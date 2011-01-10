@@ -7,6 +7,7 @@
 //
 
 #import "Readmill_FrameworkAppDelegate.h"
+#import "ReadmillAPI.h"
 
 @implementation Readmill_FrameworkAppDelegate
 
@@ -14,6 +15,12 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
+    
+    NSError *err = nil;
+    
+    ReadmillAPI *api = [[ReadmillAPI alloc] init];
+    
+    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [api userWithName:@"iKenndac" error:&err]);
 }
 
 @end
