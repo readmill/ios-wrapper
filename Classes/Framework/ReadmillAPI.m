@@ -184,7 +184,7 @@
                    withProgress:(ReadmillPingProgress)progress 
               sessionIdentifier:(NSString *)sessionId
                        duration:(ReadmillPingDuration)duration
-                  occuranceTime:(NSDate *)occuranceTime 
+                  occurrenceTime:(NSDate *)occurrenceTime 
                           error:(NSError **)error {
 
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
@@ -196,8 +196,11 @@
         [parameters setValue:sessionId forKey:@"identifier"];
     }
     
-    if (occuranceTime != nil) {
-        // Something?
+    if (occurrenceTime != nil) {
+        // 2011-01-06T11:47:14Z
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] initWithDateFormat:@"%Y-%m-%dT%H:%M:%SZ" allowNaturalLanguage:NO];
+        [parameters setValue:[formatter stringFromDate:occurrenceTime] forKey:@"occurred_at"];
     }
     
     NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings", kLiveAPIEndPoint, readId]] 

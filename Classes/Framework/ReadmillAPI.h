@@ -51,7 +51,7 @@ typedef enum {
 
 //Pings     
 
--(NSDictionary *)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillPingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occuranceTime:(NSDate *)occuranceTime error:(NSError **)error;
+-(NSDictionary *)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillPingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime error:(NSError **)error;
 
 // Users
 
