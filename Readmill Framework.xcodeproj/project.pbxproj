@@ -1,0 +1,284 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		963E58FE12DB35EB000864D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963E58FD12DB35EB000864D8 /* Cocoa.framework */; };
+		963E590312DB35EB000864D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 963E590112DB35EB000864D8 /* InfoPlist.strings */; };
+		963E590512DB35EB000864D8 /* Readmill_Framework-main.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590412DB35EB000864D8 /* Readmill_Framework-main.m */; };
+		963E590812DB35EB000864D8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 963E590612DB35EB000864D8 /* MainMenu.xib */; };
+		963E590B12DB35EB000864D8 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 963E590912DB35EB000864D8 /* Credits.rtf */; };
+		963E590E12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		963E58FA12DB35EB000864D8 /* Readmill Framework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Framework.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		963E58FD12DB35EB000864D8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		963E58FF12DB35EB000864D8 /* Readmill_Framework-Info.plist */ = {isa = PBXFileReference; path = "Readmill_Framework-Info.plist"; sourceTree = "<group>"; };
+		963E590012DB35EB000864D8 /* Readmill_Framework-Prefix.pch */ = {isa = PBXFileReference; path = "Readmill_Framework-Prefix.pch"; sourceTree = "<group>"; };
+		963E590212DB35EB000864D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		963E590412DB35EB000864D8 /* Readmill_Framework-main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Readmill_Framework-main.m"; sourceTree = "<group>"; };
+		963E590712DB35EB000864D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		963E590A12DB35EB000864D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		963E590C12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.h */ = {isa = PBXFileReference; path = Readmill_FrameworkAppDelegate.h; sourceTree = "<group>"; };
+		963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Readmill_FrameworkAppDelegate.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		963E58F712DB35EB000864D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				963E58FE12DB35EB000864D8 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		963E58EB12DB35EB000864D8 = {
+			isa = PBXGroup;
+			children = (
+				963E58F212DB35EB000864D8 /* Classes */,
+				963E58F312DB35EB000864D8 /* Other Sources */,
+				963E58F412DB35EB000864D8 /* Resources */,
+				963E58F512DB35EB000864D8 /* Frameworks */,
+				963E58FB12DB35EB000864D8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		963E58F212DB35EB000864D8 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				963E590C12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.h */,
+				963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		963E58F312DB35EB000864D8 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				963E590012DB35EB000864D8 /* Readmill_Framework-Prefix.pch */,
+				963E590412DB35EB000864D8 /* Readmill_Framework-main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		963E58F412DB35EB000864D8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				963E58FF12DB35EB000864D8 /* Readmill_Framework-Info.plist */,
+				963E590112DB35EB000864D8 /* InfoPlist.strings */,
+				963E590612DB35EB000864D8 /* MainMenu.xib */,
+				963E590912DB35EB000864D8 /* Credits.rtf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		963E58F512DB35EB000864D8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				963E58FD12DB35EB000864D8 /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		963E58FB12DB35EB000864D8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				963E58FA12DB35EB000864D8 /* Readmill Framework.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		963E58F912DB35EB000864D8 /* Readmill Framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 963E591112DB35EB000864D8 /* Build configuration list for PBXNativeTarget "Readmill Framework" */;
+			buildPhases = (
+				963E58F612DB35EB000864D8 /* Sources */,
+				963E58F712DB35EB000864D8 /* Frameworks */,
+				963E58F812DB35EB000864D8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Readmill Framework";
+			productName = "Readmill Framework";
+			productReference = 963E58FA12DB35EB000864D8 /* Readmill Framework.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		963E58ED12DB35EB000864D8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "KennettNet Software Limited";
+			};
+			buildConfigurationList = 963E58F012DB35EB000864D8 /* Build configuration list for PBXProject "Readmill Framework" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 963E58EB12DB35EB000864D8;
+			productRefGroup = 963E58FB12DB35EB000864D8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				963E58F912DB35EB000864D8 /* Readmill Framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		963E58F812DB35EB000864D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				963E590312DB35EB000864D8 /* InfoPlist.strings in Resources */,
+				963E590812DB35EB000864D8 /* MainMenu.xib in Resources */,
+				963E590B12DB35EB000864D8 /* Credits.rtf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		963E58F612DB35EB000864D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				963E590512DB35EB000864D8 /* Readmill_Framework-main.m in Sources */,
+				963E590E12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		963E590112DB35EB000864D8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				963E590212DB35EB000864D8 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		963E590612DB35EB000864D8 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				963E590712DB35EB000864D8 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		963E590912DB35EB000864D8 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				963E590A12DB35EB000864D8 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		963E590F12DB35EB000864D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		963E591012DB35EB000864D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PREBINDING = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		963E591212DB35EB000864D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
+				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		963E591312DB35EB000864D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
+				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		963E58F012DB35EB000864D8 /* Build configuration list for PBXProject "Readmill Framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				963E590F12DB35EB000864D8 /* Debug */,
+				963E591012DB35EB000864D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		963E591112DB35EB000864D8 /* Build configuration list for PBXNativeTarget "Readmill Framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				963E591212DB35EB000864D8 /* Debug */,
+				963E591312DB35EB000864D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 963E58ED12DB35EB000864D8 /* Project object */;
+}
