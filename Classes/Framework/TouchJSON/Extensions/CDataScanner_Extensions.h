@@ -1,9 +1,9 @@
 //
-//  CTidy.h
+//  CDataScanner_Extensions.h
 //  TouchCode
 //
-//  Created by Jonathan Wight on 03/07/08.
-//  Copyright 2008 toxicsoftware.com. All rights reserved.
+//  Created by Jonathan Wight on 12/08/2005.
+//  Copyright 2005 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
 //  obtaining a copy of this software and associated documentation
@@ -27,27 +27,14 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#ifdef TOUCHXMLUSETIDY
+#import "CDataScanner.h"
 
-#import <Foundation/Foundation.h>
+@interface CDataScanner (CDataScanner_Extensions)
 
-#include "tidy.h"
-#include "buffio.h"
+- (BOOL)scanCStyleComment:(NSString **)outComment;
+- (BOOL)scanCPlusPlusStyleComment:(NSString **)outComment;
 
-typedef enum {
-	TidyFormat_HTML,
-	TidyFormat_XML,
-	TidyFormat_XHTML,
-} CTidyFormat;
-
-@interface CTidy : NSObject {
-}
-
-+ (CTidy *)tidy;
-
-- (NSData *)tidyData:(NSData *)inData inputFormat:(CTidyFormat)inInputFormat outputFormat:(CTidyFormat)inOutputFormat diagnostics:(NSString **)outDiagnostics error:(NSError **)outError;
-- (NSString *)tidyString:(NSString *)inString inputFormat:(CTidyFormat)inInputFormat outputFormat:(CTidyFormat)inOutputFormat diagnostics:(NSString **)outDiagnostics error:(NSError **)outError;
+- (NSUInteger)lineOfScanLocation;
+- (NSDictionary *)userInfoForScanLocation;
 
 @end
-
-#endif /* TOUCHXMLUSETIDY */

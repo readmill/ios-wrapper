@@ -7,9 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "ReadmillAPI.h"
 
 @interface Readmill_FrameworkAppDelegate : NSObject <NSApplicationDelegate> {
     NSWindow *window;
+    ReadmillAPI *api;
 }
 
 @property (assign) IBOutlet NSWindow *window;

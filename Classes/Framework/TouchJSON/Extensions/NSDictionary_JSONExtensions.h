@@ -1,8 +1,8 @@
 //
-//  CXMLElement_CreationExtensions.m
+//  NSDictionary_JSONExtensions.h
 //  TouchCode
 //
-//  Created by Jonathan Wight on 04/01/08.
+//  Created by Jonathan Wight on 04/17/08.
 //  Copyright 2008 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
@@ -27,29 +27,10 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLElement_CreationExtensions.h"
+#import <Foundation/Foundation.h>
 
-@implementation CXMLElement (CXMLElement_CreationExtensions)
+@interface NSDictionary (NSDictionary_JSONExtensions)
 
-- (void)addChild:(CXMLNode *)inNode
-{
-NSAssert(inNode->_node->doc == NULL, @"Cannot addChild with a node that already is part of a document. Copy it first!");
-NSAssert(self->_node != NULL, @"_node should not be null");
-NSAssert(inNode->_node != NULL, @"_node should not be null");
-xmlAddChild(self->_node, inNode->_node);
-}
-
-- (void)addNamespace:(CXMLNode *)inNamespace
-{
-xmlSetNs(self->_node, (xmlNsPtr)inNamespace->_node);
-}
-
-- (void)setStringValue:(NSString *)inStringValue
-{
-NSAssert(inStringValue != NULL, @"CXMLElement setStringValue should not be null");
-xmlNodePtr theContentNode = xmlNewText((const xmlChar *)[inStringValue UTF8String]);
-NSAssert(self->_node != NULL, @"_node should not be null");
-xmlAddChild(self->_node, theContentNode);
-}
++ (id)dictionaryWithJSONData:(NSData *)inData error:(NSError **)outError;
 
 @end

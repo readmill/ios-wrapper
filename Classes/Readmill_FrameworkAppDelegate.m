@@ -13,14 +13,35 @@
 
 @synthesize window;
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+-(void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
     
+    [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(getUrl:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
+
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"fff"] != nil) {
+        
+        api = [[ReadmillAPI alloc] initWithPropertyListRepresentation:[[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"]];
+        
+    } else {
+    
+        api = [[ReadmillAPI alloc] initWithStagingEndPoint];
+        [[NSWorkspace sharedWorkspace] openURL:[api clientAuthorizationURLWithRedirectURLString:@"readmillTestAuth://authorize"]];
+    }
+    
+    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[api allBooks:nil] valueForKey:@"title"]);
+    
+}
+
+
+- (void)getUrl:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent {
+	NSString *code = [[[[event paramDescriptorForKeyword:keyDirectObject] stringValue] substringFromIndex:34] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
     NSError *err = nil;
+    [api authorizeWithAuthorizationCode:code fromRedirectURL:@"readmillTestAuth://authorize" error:&err];    
     
-    ReadmillAPI *api = [[ReadmillAPI alloc] init];
+    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), err);
     
-    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [api userWithName:@"iKenndac" error:&err]);
+    [[NSUserDefaults standardUserDefaults] setValue:[api propertyListRepresentation] forKey:@"readmill"];
 }
 
 @end

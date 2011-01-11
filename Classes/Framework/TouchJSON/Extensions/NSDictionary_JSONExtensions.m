@@ -1,8 +1,8 @@
 //
-//  CXMLElement.h
+//  NSDictionary_JSONExtensions.m
 //  TouchCode
 //
-//  Created by Jonathan Wight on 03/07/08.
+//  Created by Jonathan Wight on 04/17/08.
 //  Copyright 2008 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
@@ -27,24 +27,15 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLNode.h"
+#import "NSDictionary_JSONExtensions.h"
 
-// NSXMLElement
-@interface CXMLElement : CXMLNode {
+#import "CJSONDeserializer.h"
 
+@implementation NSDictionary (NSDictionary_JSONExtensions)
+
++ (id)dictionaryWithJSONData:(NSData *)inData error:(NSError **)outError
+{
+return([[CJSONDeserializer deserializer] deserialize:inData error:outError]);
 }
 
-- (NSArray *)elementsForName:(NSString *)name;
-//- (NSArray *)elementsForLocalName:(NSString *)localName URI:(NSString *)URI;
-
-- (NSArray *)attributes;
-- (CXMLNode *)attributeForName:(NSString *)name;
-//- (CXMLNode *)attributeForLocalName:(NSString *)localName URI:(NSString *)URI;
-
-//- (NSArray *)namespaces; //primitive
-//- (CXMLNode *)namespaceForPrefix:(NSString *)name;
-//- (CXMLNode *)resolveNamespaceForName:(NSString *)name;
-//- (NSString *)resolvePrefixForNamespaceURI:(NSString *)namespaceURI;
-
-//- (NSString*)_XMLStringWithOptions:(NSUInteger)options appendingToString:(NSMutableString*)str;
 @end

@@ -1,9 +1,9 @@
 //
-//  CXMLNode_PrivateExtensions.h
+//  NSCharacterSet_Extensions.h
 //  TouchCode
 //
-//  Created by Jonathan Wight on 03/07/08.
-//  Copyright 2008 toxicsoftware.com. All rights reserved.
+//  Created by Jonathan Wight on 12/08/2005.
+//  Copyright 2005 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
 //  obtaining a copy of this software and associated documentation
@@ -27,14 +27,10 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLNode.h"
+#import <Foundation/Foundation.h>
 
-@interface CXMLNode (CXMLNode_PrivateExtensions)
+@interface NSCharacterSet (NSCharacterSet_Extensions)
 
-@property (readonly, nonatomic, assign) xmlNodePtr node;
-
-- (id)initWithLibXMLNode:(xmlNodePtr)inLibXMLNode freeOnDealloc:(BOOL)infreeOnDealloc;
-
-+ (id)nodeWithLibXMLNode:(xmlNodePtr)inLibXMLNode freeOnDealloc:(BOOL)infreeOnDealloc;
++ (NSCharacterSet *)linebreaksCharacterSet;
 
 @end

@@ -1,9 +1,9 @@
 //
-//  CXMLDocument_CreationExtensions.m
+//  NSCharacterSet_Extensions.m
 //  TouchCode
 //
-//  Created by Jonathan Wight on 11/11/08.
-//  Copyright 2008 toxicsoftware.com. All rights reserved.
+//  Created by Jonathan Wight on 12/08/2005.
+//  Copyright 2005 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
 //  obtaining a copy of this software and associated documentation
@@ -27,27 +27,31 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLDocument_CreationExtensions.h"
+#import "NSCharacterSet_Extensions.h"
 
-#import "CXMLElement.h"
-#import "CXMLNode_PrivateExtensions.h"
-#import "CXMLDocument_PrivateExtensions.h"
+@implementation NSCharacterSet (NSCharacterSet_Extensions)
 
-@implementation CXMLDocument (CXMLDocument_CreationExtensions)
+#define LF 0x000a // Line Feed
+#define FF 0x000c // Form Feed
+#define CR 0x000d // Carriage Return
+#define NEL 0x0085 // Next Line
+#define LS 0x2028 // Line Separator
+#define PS 0x2029 // Paragraph Separator
 
-- (void)insertChild:(CXMLNode *)child atIndex:(NSUInteger)index
+static NSCharacterSet *sLineBreaksCharacterSet = NULL;
+
++ (NSCharacterSet *)linebreaksCharacterSet
 {
-[self.nodePool addObject:child];
+@synchronized(self)
+    {
+    if (sLineBreaksCharacterSet == NULL)
+        {
+        unichar theCharacters[] = { LF, FF, CR, NEL, LS, PS, };
 
-CXMLNode *theCurrentNode = [self.children objectAtIndex:index];
-xmlAddPrevSibling(theCurrentNode->_node, child->_node);
-}
-
-- (void)addChild:(CXMLNode *)child
-{
-[self.nodePool addObject:child];
-
-xmlAddChild(self->_node, child->_node);
+        sLineBreaksCharacterSet = [[NSCharacterSet characterSetWithCharactersInString:[NSString stringWithCharacters:theCharacters length:sizeof(theCharacters) / sizeof(*theCharacters)]] retain];
+        }
+    return(sLineBreaksCharacterSet);
+    }
 }
 
 @end

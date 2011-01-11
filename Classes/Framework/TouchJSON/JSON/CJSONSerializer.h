@@ -1,9 +1,9 @@
 //
-//  CXMLElement_ElementTreeExtensions.h
+//  CJSONSerializer.h
 //  TouchCode
 //
-//  Created by Jonathan Wight on 11/14/08.
-//  Copyright 2008 toxicsoftware.com. All rights reserved.
+//  Created by Jonathan Wight on 12/07/2005.
+//  Copyright 2005 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
 //  obtaining a copy of this software and associated documentation
@@ -27,11 +27,20 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLElement.h"
+#import <Foundation/Foundation.h>
 
+@interface CJSONSerializer : NSObject {
+}
 
-@interface CXMLElement (CXMLElement_ElementTreeExtensions)
++ (id)serializer;
 
-- (CXMLElement *)subelement:(NSString *)inName;
+/// Take any JSON compatible object (generally NSNull, NSNumber, NSString, NSArray and NSDictionary) and produce an NSData containing the serialized JSON.
+- (NSData *)serializeObject:(id)inObject error:(NSError **)outError;
+
+- (NSData *)serializeNull:(NSNull *)inNull error:(NSError **)outError;
+- (NSData *)serializeNumber:(NSNumber *)inNumber error:(NSError **)outError;
+- (NSData *)serializeString:(NSString *)inString error:(NSError **)outError;
+- (NSData *)serializeArray:(NSArray *)inArray error:(NSError **)outError;
+- (NSData *)serializeDictionary:(NSDictionary *)inDictionary error:(NSError **)outError;
 
 @end

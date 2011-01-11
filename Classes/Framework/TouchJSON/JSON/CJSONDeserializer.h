@@ -1,9 +1,9 @@
 //
-//  CXMLElement_ElementTreeExtensions.m
+//  CJSONDeserializer.h
 //  TouchCode
 //
-//  Created by Jonathan Wight on 11/14/08.
-//  Copyright 2008 toxicsoftware.com. All rights reserved.
+//  Created by Jonathan Wight on 12/15/2005.
+//  Copyright 2005 toxicsoftware.com. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
 //  obtaining a copy of this software and associated documentation
@@ -27,18 +27,27 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLElement_ElementTreeExtensions.h"
+#import <Foundation/Foundation.h>
 
-#import "CXMLElement_CreationExtensions.h"
-#import "CXMLNode_CreationExtensions.h"
+extern NSString *const kJSONDeserializerErrorDomain /* = @"CJSONDeserializerErrorDomain" */;
 
-@implementation CXMLElement (CXMLElement_ElementTreeExtensions)
+@class CJSONScanner;
 
-- (CXMLElement *)subelement:(NSString *)inName;
-{
-CXMLElement *theSubelement = [CXMLNode elementWithName:inName];
-[self addChild:theSubelement];
-return(theSubelement);
+@interface CJSONDeserializer : NSObject {
+    CJSONScanner *scanner;
 }
+
+@property (readwrite, nonatomic, retain) CJSONScanner *scanner;
+/// Object to return instead when a null encountered in the JSON. Defaults to NSNull. Setting to null causes the scanner to skip null values.
+@property (readwrite, nonatomic, retain) id nullObject;
+/// JSON must be encoded in Unicode (UTF-8, UTF-16 or UTF-32). Use this if you expect to get the JSON in another encoding.
+@property (readwrite, nonatomic, assign) NSStringEncoding allowedEncoding;
+
++ (id)deserializer;
+
+- (id)deserialize:(NSData *)inData error:(NSError **)outError;
+
+- (id)deserializeAsDictionary:(NSData *)inData error:(NSError **)outError;
+- (id)deserializeAsArray:(NSData *)inData error:(NSError **)outError;
 
 @end
