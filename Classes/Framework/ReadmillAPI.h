@@ -26,14 +26,28 @@ typedef enum {
 @interface ReadmillAPI : NSObject {
 @private
     
-    NSString *oAuthSecret;
-    NSString *oAuthToken;
-    
+    NSString *accessToken;
+    NSString *refreshToken;
+    NSString *authorizedRedirectURL;
+    NSDate *accessTokenExpiryDate;
+    NSString *apiEndPoint;
 }
 
-@property (readonly, copy) NSString *oAuthSecret;
-@property (readonly, copy) NSString *oAuthToken;
+-(id)init;
+-(id)initWithStagingEndPoint;
+-(id)initWithPropertyListRepresentation:(NSDictionary *)plist;
+-(NSDictionary *)propertyListRepresentation;
 
+@property (readonly, copy) NSString *accessToken;
+@property (readonly, copy) NSString *refreshToken;
+@property (readonly, copy) NSDate *accessTokenExpiryDate;
+@property (readonly, copy) NSString *authorizedRedirectURL;
+
+// oAuth
+
+-(void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error;
+-(void)ensureAccessTokenIsCurrent:(NSError **)error;
+-(NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect;
 
 // Books
 
@@ -44,8 +58,8 @@ typedef enum {
 
 // Reads
 
--(NSDictionary *)createReadWithBookId:(ReadmillBookId)bookId state:(ReadmillReadState)readState applicationId:(NSString *)applicationId private:(BOOL)isPrivate error:(NSError **)error;
--(NSDictionary *)updateReadWithId:(ReadmillReadId)readId withState:(ReadmillReadState)readState applicationId:(NSString *)applicationId private:(BOOL)isPrivate closingRemark:(NSString *)remark error:(NSError **)error;
+-(NSDictionary *)createReadWithBookId:(ReadmillBookId)bookId state:(ReadmillReadState)readState private:(BOOL)isPrivate error:(NSError **)error;
+-(NSDictionary *)updateReadWithId:(ReadmillReadId)readId withState:(ReadmillReadState)readState private:(BOOL)isPrivate closingRemark:(NSString *)remark error:(NSError **)error;
 -(NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error;
 -(NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error;
 
