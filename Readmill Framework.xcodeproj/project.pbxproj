@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		962E24BD12DE3D9F00FC7342 /* ReadmillBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */; };
+		962E24C012DE4B0600FC7342 /* ReadmillDictionaryExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 962E24BF12DE4B0600FC7342 /* ReadmillDictionaryExtensions.m */; };
 		963E58FE12DB35EB000864D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963E58FD12DB35EB000864D8 /* Cocoa.framework */; };
 		963E590312DB35EB000864D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 963E590112DB35EB000864D8 /* InfoPlist.strings */; };
 		963E590512DB35EB000864D8 /* Readmill_Framework-main.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590412DB35EB000864D8 /* Readmill_Framework-main.m */; };
@@ -29,6 +31,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		962E24BB12DE3D9F00FC7342 /* ReadmillBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillBook.h; path = "Framework/Object Model/ReadmillBook.h"; sourceTree = "<group>"; };
+		962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillBook.m; path = "Framework/Object Model/ReadmillBook.m"; sourceTree = "<group>"; };
+		962E24BE12DE4B0600FC7342 /* ReadmillDictionaryExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillDictionaryExtensions.h; path = Framework/ReadmillDictionaryExtensions.h; sourceTree = "<group>"; };
+		962E24BF12DE4B0600FC7342 /* ReadmillDictionaryExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillDictionaryExtensions.m; path = Framework/ReadmillDictionaryExtensions.m; sourceTree = "<group>"; };
 		963E58FA12DB35EB000864D8 /* Readmill Framework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Framework.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		963E58FD12DB35EB000864D8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		963E58FF12DB35EB000864D8 /* Readmill_Framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Readmill_Framework-Info.plist"; sourceTree = "<group>"; };
@@ -82,6 +88,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		962E24B912DE3C0900FC7342 /* Core API */ = {
+			isa = PBXGroup;
+			children = (
+				963E599B12DB525A000864D8 /* Constants.h */,
+				966FAD4712DCB35500836DF3 /* TouchJSON */,
+				963E599712DB4E3C000864D8 /* Extensions */,
+				963E591512DB3D0F000864D8 /* ReadmillAPI.h */,
+				963E591612DB3D0F000864D8 /* ReadmillAPI.m */,
+			);
+			name = "Core API";
+			sourceTree = "<group>";
+		};
+		962E24BA12DE3C1A00FC7342 /* Object Model */ = {
+			isa = PBXGroup;
+			children = (
+				962E24BB12DE3D9F00FC7342 /* ReadmillBook.h */,
+				962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */,
+			);
+			name = "Object Model";
+			sourceTree = "<group>";
+		};
 		963E58EB12DB35EB000864D8 = {
 			isa = PBXGroup;
 			children = (
@@ -143,11 +170,8 @@
 		963E591412DB35FF000864D8 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
-				963E599B12DB525A000864D8 /* Constants.h */,
-				966FAD4712DCB35500836DF3 /* TouchJSON */,
-				963E599712DB4E3C000864D8 /* Extensions */,
-				963E591512DB3D0F000864D8 /* ReadmillAPI.h */,
-				963E591612DB3D0F000864D8 /* ReadmillAPI.m */,
+				962E24BA12DE3C1A00FC7342 /* Object Model */,
+				962E24B912DE3C0900FC7342 /* Core API */,
 			);
 			name = Framework;
 			sourceTree = "<group>";
@@ -157,6 +181,8 @@
 			children = (
 				963E599812DB4E4D000864D8 /* ReadmillStringExtensions.h */,
 				963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */,
+				962E24BE12DE4B0600FC7342 /* ReadmillDictionaryExtensions.h */,
+				962E24BF12DE4B0600FC7342 /* ReadmillDictionaryExtensions.m */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -294,6 +320,8 @@
 				966FAD6A12DCB35500836DF3 /* CJSONDeserializer.m in Sources */,
 				966FAD6B12DCB35500836DF3 /* CJSONScanner.m in Sources */,
 				966FAD6C12DCB35500836DF3 /* CJSONSerializer.m in Sources */,
+				962E24BD12DE3D9F00FC7342 /* ReadmillBook.m in Sources */,
+				962E24C012DE4B0600FC7342 /* ReadmillDictionaryExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
