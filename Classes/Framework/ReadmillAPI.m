@@ -19,7 +19,6 @@
 -(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error;
 -(id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 
-
 -(BOOL)refreshAccessToken:(NSError **)error;
 
 -(NSString *)oAuthBaseURL;
@@ -232,10 +231,43 @@
     }
 }
 
+-(NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
+    
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
+                                                           [NSString stringWithFormat:@"%@users/%d/reads/%d.json", 
+                                                            [self apiEndPoint], 
+                                                            userId,
+                                                            readId]] 
+                                           withParameters:nil
+                               shouldBeCalledUnauthorized:YES
+                                                    error:error];
+    return apiResponse;
+    
+}
+
+-(NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithName:(NSString *)userName error:(NSError **)error {
+    
+    if ([userName length] == 0) {
+        return nil;
+    } else {
+        
+        NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
+                                                               [NSString stringWithFormat:@"%@users/%@/reads/%d.json", 
+                                                                [self apiEndPoint], 
+                                                                userName,
+                                                                readId]] 
+                                               withParameters:nil
+                                   shouldBeCalledUnauthorized:YES
+                                                        error:error];
+        return apiResponse;
+    }
+}
+
+
 //Pings     
 
 -(void)pingReadWithId:(ReadmillReadId)readId 
-         withProgress:(ReadmillPingProgress)progress 
+         withProgress:(ReadmillReadProgress)progress 
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
        occurrenceTime:(NSDate *)occurrenceTime 

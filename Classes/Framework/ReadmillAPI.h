@@ -11,7 +11,7 @@
 typedef NSUInteger ReadmillBookId;
 typedef NSUInteger ReadmillReadId;
 typedef NSUInteger ReadmillUserId;
-typedef NSUInteger ReadmillPingProgress; // Integer, 1-100 (%)
+typedef NSUInteger ReadmillReadProgress; // Integer, 1-100 (%)
 typedef NSUInteger ReadmillPingDuration; // Integer, seconds
 
 typedef enum {
@@ -62,10 +62,12 @@ typedef enum {
 -(void)updateReadWithId:(ReadmillReadId)readId withState:(ReadmillReadState)readState private:(BOOL)isPrivate closingRemark:(NSString *)remark error:(NSError **)error;
 -(NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error;
 -(NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error;
+-(NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error;
+-(NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithName:(NSString *)userName error:(NSError **)error;
 
 //Pings     
 
--(void)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillPingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime error:(NSError **)error;
+-(void)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillReadProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime error:(NSError **)error;
 
 // Users
 
