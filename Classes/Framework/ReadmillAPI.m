@@ -7,9 +7,6 @@
 //
 
 #import "ReadmillAPI.h"
-#import "OAConsumer.h"
-#import "OAToken.h"
-#import "OAMutableURLRequest.h"
 #import "ReadmillStringExtensions.h"
 #import "Constants.h"
 #import "CJSONDeserializer.h"
@@ -17,14 +14,14 @@
 @interface ReadmillAPI ()
 
 -(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error;
--(id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters error:(NSError **)error;
--(id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters error:(NSError **)error;
--(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters error:(NSError **)error;
+-(id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+-(id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+-(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+-(id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 
--(void)refreshAccessToken:(NSError **)error;
 
--(OAConsumer *)oAuthConsumer;
--(OAToken *)oAuthToken;
+-(BOOL)refreshAccessToken:(NSError **)error;
+
 -(NSString *)oAuthBaseURL;
 
 @property (readwrite, copy) NSString *refreshToken;
@@ -55,7 +52,7 @@
 }
 
 -(id)initWithPropertyListRepresentation:(NSDictionary *)plist {
-
+    
     if ((self = [self init])) {
         
         [self setAuthorizedRedirectURL:[plist valueForKey:@"authorizedRedirectURL"]];
@@ -65,7 +62,7 @@
     }
     return self;
 }
-    
+
 -(NSDictionary *)propertyListRepresentation {
     return [NSDictionary dictionaryWithObjectsAndKeys:
             [self authorizedRedirectURL], @"authorizedRedirectURL",
@@ -103,6 +100,7 @@
     
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
                                       withParameters:nil
+                             canBeCalledUnauthorized:YES
                                                error:error];
     return apiResponse;
     
@@ -117,6 +115,7 @@
         
         NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
                                           withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
+                                 canBeCalledUnauthorized:YES
                                                    error:error];
         return apiResponse;
         
@@ -131,6 +130,7 @@
         
         NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
                                           withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
+                                 canBeCalledUnauthorized:YES
                                                    error:error];
         return apiResponse;
         
@@ -156,6 +156,7 @@
     
     NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]]
                                             withParameters:parameters
+                                   canBeCalledUnauthorized:NO
                                                      error:error];
     return apiResponse;
 }
@@ -177,6 +178,7 @@
     
     NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books/%d/reads.json", [self apiEndPoint], bookId]]
                                             withParameters:parameters
+                                   canBeCalledUnauthorized:NO
                                                      error:error];
     return apiResponse;
     
@@ -200,6 +202,7 @@
     
     NSDictionary *apiResponse = [self sendPutRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d.json", [self apiEndPoint], readId]]
                                            withParameters:parameters
+                                  canBeCalledUnauthorized:NO
                                                     error:error];
     return apiResponse;
     
@@ -211,6 +214,7 @@
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d/reads.json", [self apiEndPoint], userId]] 
                                            withParameters:nil
+                                  canBeCalledUnauthorized:YES
                                                     error:error];
     return [apiResponse valueForKey:@"read"];
 }
@@ -223,6 +227,7 @@
         
         NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@/reads.json", [self apiEndPoint], userName]] 
                                                withParameters:nil
+                                      canBeCalledUnauthorized:YES
                                                         error:error];
         return [apiResponse valueForKey:@"read"];
     }
@@ -255,6 +260,7 @@
     
     NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings.json", [self apiEndPoint], readId]] 
                                             withParameters:nil
+                                   canBeCalledUnauthorized:NO
                                                      error:error];
     return apiResponse;
     
@@ -266,6 +272,7 @@
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d.json", [self apiEndPoint], userId]] 
                                            withParameters:nil
+                                  canBeCalledUnauthorized:YES
                                                     error:error];
     return apiResponse;
     
@@ -279,6 +286,7 @@
         
         NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@.json", [self apiEndPoint], userName]] 
                                                withParameters:nil
+                                      canBeCalledUnauthorized:YES
                                                         error:error];
         return apiResponse;
     }
@@ -298,7 +306,7 @@
                                  [kClientSecret urlEncodedString],
                                  [authCode urlEncodedString],
                                  [redirectURLString urlEncodedString]];
-   
+    
     [request setHTTPMethod:@"POST"];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
@@ -317,7 +325,7 @@
     }
 }
 
--(void)refreshAccessToken:(NSError **)error {
+-(BOOL)refreshAccessToken:(NSError **)error {
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
@@ -343,7 +351,9 @@
         [self setRefreshToken:[response valueForKey:@"refresh_token"]];
         [self setAccessToken:[response valueForKey:@"access_token"]];
         
-        NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"Refreshed sucessfully");
+        return YES;
+    } else {
+        return NO;
     }
 }
 
@@ -361,14 +371,6 @@
     return [NSURL URLWithString:urlString];
 }
 
--(OAConsumer *)oAuthConsumer {
-    return [[[OAConsumer alloc] initWithKey:@"" secret:@""] autorelease];
-}
-
--(OAToken *)oAuthToken {
-    return [[[OAToken alloc] initWithKey:[self accessToken] secret:[self refreshToken]] autorelease];
-}
-
 -(NSString *)oAuthBaseURL {
     
     if ([[self apiEndPoint] isEqualToString:kLiveAPIEndPoint]) {
@@ -382,93 +384,32 @@
 #pragma mark -
 #pragma mark Sending Requests
 
--(void)ensureAccessTokenIsCurrent:(NSError **)error {
+-(BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
     
     if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
-        [self refreshAccessToken:error];
+        return [self refreshAccessToken:error];
+    } else {
+        return YES;
     }
 }
 
--(id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters error:(NSError **)error {
+-(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
     
-    [self ensureAccessTokenIsCurrent:error];
+    if (![self ensureAccessTokenIsCurrent:error]) {
+        if (!allowUnauthed) {
+            return nil;
+        }
+    }
     
-	NSMutableString *parameterString = [NSMutableString string];
 	BOOL first = YES;
 	
-	for (NSString *key in [parameters allKeys]) {		
-		
-		id value = [parameters valueForKey:key];
-		
-		if (value) {
-			[parameterString appendFormat:@"%@%@=%@",
-			 first ? @"" : @"&", 
-			 key, 
-			 [value isKindOfClass:[NSString class]] ? [value urlEncodedString] : [[value stringValue] urlEncodedString]];
-			first = NO;
-		}		
-	}
+    NSMutableString *parameterString = [NSMutableString string];
     
-	OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-																   consumer:[self oAuthConsumer]
-																	  token:[self oAuthToken]
-																	  realm:nil
-														  signatureProvider:nil];
-	[request setHTTPMethod:@"PUT"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
-	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
-	
-	[request prepare]; 
-	[request autorelease];
-	
-	return [self sendPreparedRequest:request error:error];	
+    if ([[self accessToken] length] > 0) {
+        [parameterString appendFormat:@"access_token=%@", [self accessToken]];
+        first = NO;
+    }
     
-}
-
--(id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters error:(NSError **)error {
-	
-    [self ensureAccessTokenIsCurrent:error];
-    
-	NSMutableString *parameterString = [NSMutableString string];
-	BOOL first = YES;
-	
-	for (NSString *key in [parameters allKeys]) {		
-		
-		id value = [parameters valueForKey:key];
-		
-		if (value) {
-			[parameterString appendFormat:@"%@%@=%@",
-			 first ? @"" : @"&", 
-			 key, 
-			 [value isKindOfClass:[NSString class]] ? [value urlEncodedString] : [[value stringValue] urlEncodedString]];
-			first = NO;
-		}		
-	}
-    
-	
-	OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:url
-																   consumer:[self oAuthConsumer]
-																	  token:[self oAuthToken]
-																	  realm:nil
-														  signatureProvider:nil];
-	[request setHTTPMethod:@"POST"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
-	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
-	
-	[request prepare]; 
-	[request autorelease];
-	
-	return [self sendPreparedRequest:request error:error];	
-	
-}
-
--(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters error:(NSError **)error {
-	
-    [self ensureAccessTokenIsCurrent:error];
-    
-	NSMutableString *parameterString = [NSMutableString string];
-	BOOL first = YES;
-	
 	for (NSString *key in [parameters allKeys]) {		
 		
 		id value = [parameters valueForKey:key];
@@ -482,19 +423,62 @@
 		}		
 	}
 	
-	OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",
 																								  [url absoluteString], 
-																								  parameterString]]
-                                                                   consumer:[self oAuthConsumer]
-																	  token:[self oAuthToken]
-																	  realm:nil
-														  signatureProvider:nil];
+																								  parameterString]]];
 	[request setHTTPMethod:@"GET"];
-	
-	[request prepare]; 
 	[request autorelease];
 	
 	return [self sendPreparedRequest:request error:error];
+}
+
+-(id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+    return [self sendBodyRequestToURL:url httpMethod:@"PUT" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
+}
+
+-(id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+	return [self sendBodyRequestToURL:url httpMethod:@"POST" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
+}
+
+-(id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+    
+    if (![self ensureAccessTokenIsCurrent:error]) {
+        if (!allowUnauthed) {
+            return nil;
+        }
+    }
+    
+	BOOL first = YES;
+	
+    NSMutableString *parameterString = [NSMutableString string];
+    
+    if ([[self accessToken] length] > 0) {
+        [parameterString appendFormat:@"access_token=%@", [self accessToken]];
+        first = NO;
+    }
+    
+	for (NSString *key in [parameters allKeys]) {		
+		
+		id value = [parameters valueForKey:key];
+		
+		if (value) {
+			[parameterString appendFormat:@"%@%@=%@",
+			 first ? @"" : @"&", 
+			 key, 
+			 [value isKindOfClass:[NSString class]] ? [value urlEncodedString] : [[value stringValue] urlEncodedString]];
+			first = NO;
+		}		
+	}
+    
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    
+	[request setHTTPMethod:httpMethod];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
+	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
+    
+	[request autorelease];
+	
+	return [self sendPreparedRequest:request error:error];	
 }
 
 -(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {

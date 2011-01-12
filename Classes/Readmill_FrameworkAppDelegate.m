@@ -18,7 +18,7 @@
     
     [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(getUrl:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
 
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"fff"] != nil) {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"] != nil) {
         
         api = [[ReadmillAPI alloc] initWithPropertyListRepresentation:[[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"]];
         
@@ -28,10 +28,21 @@
         [[NSWorkspace sharedWorkspace] openURL:[api clientAuthorizationURLWithRedirectURLString:@"readmillTestAuth://authorize"]];
     }
     
-    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [[api allBooks:nil] valueForKey:@"title"]);
+    NSError *err;
+    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [api addBookWithTitle:@"Winnie-the-Pooh"
+                                                                                                     author:@"A. A. Milne"
+                                                                                                       isbn:@"1405223987"
+                                                                                                      error:&err]);
+    
+    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), err);
+                                                                                      
+                                                            
     
 }
 
+-(void)applicationWillTerminate:(NSNotification *)notification {
+    [[NSUserDefaults standardUserDefaults] setValue:[api propertyListRepresentation] forKey:@"readmill"];
+}
 
 - (void)getUrl:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent {
 	NSString *code = [[[[event paramDescriptorForKeyword:keyDirectObject] stringValue] substringFromIndex:34] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];

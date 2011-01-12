@@ -46,7 +46,7 @@ typedef enum {
 // oAuth
 
 -(void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error;
--(void)ensureAccessTokenIsCurrent:(NSError **)error;
+-(BOOL)ensureAccessTokenIsCurrent:(NSError **)error;
 -(NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect;
 
 // Books
