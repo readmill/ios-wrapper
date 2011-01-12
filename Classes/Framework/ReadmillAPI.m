@@ -16,7 +16,7 @@
 -(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error;
 -(id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 -(id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
--(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+-(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error;
 -(id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 
 
@@ -100,7 +100,7 @@
     
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
                                       withParameters:nil
-                             canBeCalledUnauthorized:YES
+                          shouldBeCalledUnauthorized:YES
                                                error:error];
     return apiResponse;
     
@@ -115,7 +115,7 @@
         
         NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
                                           withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
-                                 canBeCalledUnauthorized:YES
+                              shouldBeCalledUnauthorized:YES
                                                    error:error];
         return apiResponse;
         
@@ -130,7 +130,7 @@
         
         NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
                                           withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
-                                 canBeCalledUnauthorized:YES
+                              shouldBeCalledUnauthorized:YES
                                                    error:error];
         return apiResponse;
         
@@ -214,7 +214,7 @@
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d/reads.json", [self apiEndPoint], userId]] 
                                            withParameters:nil
-                                  canBeCalledUnauthorized:YES
+                               shouldBeCalledUnauthorized:YES
                                                     error:error];
     return [apiResponse valueForKey:@"read"];
 }
@@ -227,7 +227,7 @@
         
         NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@/reads.json", [self apiEndPoint], userName]] 
                                                withParameters:nil
-                                      canBeCalledUnauthorized:YES
+                                   shouldBeCalledUnauthorized:YES
                                                         error:error];
         return [apiResponse valueForKey:@"read"];
     }
@@ -272,7 +272,7 @@
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d.json", [self apiEndPoint], userId]] 
                                            withParameters:nil
-                                  canBeCalledUnauthorized:YES
+                               shouldBeCalledUnauthorized:YES
                                                     error:error];
     return apiResponse;
     
@@ -286,7 +286,7 @@
         
         NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@.json", [self apiEndPoint], userName]] 
                                                withParameters:nil
-                                      canBeCalledUnauthorized:YES
+                                   shouldBeCalledUnauthorized:YES
                                                         error:error];
         return apiResponse;
     }
@@ -393,10 +393,10 @@
     }
 }
 
--(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+-(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error {
     
     if (![self ensureAccessTokenIsCurrent:error]) {
-        if (!allowUnauthed) {
+        if (!stripAuth) {
             return nil;
         }
     }
@@ -405,7 +405,7 @@
 	
     NSMutableString *parameterString = [NSMutableString string];
     
-    if ([[self accessToken] length] > 0) {
+    if ([[self accessToken] length] > 0 && !stripAuth) {
         [parameterString appendFormat:@"access_token=%@", [self accessToken]];
         first = NO;
     }
