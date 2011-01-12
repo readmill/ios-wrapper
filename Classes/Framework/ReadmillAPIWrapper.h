@@ -16,14 +16,14 @@ typedef NSUInteger ReadmillPingDuration; // Integer, seconds
 
 typedef enum {
     
-    kReadStateInteresting = 1,
-    kReadStateReading = 2,
-    kReadStateFinished = 3,
-    kReadStateAbandoned = 4
+    ReadStateInteresting = 1,
+    ReadStateReading = 2,
+    ReadStateFinished = 3,
+    ReadStateAbandoned = 4
     
 } ReadmillReadState;
 
-@interface ReadmillAPI : NSObject {
+@interface ReadmillAPIWrapper : NSObject {
 @private
     
     NSString *accessToken;

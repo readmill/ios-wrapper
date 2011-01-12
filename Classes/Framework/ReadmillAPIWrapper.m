@@ -6,12 +6,12 @@
 //  Copyright 2011 KennettNet Software Limited. All rights reserved.
 //
 
-#import "ReadmillAPI.h"
+#import "ReadmillAPIWrapper.h"
 #import "ReadmillStringExtensions.h"
 #import "Constants.h"
 #import "CJSONDeserializer.h"
 
-@interface ReadmillAPI ()
+@interface ReadmillAPIWrapper ()
 
 -(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error;
 -(id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
@@ -31,7 +31,7 @@
 
 @end
 
-@implementation ReadmillAPI
+@implementation ReadmillAPIWrapper
 
 - (id)init {
     if ((self = [super init])) {

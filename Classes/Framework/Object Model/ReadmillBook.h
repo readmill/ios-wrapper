@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ReadmillAPI.h"
+#import "ReadmillAPIWrapper.h"
 
 @interface ReadmillBook : NSObject {
 @private

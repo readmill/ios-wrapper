@@ -15,7 +15,7 @@
 		963E590812DB35EB000864D8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 963E590612DB35EB000864D8 /* MainMenu.xib */; };
 		963E590B12DB35EB000864D8 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 963E590912DB35EB000864D8 /* Credits.rtf */; };
 		963E590E12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */; };
-		963E591712DB3D0F000864D8 /* ReadmillAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E591612DB3D0F000864D8 /* ReadmillAPI.m */; };
+		963E591712DB3D0F000864D8 /* ReadmillAPIWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E591612DB3D0F000864D8 /* ReadmillAPIWrapper.m */; };
 		963E599A12DB4E4D000864D8 /* ReadmillStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */; };
 		966FAD6212DCB35500836DF3 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD4912DCB35500836DF3 /* CDataScanner.m */; };
 		966FAD6312DCB35500836DF3 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD4C12DCB35500836DF3 /* CFilteringJSONSerializer.m */; };
@@ -45,8 +45,8 @@
 		963E590A12DB35EB000864D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		963E590C12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Readmill_FrameworkAppDelegate.h; sourceTree = "<group>"; };
 		963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Readmill_FrameworkAppDelegate.m; sourceTree = "<group>"; };
-		963E591512DB3D0F000864D8 /* ReadmillAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPI.h; path = Framework/ReadmillAPI.h; sourceTree = "<group>"; };
-		963E591612DB3D0F000864D8 /* ReadmillAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillAPI.m; path = Framework/ReadmillAPI.m; sourceTree = "<group>"; };
+		963E591512DB3D0F000864D8 /* ReadmillAPIWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; name = ReadmillAPIWrapper.h; path = Framework/ReadmillAPIWrapper.h; sourceTree = "<group>"; };
+		963E591612DB3D0F000864D8 /* ReadmillAPIWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillAPIWrapper.m; path = Framework/ReadmillAPIWrapper.m; sourceTree = "<group>"; };
 		963E599812DB4E4D000864D8 /* ReadmillStringExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillStringExtensions.h; path = Framework/ReadmillStringExtensions.h; sourceTree = "<group>"; };
 		963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillStringExtensions.m; path = Framework/ReadmillStringExtensions.m; sourceTree = "<group>"; };
 		963E599B12DB525A000864D8 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Framework/Constants.h; sourceTree = "<group>"; };
@@ -94,8 +94,8 @@
 				963E599B12DB525A000864D8 /* Constants.h */,
 				966FAD4712DCB35500836DF3 /* TouchJSON */,
 				963E599712DB4E3C000864D8 /* Extensions */,
-				963E591512DB3D0F000864D8 /* ReadmillAPI.h */,
-				963E591612DB3D0F000864D8 /* ReadmillAPI.m */,
+				963E591512DB3D0F000864D8 /* ReadmillAPIWrapper.h */,
+				963E591612DB3D0F000864D8 /* ReadmillAPIWrapper.m */,
 			);
 			name = "Core API";
 			sourceTree = "<group>";
@@ -307,7 +307,7 @@
 			files = (
 				963E590512DB35EB000864D8 /* Readmill_Framework-main.m in Sources */,
 				963E590E12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m in Sources */,
-				963E591712DB3D0F000864D8 /* ReadmillAPI.m in Sources */,
+				963E591712DB3D0F000864D8 /* ReadmillAPIWrapper.m in Sources */,
 				963E599A12DB4E4D000864D8 /* ReadmillStringExtensions.m in Sources */,
 				966FAD6212DCB35500836DF3 /* CDataScanner.m in Sources */,
 				966FAD6312DCB35500836DF3 /* CFilteringJSONSerializer.m in Sources */,
