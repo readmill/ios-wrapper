@@ -184,11 +184,11 @@
     
 }
 
--(NSDictionary *)updateReadWithId:(ReadmillReadId)readId 
-                        withState:(ReadmillReadState)readState
-                          private:(BOOL)isPrivate 
-                    closingRemark:(NSString *)remark 
-                            error:(NSError **)error {
+-(void)updateReadWithId:(ReadmillReadId)readId 
+              withState:(ReadmillReadState)readState
+                private:(BOOL)isPrivate 
+          closingRemark:(NSString *)remark 
+                  error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
@@ -200,11 +200,10 @@
         [parameters setValue:remark forKey:@"closing_remark"];
     }
     
-    NSDictionary *apiResponse = [self sendPutRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d.json", [self apiEndPoint], readId]]
-                                           withParameters:parameters
-                                  canBeCalledUnauthorized:NO
-                                                    error:error];
-    return apiResponse;
+    [self sendPutRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d.json", [self apiEndPoint], readId]]
+               withParameters:parameters
+      canBeCalledUnauthorized:NO
+                        error:error];
     
     
 }
@@ -235,12 +234,12 @@
 
 //Pings     
 
--(NSDictionary *)pingReadWithId:(ReadmillReadId)readId 
-                   withProgress:(ReadmillPingProgress)progress 
-              sessionIdentifier:(NSString *)sessionId
-                       duration:(ReadmillPingDuration)duration
-                 occurrenceTime:(NSDate *)occurrenceTime 
-                          error:(NSError **)error {
+-(void)pingReadWithId:(ReadmillReadId)readId 
+         withProgress:(ReadmillPingProgress)progress 
+    sessionIdentifier:(NSString *)sessionId
+             duration:(ReadmillPingDuration)duration
+       occurrenceTime:(NSDate *)occurrenceTime 
+                error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
@@ -258,11 +257,10 @@
         [parameters setValue:[formatter stringFromDate:occurrenceTime] forKey:@"occurred_at"];
     }
     
-    NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings.json", [self apiEndPoint], readId]] 
-                                            withParameters:nil
-                                   canBeCalledUnauthorized:NO
-                                                     error:error];
-    return apiResponse;
+    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings.json", [self apiEndPoint], readId]] 
+                withParameters:parameters
+       canBeCalledUnauthorized:NO
+                         error:error];
     
 }
 
@@ -513,16 +511,25 @@
 		// All was OK in the URL, let's try and parse the JSON.
 		
 		NSError *parseError = nil;
-		id parsedJsonValue = [[CJSONDeserializer deserializer] deserialize:responseData error:&parseError];
-		
-        if (parseError != nil) {
-			if (error != NULL) {
-				*error = parseError;
-			}
-			return nil;
-		} else {
-			return parsedJsonValue;
-		}
+        
+        // Do we have an empty response?
+        
+        NSString *jsonString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+        
+        if ([[jsonString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
+            id parsedJsonValue = [[CJSONDeserializer deserializer] deserialize:responseData error:&parseError];
+            
+            if (parseError != nil) {
+                if (error != NULL) {
+                    *error = parseError;
+                }
+                
+            } else {
+                return parsedJsonValue;
+            }
+        }
+        
+        return nil;
 	}	
 }
 

@@ -59,13 +59,13 @@ typedef enum {
 // Reads
 
 -(NSDictionary *)createReadWithBookId:(ReadmillBookId)bookId state:(ReadmillReadState)readState private:(BOOL)isPrivate error:(NSError **)error;
--(NSDictionary *)updateReadWithId:(ReadmillReadId)readId withState:(ReadmillReadState)readState private:(BOOL)isPrivate closingRemark:(NSString *)remark error:(NSError **)error;
+-(void)updateReadWithId:(ReadmillReadId)readId withState:(ReadmillReadState)readState private:(BOOL)isPrivate closingRemark:(NSString *)remark error:(NSError **)error;
 -(NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error;
 -(NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error;
 
 //Pings     
 
--(NSDictionary *)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillPingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime error:(NSError **)error;
+-(void)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillPingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime error:(NSError **)error;
 
 // Users
 

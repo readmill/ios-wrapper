@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		962E24B812DDF50C00FC7342 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962E24B712DDF50C00FC7342 /* Security.framework */; };
 		963E58FE12DB35EB000864D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963E58FD12DB35EB000864D8 /* Cocoa.framework */; };
 		963E590312DB35EB000864D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 963E590112DB35EB000864D8 /* InfoPlist.strings */; };
 		963E590512DB35EB000864D8 /* Readmill_Framework-main.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590412DB35EB000864D8 /* Readmill_Framework-main.m */; };
@@ -16,7 +15,6 @@
 		963E590E12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */; };
 		963E591712DB3D0F000864D8 /* ReadmillAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E591612DB3D0F000864D8 /* ReadmillAPI.m */; };
 		963E599A12DB4E4D000864D8 /* ReadmillStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */; };
-		963E59C612DB5A19000864D8 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 963E59C512DB5A19000864D8 /* libxml2.dylib */; };
 		966FAD6212DCB35500836DF3 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD4912DCB35500836DF3 /* CDataScanner.m */; };
 		966FAD6312DCB35500836DF3 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD4C12DCB35500836DF3 /* CFilteringJSONSerializer.m */; };
 		966FAD6412DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD4E12DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.m */; };
@@ -31,7 +29,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		962E24B712DDF50C00FC7342 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		963E58FA12DB35EB000864D8 /* Readmill Framework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Framework.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		963E58FD12DB35EB000864D8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		963E58FF12DB35EB000864D8 /* Readmill_Framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Readmill_Framework-Info.plist"; sourceTree = "<group>"; };
@@ -78,8 +75,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				962E24B812DDF50C00FC7342 /* Security.framework in Frameworks */,
-				963E59C612DB5A19000864D8 /* libxml2.dylib in Frameworks */,
 				963E58FE12DB35EB000864D8 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,7 +85,6 @@
 		963E58EB12DB35EB000864D8 = {
 			isa = PBXGroup;
 			children = (
-				962E24B712DDF50C00FC7342 /* Security.framework */,
 				963E58F212DB35EB000864D8 /* Classes */,
 				963E58F312DB35EB000864D8 /* Other Sources */,
 				963E58F412DB35EB000864D8 /* Resources */,

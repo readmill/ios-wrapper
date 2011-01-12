@@ -28,11 +28,15 @@
         [[NSWorkspace sharedWorkspace] openURL:[api clientAuthorizationURLWithRedirectURLString:@"readmillTestAuth://authorize"]];
     }
     
+    // Winnie the Pooh book: 11 read: 28
+    // User: Name danielkennett id = 7
+    
     NSError *err;
-    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [api addBookWithTitle:@"Winnie-the-Pooh"
-                                                                                                     author:@"A. A. Milne"
-                                                                                                       isbn:@"1405223987"
-                                                                                                      error:&err]);
+    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [api updateReadWithId:28
+                                                                                                 withState:kReadStateReading
+                                                                                                   private:NO
+                                                                                             closingRemark:nil
+                                                                                                     error:&err]);
     
     NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), err);
                                                                                       
