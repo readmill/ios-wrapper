@@ -35,3 +35,23 @@ static NSString * const kReadmillAPIBookPermalinkURLKey = @"permalink_url";
 static NSString * const kReadmillAPIBookIdKey = @"id";
 static NSString * const kReadmillAPIBookRootEditionIdKey = @"root_edition";
 static NSString * const kReadmillAPIBookDatePublishedKey = @"published_at";
+
+// API Keys - User
+
+static NSString * const kReadmillAPIUserAvatarURLKey = @"avatar_url";
+static NSString * const kReadmillAPIUserAbandonedBooksKey = @"books_abandoned";
+static NSString * const kReadmillAPIUserFinishedBooksKey = @"books_finished";
+static NSString * const kReadmillAPIUserInterestingBooksKey = @"books_interesting";
+static NSString * const kReadmillAPIUserOpenBooksKey = @"books_open";
+static NSString * const kReadmillAPIUserCityKey = @"city";
+static NSString * const kReadmillAPIUserCountryKey = @"country";
+static NSString * const kReadmillAPIUserDescriptionKey = @"description";
+static NSString * const kReadmillAPIUserFirstNameKey = @"firstname";
+static NSString * const kReadmillAPIUserFollowerCountKey = @"followers";
+static NSString * const kReadmillAPIUserFollowingCountKey = @"followings";
+static NSString * const kReadmillAPIUserFullNameKey = @"fullname";
+static NSString * const kReadmillAPIUserIDKey = @"id";
+static NSString * const kReadmillAPIUserLastNameKey = @"lastname";
+static NSString * const kReadmillAPIUserPermalinkURLKey = @"permalink_url";
+static NSString * const kReadmillAPIUserReadmillUserNameKey = @"username";
+static NSString * const kReadmillAPIUserWebsiteKey = @"website";

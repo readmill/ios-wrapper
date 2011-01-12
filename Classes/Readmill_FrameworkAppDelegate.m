@@ -9,6 +9,7 @@
 #import "Readmill_FrameworkAppDelegate.h"
 #import "ReadmillAPIWrapper.h"
 #import "ReadmillBook.h"
+#import "ReadmillUser.h"
 
 @implementation Readmill_FrameworkAppDelegate
 
@@ -36,6 +37,10 @@
     // User: Name danielkennett id = 7
     
     NSError *err;
+    
+    ReadmillUser *user = [[[ReadmillUser alloc] initWithAPIDictionary:[api userWithId:7 error:&err]] autorelease];
+    
+    NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), user);
     
     NSArray *bookObjects = [api allBooks:&err];
     

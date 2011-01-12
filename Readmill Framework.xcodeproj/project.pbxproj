@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		962E24BD12DE3D9F00FC7342 /* ReadmillBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */; };
 		962E24C012DE4B0600FC7342 /* ReadmillDictionaryExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 962E24BF12DE4B0600FC7342 /* ReadmillDictionaryExtensions.m */; };
+		962E24C312DE5CCD00FC7342 /* ReadmillUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 962E24C212DE5CCD00FC7342 /* ReadmillUser.m */; };
 		963E58FE12DB35EB000864D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963E58FD12DB35EB000864D8 /* Cocoa.framework */; };
 		963E590312DB35EB000864D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 963E590112DB35EB000864D8 /* InfoPlist.strings */; };
 		963E590512DB35EB000864D8 /* Readmill_Framework-main.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590412DB35EB000864D8 /* Readmill_Framework-main.m */; };
@@ -35,6 +36,8 @@
 		962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillBook.m; path = "Framework/Object Model/ReadmillBook.m"; sourceTree = "<group>"; };
 		962E24BE12DE4B0600FC7342 /* ReadmillDictionaryExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillDictionaryExtensions.h; path = Framework/ReadmillDictionaryExtensions.h; sourceTree = "<group>"; };
 		962E24BF12DE4B0600FC7342 /* ReadmillDictionaryExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillDictionaryExtensions.m; path = Framework/ReadmillDictionaryExtensions.m; sourceTree = "<group>"; };
+		962E24C112DE5CCD00FC7342 /* ReadmillUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillUser.h; path = "Framework/Object Model/ReadmillUser.h"; sourceTree = "<group>"; };
+		962E24C212DE5CCD00FC7342 /* ReadmillUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillUser.m; path = "Framework/Object Model/ReadmillUser.m"; sourceTree = "<group>"; };
 		963E58FA12DB35EB000864D8 /* Readmill Framework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Framework.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		963E58FD12DB35EB000864D8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		963E58FF12DB35EB000864D8 /* Readmill_Framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Readmill_Framework-Info.plist"; sourceTree = "<group>"; };
@@ -45,7 +48,7 @@
 		963E590A12DB35EB000864D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		963E590C12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Readmill_FrameworkAppDelegate.h; sourceTree = "<group>"; };
 		963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Readmill_FrameworkAppDelegate.m; sourceTree = "<group>"; };
-		963E591512DB3D0F000864D8 /* ReadmillAPIWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; name = ReadmillAPIWrapper.h; path = Framework/ReadmillAPIWrapper.h; sourceTree = "<group>"; };
+		963E591512DB3D0F000864D8 /* ReadmillAPIWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPIWrapper.h; path = Framework/ReadmillAPIWrapper.h; sourceTree = "<group>"; };
 		963E591612DB3D0F000864D8 /* ReadmillAPIWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillAPIWrapper.m; path = Framework/ReadmillAPIWrapper.m; sourceTree = "<group>"; };
 		963E599812DB4E4D000864D8 /* ReadmillStringExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillStringExtensions.h; path = Framework/ReadmillStringExtensions.h; sourceTree = "<group>"; };
 		963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillStringExtensions.m; path = Framework/ReadmillStringExtensions.m; sourceTree = "<group>"; };
@@ -105,6 +108,8 @@
 			children = (
 				962E24BB12DE3D9F00FC7342 /* ReadmillBook.h */,
 				962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */,
+				962E24C112DE5CCD00FC7342 /* ReadmillUser.h */,
+				962E24C212DE5CCD00FC7342 /* ReadmillUser.m */,
 			);
 			name = "Object Model";
 			sourceTree = "<group>";
@@ -322,6 +327,7 @@
 				966FAD6C12DCB35500836DF3 /* CJSONSerializer.m in Sources */,
 				962E24BD12DE3D9F00FC7342 /* ReadmillBook.m in Sources */,
 				962E24C012DE4B0600FC7342 /* ReadmillDictionaryExtensions.m in Sources */,
+				962E24C312DE5CCD00FC7342 /* ReadmillUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
