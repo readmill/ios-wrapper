@@ -172,7 +172,7 @@
     
     [parameters setValue:[NSNumber numberWithInteger:readState] forKey:@"state"];
     [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:@"is_private"];
-    [parameters setValue:kClientId forKey:@"client_id"];
+    [parameters setValue:kReadmillClientId forKey:@"client_id"];
     
     
     NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books/%d/reads.json", [self apiEndPoint], bookId]]
@@ -193,7 +193,7 @@
     
     [parameters setValue:[NSNumber numberWithInteger:readState] forKey:@"state"];
     [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:@"is_private"];
-    [parameters setValue:kClientId forKey:@"client_id"];
+    [parameters setValue:kReadmillClientId forKey:@"client_id"];
     
     if ([remark length] > 0) {
         [parameters setValue:remark forKey:@"closing_remark"];
@@ -348,8 +348,8 @@
                                                        timeoutInterval:10.0];
     
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&code=%@&redirect_uri=%@",
-                                 [kClientId urlEncodedString],
-                                 [kClientSecret urlEncodedString],
+                                 [kReadmillClientId urlEncodedString],
+                                 [kReadmillClientSecret urlEncodedString],
                                  [authCode urlEncodedString],
                                  [redirectURLString urlEncodedString]];
     
@@ -378,8 +378,8 @@
                                                        timeoutInterval:10.0];
     
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
-                                 [kClientId urlEncodedString],
-                                 [kClientSecret urlEncodedString],
+                                 [kReadmillClientId urlEncodedString],
+                                 [kReadmillClientSecret urlEncodedString],
                                  [[self refreshToken] urlEncodedString],
                                  [[self authorizedRedirectURL] urlEncodedString]];
     
@@ -408,7 +408,7 @@
     
     NSString *baseURL = [self oAuthBaseURL];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@", baseURL, kClientId];
+    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@", baseURL, kReadmillClientId];
     
     if ([redirect length] > 0) {
         urlString = [NSString stringWithFormat:@"%@&redirect_uri=%@", urlString, [redirect urlEncodedString]];
