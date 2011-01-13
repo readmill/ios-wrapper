@@ -72,7 +72,7 @@
 
 -(NSString *)description {
     
-    return [NSString stringWithFormat:@"%@: %@ by %@ [ISBN %@]", [super description], [self title], [self author], [self isbn]];
+    return [NSString stringWithFormat:@"%@ id %d: %@ by %@ [ISBN %@]", [super description], [self bookId], [self title], [self author], [self isbn]];
 }
 
 @synthesize author;

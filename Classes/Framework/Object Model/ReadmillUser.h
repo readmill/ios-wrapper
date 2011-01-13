@@ -18,6 +18,14 @@
 
 @end
 
+@protocol ReadmillBookFindingDelegate <NSObject>
+
+-(void)readmillUser:(ReadmillUser *)user didFindBooks:(NSArray *)books;
+-(void)readmillUserFoundNoBooks:(ReadmillUser *)user;
+-(void)readmillUser:(ReadmillUser *)user failedToFindBooksWithError:(NSError *)error;
+
+@end
+
 @interface ReadmillUser : NSObject {
 @private
     
@@ -56,8 +64,17 @@
 
 -(void)updateWithAPIDictionary:(NSDictionary *)apiDict;
 
+// Authentication 
+
 -(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
 -(void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
+
+// Books
+
+-(void)findBooksWithISBN:(NSString *)isbn title:(NSString *)title delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+-(void)createBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+-(void)findOrCreateBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+
 
 
 @property (readonly, copy) NSString *city;
