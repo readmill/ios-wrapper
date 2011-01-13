@@ -322,6 +322,22 @@
     }
 }
 
+-(NSDictionary *)currentUser:(NSError **)error {
+    
+    if (![self ensureAccessTokenIsCurrent:error]) {
+        return nil;
+    }
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/echo.json?access_token=%@",
+                                                                                             [self oAuthBaseURL],
+                                                                                             [self accessToken]]]
+                                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                       timeoutInterval:10.0];
+    [request setHTTPMethod:@"GET"];
+    
+    return [self sendPreparedRequest:request error:error];
+}
+
 #pragma mark -
 #pragma mark OAuth
 

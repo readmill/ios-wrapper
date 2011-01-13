@@ -73,6 +73,6 @@ typedef enum {
 
 -(NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error;
 -(NSDictionary *)userWithName:(NSString *)userName error:(NSError **)error;
-
+-(NSDictionary *)currentUser:(NSError **)error;
 
 @end
