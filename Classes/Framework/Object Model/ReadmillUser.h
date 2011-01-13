@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
+#import "ReadmillBook.h"
 
 @class ReadmillUser;
 
@@ -23,6 +24,14 @@
 -(void)readmillUser:(ReadmillUser *)user didFindBooks:(NSArray *)books;
 -(void)readmillUserFoundNoBooks:(ReadmillUser *)user;
 -(void)readmillUser:(ReadmillUser *)user failedToFindBooksWithError:(NSError *)error;
+
+@end
+
+@protocol ReadmillReadFindingDelegate <NSObject>
+
+-(void)readmillUser:(ReadmillUser *)user didFindReads:(NSArray *)reads forBook:(ReadmillBook *)book;
+-(void)readmillUser:(ReadmillUser *)user foundNoReadsForBook:(ReadmillBook *)book;
+-(void)readmillUser:(ReadmillUser *)user failedToFindReadForBook:(ReadmillBook *)book withError:(NSError *)error;
 
 @end
 
@@ -75,6 +84,11 @@
 -(void)createBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 -(void)findOrCreateBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
+// Reads 
+
+-(void)createReadForBook:(ReadmillBook *)book delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
+-(void)findReadForBook:(ReadmillBook *)book delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
+-(void)findOrCreateReadForBook:(ReadmillBook *)book delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
 
 
 @property (readonly, copy) NSString *city;

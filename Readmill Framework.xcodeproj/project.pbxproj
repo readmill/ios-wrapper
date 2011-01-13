@@ -53,7 +53,7 @@
 		963E591612DB3D0F000864D8 /* ReadmillAPIWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillAPIWrapper.m; path = Framework/ReadmillAPIWrapper.m; sourceTree = "<group>"; };
 		963E599812DB4E4D000864D8 /* ReadmillStringExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillStringExtensions.h; path = Framework/ReadmillStringExtensions.h; sourceTree = "<group>"; };
 		963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillStringExtensions.m; path = Framework/ReadmillStringExtensions.m; sourceTree = "<group>"; };
-		963E599B12DB525A000864D8 /* ReadmillAPIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; name = ReadmillAPIConstants.h; path = Framework/ReadmillAPIConstants.h; sourceTree = "<group>"; };
+		963E599B12DB525A000864D8 /* ReadmillAPIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPIConstants.h; path = Framework/ReadmillAPIConstants.h; sourceTree = "<group>"; };
 		963E59C512DB5A19000864D8 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /Xcode4/SDKs/MacOSX10.6.sdk/usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		966FAD4812DCB35500836DF3 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
 		966FAD4912DCB35500836DF3 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner.m; sourceTree = "<group>"; };

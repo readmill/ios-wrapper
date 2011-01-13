@@ -27,17 +27,21 @@
 @property (readwrite) ReadmillUserId userId;
 @property (readwrite) ReadmillReadId readId;
 
+@property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
+
 @end
 
 @implementation ReadmillRead
 
 - (id)init {
-    return [self initWithAPIDictionary:nil];
+    return [self initWithAPIDictionary:nil apiWrapper:nil];
 }
 
--(id)initWithAPIDictionary:(NSDictionary *)apiDict {
+-(id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper {
     if ((self = [super init])) {
         // Initialization code here.
+        
+        [self setApiWrapper:nil];
         
         NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
         
@@ -63,7 +67,7 @@
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"%@: Read of book %d by %d", [super description], [self bookId], [self userId]];
+    return [NSString stringWithFormat:@"%@ id %d: Read of book %d by %d", [super description], [self readId], [self bookId], [self userId]];
 }
 
 @synthesize dateAbandoned;
@@ -80,8 +84,12 @@
 @synthesize userId;
 @synthesize readId;
 
+@synthesize apiWrapper;
+
 - (void)dealloc {
     // Clean-up code here.
+    
+    [self setApiWrapper:nil];
     
     [self setDateAbandoned:nil];
     [self setDateCreated:nil];

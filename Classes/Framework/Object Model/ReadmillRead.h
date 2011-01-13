@@ -28,9 +28,10 @@
     ReadmillUserId userId;
     ReadmillReadId readId;
     
+    ReadmillAPIWrapper *apiWrapper;
 }
 
--(id)initWithAPIDictionary:(NSDictionary *)apiDict;
+-(id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper;
 
 @property (readonly, copy) NSDate *dateAbandoned;
 @property (readonly, copy) NSDate *dateCreated;
@@ -47,5 +48,7 @@
 @property (readonly) ReadmillBookId bookId;
 @property (readonly) ReadmillUserId userId;
 @property (readonly) ReadmillReadId readId;
+
+@property (readonly, retain) ReadmillAPIWrapper *apiWrapper;
 
 @end

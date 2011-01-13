@@ -40,16 +40,6 @@
     
 }
 
--(void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), authenticationError);
-}
-
-
--(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), loggedInUser);
-    [self setUser:loggedInUser];
-}
-
 -(void)applicationWillTerminate:(NSNotification *)notification {
     [[NSUserDefaults standardUserDefaults] setValue:[[self user] propertyListRepresentation] forKey:@"readmill"];
 }
@@ -64,4 +54,55 @@
                           onStagingServer:YES];
 }
 
-@end
+
+
+#pragma mark -
+#pragma mark Authentication
+
+-(void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), authenticationError);
+}
+
+-(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), loggedInUser);
+    [self setUser:loggedInUser];
+    
+    [[self user] findOrCreateBookWithISBN:@"0340896981"
+                                    title:@"One Day"
+                                   author:@"David Nicholls"
+                                 delegate:self];
+    
+}
+
+#pragma mark -
+#pragma mark Book finding
+
+-(void)readmillUser:(ReadmillUser *)user didFindBooks:(NSArray *)books {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), books);
+    
+    [[self user] findOrCreateReadForBook:[books lastObject]
+                        delegate:self];
+}
+
+-(void)readmillUserFoundNoBooks:(ReadmillUser *)user {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"No books!");
+}
+
+-(void)readmillUser:(ReadmillUser *)user failedToFindBooksWithError:(NSError *)error {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
+}
+
+#pragma mark -
+#pragma mark Reads
+
+-(void)readmillUser:(ReadmillUser *)user didFindReads:(NSArray *)reads forBook:(ReadmillBook *)book {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), reads);
+}
+
+-(void)readmillUser:(ReadmillUser *)user foundNoReadsForBook:(ReadmillBook *)book {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"No reads!");   
+}
+
+-(void)readmillUser:(ReadmillUser *)user failedToFindReadForBook:(ReadmillBook *)book withError:(NSError *)error {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
+}

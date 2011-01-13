@@ -9,6 +9,7 @@
 #import "ReadmillUser.h"
 #import "ReadmillDictionaryExtensions.h"
 #import "ReadmillBook.h"
+#import "ReadmillRead.h"
 
 @interface ReadmillUser ()
 
@@ -168,6 +169,8 @@
 
 - (void)dealloc {
     // Clean-up code here.
+    
+    [self setApiWrapper:nil];
     
     [self setCity:nil];
     [self setCountry:nil];
@@ -528,10 +531,228 @@
     [self release];
 }
 
+#pragma mark -
+
+-(void)findReadForBook:(ReadmillBook *)book delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate {
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                readFindingDelegate, @"delegate",
+                                [NSThread currentThread], @"callbackThread",
+                                book, @"book", 
+                                nil];
+    
+    [self performSelectorInBackground:@selector(findReadWithProperties:)
+                           withObject:properties];
+    
+}
+
+-(void)findOrCreateReadForBook:(ReadmillBook *)book delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate {
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                readFindingDelegate, @"delegate",
+                                [NSThread currentThread], @"callbackThread",
+                                book, @"book", 
+                                [NSNumber numberWithBool:YES], @"createIfNotFound",
+                                nil];
+    
+    [self performSelectorInBackground:@selector(findReadWithProperties:)
+                           withObject:properties];
+}
+
+-(void)findReadWithProperties:(NSDictionary *)properties {
+    
+    [self retain];
+    
+    NSAutoreleasePool *pool;
+    pool = [[NSAutoreleasePool alloc] init];
+    
+    NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
+    id <ReadmillReadFindingDelegate> readFindingDelegate = [properties valueForKey:@"delegate"];
+    ReadmillBook *book = [properties valueForKey:@"book"];
+    BOOL createIfNotFound = [[properties valueForKey:@"createIfNotFound"] boolValue];
+    
+    NSError *error = nil;
+    NSMutableArray *matchingReads = [NSMutableArray array];
+    
+    NSArray *readsForUser = [[self apiWrapper] publicReadsForUserWithId:[self userId] error:&error];
+    
+    if (error == nil) {
+        for (NSDictionary *read in readsForUser) {
+            if ([[[read valueForKey:kReadmillAPIReadBookKey]
+                  valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue] == [book bookId]) {
+                
+                [matchingReads addObject:read];
+            }
+        }
+    }
+    
+    if ([matchingReads count] == 0 && createIfNotFound == YES) {
+        
+        NSDictionary *readDict = [[self apiWrapper] createReadWithBookId:[book bookId]
+                                                                   state:ReadStateInteresting
+                                                                 private:NO
+                                                                   error:&error];
+        if (readDict != nil) {
+            [matchingReads addObject:readDict];
+        }
+    }
+    
+    if (error == nil && readFindingDelegate != nil && [matchingReads count] == 0) {
+        
+        NSInvocation *noReadsInvocation = [NSInvocation invocationWithMethodSignature:
+                                           [(NSObject *)readFindingDelegate
+                                            methodSignatureForSelector:@selector(readmillUser:foundNoReadsForBook:)]];
+        
+        [noReadsInvocation setSelector:@selector(readmillUser:foundNoReadsForBook:)];
+        
+        [noReadsInvocation setArgument:&self atIndex:2];
+        [noReadsInvocation setArgument:&book atIndex:3];
+        
+        [noReadsInvocation performSelector:@selector(invokeWithTarget:)
+                                  onThread:callbackThread
+                                withObject:readFindingDelegate
+                             waitUntilDone:YES]; 
+        
+    } else if (error == nil && readFindingDelegate != nil && [matchingReads count] > 0) {
+        
+        NSMutableArray *mutableReads = [NSMutableArray arrayWithCapacity:[matchingReads count]];
+        
+        for (NSDictionary *dict in matchingReads) {
+            ReadmillRead *read = [[[ReadmillRead alloc] initWithAPIDictionary:dict apiWrapper:[self apiWrapper]] autorelease];
+            [mutableReads addObject:read];
+        }
+        
+        NSArray *reads = [NSArray arrayWithArray:mutableReads];
+        
+        NSInvocation *successInvocation = [NSInvocation invocationWithMethodSignature:
+                                           [(NSObject *)readFindingDelegate
+                                            methodSignatureForSelector:@selector(readmillUser:didFindReads:forBook:)]];
+        
+        [successInvocation setSelector:@selector(readmillUser:didFindReads:forBook:)];
+        
+        [successInvocation setArgument:&self atIndex:2];
+        [successInvocation setArgument:&reads atIndex:3];
+        [successInvocation setArgument:&book atIndex:4];
+        
+        [successInvocation performSelector:@selector(invokeWithTarget:)
+                                  onThread:callbackThread
+                                withObject:readFindingDelegate
+                             waitUntilDone:YES]; 
+        
+    } else if (error != nil && readFindingDelegate != nil) {
+        
+        NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
+                                          [(NSObject *)readFindingDelegate 
+                                           methodSignatureForSelector:@selector(readmillUser:failedToFindReadForBook:withError:)]];
+        
+        [failedInvocation setSelector:@selector(readmillUser:failedToFindBooksWithError:)];
+        
+        [failedInvocation setArgument:&self atIndex:2];
+        [failedInvocation setArgument:&book atIndex:3];
+        [failedInvocation setArgument:&error atIndex:4];
+        
+        [failedInvocation performSelector:@selector(invokeWithTarget:)
+                                 onThread:callbackThread
+                               withObject:readFindingDelegate
+                            waitUntilDone:YES]; 
+    }
+
+    
+    [pool drain];
+    
+    [self release];
+    
+}
 
 
+-(void)createReadForBook:(ReadmillBook *)book delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate {
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                readFindingDelegate, @"delegate",
+                                [NSThread currentThread], @"callbackThread",
+                                book, @"book", 
+                                nil];
+    
+    [self performSelectorInBackground:@selector(createReadWithProperties:)
+                           withObject:properties];
+}
 
-
-
+-(void)createReadWithProperties:(NSDictionary *)properties {
+    
+    [self retain];
+    
+    NSAutoreleasePool *pool;
+    pool = [[NSAutoreleasePool alloc] init];
+    
+    NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
+    id <ReadmillReadFindingDelegate> readFindingDelegate = [properties valueForKey:@"delegate"];
+    ReadmillBook *book = [properties valueForKey:@"book"];
+    
+    NSError *error = nil;
+    NSDictionary *readDict = [[self apiWrapper] createReadWithBookId:[book bookId]
+                                                               state:ReadStateInteresting
+                                                             private:NO
+                                                               error:&error];
+    
+    if (error == nil && readFindingDelegate != nil && readDict == nil) {
+        
+        NSInvocation *noReadsInvocation = [NSInvocation invocationWithMethodSignature:
+                                           [(NSObject *)readFindingDelegate
+                                            methodSignatureForSelector:@selector(readmillUser:foundNoReadsForBook:)]];
+        
+        [noReadsInvocation setSelector:@selector(readmillUser:foundNoReadsForBook:)];
+        
+        [noReadsInvocation setArgument:&self atIndex:2];
+        [noReadsInvocation setArgument:&book atIndex:3];
+        
+        [noReadsInvocation performSelector:@selector(invokeWithTarget:)
+                                  onThread:callbackThread
+                                withObject:readFindingDelegate
+                             waitUntilDone:YES]; 
+        
+    } else if (error == nil && readFindingDelegate != nil && readDict != nil) {
+        
+        NSInvocation *successInvocation = [NSInvocation invocationWithMethodSignature:
+                                           [(NSObject *)readFindingDelegate
+                                            methodSignatureForSelector:@selector(readmillUser:didFindReads:forBook:)]];
+        
+        [successInvocation setSelector:@selector(readmillUser:didFindReads:forBook:)];
+        
+        ReadmillRead *read = [[[ReadmillRead alloc] initWithAPIDictionary:readDict
+                                                               apiWrapper:[self apiWrapper]] autorelease];
+        
+        NSArray *readArray = [NSArray arrayWithObject:read];
+        
+        [successInvocation setArgument:&self atIndex:2];
+        [successInvocation setArgument:&readArray atIndex:3];
+        [successInvocation setArgument:&book atIndex:4];
+        
+        [successInvocation performSelector:@selector(invokeWithTarget:)
+                                  onThread:callbackThread
+                                withObject:readFindingDelegate
+                             waitUntilDone:YES]; 
+        
+    } else if (error != nil && readFindingDelegate != nil) {
+        
+        NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
+                                          [(NSObject *)readFindingDelegate 
+                                           methodSignatureForSelector:@selector(readmillUser:failedToFindReadForBook:withError:)]];
+        
+        [failedInvocation setSelector:@selector(readmillUser:failedToFindBooksWithError:)];
+        
+        [failedInvocation setArgument:&self atIndex:2];
+        [failedInvocation setArgument:&book atIndex:3];
+        [failedInvocation setArgument:&error atIndex:4];
+        
+        [failedInvocation performSelector:@selector(invokeWithTarget:)
+                                 onThread:callbackThread
+                               withObject:readFindingDelegate
+                            waitUntilDone:YES]; 
+    }
+    
+    [pool drain];
+    
+    [self release];
+}
 
 @end
