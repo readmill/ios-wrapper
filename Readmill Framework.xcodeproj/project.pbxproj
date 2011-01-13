@@ -29,6 +29,7 @@
 		966FAD6A12DCB35500836DF3 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5C12DCB35500836DF3 /* CJSONDeserializer.m */; };
 		966FAD6B12DCB35500836DF3 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5E12DCB35500836DF3 /* CJSONScanner.m */; };
 		966FAD6C12DCB35500836DF3 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD6012DCB35500836DF3 /* CJSONSerializer.m */; };
+		968FF39212DF284000EC8369 /* ReadmillRead.m in Sources */ = {isa = PBXBuildFile; fileRef = 968FF39112DF284000EC8369 /* ReadmillRead.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +78,8 @@
 		966FAD5F12DCB35500836DF3 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		966FAD6012DCB35500836DF3 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		966FAD6112DCB35500836DF3 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
+		968FF39012DF284000EC8369 /* ReadmillRead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillRead.h; path = "Framework/Object Model/ReadmillRead.h"; sourceTree = "<group>"; };
+		968FF39112DF284000EC8369 /* ReadmillRead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillRead.m; path = "Framework/Object Model/ReadmillRead.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +113,8 @@
 				962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */,
 				962E24C112DE5CCD00FC7342 /* ReadmillUser.h */,
 				962E24C212DE5CCD00FC7342 /* ReadmillUser.m */,
+				968FF39012DF284000EC8369 /* ReadmillRead.h */,
+				968FF39112DF284000EC8369 /* ReadmillRead.m */,
 			);
 			name = "Object Model";
 			sourceTree = "<group>";
@@ -328,6 +333,7 @@
 				962E24BD12DE3D9F00FC7342 /* ReadmillBook.m in Sources */,
 				962E24C012DE4B0600FC7342 /* ReadmillDictionaryExtensions.m in Sources */,
 				962E24C312DE5CCD00FC7342 /* ReadmillUser.m in Sources */,
+				968FF39212DF284000EC8369 /* ReadmillRead.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
