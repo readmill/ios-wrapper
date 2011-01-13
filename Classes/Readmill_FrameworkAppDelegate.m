@@ -10,6 +10,7 @@
 #import "ReadmillAPIWrapper.h"
 #import "ReadmillBook.h"
 #import "ReadmillUser.h"
+#import "ReadmillRead.h"
 
 @implementation Readmill_FrameworkAppDelegate
 
@@ -36,11 +37,21 @@
     // Winnie the Pooh book: 11 read: 28
     // User: Name danielkennett id = 7
     
-    NSError *err;
+    
+    NSError *err = nil;
+    
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [api currentUser:&err]);
+    
     
     ReadmillUser *user = [[[ReadmillUser alloc] initWithAPIDictionary:[api userWithId:7 error:&err]] autorelease];
     
     NSLog(@"%@ %@: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), user);
+    
+    ReadmillRead *read = [[[ReadmillRead alloc] initWithAPIDictionary:[api readWithId:28 
+                                                                        forUserWithId:7
+                                                                                error:&err]] autorelease];
+    
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), read);
     
     NSArray *bookObjects = [api allBooks:&err];
     

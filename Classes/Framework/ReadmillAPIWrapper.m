@@ -8,7 +8,7 @@
 
 #import "ReadmillAPIWrapper.h"
 #import "ReadmillStringExtensions.h"
-#import "Constants.h"
+#import "ReadmillAPIConstants.h"
 #import "CJSONDeserializer.h"
 
 @interface ReadmillAPIWrapper ()

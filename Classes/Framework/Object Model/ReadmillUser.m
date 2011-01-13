@@ -8,7 +8,6 @@
 
 #import "ReadmillUser.h"
 #import "ReadmillDictionaryExtensions.h"
-#import "Constants.h"
 
 @interface ReadmillUser ()
 
