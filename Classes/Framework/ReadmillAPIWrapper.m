@@ -207,11 +207,11 @@
 
 -(NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error {
     
-    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d/reads.json", [self apiEndPoint], userId]] 
+    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d/reads.json", [self apiEndPoint], userId]] 
                                            withParameters:nil
-                               shouldBeCalledUnauthorized:YES
+                               shouldBeCalledUnauthorized:NO
                                                     error:error];
-    return [apiResponse valueForKey:@"read"];
+    return apiResponse;
 }
 
 -(NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error {
@@ -220,11 +220,11 @@
         return nil;
     } else {
         
-        NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@/reads.json", [self apiEndPoint], userName]] 
+        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@/reads.json", [self apiEndPoint], userName]] 
                                                withParameters:nil
-                                   shouldBeCalledUnauthorized:YES
+                                   shouldBeCalledUnauthorized:NO
                                                         error:error];
-        return [apiResponse valueForKey:@"read"];
+        return apiResponse;
     }
 }
 
@@ -236,7 +236,7 @@
                                                             userId,
                                                             readId]] 
                                            withParameters:nil
-                               shouldBeCalledUnauthorized:YES
+                               shouldBeCalledUnauthorized:NO
                                                     error:error];
     return apiResponse;
     
@@ -254,7 +254,7 @@
                                                                 userName,
                                                                 readId]] 
                                                withParameters:nil
-                                   shouldBeCalledUnauthorized:YES
+                                   shouldBeCalledUnauthorized:NO
                                                         error:error];
         return apiResponse;
     }
@@ -449,7 +449,7 @@
     NSMutableString *parameterString = [NSMutableString string];
     
     if ([[self accessToken] length] > 0 && !stripAuth) {
-        [parameterString appendFormat:@"access_token=%@", [self accessToken]];
+        [parameterString appendFormat:@"?access_token=%@", [self accessToken]];
         first = NO;
     }
     
