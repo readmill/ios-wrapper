@@ -9,6 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
 
+@class ReadmillRead;
+
+@protocol ReadmillReadUpdatingDelegate <NSObject>
+
+-(void)readmillReadDidUpdateMetadataSuccessfully:(ReadmillRead *)read;
+-(void)readmillRead:(ReadmillRead *)read didFailToUpdateMetadataWithError:(NSError *)error;
+
+@end
+
 @interface ReadmillRead : NSObject {
 @private
     
@@ -32,6 +41,13 @@
 }
 
 -(id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper;
+
+-(void)updateWithAPIDictionary:(NSDictionary *)apiDict;
+
+-(void)updateState:(ReadmillReadState)newState delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateWithState:(ReadmillReadState)newState isPrivate:(BOOL)readIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
 
 @property (readonly, copy) NSDate *dateAbandoned;
 @property (readonly, copy) NSDate *dateCreated;

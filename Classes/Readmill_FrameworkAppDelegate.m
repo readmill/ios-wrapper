@@ -97,6 +97,8 @@
 
 -(void)readmillUser:(ReadmillUser *)user didFindReads:(NSArray *)reads forBook:(ReadmillBook *)book {
     NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), reads);
+    
+    [[reads lastObject] updateState:ReadStateReading delegate:self];
 }
 
 -(void)readmillUser:(ReadmillUser *)user foundNoReadsForBook:(ReadmillBook *)book {
@@ -106,3 +108,17 @@
 -(void)readmillUser:(ReadmillUser *)user failedToFindReadForBook:(ReadmillBook *)book withError:(NSError *)error {
     NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
 }
+
+#pragma mark -
+#pragma mark Read updating
+
+-(void)readmillReadDidUpdateMetadataSuccessfully:(ReadmillRead *)read {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), read);
+}
+
+-(void)readmillRead:(ReadmillRead *)read didFailToUpdateMetadataWithError:(NSError *)error {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
+}
+
+
+@end
