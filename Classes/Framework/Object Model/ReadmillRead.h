@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
+#import "ReadmillReadSession.h"
 
 @class ReadmillRead;
 
@@ -48,6 +49,9 @@
 -(void)updateIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
 -(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
 -(void)updateWithState:(ReadmillReadState)newState isPrivate:(BOOL)readIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+
+-(ReadmillReadSession *)createReadSession;
+-(ReadmillReadSession *)createReadSessionWithExistingSessionId:(NSString *)sessionId;
 
 @property (readonly, copy) NSDate *dateAbandoned;
 @property (readonly, copy) NSDate *dateCreated;

@@ -9,12 +9,14 @@
 #import <Cocoa/Cocoa.h>
 #import "ReadmillUser.h"
 #import "ReadmillRead.h"
+#import "ReadmillReadSession.h"
 
 @interface Readmill_FrameworkAppDelegate : NSObject <NSApplicationDelegate, 
 ReadmillUserAuthenticationDelegate, 
 ReadmillBookFindingDelegate,
 ReadmillReadFindingDelegate,
-ReadmillReadUpdatingDelegate> {
+ReadmillReadUpdatingDelegate,
+ReadmillPingDelegate> {
     
     NSWindow *window;
     ReadmillUser *user;

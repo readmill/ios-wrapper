@@ -11,6 +11,7 @@
 #import "ReadmillBook.h"
 #import "ReadmillUser.h"
 #import "ReadmillRead.h"
+#import "ReadmillReadSession.h"
 
 @implementation Readmill_FrameworkAppDelegate
 
@@ -99,6 +100,10 @@
     NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), reads);
     
     [[reads lastObject] updateState:ReadStateReading delegate:self];
+    ReadmillReadSession *session = [[reads lastObject] createReadSession];
+    
+    [session pingWithProgress:20 delegate:self];
+    
 }
 
 -(void)readmillUser:(ReadmillUser *)user foundNoReadsForBook:(ReadmillBook *)book {
@@ -117,6 +122,17 @@
 }
 
 -(void)readmillRead:(ReadmillRead *)read didFailToUpdateMetadataWithError:(NSError *)error {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
+}
+
+#pragma mark -
+#pragma mark Session Pinging
+
+-(void)readmillReadSessionDidPingSuccessfully:(ReadmillReadSession *)session {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), session);
+}
+
+-(void)readmillReadSession:(ReadmillReadSession *)session didFailToPingWithError:(NSError *)error {
     NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
 }
 

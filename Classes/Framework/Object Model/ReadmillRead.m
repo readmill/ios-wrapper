@@ -74,6 +74,14 @@
     return [NSString stringWithFormat:@"%@ id %d: Read of book %d by %d", [super description], [self readId], [self bookId], [self userId]];
 }
 
+-(ReadmillReadSession *)createReadSession {
+    return [[[ReadmillReadSession alloc] initWithAPIWrapper:[self apiWrapper] readId:[self readId]] autorelease];
+}
+
+-(ReadmillReadSession *)createReadSessionWithExistingSessionId:(NSString *)sessionId {
+    return [[[ReadmillReadSession alloc] initWithAPIWrapper:[self apiWrapper] readId:[self readId] sessionId:sessionId] autorelease];
+}
+
 @synthesize dateAbandoned;
 @synthesize dateCreated;
 @synthesize dateFinished;
