@@ -7,13 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "ReadmillAPIWrapper.h"
+#import "ReadmillUser.h"
 
-@interface Readmill_FrameworkAppDelegate : NSObject <NSApplicationDelegate> {
+@interface Readmill_FrameworkAppDelegate : NSObject <NSApplicationDelegate, ReadmillUserAuthenticationDelegate> {
     NSWindow *window;
-    ReadmillAPIWrapper *api;
+    ReadmillUser *user;
 }
 
 @property (assign) IBOutlet NSWindow *window;
+@property (readwrite, retain) ReadmillUser *user;
 
 @end

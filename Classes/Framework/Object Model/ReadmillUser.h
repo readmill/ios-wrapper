@@ -9,6 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
 
+@class ReadmillUser;
+
+@protocol ReadmillUserAuthenticationDelegate <NSObject>
+
+-(void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError;
+-(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser;
+
+@end
+
 @interface ReadmillUser : NSObject {
 @private
     
@@ -32,9 +41,24 @@
     NSUInteger finishedBookCount;
     NSUInteger interestingBookCount;
     NSUInteger openBookCount;
+    
+    ReadmillAPIWrapper *apiWrapper;
 }
 
--(id)initWithAPIDictionary:(NSDictionary *)apiDict;
++(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirect onStagingServer:(BOOL)onStaging;
++(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate onStagingServer:(BOOL)onStaging;
++(void)authenticateWithPropertyListRepresentation:(NSDictionary *)plistRep delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
+
+-(id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper;
+-(id)initWithPropertyListRepresentation:(NSDictionary *)plistRep;
+
+-(NSDictionary *)propertyListRepresentation;
+
+-(void)updateWithAPIDictionary:(NSDictionary *)apiDict;
+
+-(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
+-(void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
+
 
 @property (readonly, copy) NSString *city;
 @property (readonly, copy) NSString *country;
@@ -57,5 +81,6 @@
 @property (readonly) NSUInteger interestingBookCount;
 @property (readonly) NSUInteger openBookCount;
 
+@property (readonly, retain) ReadmillAPIWrapper *apiWrapper;
 
 @end

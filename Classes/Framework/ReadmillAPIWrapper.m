@@ -78,9 +78,6 @@
 @synthesize apiEndPoint;
 
 -(void)dealloc {
-    
-    [self removeObserver:self forKeyPath:@"accessToken"];
-    
     [self setRefreshToken:nil];
     [self setAccessToken:nil];
     [self setAuthorizedRedirectURL:nil];

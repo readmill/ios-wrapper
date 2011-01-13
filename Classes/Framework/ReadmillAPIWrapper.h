@@ -23,6 +23,10 @@ typedef enum {
     
 } ReadmillReadState;
 
+// General 
+
+static NSString * const kReadmillErrorDomain = @"com.readmill";
+
 // URLs
 
 static NSString * const kLiveAPIEndPoint = @"http://api.readmill.com/";
