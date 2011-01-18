@@ -90,7 +90,8 @@
 
 @synthesize datePublished;
 
-- (void)dealloc {
+- (void)dealloc 
+{
     // Clean-up code here.
     
     [self setAuthor:nil];
@@ -104,6 +105,40 @@
     [self setDatePublished:nil];
     
     [super dealloc];
+}
+
+#pragma mark -
+#pragma mark NSCoding
+
+-(void)encodeWithCoder:(NSCoder *)encoder
+{	
+    [encoder encodeObject:title forKey:@"title"];
+    [encoder encodeObject:coverImageURL forKey:@"coverImageURL"];
+    [encoder encodeObject:metaDataURL forKey:@"metaDataURL"];
+    [encoder encodeObject:permalinkURL forKey:@"permalinkURL"];
+    [encoder encodeObject:author forKey:@"author"];
+    [encoder encodeObject:summary forKey:@"summary"];
+    [encoder encodeObject:isbn forKey:@"isbn"];
+    [encoder encodeObject:language forKey:@"language"];
+    [encoder encodeObject:[NSNumber numberWithInt:bookId] forKey:@"bookId"];
+    [encoder encodeObject:[NSNumber numberWithInt:rootEditionId] forKey:@"rootEditionId"];
+    [encoder encodeObject:datePublished forKey:@"datePublished"];
+}
+
+-(id)initWithCoder:(NSCoder *)decoder
+{
+    self.title = [decoder decodeObjectForKey:@"title"];
+    self.coverImageURL = [decoder decodeObjectForKey:@"coverImageURL"];
+    self.metaDataURL = [decoder decodeObjectForKey:@"metaDataURL"];
+    self.permalinkURL = [decoder decodeObjectForKey:@"permalinkURL"];
+    self.author = [decoder decodeObjectForKey:@"author"];
+    self.summary = [decoder decodeObjectForKey:@"summary"];
+    self.language = [decoder decodeObjectForKey:@"language"];
+    self.isbn = [decoder decodeObjectForKey:@"isbn"];
+    self.bookId = [[decoder decodeObjectForKey:@"bookId"] intValue];
+    self.rootEditionId = [[decoder decodeObjectForKey:@"rootEditionId"] intValue];
+    self.datePublished = [decoder decodeObjectForKey:@"datePublished"];
+    return self;
 }
 
 @end
