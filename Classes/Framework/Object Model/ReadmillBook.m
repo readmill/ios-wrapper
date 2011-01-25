@@ -110,34 +110,36 @@
 #pragma mark -
 #pragma mark NSCoding
 
--(void)encodeWithCoder:(NSCoder *)encoder
-{	
-    [encoder encodeObject:title forKey:@"title"];
-    [encoder encodeObject:coverImageURL forKey:@"coverImageURL"];
-    [encoder encodeObject:metaDataURL forKey:@"metaDataURL"];
-    [encoder encodeObject:permalinkURL forKey:@"permalinkURL"];
-    [encoder encodeObject:author forKey:@"author"];
-    [encoder encodeObject:summary forKey:@"summary"];
-    [encoder encodeObject:isbn forKey:@"isbn"];
-    [encoder encodeObject:language forKey:@"language"];
-    [encoder encodeObject:[NSNumber numberWithInt:bookId] forKey:@"bookId"];
-    [encoder encodeObject:[NSNumber numberWithInt:rootEditionId] forKey:@"rootEditionId"];
-    [encoder encodeObject:datePublished forKey:@"datePublished"];
+-(void)encodeWithCoder:(NSCoder *)encoder {	
+    
+    [encoder encodeObject:[self title] forKey:@"title"];
+    [encoder encodeObject:[self coverImageURL] forKey:@"coverImageURL"];
+    [encoder encodeObject:[self metaDataURL] forKey:@"metaDataURL"];
+    [encoder encodeObject:[self permalinkURL] forKey:@"permalinkURL"];
+    [encoder encodeObject:[self author] forKey:@"author"];
+    [encoder encodeObject:[self summary] forKey:@"summary"];
+    [encoder encodeObject:[self isbn] forKey:@"isbn"];
+    [encoder encodeObject:[self language] forKey:@"language"];
+    [encoder encodeObject:[NSNumber numberWithInt:[self bookId]] forKey:@"bookId"];
+    [encoder encodeObject:[NSNumber numberWithInt:[self rootEditionId]] forKey:@"rootEditionId"];
+    [encoder encodeObject:[self datePublished] forKey:@"datePublished"];
 }
 
--(id)initWithCoder:(NSCoder *)decoder
-{
-    self.title = [decoder decodeObjectForKey:@"title"];
-    self.coverImageURL = [decoder decodeObjectForKey:@"coverImageURL"];
-    self.metaDataURL = [decoder decodeObjectForKey:@"metaDataURL"];
-    self.permalinkURL = [decoder decodeObjectForKey:@"permalinkURL"];
-    self.author = [decoder decodeObjectForKey:@"author"];
-    self.summary = [decoder decodeObjectForKey:@"summary"];
-    self.language = [decoder decodeObjectForKey:@"language"];
-    self.isbn = [decoder decodeObjectForKey:@"isbn"];
-    self.bookId = [[decoder decodeObjectForKey:@"bookId"] intValue];
-    self.rootEditionId = [[decoder decodeObjectForKey:@"rootEditionId"] intValue];
-    self.datePublished = [decoder decodeObjectForKey:@"datePublished"];
+-(id)initWithCoder:(NSCoder *)decoder {
+    
+    if ((self = [super init])) { 
+        [self setTitle:[decoder decodeObjectForKey:@"title"]];
+        [self setCoverImageURL:[decoder decodeObjectForKey:@"coverImageURL"]];
+        [self setMetaDataURL:[decoder decodeObjectForKey:@"metaDataURL"]];
+        [self setPermalinkURL:[decoder decodeObjectForKey:@"permalinkURL"]];
+        [self setAuthor:[decoder decodeObjectForKey:@"author"]];
+        [self setSummary:[decoder decodeObjectForKey:@"summary"]];
+        [self setLanguage:[decoder decodeObjectForKey:@"language"]];
+        [self setIsbn:[decoder decodeObjectForKey:@"isbn"]];
+        [self setBookId:[[decoder decodeObjectForKey:@"bookId"] intValue]];
+        [self setRootEditionId:[[decoder decodeObjectForKey:@"rootEditionId"] intValue]];
+        [self setDatePublished:[decoder decodeObjectForKey:@"datePublished"]];
+    }
     return self;
 }
 
