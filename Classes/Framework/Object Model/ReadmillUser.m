@@ -101,6 +101,10 @@
     return self;
 }
 
++(NSSet *)keyPathsForValuesAffectingPropertyListRepresentation {
+    return [NSSet setWithObject:@"apiWrapper.propertyListRepresentation"];
+}
+
 -(NSDictionary *)propertyListRepresentation {
     return [[self apiWrapper] propertyListRepresentation]; 
 }
