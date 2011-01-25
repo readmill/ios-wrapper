@@ -2,8 +2,8 @@
 //  ReadmillReadSession.m
 //  Readmill Framework
 //
-//  Created by Work on 13/01/2011.
-//  Copyright 2011 KennettNet Software Limited. All rights reserved.
+//  Created by Readmill on 13/01/2011.
+//  Copyright 2011 Readmill. All rights reserved.
 //
 
 #import "ReadmillReadSession.h"

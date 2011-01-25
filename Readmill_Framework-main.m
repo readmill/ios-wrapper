@@ -2,8 +2,8 @@
 //  Readmill_Framework-main.m
 //  Readmill Framework
 //
-//  Created by Work on 10/01/2011.
-//  Copyright 2011 KennettNet Software Limited. All rights reserved.
+//  Created by Readmill on 10/01/2011.
+//  Created by Readmill on
 //
 
 #import <Cocoa/Cocoa.h>
