@@ -365,10 +365,13 @@
         NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
         [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
         
+        [self willChangeValueForKey:@"propertyListRepresentation"];
+        
         [self setRefreshToken:[response valueForKey:@"refresh_token"]];
         [self setAccessToken:[response valueForKey:@"access_token"]];
-        
         [self setAuthorizedRedirectURL:redirectURLString];
+        
+        [self didChangeValueForKey:@"propertyListRepresentation"];
     }
 }
 
@@ -395,8 +398,12 @@
         NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
         [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
         
+        [self willChangeValueForKey:@"propertyListRepresentation"];
+        
         [self setRefreshToken:[response valueForKey:@"refresh_token"]];
         [self setAccessToken:[response valueForKey:@"access_token"]];
+        
+        [self didChangeValueForKey:@"propertyListRepresentation"];
         
         return YES;
     } else {
