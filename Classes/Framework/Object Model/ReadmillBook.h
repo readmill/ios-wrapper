@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
 
-@interface ReadmillBook : NSObject {
+@interface ReadmillBook : NSObject <NSCoding>
+{
 @private
     
     NSString *author;

@@ -346,8 +346,8 @@
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 bookfindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
-                                isbn, @"isbn", 
                                 title, @"title",
+                                isbn, @"isbn", 
                                 author, @"author",
                                 [NSNumber numberWithBool:YES], @"createIfNotFound",
                                 nil];
