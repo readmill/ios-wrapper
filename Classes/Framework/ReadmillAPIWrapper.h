@@ -134,6 +134,7 @@ static NSString * const kReadmillAPIReadIdKey = @"id";
 -(id)initWithStagingEndPoint;
 
 /*!
+ @param plist The saved credentials. 
  @result The created ReamillAPIWrapper object.
  @brief   Create a Readmill API object with the saved authentication details.
  
@@ -149,7 +150,6 @@ static NSString * const kReadmillAPIReadIdKey = @"id";
 -(id)initWithPropertyListRepresentation:(NSDictionary *)plist;
 
 /*!
- @param plist The saved credentials. 
  @result A set of saved credentials appropriate for storing in NSUserDefaults.
  @brief   Obtain a set of saved credentials appropriate for storing in NSUserDefaults.
  
