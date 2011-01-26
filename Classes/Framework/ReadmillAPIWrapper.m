@@ -118,6 +118,16 @@
     }
 }
 
+-(NSDictionary *)bookWithId:(ReadmillBookId)bookId error:(NSError **)error {
+    
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books/%d.json", [self apiEndPoint], bookId]] 
+                                           withParameters:nil
+                               shouldBeCalledUnauthorized:YES
+                                                    error:error];
+    return apiResponse;
+    
+}
+
 -(NSArray *)booksMatchingISBN:(NSString *)isbn error:(NSError **)error {
     
     if ([isbn length] == 0) {

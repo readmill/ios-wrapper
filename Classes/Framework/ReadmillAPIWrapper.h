@@ -274,6 +274,14 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 -(NSArray *)booksMatchingISBN:(NSString *)isbn error:(NSError **)error;
 
 /*!
+ @param bookId The Readmill id of the book to retrieve.
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
+ @brief   Get a specific book in the Readmill system. 
+ */
+-(NSDictionary *)bookWithId:(ReadmillBookId)bookId error:(NSError **)error;
+
+/*!
  @param bookTitle The new book's title.
  @param bookAuthor The new book's author.
  @param bookIsbn The new book's ISBN.
