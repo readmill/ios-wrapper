@@ -6,8 +6,12 @@
 //  Created by Readmill on
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 int main(int argc, char *argv[]) {
-    return NSApplicationMain(argc,  (const char **) argv);
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    int retVal = UIApplicationMain(argc, argv, nil, nil);
+    [pool release];
+    return retVal;
+	
 }

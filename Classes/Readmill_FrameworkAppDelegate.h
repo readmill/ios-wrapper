@@ -2,27 +2,33 @@
 //  Readmill_FrameworkAppDelegate.h
 //  Readmill Framework
 //
-//  Created by Readmill on 10/01/2011.
-//  Copyright 2011 Readmill. All rights reserved.
+//  Created by Work on 26/01/2011.
+//  Copyright 2011 KennettNet Software Limited. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <UIKit/UIKit.h>
 #import "ReadmillUser.h"
 #import "ReadmillRead.h"
 #import "ReadmillReadSession.h"
 
-@interface Readmill_FrameworkAppDelegate : NSObject <NSApplicationDelegate, 
+@class Readmill_FrameworkViewController;
+
+@interface Readmill_FrameworkAppDelegate : NSObject <UIApplicationDelegate,
 ReadmillUserAuthenticationDelegate, 
 ReadmillBookFindingDelegate,
 ReadmillReadFindingDelegate,
 ReadmillReadUpdatingDelegate,
 ReadmillPingDelegate> {
     
-    NSWindow *window;
+@private
+
     ReadmillUser *user;
+    
 }
 
-@property (assign) IBOutlet NSWindow *window;
+@property (nonatomic, retain) IBOutlet UIWindow *window;
+
+@property (nonatomic, retain) IBOutlet Readmill_FrameworkViewController *viewController;
 @property (readwrite, retain) ReadmillUser *user;
 
 @end

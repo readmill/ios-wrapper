@@ -2,60 +2,87 @@
 //  Readmill_FrameworkAppDelegate.m
 //  Readmill Framework
 //
-//  Created by Readmill on 10/01/2011.
-//  Copyright 2011 Readmill. All rights reserved.
+//  Created by Work on 26/01/2011.
+//  Copyright 2011 KennettNet Software Limited. All rights reserved.
 //
 
 #import "Readmill_FrameworkAppDelegate.h"
-#import "ReadmillAPIWrapper.h"
-#import "ReadmillBook.h"
-#import "ReadmillUser.h"
-#import "ReadmillRead.h"
-#import "ReadmillReadSession.h"
+
+#import "Readmill_FrameworkViewController.h"
 
 @implementation Readmill_FrameworkAppDelegate
 
+
 @synthesize window;
+
+@synthesize viewController;
 @synthesize user;
 
--(void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    // Override point for customization after application launch.
     
-    [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self 
-                                                       andSelector:@selector(getUrl:withReplyEvent:) 
-                                                     forEventClass:kInternetEventClass 
-                                                        andEventID:kAEGetURL];
-
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"] != nil) {
         
         [ReadmillUser authenticateWithPropertyListRepresentation:[[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"]
                                                         delegate:self];
     } else {
-    
-        [[NSWorkspace sharedWorkspace] openURL:[ReadmillUser clientAuthorizationURLWithRedirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]
+        
+        [[UIApplication sharedApplication] openURL:[ReadmillUser clientAuthorizationURLWithRedirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]
                                                                                    onStagingServer:YES]];
     }
     
-    // Winnie the Pooh book: 11 read: 28
-    // User: Name danielkennett id = 7
+    if ([launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] != nil) {
+        
+        NSURL *url = [launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
+        
+        [ReadmillUser authenticateCallbackURL:url
+                              baseCallbackURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]
+                                     delegate:self
+                              onStagingServer:YES];
+
+    }
+
+    
+    self.window.rootViewController = self.viewController;
+    [self.window makeKeyAndVisible];
+    return YES;
     
 }
 
--(void)applicationWillTerminate:(NSNotification *)notification {
-    [[NSUserDefaults standardUserDefaults] setValue:[[self user] propertyListRepresentation] forKey:@"readmill"];
-}
-
-- (void)getUrl:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent {
-
-    NSURL *url = [NSURL URLWithString:[[event paramDescriptorForKeyword:keyDirectObject] stringValue]];
-    
+-(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     [ReadmillUser authenticateCallbackURL:url
                           baseCallbackURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]
                                  delegate:self
                           onStagingServer:YES];
+    
+    return YES;
 }
 
 
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    /*
+     Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+     Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+     */
+    [[NSUserDefaults standardUserDefaults] setValue:[[self user] propertyListRepresentation] forKey:@"readmill"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    // Save data if appropriate.
+    [[NSUserDefaults standardUserDefaults] setValue:[[self user] propertyListRepresentation] forKey:@"readmill"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)dealloc {
+
+    [window release];
+    [viewController release];
+    [super dealloc];
+}
 
 #pragma mark -
 #pragma mark Authentication
@@ -82,7 +109,7 @@
     NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), books);
     
     [[self user] findOrCreateReadForBook:[books lastObject]
-                        delegate:self];
+                                delegate:self];
 }
 
 -(void)readmillUserFoundNoBooks:(ReadmillUser *)user {
