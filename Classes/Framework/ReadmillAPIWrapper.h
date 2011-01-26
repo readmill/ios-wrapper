@@ -243,7 +243,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Obtain a read edit URL containing the parameters to have Readmill present a UI to the user 
  for editing their read of this book in their Readmill account.
  */
--(NSURL *)editReadUIURLForBookWithId:(ReadmillReadId)readId;
+-(NSURL *)editReadUIURLForReadWithId:(ReadmillReadId)readId;
 
 #pragma mark -
 #pragma mark Books

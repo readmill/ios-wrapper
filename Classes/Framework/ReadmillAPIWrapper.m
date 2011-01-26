@@ -456,7 +456,7 @@
     return [NSURL URLWithString:urlString];
 }
 
--(NSURL *)editReadUIURLForBookWithId:(ReadmillReadId)readId {
+-(NSURL *)editReadUIURLForReadWithId:(ReadmillReadId)readId {
     
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
