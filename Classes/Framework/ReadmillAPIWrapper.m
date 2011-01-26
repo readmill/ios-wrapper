@@ -434,6 +434,29 @@
 }
 
 #pragma mark -
+#pragma mark UI URLs
+
+-(NSURL *)connectBookUIURLForBookWithId:(ReadmillBookId)bookId {
+    
+    if (![self ensureAccessTokenIsCurrent:nil]) {
+        return nil;
+    }
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@books/%d/reads/new?access_token=%@", [self apiEndPoint], bookId, [self accessToken]];
+    return [NSURL URLWithString:urlString];
+}
+
+-(NSURL *)editReadUIURLForBookWithId:(ReadmillReadId)readId {
+    
+    if (![self ensureAccessTokenIsCurrent:nil]) {
+        return nil;
+    }
+
+    NSString *urlString = [NSString stringWithFormat:@"%@reads/%d/edit?access_token=%@", [self apiEndPoint], readId, [self accessToken]];
+    return [NSURL URLWithString:urlString];
+}
+
+#pragma mark -
 #pragma mark Sending Requests
 
 -(BOOL)ensureAccessTokenIsCurrent:(NSError **)error {

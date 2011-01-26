@@ -229,6 +229,22 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 -(NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect;
 
+/*!
+ @param bookId The Readmill id of the book to link to. 
+ @result An NSURL pointing to the Readmill book link page with the appropriate parameters.  
+ @brief   Obtain a book link URL containing the parameters to have Readmill present a UI to the user 
+ for linking the book to their Readmill account.
+ */
+-(NSURL *)connectBookUIURLForBookWithId:(ReadmillBookId)bookId;
+
+/*!
+ @param readId The Readmill id of the read to edit. 
+ @result An NSURL pointing to the Readmill read edit page with the appropriate parameters.  
+ @brief   Obtain a read edit URL containing the parameters to have Readmill present a UI to the user 
+ for editing their read of this book in their Readmill account.
+ */
+-(NSURL *)editReadUIURLForBookWithId:(ReadmillReadId)readId;
+
 #pragma mark -
 #pragma mark Books
 
