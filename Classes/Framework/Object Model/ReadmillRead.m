@@ -52,11 +52,14 @@
     
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
-    [self setDateAbandoned:[NSDate dateWithString:[cleanedDict valueForKey:kReadmillAPIReadDateAbandonedKey]]];
-    [self setDateCreated:[NSDate dateWithString:[cleanedDict valueForKey:kReadmillAPIReadDateCreatedKey]]];
-    [self setDateFinished:[NSDate dateWithString:[cleanedDict valueForKey:kReadmillAPIReadDateFinishedKey]]];
-    [self setDateModified:[NSDate dateWithString:[cleanedDict valueForKey:kReadmillAPIReadDateModifiedKey]]];
-    [self setDateStarted:[NSDate dateWithString:[cleanedDict valueForKey:kReadmillAPIReadDateStarted]]];
+    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+    [formatter setDateFormat:@"%Y-%m-%dT%H:%M:%SZ"];
+    
+    [self setDateAbandoned:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateAbandonedKey]]];
+    [self setDateCreated:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateCreatedKey]]];
+    [self setDateFinished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateFinishedKey]]];
+    [self setDateModified:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateModifiedKey]]];
+    [self setDateStarted:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateStarted]]];
     
     [self setClosingRemark:[cleanedDict valueForKey:kReadmillAPIReadClosingRemarkKey]];
     
