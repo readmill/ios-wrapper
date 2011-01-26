@@ -43,6 +43,10 @@
 
     }
 
+    [self addObserver:self
+           forKeyPath:@"user.propertyListRepresentation"
+              options:0
+              context:nil];
     
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
@@ -60,21 +64,35 @@
 }
 
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"user.propertyListRepresentation"]) {
+        
+        if ([[self user] propertyListRepresentation] != nil) {
+            
+            NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"Auth changed");
+            
+            [[NSUserDefaults standardUserDefaults] setValue:[[self user] propertyListRepresentation] forKey:@"readmill"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     /*
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
-    [[NSUserDefaults standardUserDefaults] setValue:[[self user] propertyListRepresentation] forKey:@"readmill"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Save data if appropriate.
-    [[NSUserDefaults standardUserDefaults] setValue:[[self user] propertyListRepresentation] forKey:@"readmill"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    
 }
 
 - (void)dealloc {
@@ -95,6 +113,8 @@
     NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), loggedInUser);
     [self setUser:loggedInUser];
     
+    
+    return;
     [[self user] findOrCreateBookWithISBN:@"0340896981"
                                     title:@"One Day"
                                    author:@"David Nicholls"
@@ -109,6 +129,7 @@
     NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), books);
     
     [[self user] findOrCreateReadForBook:[books lastObject]
+                    createdReadIsPrivate:NO
                                 delegate:self];
 }
 
