@@ -7,266 +7,262 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		962E24BD12DE3D9F00FC7342 /* ReadmillBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */; };
-		962E24C012DE4B0600FC7342 /* ReadmillDictionaryExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 962E24BF12DE4B0600FC7342 /* ReadmillDictionaryExtensions.m */; };
-		962E24C312DE5CCD00FC7342 /* ReadmillUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 962E24C212DE5CCD00FC7342 /* ReadmillUser.m */; };
-		963E58FE12DB35EB000864D8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 963E58FD12DB35EB000864D8 /* Cocoa.framework */; };
-		963E590312DB35EB000864D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 963E590112DB35EB000864D8 /* InfoPlist.strings */; };
-		963E590512DB35EB000864D8 /* Readmill_Framework-main.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590412DB35EB000864D8 /* Readmill_Framework-main.m */; };
-		963E590812DB35EB000864D8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 963E590612DB35EB000864D8 /* MainMenu.xib */; };
-		963E590B12DB35EB000864D8 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 963E590912DB35EB000864D8 /* Credits.rtf */; };
-		963E590E12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */; };
-		963E591712DB3D0F000864D8 /* ReadmillAPIWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E591612DB3D0F000864D8 /* ReadmillAPIWrapper.m */; };
-		963E599A12DB4E4D000864D8 /* ReadmillStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */; };
-		966FAD6212DCB35500836DF3 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD4912DCB35500836DF3 /* CDataScanner.m */; };
-		966FAD6312DCB35500836DF3 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD4C12DCB35500836DF3 /* CFilteringJSONSerializer.m */; };
-		966FAD6412DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD4E12DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.m */; };
-		966FAD6512DCB35500836DF3 /* CJSONSerializedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5012DCB35500836DF3 /* CJSONSerializedData.m */; };
-		966FAD6612DCB35500836DF3 /* CDataScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5312DCB35500836DF3 /* CDataScanner_Extensions.m */; };
-		966FAD6712DCB35500836DF3 /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5512DCB35500836DF3 /* NSCharacterSet_Extensions.m */; };
-		966FAD6812DCB35500836DF3 /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5712DCB35500836DF3 /* NSDictionary_JSONExtensions.m */; };
-		966FAD6912DCB35500836DF3 /* NSScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5912DCB35500836DF3 /* NSScanner_Extensions.m */; };
-		966FAD6A12DCB35500836DF3 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5C12DCB35500836DF3 /* CJSONDeserializer.m */; };
-		966FAD6B12DCB35500836DF3 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD5E12DCB35500836DF3 /* CJSONScanner.m */; };
-		966FAD6C12DCB35500836DF3 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 966FAD6012DCB35500836DF3 /* CJSONSerializer.m */; };
-		968FF39212DF284000EC8369 /* ReadmillRead.m in Sources */ = {isa = PBXBuildFile; fileRef = 968FF39112DF284000EC8369 /* ReadmillRead.m */; };
-		96B2F9EC12DF7D3D00F53CE6 /* ReadmillReadSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B2F9EB12DF7D3D00F53CE6 /* ReadmillReadSession.m */; };
+		96BEAED112F05E80006028D0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED012F05E80006028D0 /* UIKit.framework */; };
+		96BEAED312F05E80006028D0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED212F05E80006028D0 /* Foundation.framework */; };
+		96BEAED512F05E80006028D0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED412F05E80006028D0 /* CoreGraphics.framework */; };
+		96BEAF1F12F06360006028D0 /* ReadmillBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEF612F06360006028D0 /* ReadmillBook.m */; };
+		96BEAF2012F06360006028D0 /* ReadmillRead.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEF812F06360006028D0 /* ReadmillRead.m */; };
+		96BEAF2112F06360006028D0 /* ReadmillReadSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFA12F06360006028D0 /* ReadmillReadSession.m */; };
+		96BEAF2212F06360006028D0 /* ReadmillUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFC12F06360006028D0 /* ReadmillUser.m */; };
+		96BEAF2312F06360006028D0 /* ReadmillAPIWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */; };
+		96BEAF2412F06360006028D0 /* ReadmillDictionaryExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0112F06360006028D0 /* ReadmillDictionaryExtensions.m */; };
+		96BEAF2512F06360006028D0 /* ReadmillStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0312F06360006028D0 /* ReadmillStringExtensions.m */; };
+		96BEAF2612F06360006028D0 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0612F06360006028D0 /* CDataScanner.m */; };
+		96BEAF2712F06360006028D0 /* CFilteringJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0912F06360006028D0 /* CFilteringJSONSerializer.m */; };
+		96BEAF2812F06360006028D0 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0B12F06360006028D0 /* CJSONDeserializer_BlocksExtensions.m */; };
+		96BEAF2912F06360006028D0 /* CJSONSerializedData.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0D12F06360006028D0 /* CJSONSerializedData.m */; };
+		96BEAF2A12F06360006028D0 /* CDataScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1012F06360006028D0 /* CDataScanner_Extensions.m */; };
+		96BEAF2B12F06360006028D0 /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1212F06360006028D0 /* NSCharacterSet_Extensions.m */; };
+		96BEAF2C12F06360006028D0 /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1412F06360006028D0 /* NSDictionary_JSONExtensions.m */; };
+		96BEAF2D12F06360006028D0 /* NSScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1612F06360006028D0 /* NSScanner_Extensions.m */; };
+		96BEAF2E12F06360006028D0 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1912F06360006028D0 /* CJSONDeserializer.m */; };
+		96BEAF2F12F06360006028D0 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1B12F06360006028D0 /* CJSONScanner.m */; };
+		96BEAF3012F06360006028D0 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1D12F06360006028D0 /* CJSONSerializer.m */; };
+		96F0756D12F061C800F6369D /* Readmill_FrameworkAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F0756C12F061C800F6369D /* Readmill_FrameworkAppDelegate.m */; };
+		96F0757912F0620600F6369D /* Readmill_FrameworkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F0757812F0620600F6369D /* Readmill_FrameworkViewController.m */; };
+		96F0758312F0623400F6369D /* Readmill_Framework-main.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F0758012F0623400F6369D /* Readmill_Framework-main.m */; };
+		96F0758612F0624100F6369D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 96F0758412F0624100F6369D /* InfoPlist.strings */; };
+		96F0758B12F0624F00F6369D /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 96F0758712F0624F00F6369D /* MainWindow.xib */; };
+		96F0758C12F0624F00F6369D /* Readmill_FrameworkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 96F0758912F0624F00F6369D /* Readmill_FrameworkViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		962E24BB12DE3D9F00FC7342 /* ReadmillBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillBook.h; path = "Framework/Object Model/ReadmillBook.h"; sourceTree = "<group>"; };
-		962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillBook.m; path = "Framework/Object Model/ReadmillBook.m"; sourceTree = "<group>"; };
-		962E24BE12DE4B0600FC7342 /* ReadmillDictionaryExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillDictionaryExtensions.h; path = Framework/ReadmillDictionaryExtensions.h; sourceTree = "<group>"; };
-		962E24BF12DE4B0600FC7342 /* ReadmillDictionaryExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillDictionaryExtensions.m; path = Framework/ReadmillDictionaryExtensions.m; sourceTree = "<group>"; };
-		962E24C112DE5CCD00FC7342 /* ReadmillUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillUser.h; path = "Framework/Object Model/ReadmillUser.h"; sourceTree = "<group>"; };
-		962E24C212DE5CCD00FC7342 /* ReadmillUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillUser.m; path = "Framework/Object Model/ReadmillUser.m"; sourceTree = "<group>"; };
-		963E58FA12DB35EB000864D8 /* Readmill Framework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Framework.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		963E58FD12DB35EB000864D8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		963E58FF12DB35EB000864D8 /* Readmill_Framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Readmill_Framework-Info.plist"; sourceTree = "<group>"; };
-		963E590012DB35EB000864D8 /* Readmill_Framework-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Readmill_Framework-Prefix.pch"; sourceTree = "<group>"; };
-		963E590212DB35EB000864D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		963E590412DB35EB000864D8 /* Readmill_Framework-main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Readmill_Framework-main.m"; sourceTree = "<group>"; };
-		963E590712DB35EB000864D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		963E590A12DB35EB000864D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		963E590C12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Readmill_FrameworkAppDelegate.h; sourceTree = "<group>"; };
-		963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Readmill_FrameworkAppDelegate.m; sourceTree = "<group>"; };
-		963E591512DB3D0F000864D8 /* ReadmillAPIWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPIWrapper.h; path = Framework/ReadmillAPIWrapper.h; sourceTree = "<group>"; };
-		963E591612DB3D0F000864D8 /* ReadmillAPIWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillAPIWrapper.m; path = Framework/ReadmillAPIWrapper.m; sourceTree = "<group>"; };
-		963E599812DB4E4D000864D8 /* ReadmillStringExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillStringExtensions.h; path = Framework/ReadmillStringExtensions.h; sourceTree = "<group>"; };
-		963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillStringExtensions.m; path = Framework/ReadmillStringExtensions.m; sourceTree = "<group>"; };
-		963E599B12DB525A000864D8 /* ReadmillAPIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPIConstants.h; path = Framework/ReadmillAPIConstants.h; sourceTree = "<group>"; };
-		963E59C512DB5A19000864D8 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /Xcode4/SDKs/MacOSX10.6.sdk/usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
-		966FAD4812DCB35500836DF3 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
-		966FAD4912DCB35500836DF3 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner.m; sourceTree = "<group>"; };
-		966FAD4B12DCB35500836DF3 /* CFilteringJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFilteringJSONSerializer.h; sourceTree = "<group>"; };
-		966FAD4C12DCB35500836DF3 /* CFilteringJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFilteringJSONSerializer.m; sourceTree = "<group>"; };
-		966FAD4D12DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDeserializer_BlocksExtensions.h; sourceTree = "<group>"; };
-		966FAD4E12DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONDeserializer_BlocksExtensions.m; sourceTree = "<group>"; };
-		966FAD4F12DCB35500836DF3 /* CJSONSerializedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializedData.h; sourceTree = "<group>"; };
-		966FAD5012DCB35500836DF3 /* CJSONSerializedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializedData.m; sourceTree = "<group>"; };
-		966FAD5212DCB35500836DF3 /* CDataScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner_Extensions.h; sourceTree = "<group>"; };
-		966FAD5312DCB35500836DF3 /* CDataScanner_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner_Extensions.m; sourceTree = "<group>"; };
-		966FAD5412DCB35500836DF3 /* NSCharacterSet_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCharacterSet_Extensions.h; sourceTree = "<group>"; };
-		966FAD5512DCB35500836DF3 /* NSCharacterSet_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCharacterSet_Extensions.m; sourceTree = "<group>"; };
-		966FAD5612DCB35500836DF3 /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
-		966FAD5712DCB35500836DF3 /* NSDictionary_JSONExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionary_JSONExtensions.m; sourceTree = "<group>"; };
-		966FAD5812DCB35500836DF3 /* NSScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSScanner_Extensions.h; sourceTree = "<group>"; };
-		966FAD5912DCB35500836DF3 /* NSScanner_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSScanner_Extensions.m; sourceTree = "<group>"; };
-		966FAD5B12DCB35500836DF3 /* CJSONDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDeserializer.h; sourceTree = "<group>"; };
-		966FAD5C12DCB35500836DF3 /* CJSONDeserializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONDeserializer.m; sourceTree = "<group>"; };
-		966FAD5D12DCB35500836DF3 /* CJSONScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONScanner.h; sourceTree = "<group>"; };
-		966FAD5E12DCB35500836DF3 /* CJSONScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONScanner.m; sourceTree = "<group>"; };
-		966FAD5F12DCB35500836DF3 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
-		966FAD6012DCB35500836DF3 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
-		966FAD6112DCB35500836DF3 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
-		968FF39012DF284000EC8369 /* ReadmillRead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillRead.h; path = "Framework/Object Model/ReadmillRead.h"; sourceTree = "<group>"; };
-		968FF39112DF284000EC8369 /* ReadmillRead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillRead.m; path = "Framework/Object Model/ReadmillRead.m"; sourceTree = "<group>"; };
-		96B2F9EA12DF7D3D00F53CE6 /* ReadmillReadSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillReadSession.h; path = "Framework/Object Model/ReadmillReadSession.h"; sourceTree = "<group>"; };
-		96B2F9EB12DF7D3D00F53CE6 /* ReadmillReadSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillReadSession.m; path = "Framework/Object Model/ReadmillReadSession.m"; sourceTree = "<group>"; };
+		96BEAECC12F05E80006028D0 /* Readmill Framework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Framework.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		96BEAED012F05E80006028D0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		96BEAED212F05E80006028D0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		96BEAED412F05E80006028D0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		96BEAEF512F06360006028D0 /* ReadmillBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillBook.h; sourceTree = "<group>"; };
+		96BEAEF612F06360006028D0 /* ReadmillBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillBook.m; sourceTree = "<group>"; };
+		96BEAEF712F06360006028D0 /* ReadmillRead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillRead.h; sourceTree = "<group>"; };
+		96BEAEF812F06360006028D0 /* ReadmillRead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillRead.m; sourceTree = "<group>"; };
+		96BEAEF912F06360006028D0 /* ReadmillReadSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillReadSession.h; sourceTree = "<group>"; };
+		96BEAEFA12F06360006028D0 /* ReadmillReadSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillReadSession.m; sourceTree = "<group>"; };
+		96BEAEFB12F06360006028D0 /* ReadmillUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillUser.h; sourceTree = "<group>"; };
+		96BEAEFC12F06360006028D0 /* ReadmillUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillUser.m; sourceTree = "<group>"; };
+		96BEAEFD12F06360006028D0 /* ReadmillAPIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIConstants.h; sourceTree = "<group>"; };
+		96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIWrapper.h; sourceTree = "<group>"; };
+		96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillAPIWrapper.m; sourceTree = "<group>"; };
+		96BEAF0012F06360006028D0 /* ReadmillDictionaryExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillDictionaryExtensions.h; path = ../ReadmillDictionaryExtensions.h; sourceTree = "<group>"; };
+		96BEAF0112F06360006028D0 /* ReadmillDictionaryExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillDictionaryExtensions.m; path = ../ReadmillDictionaryExtensions.m; sourceTree = "<group>"; };
+		96BEAF0212F06360006028D0 /* ReadmillStringExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillStringExtensions.h; path = ../ReadmillStringExtensions.h; sourceTree = "<group>"; };
+		96BEAF0312F06360006028D0 /* ReadmillStringExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillStringExtensions.m; path = ../ReadmillStringExtensions.m; sourceTree = "<group>"; };
+		96BEAF0512F06360006028D0 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner.h; sourceTree = "<group>"; };
+		96BEAF0612F06360006028D0 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner.m; sourceTree = "<group>"; };
+		96BEAF0812F06360006028D0 /* CFilteringJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFilteringJSONSerializer.h; sourceTree = "<group>"; };
+		96BEAF0912F06360006028D0 /* CFilteringJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFilteringJSONSerializer.m; sourceTree = "<group>"; };
+		96BEAF0A12F06360006028D0 /* CJSONDeserializer_BlocksExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDeserializer_BlocksExtensions.h; sourceTree = "<group>"; };
+		96BEAF0B12F06360006028D0 /* CJSONDeserializer_BlocksExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONDeserializer_BlocksExtensions.m; sourceTree = "<group>"; };
+		96BEAF0C12F06360006028D0 /* CJSONSerializedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializedData.h; sourceTree = "<group>"; };
+		96BEAF0D12F06360006028D0 /* CJSONSerializedData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializedData.m; sourceTree = "<group>"; };
+		96BEAF0F12F06360006028D0 /* CDataScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDataScanner_Extensions.h; sourceTree = "<group>"; };
+		96BEAF1012F06360006028D0 /* CDataScanner_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDataScanner_Extensions.m; sourceTree = "<group>"; };
+		96BEAF1112F06360006028D0 /* NSCharacterSet_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCharacterSet_Extensions.h; sourceTree = "<group>"; };
+		96BEAF1212F06360006028D0 /* NSCharacterSet_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCharacterSet_Extensions.m; sourceTree = "<group>"; };
+		96BEAF1312F06360006028D0 /* NSDictionary_JSONExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionary_JSONExtensions.h; sourceTree = "<group>"; };
+		96BEAF1412F06360006028D0 /* NSDictionary_JSONExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionary_JSONExtensions.m; sourceTree = "<group>"; };
+		96BEAF1512F06360006028D0 /* NSScanner_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSScanner_Extensions.h; sourceTree = "<group>"; };
+		96BEAF1612F06360006028D0 /* NSScanner_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSScanner_Extensions.m; sourceTree = "<group>"; };
+		96BEAF1812F06360006028D0 /* CJSONDeserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDeserializer.h; sourceTree = "<group>"; };
+		96BEAF1912F06360006028D0 /* CJSONDeserializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONDeserializer.m; sourceTree = "<group>"; };
+		96BEAF1A12F06360006028D0 /* CJSONScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONScanner.h; sourceTree = "<group>"; };
+		96BEAF1B12F06360006028D0 /* CJSONScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONScanner.m; sourceTree = "<group>"; };
+		96BEAF1C12F06360006028D0 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
+		96BEAF1D12F06360006028D0 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
+		96BEAF1E12F06360006028D0 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
+		96F0756B12F061C800F6369D /* Readmill_FrameworkAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Readmill_FrameworkAppDelegate.h; path = Classes/Readmill_FrameworkAppDelegate.h; sourceTree = "<group>"; };
+		96F0756C12F061C800F6369D /* Readmill_FrameworkAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Readmill_FrameworkAppDelegate.m; path = Classes/Readmill_FrameworkAppDelegate.m; sourceTree = "<group>"; };
+		96F0757712F0620600F6369D /* Readmill_FrameworkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Readmill_FrameworkViewController.h; path = Classes/Readmill_FrameworkViewController.h; sourceTree = "<group>"; };
+		96F0757812F0620600F6369D /* Readmill_FrameworkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Readmill_FrameworkViewController.m; path = Classes/Readmill_FrameworkViewController.m; sourceTree = "<group>"; };
+		96F0757F12F0623400F6369D /* Readmill_Framework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Readmill_Framework-Info.plist"; sourceTree = "<group>"; };
+		96F0758012F0623400F6369D /* Readmill_Framework-main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Readmill_Framework-main.m"; sourceTree = "<group>"; };
+		96F0758112F0623400F6369D /* Readmill_Framework-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Readmill_Framework-Prefix.pch"; sourceTree = "<group>"; };
+		96F0758512F0624100F6369D /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		96F0758812F0624F00F6369D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		96F0758A12F0624F00F6369D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Readmill_FrameworkViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		963E58F712DB35EB000864D8 /* Frameworks */ = {
+		96BEAEC912F05E80006028D0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				963E58FE12DB35EB000864D8 /* Cocoa.framework in Frameworks */,
+				96BEAED112F05E80006028D0 /* UIKit.framework in Frameworks */,
+				96BEAED312F05E80006028D0 /* Foundation.framework in Frameworks */,
+				96BEAED512F05E80006028D0 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		962E24B912DE3C0900FC7342 /* Core API */ = {
+		96BEAEC112F05E80006028D0 = {
 			isa = PBXGroup;
 			children = (
-				963E599B12DB525A000864D8 /* ReadmillAPIConstants.h */,
-				966FAD4712DCB35500836DF3 /* TouchJSON */,
-				963E599712DB4E3C000864D8 /* Extensions */,
-				963E591512DB3D0F000864D8 /* ReadmillAPIWrapper.h */,
-				963E591612DB3D0F000864D8 /* ReadmillAPIWrapper.m */,
-			);
-			name = "Core API";
-			sourceTree = "<group>";
-		};
-		962E24BA12DE3C1A00FC7342 /* Object Model */ = {
-			isa = PBXGroup;
-			children = (
-				962E24BB12DE3D9F00FC7342 /* ReadmillBook.h */,
-				962E24BC12DE3D9F00FC7342 /* ReadmillBook.m */,
-				962E24C112DE5CCD00FC7342 /* ReadmillUser.h */,
-				962E24C212DE5CCD00FC7342 /* ReadmillUser.m */,
-				968FF39012DF284000EC8369 /* ReadmillRead.h */,
-				968FF39112DF284000EC8369 /* ReadmillRead.m */,
-				96B2F9EA12DF7D3D00F53CE6 /* ReadmillReadSession.h */,
-				96B2F9EB12DF7D3D00F53CE6 /* ReadmillReadSession.m */,
-			);
-			name = "Object Model";
-			sourceTree = "<group>";
-		};
-		963E58EB12DB35EB000864D8 = {
-			isa = PBXGroup;
-			children = (
-				963E58F212DB35EB000864D8 /* Classes */,
-				963E58F312DB35EB000864D8 /* Other Sources */,
-				963E58F412DB35EB000864D8 /* Resources */,
-				963E58F512DB35EB000864D8 /* Frameworks */,
-				963E58FB12DB35EB000864D8 /* Products */,
+				96F0757A12F0620B00F6369D /* Readmill Framework */,
+				96F0757B12F0622100F6369D /* Supporting Files */,
+				96BEAECF12F05E80006028D0 /* Frameworks */,
+				96BEAECD12F05E80006028D0 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		963E58F212DB35EB000864D8 /* Classes */ = {
+		96BEAECD12F05E80006028D0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				963E591412DB35FF000864D8 /* Framework */,
-				963E590C12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.h */,
-				963E590D12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
-		963E58F312DB35EB000864D8 /* Other Sources */ = {
-			isa = PBXGroup;
-			children = (
-				963E590012DB35EB000864D8 /* Readmill_Framework-Prefix.pch */,
-				963E590412DB35EB000864D8 /* Readmill_Framework-main.m */,
-			);
-			name = "Other Sources";
-			sourceTree = "<group>";
-		};
-		963E58F412DB35EB000864D8 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				963E58FF12DB35EB000864D8 /* Readmill_Framework-Info.plist */,
-				963E590112DB35EB000864D8 /* InfoPlist.strings */,
-				963E590612DB35EB000864D8 /* MainMenu.xib */,
-				963E590912DB35EB000864D8 /* Credits.rtf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		963E58F512DB35EB000864D8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				963E59C512DB5A19000864D8 /* libxml2.dylib */,
-				963E58FD12DB35EB000864D8 /* Cocoa.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		963E58FB12DB35EB000864D8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				963E58FA12DB35EB000864D8 /* Readmill Framework.app */,
+				96BEAECC12F05E80006028D0 /* Readmill Framework.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		963E591412DB35FF000864D8 /* Framework */ = {
+		96BEAECF12F05E80006028D0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				962E24BA12DE3C1A00FC7342 /* Object Model */,
-				962E24B912DE3C0900FC7342 /* Core API */,
+				96BEAED012F05E80006028D0 /* UIKit.framework */,
+				96BEAED212F05E80006028D0 /* Foundation.framework */,
+				96BEAED412F05E80006028D0 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		96BEAEF312F06360006028D0 /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				96BEAF3112F0636C006028D0 /* Extensions */,
+				96BEAF0412F06360006028D0 /* TouchJSON */,
+				96BEAEF412F06360006028D0 /* Object Model */,
+				96BEAEFD12F06360006028D0 /* ReadmillAPIConstants.h */,
+				96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */,
+				96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */,
 			);
 			name = Framework;
+			path = Classes/Framework;
 			sourceTree = "<group>";
 		};
-		963E599712DB4E3C000864D8 /* Extensions */ = {
+		96BEAEF412F06360006028D0 /* Object Model */ = {
 			isa = PBXGroup;
 			children = (
-				963E599812DB4E4D000864D8 /* ReadmillStringExtensions.h */,
-				963E599912DB4E4D000864D8 /* ReadmillStringExtensions.m */,
-				962E24BE12DE4B0600FC7342 /* ReadmillDictionaryExtensions.h */,
-				962E24BF12DE4B0600FC7342 /* ReadmillDictionaryExtensions.m */,
+				96BEAEF512F06360006028D0 /* ReadmillBook.h */,
+				96BEAEF612F06360006028D0 /* ReadmillBook.m */,
+				96BEAEF712F06360006028D0 /* ReadmillRead.h */,
+				96BEAEF812F06360006028D0 /* ReadmillRead.m */,
+				96BEAEF912F06360006028D0 /* ReadmillReadSession.h */,
+				96BEAEFA12F06360006028D0 /* ReadmillReadSession.m */,
+				96BEAEFB12F06360006028D0 /* ReadmillUser.h */,
+				96BEAEFC12F06360006028D0 /* ReadmillUser.m */,
 			);
-			name = Extensions;
+			path = "Object Model";
 			sourceTree = "<group>";
 		};
-		966FAD4712DCB35500836DF3 /* TouchJSON */ = {
+		96BEAF0412F06360006028D0 /* TouchJSON */ = {
 			isa = PBXGroup;
 			children = (
-				966FAD4812DCB35500836DF3 /* CDataScanner.h */,
-				966FAD4912DCB35500836DF3 /* CDataScanner.m */,
-				966FAD4A12DCB35500836DF3 /* Experimental */,
-				966FAD5112DCB35500836DF3 /* Extensions */,
-				966FAD5A12DCB35500836DF3 /* JSON */,
+				96BEAF0512F06360006028D0 /* CDataScanner.h */,
+				96BEAF0612F06360006028D0 /* CDataScanner.m */,
+				96BEAF0712F06360006028D0 /* Experimental */,
+				96BEAF0E12F06360006028D0 /* Extensions */,
+				96BEAF1712F06360006028D0 /* JSON */,
 			);
-			name = TouchJSON;
-			path = Framework/TouchJSON;
+			path = TouchJSON;
 			sourceTree = "<group>";
 		};
-		966FAD4A12DCB35500836DF3 /* Experimental */ = {
+		96BEAF0712F06360006028D0 /* Experimental */ = {
 			isa = PBXGroup;
 			children = (
-				966FAD4B12DCB35500836DF3 /* CFilteringJSONSerializer.h */,
-				966FAD4C12DCB35500836DF3 /* CFilteringJSONSerializer.m */,
-				966FAD4D12DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.h */,
-				966FAD4E12DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.m */,
-				966FAD4F12DCB35500836DF3 /* CJSONSerializedData.h */,
-				966FAD5012DCB35500836DF3 /* CJSONSerializedData.m */,
+				96BEAF0812F06360006028D0 /* CFilteringJSONSerializer.h */,
+				96BEAF0912F06360006028D0 /* CFilteringJSONSerializer.m */,
+				96BEAF0A12F06360006028D0 /* CJSONDeserializer_BlocksExtensions.h */,
+				96BEAF0B12F06360006028D0 /* CJSONDeserializer_BlocksExtensions.m */,
+				96BEAF0C12F06360006028D0 /* CJSONSerializedData.h */,
+				96BEAF0D12F06360006028D0 /* CJSONSerializedData.m */,
 			);
 			path = Experimental;
 			sourceTree = "<group>";
 		};
-		966FAD5112DCB35500836DF3 /* Extensions */ = {
+		96BEAF0E12F06360006028D0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				966FAD5212DCB35500836DF3 /* CDataScanner_Extensions.h */,
-				966FAD5312DCB35500836DF3 /* CDataScanner_Extensions.m */,
-				966FAD5412DCB35500836DF3 /* NSCharacterSet_Extensions.h */,
-				966FAD5512DCB35500836DF3 /* NSCharacterSet_Extensions.m */,
-				966FAD5612DCB35500836DF3 /* NSDictionary_JSONExtensions.h */,
-				966FAD5712DCB35500836DF3 /* NSDictionary_JSONExtensions.m */,
-				966FAD5812DCB35500836DF3 /* NSScanner_Extensions.h */,
-				966FAD5912DCB35500836DF3 /* NSScanner_Extensions.m */,
+				96BEAF0F12F06360006028D0 /* CDataScanner_Extensions.h */,
+				96BEAF1012F06360006028D0 /* CDataScanner_Extensions.m */,
+				96BEAF1112F06360006028D0 /* NSCharacterSet_Extensions.h */,
+				96BEAF1212F06360006028D0 /* NSCharacterSet_Extensions.m */,
+				96BEAF1312F06360006028D0 /* NSDictionary_JSONExtensions.h */,
+				96BEAF1412F06360006028D0 /* NSDictionary_JSONExtensions.m */,
+				96BEAF1512F06360006028D0 /* NSScanner_Extensions.h */,
+				96BEAF1612F06360006028D0 /* NSScanner_Extensions.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		966FAD5A12DCB35500836DF3 /* JSON */ = {
+		96BEAF1712F06360006028D0 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
-				966FAD5B12DCB35500836DF3 /* CJSONDeserializer.h */,
-				966FAD5C12DCB35500836DF3 /* CJSONDeserializer.m */,
-				966FAD5D12DCB35500836DF3 /* CJSONScanner.h */,
-				966FAD5E12DCB35500836DF3 /* CJSONScanner.m */,
-				966FAD5F12DCB35500836DF3 /* CJSONSerializer.h */,
-				966FAD6012DCB35500836DF3 /* CJSONSerializer.m */,
-				966FAD6112DCB35500836DF3 /* JSONRepresentation.h */,
+				96BEAF1812F06360006028D0 /* CJSONDeserializer.h */,
+				96BEAF1912F06360006028D0 /* CJSONDeserializer.m */,
+				96BEAF1A12F06360006028D0 /* CJSONScanner.h */,
+				96BEAF1B12F06360006028D0 /* CJSONScanner.m */,
+				96BEAF1C12F06360006028D0 /* CJSONSerializer.h */,
+				96BEAF1D12F06360006028D0 /* CJSONSerializer.m */,
+				96BEAF1E12F06360006028D0 /* JSONRepresentation.h */,
 			);
 			path = JSON;
+			sourceTree = "<group>";
+		};
+		96BEAF3112F0636C006028D0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				96BEAF0012F06360006028D0 /* ReadmillDictionaryExtensions.h */,
+				96BEAF0112F06360006028D0 /* ReadmillDictionaryExtensions.m */,
+				96BEAF0212F06360006028D0 /* ReadmillStringExtensions.h */,
+				96BEAF0312F06360006028D0 /* ReadmillStringExtensions.m */,
+			);
+			name = Extensions;
+			path = "Object Model";
+			sourceTree = "<group>";
+		};
+		96F0757A12F0620B00F6369D /* Readmill Framework */ = {
+			isa = PBXGroup;
+			children = (
+				96BEAEF312F06360006028D0 /* Framework */,
+				96F0756B12F061C800F6369D /* Readmill_FrameworkAppDelegate.h */,
+				96F0756C12F061C800F6369D /* Readmill_FrameworkAppDelegate.m */,
+				96F0757712F0620600F6369D /* Readmill_FrameworkViewController.h */,
+				96F0757812F0620600F6369D /* Readmill_FrameworkViewController.m */,
+				96F0758712F0624F00F6369D /* MainWindow.xib */,
+				96F0758912F0624F00F6369D /* Readmill_FrameworkViewController.xib */,
+			);
+			name = "Readmill Framework";
+			sourceTree = "<group>";
+		};
+		96F0757B12F0622100F6369D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				96F0757F12F0623400F6369D /* Readmill_Framework-Info.plist */,
+				96F0758012F0623400F6369D /* Readmill_Framework-main.m */,
+				96F0758112F0623400F6369D /* Readmill_Framework-Prefix.pch */,
+				96F0758412F0624100F6369D /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		963E58F912DB35EB000864D8 /* Readmill Framework */ = {
+		96BEAECB12F05E80006028D0 /* Readmill Framework */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 963E591112DB35EB000864D8 /* Build configuration list for PBXNativeTarget "Readmill Framework" */;
+			buildConfigurationList = 96BEAEED12F05E80006028D0 /* Build configuration list for PBXNativeTarget "Readmill Framework" */;
 			buildPhases = (
-				963E58F612DB35EB000864D8 /* Sources */,
-				963E58F712DB35EB000864D8 /* Frameworks */,
-				963E58F812DB35EB000864D8 /* Resources */,
+				96BEAEC812F05E80006028D0 /* Sources */,
+				96BEAEC912F05E80006028D0 /* Frameworks */,
+				96BEAECA12F05E80006028D0 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -274,166 +270,161 @@
 			);
 			name = "Readmill Framework";
 			productName = "Readmill Framework";
-			productReference = 963E58FA12DB35EB000864D8 /* Readmill Framework.app */;
+			productReference = 96BEAECC12F05E80006028D0 /* Readmill Framework.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		963E58ED12DB35EB000864D8 /* Project object */ = {
+		96BEAEC312F05E80006028D0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				ORGANIZATIONNAME = "KennettNet Software Limited";
 			};
-			buildConfigurationList = 963E58F012DB35EB000864D8 /* Build configuration list for PBXProject "Readmill Framework" */;
+			buildConfigurationList = 96BEAEC612F05E80006028D0 /* Build configuration list for PBXProject "Readmill Framework" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 963E58EB12DB35EB000864D8;
-			productRefGroup = 963E58FB12DB35EB000864D8 /* Products */;
+			mainGroup = 96BEAEC112F05E80006028D0;
+			productRefGroup = 96BEAECD12F05E80006028D0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				963E58F912DB35EB000864D8 /* Readmill Framework */,
+				96BEAECB12F05E80006028D0 /* Readmill Framework */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		963E58F812DB35EB000864D8 /* Resources */ = {
+		96BEAECA12F05E80006028D0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				963E590312DB35EB000864D8 /* InfoPlist.strings in Resources */,
-				963E590812DB35EB000864D8 /* MainMenu.xib in Resources */,
-				963E590B12DB35EB000864D8 /* Credits.rtf in Resources */,
+				96F0758612F0624100F6369D /* InfoPlist.strings in Resources */,
+				96F0758B12F0624F00F6369D /* MainWindow.xib in Resources */,
+				96F0758C12F0624F00F6369D /* Readmill_FrameworkViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		963E58F612DB35EB000864D8 /* Sources */ = {
+		96BEAEC812F05E80006028D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				963E590512DB35EB000864D8 /* Readmill_Framework-main.m in Sources */,
-				963E590E12DB35EB000864D8 /* Readmill_FrameworkAppDelegate.m in Sources */,
-				963E591712DB3D0F000864D8 /* ReadmillAPIWrapper.m in Sources */,
-				963E599A12DB4E4D000864D8 /* ReadmillStringExtensions.m in Sources */,
-				966FAD6212DCB35500836DF3 /* CDataScanner.m in Sources */,
-				966FAD6312DCB35500836DF3 /* CFilteringJSONSerializer.m in Sources */,
-				966FAD6412DCB35500836DF3 /* CJSONDeserializer_BlocksExtensions.m in Sources */,
-				966FAD6512DCB35500836DF3 /* CJSONSerializedData.m in Sources */,
-				966FAD6612DCB35500836DF3 /* CDataScanner_Extensions.m in Sources */,
-				966FAD6712DCB35500836DF3 /* NSCharacterSet_Extensions.m in Sources */,
-				966FAD6812DCB35500836DF3 /* NSDictionary_JSONExtensions.m in Sources */,
-				966FAD6912DCB35500836DF3 /* NSScanner_Extensions.m in Sources */,
-				966FAD6A12DCB35500836DF3 /* CJSONDeserializer.m in Sources */,
-				966FAD6B12DCB35500836DF3 /* CJSONScanner.m in Sources */,
-				966FAD6C12DCB35500836DF3 /* CJSONSerializer.m in Sources */,
-				962E24BD12DE3D9F00FC7342 /* ReadmillBook.m in Sources */,
-				962E24C012DE4B0600FC7342 /* ReadmillDictionaryExtensions.m in Sources */,
-				962E24C312DE5CCD00FC7342 /* ReadmillUser.m in Sources */,
-				968FF39212DF284000EC8369 /* ReadmillRead.m in Sources */,
-				96B2F9EC12DF7D3D00F53CE6 /* ReadmillReadSession.m in Sources */,
+				96F0756D12F061C800F6369D /* Readmill_FrameworkAppDelegate.m in Sources */,
+				96F0757912F0620600F6369D /* Readmill_FrameworkViewController.m in Sources */,
+				96F0758312F0623400F6369D /* Readmill_Framework-main.m in Sources */,
+				96BEAF1F12F06360006028D0 /* ReadmillBook.m in Sources */,
+				96BEAF2012F06360006028D0 /* ReadmillRead.m in Sources */,
+				96BEAF2112F06360006028D0 /* ReadmillReadSession.m in Sources */,
+				96BEAF2212F06360006028D0 /* ReadmillUser.m in Sources */,
+				96BEAF2312F06360006028D0 /* ReadmillAPIWrapper.m in Sources */,
+				96BEAF2412F06360006028D0 /* ReadmillDictionaryExtensions.m in Sources */,
+				96BEAF2512F06360006028D0 /* ReadmillStringExtensions.m in Sources */,
+				96BEAF2612F06360006028D0 /* CDataScanner.m in Sources */,
+				96BEAF2712F06360006028D0 /* CFilteringJSONSerializer.m in Sources */,
+				96BEAF2812F06360006028D0 /* CJSONDeserializer_BlocksExtensions.m in Sources */,
+				96BEAF2912F06360006028D0 /* CJSONSerializedData.m in Sources */,
+				96BEAF2A12F06360006028D0 /* CDataScanner_Extensions.m in Sources */,
+				96BEAF2B12F06360006028D0 /* NSCharacterSet_Extensions.m in Sources */,
+				96BEAF2C12F06360006028D0 /* NSDictionary_JSONExtensions.m in Sources */,
+				96BEAF2D12F06360006028D0 /* NSScanner_Extensions.m in Sources */,
+				96BEAF2E12F06360006028D0 /* CJSONDeserializer.m in Sources */,
+				96BEAF2F12F06360006028D0 /* CJSONScanner.m in Sources */,
+				96BEAF3012F06360006028D0 /* CJSONSerializer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		963E590112DB35EB000864D8 /* InfoPlist.strings */ = {
+		96F0758412F0624100F6369D /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				963E590212DB35EB000864D8 /* en */,
+				96F0758512F0624100F6369D /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		963E590612DB35EB000864D8 /* MainMenu.xib */ = {
+		96F0758712F0624F00F6369D /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				963E590712DB35EB000864D8 /* en */,
+				96F0758812F0624F00F6369D /* en */,
 			);
-			name = MainMenu.xib;
+			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
-		963E590912DB35EB000864D8 /* Credits.rtf */ = {
+		96F0758912F0624F00F6369D /* Readmill_FrameworkViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				963E590A12DB35EB000864D8 /* en */,
+				96F0758A12F0624F00F6369D /* en */,
 			);
-			name = Credits.rtf;
+			name = Readmill_FrameworkViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		963E590F12DB35EB000864D8 /* Debug */ = {
+		96BEAEEB12F05E80006028D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				SDKROOT = macosx;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
-		963E591012DB35EB000864D8 /* Release */ = {
+		96BEAEEC12F05E80006028D0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				PREBINDING = NO;
-				SDKROOT = macosx;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
-		963E591212DB35EB000864D8 /* Debug */ = {
+		96BEAEEE12F05E80006028D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
-				HEADER_SEARCH_PATHS = "/usr/include/libxml2/**";
 				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
-		963E591312DB35EB000864D8 /* Release */ = {
+		96BEAEEF12F05E80006028D0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
-				HEADER_SEARCH_PATHS = "/usr/include/libxml2/**";
 				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -441,25 +432,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		963E58F012DB35EB000864D8 /* Build configuration list for PBXProject "Readmill Framework" */ = {
+		96BEAEC612F05E80006028D0 /* Build configuration list for PBXProject "Readmill Framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				963E590F12DB35EB000864D8 /* Debug */,
-				963E591012DB35EB000864D8 /* Release */,
+				96BEAEEB12F05E80006028D0 /* Debug */,
+				96BEAEEC12F05E80006028D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		963E591112DB35EB000864D8 /* Build configuration list for PBXNativeTarget "Readmill Framework" */ = {
+		96BEAEED12F05E80006028D0 /* Build configuration list for PBXNativeTarget "Readmill Framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				963E591212DB35EB000864D8 /* Debug */,
-				963E591312DB35EB000864D8 /* Release */,
+				96BEAEEE12F05E80006028D0 /* Debug */,
+				96BEAEEF12F05E80006028D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 963E58ED12DB35EB000864D8 /* Project object */;
+	rootObject = 96BEAEC312F05E80006028D0 /* Project object */;
 }

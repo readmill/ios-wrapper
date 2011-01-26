@@ -279,15 +279,13 @@
         [parameters setValue:sessionId forKey:@"identifier"];
     }
     
-    if (occurrenceTime != nil) 
-	{
+    if (occurrenceTime != nil) {
         // 2011-01-06T11:47:14Z
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
 		[formatter setDateFormat:@"%Y-%m-%dT%H:%M:%SZ"];
 		[parameters setValue:[formatter stringFromDate:occurrenceTime] forKey:@"occurred_at"];
-		
-//        NSDateFormatter *formatter = [[NSDateFormatter alloc] initWithDateFormat:@"%Y-%m-%dT%H:%M:%SZ" allowNaturalLanguage:NO];
-//        [parameters setValue:[formatter stringFromDate:occurrenceTime] forKey:@"occurred_at"];
+        [formatter release];
+        formatter = nil;
     }
     
     [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings.json", [self apiEndPoint], readId]] 
