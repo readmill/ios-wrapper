@@ -13,11 +13,13 @@
 
 @protocol ReadmillFinishReadUIDelegate <NSObject>
 
--(void)finishReadUIWillClose:(ReadmillFinishReadUI *)readUI;
+-(void)finishReadUIWillCloseWithNoAction:(ReadmillFinishReadUI *)readUI;
+-(void)finishReadUI:(ReadmillFinishReadUI *)readUI didFinishRead:(ReadmillRead *)aRead;
+-(void)finishReadUI:(ReadmillFinishReadUI *)readUI didFailToFinishRead:(ReadmillRead *)aRead withError:(NSError *)error;
 
 @end
 
-@interface ReadmillFinishReadUI : UIViewController <UIWebViewDelegate> {
+@interface ReadmillFinishReadUI : UIViewController <UIWebViewDelegate, ReadmillReadUpdatingDelegate> {
 @private
     
     ReadmillRead *read;

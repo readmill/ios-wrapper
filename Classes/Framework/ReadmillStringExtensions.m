@@ -26,4 +26,18 @@
 	return unencodedString;
 }
 
+-(NSString *)urlDecodedString {
+    
+    CFStringRef str = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,
+                                                                              (CFStringRef)self,
+                                                                              CFSTR(""),
+                                                                              kCFStringEncodingUTF8);
+    
+    NSString *decodedString = [NSString stringWithString:(NSString *)str];
+    
+    CFRelease(str);
+    
+    return decodedString;
+}
+
 @end

@@ -8,6 +8,7 @@
 
 #import "ReadmillFinishReadUI.h"
 #import "ReadmillUser.h"
+#import "ReadmillStringExtensions.h"
 
 @interface ReadmillFinishReadUI ()
 
@@ -116,11 +117,8 @@
 	
 	if ([error code] != -999) {
         // ^ Load failed because the user clicked a new link to load
-        /*
-        [[self delegate] connect:self 
-             didFailToLinkToBook:[self book]
-                       withError:error];
-        */
+        
+        [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
         [[self parentViewController] dismissModalViewControllerAnimated:YES];
         
 	}
@@ -140,10 +138,30 @@
         
         
         if ([parameters containsObject:@"close-window"]) {
-            [[self delegate] finishReadUIWillClose:self];
+            [[self delegate] finishReadUIWillCloseWithNoAction:self];
             [[self parentViewController] dismissModalViewControllerAnimated:YES];
             
+        } else if ([parameters containsObject:@"finish-with-remark"]) {
+        
+            NSUInteger indexOfParameter = [parameters indexOfObjectIdenticalTo:@"finish-with-remark"];
+            NSString *remark = nil;
+            
+            // Remark is the parameter after this
+            
+            if ([parameters count] >= indexOfParameter) {
+                remark = [parameters objectAtIndex:indexOfParameter + 1];
+            }
+        
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+            [activityIndicator startAnimating];
+            
+            [[self read] updateWithState:ReadStateFinished
+                               isPrivate:[[self read] isPrivate]
+                           closingRemark:remark
+                                delegate:self];
+            
         }         
+        
 	
 		return NO;
 	} else {
@@ -151,6 +169,21 @@
 	}
 }
 
+#pragma mark -
+#pragma mark ReadmillFinishReadUIDelegate
 
+-(void)readmillReadDidUpdateMetadataSuccessfully:(ReadmillRead *)read {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[self delegate] finishReadUI:self didFinishRead:[self read]];
+    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+}
+
+-(void)readmillRead:(ReadmillRead *)read didFailToUpdateMetadataWithError:(NSError *)error {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
+    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+}
 
 @end

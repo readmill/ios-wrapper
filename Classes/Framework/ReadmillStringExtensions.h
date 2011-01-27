@@ -13,5 +13,6 @@
 @interface NSString (ReadmillStringExtensions)
 
 -(NSString *)urlEncodedString;
+-(NSString *)urlDecodedString;
 
 @end
