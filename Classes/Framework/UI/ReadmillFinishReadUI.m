@@ -9,6 +9,7 @@
 #import "ReadmillFinishReadUI.h"
 #import "ReadmillUser.h"
 #import "ReadmillStringExtensions.h"
+#import "ReadmillUIPresenter.h"
 
 @interface ReadmillFinishReadUI ()
 
@@ -27,11 +28,18 @@
         [self setModalPresentationStyle:UIModalPresentationFormSheet];
         [self setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         [self setContentSizeForViewInPopover:CGSizeMake(600.0, 578.0)];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(willBeDismissed:)
+                                                     name:ReamillUIPresenterWillDismissViewFromCloseButtonNotification
+                                                   object:nil];
     }
     return self;
 }
 
 -(void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self setRead:nil];
     [self setDelegate:nil];
@@ -46,6 +54,10 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
+}
+
+-(void)willBeDismissed:(NSNotification *)notification {
+    [[self delegate] finishReadUIWillCloseWithNoAction:self];
 }
 
 #pragma mark - View lifecycle
@@ -119,8 +131,8 @@
         // ^ Load failed because the user clicked a new link to load
         
         [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
-        [[self parentViewController] dismissModalViewControllerAnimated:YES];
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                            object:self];
 	}
 }
 
@@ -139,8 +151,8 @@
         
         if ([parameters containsObject:@"close-window"]) {
             [[self delegate] finishReadUIWillCloseWithNoAction:self];
-            [[self parentViewController] dismissModalViewControllerAnimated:YES];
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                                object:self];
         } else if ([parameters containsObject:@"finish-with-remark"]) {
         
             NSUInteger indexOfParameter = [parameters indexOfObjectIdenticalTo:@"finish-with-remark"];
@@ -176,14 +188,16 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] finishReadUI:self didFinishRead:[self read]];
-    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                        object:self];
 }
 
 -(void)readmillRead:(ReadmillRead *)read didFailToUpdateMetadataWithError:(NSError *)error {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
-    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                        object:self];
 }
 
 @end

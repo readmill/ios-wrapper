@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9647F57C12F1A0140088CAA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9647F57B12F1A0140088CAA0 /* QuartzCore.framework */; };
+		9647F57E12F1AD8F0088CAA0 /* button_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 9647F57D12F1AD8F0088CAA0 /* button_close.png */; };
+		9647F58012F1B04C0088CAA0 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 9647F57F12F1B04C0088CAA0 /* logo.png */; };
 		96BEAED112F05E80006028D0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED012F05E80006028D0 /* UIKit.framework */; };
 		96BEAED312F05E80006028D0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED212F05E80006028D0 /* Foundation.framework */; };
 		96BEAED512F05E80006028D0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED412F05E80006028D0 /* CoreGraphics.framework */; };
@@ -40,6 +43,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9647F57B12F1A0140088CAA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9647F57D12F1AD8F0088CAA0 /* button_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button_close.png; path = UI/button_close.png; sourceTree = "<group>"; };
+		9647F57F12F1B04C0088CAA0 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		96BEAECC12F05E80006028D0 /* Readmill Framework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Framework.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		96BEAED012F05E80006028D0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		96BEAED212F05E80006028D0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -105,6 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9647F57C12F1A0140088CAA0 /* QuartzCore.framework in Frameworks */,
 				96BEAED112F05E80006028D0 /* UIKit.framework in Frameworks */,
 				96BEAED312F05E80006028D0 /* Foundation.framework in Frameworks */,
 				96BEAED512F05E80006028D0 /* CoreGraphics.framework in Frameworks */,
@@ -135,6 +142,7 @@
 		96BEAECF12F05E80006028D0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9647F57B12F1A0140088CAA0 /* QuartzCore.framework */,
 				96BEAED012F05E80006028D0 /* UIKit.framework */,
 				96BEAED212F05E80006028D0 /* Foundation.framework */,
 				96BEAED412F05E80006028D0 /* CoreGraphics.framework */,
@@ -243,6 +251,7 @@
 			children = (
 				96F0757712F0620600F6369D /* Readmill_FrameworkViewController.h */,
 				96F0757812F0620600F6369D /* Readmill_FrameworkViewController.m */,
+				9647F57F12F1B04C0088CAA0 /* logo.png */,
 				96F0758712F0624F00F6369D /* MainWindow.xib */,
 				96F0758912F0624F00F6369D /* Readmill_FrameworkViewController.xib */,
 			);
@@ -252,6 +261,7 @@
 		96BEAF3612F071D6006028D0 /* iPad UI */ = {
 			isa = PBXGroup;
 			children = (
+				9647F57D12F1AD8F0088CAA0 /* button_close.png */,
 				96E2A90212F192EF00D7D249 /* ReadmillUIPresenter.h */,
 				96E2A90312F192EF00D7D249 /* ReadmillUIPresenter.m */,
 				96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */,
@@ -337,6 +347,8 @@
 				96F0758612F0624100F6369D /* InfoPlist.strings in Resources */,
 				96F0758B12F0624F00F6369D /* MainWindow.xib in Resources */,
 				96F0758C12F0624F00F6369D /* Readmill_FrameworkViewController.xib in Resources */,
+				9647F57E12F1AD8F0088CAA0 /* button_close.png in Resources */,
+				9647F58012F1B04C0088CAA0 /* logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,6 +457,7 @@
 				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
 				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -458,6 +471,7 @@
 				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
 				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

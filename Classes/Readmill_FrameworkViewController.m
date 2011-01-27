@@ -8,6 +8,7 @@
 
 #import "Readmill_FrameworkViewController.h"
 #import "ReadmillReadSession.h"
+#import "ReadmillUIPresenter.h"
 
 @implementation Readmill_FrameworkViewController
 
@@ -38,13 +39,16 @@
 -(IBAction)readBook {
     
     ReadmillUser *user = [(NSObject *)[[UIApplication sharedApplication] delegate] valueForKey:@"user"];
-    ReadmillBook *book = [[ReadmillBook alloc] initWithAPIDictionary:[[user apiWrapper] bookWithId:5 error:nil]];
+    ReadmillBook *book = [[[ReadmillBook alloc] initWithAPIDictionary:[[user apiWrapper] bookWithId:5 error:nil]] autorelease];
     
     ReadmillConnectBookUI *popup = [[ReadmillConnectBookUI alloc] initWithUser:user
                                                                      book:book];
     [popup setDelegate:self];
         
-    [self presentModalViewController:popup animated:YES];
+    ReadmillUIPresenter *presenter = [[ReadmillUIPresenter alloc] initWithContentViewController:popup];
+    
+    [presenter presentInView:[self view] animated:YES];
+    [presenter release];
     
 }
 
@@ -58,7 +62,7 @@
 }
 
 -(void)connect:(ReadmillConnectBookUI *)connectionUI didSkipLinkingToBook:(ReadmillBook *)aBook {
-    
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"Skipped");
 }
 
 -(void)connect:(ReadmillConnectBookUI *)connectionUI didFailToLinkToBook:(ReadmillBook *)aBook withError:(NSError *)error {
@@ -73,6 +77,7 @@
     
 }
 
+#pragma mark -
 
 -(IBAction)editRead {
     
@@ -87,13 +92,37 @@
 
     } else {
         ReadmillFinishReadUI *popup = [[ReadmillFinishReadUI alloc] initWithRead:[self read]];
-        [popup setDelegate:nil];
+        [popup setDelegate:self];
         
-        [self presentModalViewController:popup animated:YES];
+        ReadmillUIPresenter *presenter = [[ReadmillUIPresenter alloc] initWithContentViewController:popup];
+        
+        [presenter presentInView:[self view] animated:YES];
+        [presenter release];
 
     }
     
 }
+
+-(void)finishReadUIWillCloseWithNoAction:(ReadmillFinishReadUI *)readUI {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"Skipped");
+}
+
+-(void)finishReadUI:(ReadmillFinishReadUI *)readUI didFinishRead:(ReadmillRead *)aRead {
+    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd),  @"Finished");
+}
+
+-(void)finishReadUI:(ReadmillFinishReadUI *)readUI didFailToFinishRead:(ReadmillRead *)aRead withError:(NSError *)error {
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could Not Finish Read"
+                                                    message:[error localizedDescription]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:nil];
+    
+    [[alert autorelease] show];
+
+}
+
 
 #pragma mark - View lifecycle
 

@@ -12,7 +12,7 @@
 #import "ReadmillBook.h"
 #import "ReadmillRead.h"
 
-@interface Readmill_FrameworkViewController : UIViewController <ReadmillConnectBookUIDelegate> {
+@interface Readmill_FrameworkViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillFinishReadUIDelegate> {
 @private
     ReadmillRead *read;
 }
@@ -21,5 +21,6 @@
 
 -(IBAction)readBook;
 -(IBAction)editRead;
+
 
 @end

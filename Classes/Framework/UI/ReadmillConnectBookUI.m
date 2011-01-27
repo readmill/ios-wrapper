@@ -8,6 +8,7 @@
 
 #import "ReadmillConnectBookUI.h"
 #import "ReadmillUser.h"
+#import "ReadmillUIPresenter.h"
 
 @interface ReadmillConnectBookUI ()
 
@@ -28,11 +29,19 @@
         [self setModalPresentationStyle:UIModalPresentationFormSheet];
         [self setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         [self setContentSizeForViewInPopover:CGSizeMake(600.0, 400.0)];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(willBeDismissed:)
+                                                     name:ReamillUIPresenterWillDismissViewFromCloseButtonNotification
+                                                   object:nil];
+        
     }
     return self;
 }
 
 -(void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self setUser:nil];
     [self setBook:nil];
@@ -49,6 +58,10 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
+}
+
+-(void)willBeDismissed:(NSNotification *)notification {
+    [[self delegate] connect:self didSkipLinkingToBook:[self book]];
 }
 
 #pragma mark - View lifecycle
@@ -125,7 +138,8 @@
              didFailToLinkToBook:[self book]
                        withError:error];
         
-        [[self parentViewController] dismissModalViewControllerAnimated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                            object:self];
         
 	}
 }
@@ -143,8 +157,8 @@
         
         if ([parameters containsObject:@"skip"]) {
             [[self delegate] connect:self didSkipLinkingToBook:[self book]];
-            [[self parentViewController] dismissModalViewControllerAnimated:YES];
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                                object:self];
         } else if ([parameters containsObject:@"connect"]) {
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -169,21 +183,24 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] connect:self didSucceedToLinkToBook:aBook withRead:[reads lastObject]];
-    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                        object:self];
 }
 
 -(void)readmillUser:(ReadmillUser *)user foundNoReadsForBook:(ReadmillBook *)aBook {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] connect:self didSkipLinkingToBook:aBook];
-    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                        object:self];
 }
 
 -(void)readmillUser:(ReadmillUser *)user failedToFindReadForBook:(ReadmillBook *)aBook withError:(NSError *)error {
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] connect:self didFailToLinkToBook:aBook withError:error];
-    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+                                                        object:self];
 }
 
 
