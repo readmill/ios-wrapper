@@ -76,7 +76,7 @@
     
     UIView *containerView = [[[UIView alloc] initWithFrame:[webView frame]] autorelease];
     
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [activityIndicator setCenter:CGPointMake(floorf([containerView frame].size.width / 2), floorf([containerView frame].size.height / 2))];
     [activityIndicator setHidesWhenStopped:YES];
     [activityIndicator startAnimating];
@@ -88,7 +88,7 @@
     
     NSURL *url = [[[self user] apiWrapper] connectBookUIURLForBookWithId:[[self book] bookId]];
     
-    [webView performSelector:@selector(loadRequest:) withObject:[NSURLRequest requestWithURL:url] afterDelay:1.0];
+    [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
