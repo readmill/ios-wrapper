@@ -6,16 +6,16 @@
 //  Copyright 2011 KennettNet Software Limited. All rights reserved.
 //
 
-#import "ReadmillEditReadUI.h"
+#import "ReadmillFinishReadUI.h"
 #import "ReadmillUser.h"
 
-@interface ReadmillEditReadUI ()
+@interface ReadmillFinishReadUI ()
 
 @property (nonatomic, readwrite, retain) ReadmillRead *read;
 
 @end
 
-@implementation ReadmillEditReadUI
+@implementation ReadmillFinishReadUI
 
 -(id)initWithRead:(ReadmillRead *)aRead {
     
@@ -25,7 +25,7 @@
         //[self setModalInPopover:YES];
         [self setModalPresentationStyle:UIModalPresentationFormSheet];
         [self setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-        [self setContentSizeForViewInPopover:CGSizeMake(600.0, 568.0)];
+        [self setContentSizeForViewInPopover:CGSizeMake(600.0, 578.0)];
     }
     return self;
 }
@@ -52,7 +52,7 @@
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 -(void)loadView {
     
-    UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 600.0, 568.0)] autorelease];
+    UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 600.0, 578.0)] autorelease];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
     [webView setHidden:YES];
@@ -75,7 +75,7 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [[self view] setFrame:CGRectMake(0.0, 0.0, 600.0, 568.0)];
+    [[self view] setFrame:CGRectMake(0.0, 0.0, 600.0, 578.0)];
 }
 
 -(void)viewDidUnload {
@@ -140,7 +140,7 @@
         
         
         if ([parameters containsObject:@"close-window"]) {
-            [[self delegate] editReadUIWillClose:self];
+            [[self delegate] finishReadUIWillClose:self];
             [[self parentViewController] dismissModalViewControllerAnimated:YES];
             
         }         

@@ -29,7 +29,7 @@
 		96BEAF2F12F06360006028D0 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1B12F06360006028D0 /* CJSONScanner.m */; };
 		96BEAF3012F06360006028D0 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF1D12F06360006028D0 /* CJSONSerializer.m */; };
 		96BEAF3912F071FA006028D0 /* ReadmillConnectBookUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */; };
-		96BEAF3F12F0951F006028D0 /* ReadmillEditReadUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF3E12F0951F006028D0 /* ReadmillEditReadUI.m */; };
+		96BEAF3F12F0951F006028D0 /* ReadmillFinishReadUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF3E12F0951F006028D0 /* ReadmillFinishReadUI.m */; };
 		96F0756D12F061C800F6369D /* Readmill_FrameworkAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F0756C12F061C800F6369D /* Readmill_FrameworkAppDelegate.m */; };
 		96F0757912F0620600F6369D /* Readmill_FrameworkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F0757812F0620600F6369D /* Readmill_FrameworkViewController.m */; };
 		96F0758312F0623400F6369D /* Readmill_Framework-main.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F0758012F0623400F6369D /* Readmill_Framework-main.m */; };
@@ -83,8 +83,8 @@
 		96BEAF1E12F06360006028D0 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
 		96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillConnectBookUI.h; path = UI/ReadmillConnectBookUI.h; sourceTree = "<group>"; };
 		96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillConnectBookUI.m; path = UI/ReadmillConnectBookUI.m; sourceTree = "<group>"; };
-		96BEAF3D12F0951F006028D0 /* ReadmillEditReadUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillEditReadUI.h; path = UI/ReadmillEditReadUI.h; sourceTree = "<group>"; };
-		96BEAF3E12F0951F006028D0 /* ReadmillEditReadUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillEditReadUI.m; path = UI/ReadmillEditReadUI.m; sourceTree = "<group>"; };
+		96BEAF3D12F0951F006028D0 /* ReadmillFinishReadUI.h */ = {isa = PBXFileReference; fileEncoding = 4; name = ReadmillFinishReadUI.h; path = UI/ReadmillFinishReadUI.h; sourceTree = "<group>"; };
+		96BEAF3E12F0951F006028D0 /* ReadmillFinishReadUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillFinishReadUI.m; path = UI/ReadmillFinishReadUI.m; sourceTree = "<group>"; };
 		96F0756B12F061C800F6369D /* Readmill_FrameworkAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Readmill_FrameworkAppDelegate.h; path = Classes/Readmill_FrameworkAppDelegate.h; sourceTree = "<group>"; };
 		96F0756C12F061C800F6369D /* Readmill_FrameworkAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Readmill_FrameworkAppDelegate.m; path = Classes/Readmill_FrameworkAppDelegate.m; sourceTree = "<group>"; };
 		96F0757712F0620600F6369D /* Readmill_FrameworkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Readmill_FrameworkViewController.h; path = Classes/Readmill_FrameworkViewController.h; sourceTree = "<group>"; };
@@ -145,7 +145,7 @@
 				96BEAF3112F0636C006028D0 /* Extensions */,
 				96BEAF0412F06360006028D0 /* TouchJSON */,
 				96BEAEF412F06360006028D0 /* Object Model */,
-				96BEAF3612F071D6006028D0 /* UI */,
+				96BEAF3612F071D6006028D0 /* iPad UI */,
 				96BEAEFD12F06360006028D0 /* ReadmillAPIConstants.h */,
 				96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */,
 				96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */,
@@ -246,15 +246,15 @@
 			name = UI;
 			sourceTree = "<group>";
 		};
-		96BEAF3612F071D6006028D0 /* UI */ = {
+		96BEAF3612F071D6006028D0 /* iPad UI */ = {
 			isa = PBXGroup;
 			children = (
 				96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */,
 				96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */,
-				96BEAF3D12F0951F006028D0 /* ReadmillEditReadUI.h */,
-				96BEAF3E12F0951F006028D0 /* ReadmillEditReadUI.m */,
+				96BEAF3D12F0951F006028D0 /* ReadmillFinishReadUI.h */,
+				96BEAF3E12F0951F006028D0 /* ReadmillFinishReadUI.m */,
 			);
-			name = UI;
+			name = "iPad UI";
 			sourceTree = "<group>";
 		};
 		96F0757A12F0620B00F6369D /* Readmill Framework */ = {
@@ -364,7 +364,7 @@
 				96BEAF2F12F06360006028D0 /* CJSONScanner.m in Sources */,
 				96BEAF3012F06360006028D0 /* CJSONSerializer.m in Sources */,
 				96BEAF3912F071FA006028D0 /* ReadmillConnectBookUI.m in Sources */,
-				96BEAF3F12F0951F006028D0 /* ReadmillEditReadUI.m in Sources */,
+				96BEAF3F12F0951F006028D0 /* ReadmillFinishReadUI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

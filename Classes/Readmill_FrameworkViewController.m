@@ -77,7 +77,7 @@
 -(IBAction)editRead {
     
     if ([self read] == nil) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Read To Edit"
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Read To Finish"
                                                         message:nil
                                                        delegate:nil
                                               cancelButtonTitle:@"Cancel"
@@ -86,7 +86,7 @@
         [[alert autorelease] show];
 
     } else {
-        ReadmillEditReadUI *popup = [[ReadmillEditReadUI alloc] initWithRead:[self read]];
+        ReadmillFinishReadUI *popup = [[ReadmillFinishReadUI alloc] initWithRead:[self read]];
         [popup setDelegate:nil];
         
         [self presentModalViewController:popup animated:YES];

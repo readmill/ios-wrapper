@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ReadmillConnectBookUI.h"
-#import "ReadmillEditReadUI.h"
+#import "ReadmillFinishReadUI.h"
 #import "ReadmillBook.h"
 #import "ReadmillRead.h"
 

@@ -9,27 +9,27 @@
 #import <UIKit/UIKit.h>
 #import "ReadmillRead.h"
 
-@class ReadmillEditReadUI;
+@class ReadmillFinishReadUI;
 
-@protocol ReadmillEditReadUIDelegate <NSObject>
+@protocol ReadmillFinishReadUIDelegate <NSObject>
 
--(void)editReadUIWillClose:(ReadmillEditReadUI *)readUI;
+-(void)finishReadUIWillClose:(ReadmillFinishReadUI *)readUI;
 
 @end
 
-@interface ReadmillEditReadUI : UIViewController <UIWebViewDelegate> {
+@interface ReadmillFinishReadUI : UIViewController <UIWebViewDelegate> {
 @private
     
     ReadmillRead *read;
     UIActivityIndicatorView *activityIndicator;
     
-    id <ReadmillEditReadUIDelegate> delegate;
+    id <ReadmillFinishReadUIDelegate> delegate;
     
 }
 
 -(id)initWithRead:(ReadmillRead *)aRead;
 
 @property (nonatomic, readonly, retain) ReadmillRead *read;
-@property (nonatomic, readwrite, retain) id <ReadmillEditReadUIDelegate> delegate;
+@property (nonatomic, readwrite, retain) id <ReadmillFinishReadUIDelegate> delegate;
 
 @end

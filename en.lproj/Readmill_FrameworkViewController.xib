@@ -86,7 +86,7 @@
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<reference key="IBUIFont" ref="246529379"/>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">Edit Read</string>
+						<string key="IBUINormalTitle">Finish Read</string>
 						<reference key="IBUIHighlightedTitleColor" ref="801916608"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
