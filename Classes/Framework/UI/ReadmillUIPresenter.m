@@ -63,7 +63,7 @@
 #define kAnimationDuration 0.3
 #define kBackgroundOpactity 0.4 
 
--(void)presentInView:(UIView *)parentView animated:(BOOL)animated {
+-(void)presentInViewController:(UIViewController *)theParentViewController animated:(BOOL)animated {
     
     [self retain];
     
@@ -71,6 +71,8 @@
                                              selector:@selector(contentViewControllerShouldBeDismissed:)
                                                  name:ReamillUIPresenterShouldDismissViewNotification
                                                object:[self contentViewController]];
+    
+    UIView *parentView = [theParentViewController view];
     
     [[self view] setFrame:[parentView bounds]];
     [parentView addSubview:[self view]];

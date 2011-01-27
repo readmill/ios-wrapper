@@ -47,7 +47,7 @@
         
     ReadmillUIPresenter *presenter = [[ReadmillUIPresenter alloc] initWithContentViewController:popup];
     
-    [presenter presentInView:[self view] animated:YES];
+    [presenter presentInViewController:self animated:YES];
     [presenter release];
     
 }
@@ -96,7 +96,7 @@
         
         ReadmillUIPresenter *presenter = [[ReadmillUIPresenter alloc] initWithContentViewController:popup];
         
-        [presenter presentInView:[self view] animated:YES];
+        [presenter presentInViewController:self animated:YES];
         [presenter release];
 
     }
