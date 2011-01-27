@@ -124,7 +124,8 @@
 		96BEAEC112F05E80006028D0 = {
 			isa = PBXGroup;
 			children = (
-				96F0757A12F0620B00F6369D /* Readmill Framework */,
+				96BEAEF312F06360006028D0 /* Readmill Framework */,
+				96F0757A12F0620B00F6369D /* Sample Application */,
 				96F0757B12F0622100F6369D /* Supporting Files */,
 				96BEAECF12F05E80006028D0 /* Frameworks */,
 				96BEAECD12F05E80006028D0 /* Products */,
@@ -150,7 +151,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		96BEAEF312F06360006028D0 /* Framework */ = {
+		96BEAEF312F06360006028D0 /* Readmill Framework */ = {
 			isa = PBXGroup;
 			children = (
 				96BEAF3112F0636C006028D0 /* Extensions */,
@@ -161,7 +162,7 @@
 				96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */,
 				96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */,
 			);
-			name = Framework;
+			name = "Readmill Framework";
 			path = Classes/Framework;
 			sourceTree = "<group>";
 		};
@@ -246,18 +247,6 @@
 			path = "Object Model";
 			sourceTree = "<group>";
 		};
-		96BEAF3212F067E7006028D0 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				96F0757712F0620600F6369D /* Readmill_FrameworkViewController.h */,
-				96F0757812F0620600F6369D /* Readmill_FrameworkViewController.m */,
-				9647F57F12F1B04C0088CAA0 /* logo.png */,
-				96F0758712F0624F00F6369D /* MainWindow.xib */,
-				96F0758912F0624F00F6369D /* Readmill_FrameworkViewController.xib */,
-			);
-			name = UI;
-			sourceTree = "<group>";
-		};
 		96BEAF3612F071D6006028D0 /* iPad UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,15 +261,18 @@
 			name = "iPad UI";
 			sourceTree = "<group>";
 		};
-		96F0757A12F0620B00F6369D /* Readmill Framework */ = {
+		96F0757A12F0620B00F6369D /* Sample Application */ = {
 			isa = PBXGroup;
 			children = (
-				96BEAEF312F06360006028D0 /* Framework */,
 				96F0756B12F061C800F6369D /* Readmill_FrameworkAppDelegate.h */,
 				96F0756C12F061C800F6369D /* Readmill_FrameworkAppDelegate.m */,
-				96BEAF3212F067E7006028D0 /* UI */,
+				96F0758712F0624F00F6369D /* MainWindow.xib */,
+				96F0757712F0620600F6369D /* Readmill_FrameworkViewController.h */,
+				96F0757812F0620600F6369D /* Readmill_FrameworkViewController.m */,
+				96F0758912F0624F00F6369D /* Readmill_FrameworkViewController.xib */,
+				9647F57F12F1B04C0088CAA0 /* logo.png */,
 			);
-			name = "Readmill Framework";
+			name = "Sample Application";
 			sourceTree = "<group>";
 		};
 		96F0757B12F0622100F6369D /* Supporting Files */ = {
