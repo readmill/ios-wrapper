@@ -25,11 +25,6 @@
         [self setUser:aUser];
         [self setBook:bookToConnectTo];
         
-        //[self setModalInPopover:YES];
-        [self setModalPresentationStyle:UIModalPresentationFormSheet];
-        [self setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-        [self setContentSizeForViewInPopover:CGSizeMake(600.0, 400.0)];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(willBeDismissed:)
                                                      name:ReamillUIPresenterWillDismissViewFromCloseButtonNotification

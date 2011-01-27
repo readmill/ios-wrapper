@@ -24,11 +24,6 @@
     if ((self = [super init])) {
         [self setRead:aRead];
         
-        //[self setModalInPopover:YES];
-        [self setModalPresentationStyle:UIModalPresentationFormSheet];
-        [self setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-        [self setContentSizeForViewInPopover:CGSizeMake(600.0, 578.0)];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(willBeDismissed:)
                                                      name:ReamillUIPresenterWillDismissViewFromCloseButtonNotification
@@ -146,8 +141,6 @@
         // callback://connect/private
         
         NSArray *parameters = [[[[request URL] absoluteURL] absoluteString] componentsSeparatedByString:@"/"];
-        NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), parameters);
-        
         
         if ([parameters containsObject:@"close-window"]) {
             [[self delegate] finishReadUIWillCloseWithNoAction:self];
@@ -171,10 +164,8 @@
                                isPrivate:[[self read] isPrivate]
                            closingRemark:remark
                                 delegate:self];
-            
         }         
         
-	
 		return NO;
 	} else {
 		return YES;
