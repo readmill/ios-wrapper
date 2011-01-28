@@ -7,30 +7,33 @@
 //
 
 #import "Readmill_FrameworkAppDelegate.h"
-
-#import "Readmill_FrameworkViewController.h"
+#import "Readmill_SignedInViewController.h"
 
 @implementation Readmill_FrameworkAppDelegate
 
-
 @synthesize window;
+@synthesize signedInViewController;
+@synthesize signingInViewController;
 
-@synthesize viewController;
-@synthesize user;
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+-(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"] != nil) {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"] == nil) {
         
-        [ReadmillUser authenticateWithPropertyListRepresentation:[[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"]
-                                                        delegate:self];
-    } else {
+        // We don't have saved credentials. Boot the user out to Readmill for authentication with a callback URL this application is set up to handle. 
         
         [[UIApplication sharedApplication] openURL:[ReadmillUser clientAuthorizationURLWithRedirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]
-                                                                                   onStagingServer:YES]];
+                                                                                       onStagingServer:YES]];
+        
+    } else {
+        
+        // We have saved credentials. Attempt to authorise them - delegates for this are handled below. 
+
+        [ReadmillUser authenticateWithPropertyListRepresentation:[[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"]
+                                                        delegate:self];
     }
+    
+    // If we were launched with a URL, attempt to authenticate from it - delegates for this are handled below, the same as authenticating with values from NSUserDefaults.
     
     if ([launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] != nil) {
         
@@ -42,17 +45,41 @@
                               onStagingServer:YES];
 
     }
-
-    [self addObserver:self
-           forKeyPath:@"user.propertyListRepresentation"
-              options:0
-              context:nil];
     
-    self.window.rootViewController = self.viewController;
-    [self.window makeKeyAndVisible];
+    [[self window] setRootViewController:[self signingInViewController]];
+    [[self window] makeKeyAndVisible];
+    
     return YES;
     
 }
+
+#pragma mark -
+#pragma mark Authentication Delegates
+
+-(void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError {
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Authentication Failed!"
+                                                    message:[authenticationError localizedDescription]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:nil];
+    
+    [[alert autorelease] show];
+
+    // Clear any saved credentials and start again next time.
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"readmill"];
+}
+
+-(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser {
+     
+    // Authentication was successful. 
+    
+    [[self signedInViewController] setUser:loggedInUser];    
+    [[self window] setRootViewController:[self signedInViewController]];
+}
+
+#pragma mark -
 
 -(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     [ReadmillUser authenticateCallbackURL:url
@@ -63,22 +90,6 @@
     return YES;
 }
 
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"user.propertyListRepresentation"]) {
-        
-        if ([[self user] propertyListRepresentation] != nil) {
-            
-            NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"Auth changed");
-            
-            [[NSUserDefaults standardUserDefaults] setValue:[[self user] propertyListRepresentation] forKey:@"readmill"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-        
-    } else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -98,91 +109,10 @@
 - (void)dealloc {
 
     [window release];
-    [viewController release];
+    [signedInViewController release];
     [super dealloc];
 }
 
-#pragma mark -
-#pragma mark Authentication
-
--(void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), authenticationError);
-}
-
--(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), loggedInUser);
-    [self setUser:loggedInUser];
-    
-    
-    return;
-    [[self user] findOrCreateBookWithISBN:@"0340896981"
-                                    title:@"One Day"
-                                   author:@"David Nicholls"
-                                 delegate:self];
-    
-}
-
-#pragma mark -
-#pragma mark Book finding
-
--(void)readmillUser:(ReadmillUser *)user didFindBooks:(NSArray *)books {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), books);
-    
-    [[self user] findOrCreateReadForBook:[books lastObject]
-                    createdReadIsPrivate:NO
-                                delegate:self];
-}
-
--(void)readmillUserFoundNoBooks:(ReadmillUser *)user {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"No books!");
-}
-
--(void)readmillUser:(ReadmillUser *)user failedToFindBooksWithError:(NSError *)error {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
-}
-
-#pragma mark -
-#pragma mark Reads
-
--(void)readmillUser:(ReadmillUser *)user didFindReads:(NSArray *)reads forBook:(ReadmillBook *)book {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), reads);
-    
-    [[reads lastObject] updateState:ReadStateReading delegate:self];
-    ReadmillReadSession *session = [[reads lastObject] createReadSession];
-    
-    [session pingWithProgress:20 delegate:self];
-    
-}
-
--(void)readmillUser:(ReadmillUser *)user foundNoReadsForBook:(ReadmillBook *)book {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), @"No reads!");   
-}
-
--(void)readmillUser:(ReadmillUser *)user failedToFindReadForBook:(ReadmillBook *)book withError:(NSError *)error {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
-}
-
-#pragma mark -
-#pragma mark Read updating
-
--(void)readmillReadDidUpdateMetadataSuccessfully:(ReadmillRead *)read {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), read);
-}
-
--(void)readmillRead:(ReadmillRead *)read didFailToUpdateMetadataWithError:(NSError *)error {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
-}
-
-#pragma mark -
-#pragma mark Session Pinging
-
--(void)readmillReadSessionDidPingSuccessfully:(ReadmillReadSession *)session {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), session);
-}
-
--(void)readmillReadSession:(ReadmillReadSession *)session didFailToPingWithError:(NSError *)error {
-    NSLog(@"[%@ %@]: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error);
-}
 
 
 @end

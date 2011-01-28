@@ -10,25 +10,20 @@
 #import "ReadmillUser.h"
 #import "ReadmillRead.h"
 #import "ReadmillReadSession.h"
+#import "Readmill_SigningInViewController.h"
 
-@class Readmill_FrameworkViewController;
+@class Readmill_SignedInViewController;
 
-@interface Readmill_FrameworkAppDelegate : NSObject <UIApplicationDelegate,
-ReadmillUserAuthenticationDelegate, 
-ReadmillBookFindingDelegate,
-ReadmillReadFindingDelegate,
-ReadmillReadUpdatingDelegate,
-ReadmillPingDelegate> {
+@interface Readmill_FrameworkAppDelegate : NSObject <UIApplicationDelegate, ReadmillUserAuthenticationDelegate> {
     
 @private
-
-    ReadmillUser *user;
     
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
-@property (nonatomic, retain) IBOutlet Readmill_FrameworkViewController *viewController;
-@property (readwrite, retain) ReadmillUser *user;
+@property (nonatomic, retain) IBOutlet Readmill_SignedInViewController *signedInViewController;
+@property (nonatomic, retain) IBOutlet Readmill_SigningInViewController *signingInViewController;
+
 
 @end

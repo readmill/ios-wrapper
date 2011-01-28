@@ -12,15 +12,20 @@
 #import "ReadmillBook.h"
 #import "ReadmillRead.h"
 
-@interface Readmill_FrameworkViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillFinishReadUIDelegate> {
+@interface Readmill_SignedInViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillFinishReadUIDelegate, ReadmillBookFindingDelegate> {
 @private
     ReadmillRead *read;
+    ReadmillUser *user;
 }
 
+@property (nonatomic, retain) IBOutlet UILabel *welcomeLabel;
+
+
+@property (nonatomic, readwrite, retain) ReadmillUser *user;
 @property (nonatomic, readwrite, retain) ReadmillRead *read;
 
--(IBAction)readBook;
--(IBAction)editRead;
+-(IBAction)linkToBookButtonWasPushed;
+-(IBAction)finishReadButtonWasPushed;
 
 
 @end
