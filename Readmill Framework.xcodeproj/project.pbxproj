@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		502698D2130C87D400E67974 /* README.asciidoc in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.asciidoc */; };
 		9647F57C12F1A0140088CAA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9647F57B12F1A0140088CAA0 /* QuartzCore.framework */; };
 		9647F57E12F1AD8F0088CAA0 /* button_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 9647F57D12F1AD8F0088CAA0 /* button_close.png */; };
 		9647F58012F1B04C0088CAA0 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 9647F57F12F1B04C0088CAA0 /* logo.png */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		502698D1130C87D300E67974 /* README.asciidoc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.asciidoc; sourceTree = "<group>"; };
 		9647F57B12F1A0140088CAA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9647F57D12F1AD8F0088CAA0 /* button_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button_close.png; path = UI/button_close.png; sourceTree = "<group>"; };
 		9647F57F12F1B04C0088CAA0 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		96BEAEC112F05E80006028D0 = {
 			isa = PBXGroup;
 			children = (
+				502698D1130C87D300E67974 /* README.asciidoc */,
 				96BEAEF312F06360006028D0 /* Readmill Framework */,
 				96F0757A12F0620B00F6369D /* Sample Application */,
 				96BEAECF12F05E80006028D0 /* Frameworks */,
@@ -366,6 +369,7 @@
 				9647F57E12F1AD8F0088CAA0 /* button_close.png in Resources */,
 				9647F58012F1B04C0088CAA0 /* logo.png in Resources */,
 				966E3E5512F2F7290027E05F /* Readmill_SigningInViewController.xib in Resources */,
+				502698D2130C87D400E67974 /* README.asciidoc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
