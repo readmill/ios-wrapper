@@ -41,7 +41,7 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(willBeDismissed:)
-                                                     name:ReamillUIPresenterWillDismissViewFromCloseButtonNotification
+                                                     name:ReadmillUIPresenterWillDismissViewFromCloseButtonNotification
                                                    object:nil];
         
     }
@@ -147,7 +147,7 @@
              didFailToLinkToBook:[self book]
                        withError:error];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+        [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                             object:self];
         
 	}
@@ -166,7 +166,7 @@
         
         if ([parameters containsObject:@"skip"]) {
             [[self delegate] connect:self didSkipLinkingToBook:[self book]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+            [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                                 object:self];
         } else if ([parameters containsObject:@"connect"]) {
             
@@ -174,6 +174,7 @@
             [activityIndicator startAnimating];
             
             [[self user] findOrCreateReadForBook:[self book]
+										   state:ReadStateReading
                             createdReadIsPrivate:[parameters containsObject:@"private"]
                                         delegate:self];
             
@@ -192,7 +193,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] connect:self didSucceedToLinkToBook:aBook withRead:[reads lastObject]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                         object:self];
 }
 
@@ -200,7 +201,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] connect:self didSkipLinkingToBook:aBook];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                         object:self];
 }
 
@@ -208,7 +209,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] connect:self didFailToLinkToBook:aBook withError:error];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                         object:self];
 }
 

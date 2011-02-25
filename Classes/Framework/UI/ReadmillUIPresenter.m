@@ -67,7 +67,7 @@
 }
 
 -(void)closeButtonPushed {
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterWillDismissViewFromCloseButtonNotification 
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterWillDismissViewFromCloseButtonNotification 
                                                         object:self];
     [self dismissPresenterAnimated:YES];
 }
@@ -83,7 +83,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(contentViewControllerShouldBeDismissed:)
-                                                 name:ReamillUIPresenterShouldDismissViewNotification
+                                                 name:ReadmillUIPresenterShouldDismissViewNotification
                                                object:[self contentViewController]];
     
     UIView *parentView = [theParentViewController view];
@@ -121,7 +121,7 @@
 -(void)dismissPresenterAnimated:(BOOL)animated {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:ReamillUIPresenterShouldDismissViewNotification
+                                                    name:ReadmillUIPresenterShouldDismissViewNotification
                                                   object:[self contentViewController]];
     
     if (animated) {

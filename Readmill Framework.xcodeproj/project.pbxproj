@@ -131,9 +131,9 @@
 		966E3E4F12F2F6EB0027E05F /* Linking A Book */ = {
 			isa = PBXGroup;
 			children = (
+				96F0758912F0624F00F6369D /* Readmill_SignedInViewController.xib */,
 				96F0757712F0620600F6369D /* Readmill_SignedInViewController.h */,
 				96F0757812F0620600F6369D /* Readmill_SignedInViewController.m */,
-				96F0758912F0624F00F6369D /* Readmill_SignedInViewController.xib */,
 			);
 			name = "Linking A Book";
 			sourceTree = "<group>";

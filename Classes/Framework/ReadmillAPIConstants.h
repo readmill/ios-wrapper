@@ -24,5 +24,7 @@
 
 #warning Replace these with your own application's Readmill client and secret keys.
 
-static NSString * const kReadmillClientSecret = @"750452e5fc0c20531e94f44215475094";
-static NSString * const kReadmillClientId = @"99dce8a929298cb95e534e86861db6de";
+//static NSString * const kReadmillClientSecret = @"750452e5fc0c20531e94f44215475094";
+//static NSString * const kReadmillClientId = @"99dce8a929298cb95e534e86861db6de";
+static NSString * const kReadmillClientSecret = @"8dbe0ade91c91726f43aab2d2035c42f";
+static NSString * const kReadmillClientId = @"b41d2e9c98c4fe6dbb3a9c8bd9efe207";

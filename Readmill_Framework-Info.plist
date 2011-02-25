@@ -36,15 +36,15 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-      <key>CFBundleURLName</key>
-      <string>com.readmill.ReadmillTestAuth</string>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>readmillTestAuth</string>
-      </array>
-    </dict>
-  </array>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.readmill.ReadmillTestAuth</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>readmillTestAuth</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -297,6 +297,7 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
 
 /*!
  @param book The book to create a read for.
+ @param readState The initial read state.
  @param isPrivate The privacy of the read.
  @param readFindingDelegate The delegate object to receive notifications of success or failure.
  @brief   Create a read for the given book in Readmill.
@@ -304,7 +305,7 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
  IMPORTANT: The read will be created even if one exists in Readmill. Please search first, or use the convenience method
  -findOrCreateReadForBook:delegate:.
  */
--(void)createReadForBook:(ReadmillBook *)book isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
+-(void)createReadForBook:(ReadmillBook *)book state:(ReadmillReadState)readState isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
 
 /*!
  @param book The book to find a read for.
@@ -315,13 +316,14 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
 
 /*!
  @param book The book to find or create a read for.
+ @param readState The initial read state.
  @param isPrivate The privacy of the read if a new one is created.
  @param readFindingDelegate The delegate object to receive notifications of success or failure.
  @brief   Find a read for the given book in Readmill, creating one if it doesn't exist.
 
  This is equivalent of calling -createReadForBook:delegate:, then calling findReadForBook:delegate: if none are found.
  */
--(void)findOrCreateReadForBook:(ReadmillBook *)book createdReadIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
+-(void)findOrCreateReadForBook:(ReadmillBook *)book state:(ReadmillReadState)readState createdReadIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
 
 #pragma mark -
 #pragma mark Properties

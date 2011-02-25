@@ -580,6 +580,8 @@
 
 -(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {
     
+	DLog(@"request: %@", request);
+
 	NSHTTPURLResponse *response = nil;
 	NSError *connectionError = nil;
 	
@@ -588,6 +590,7 @@
 															 error:&connectionError];
     
 	if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
+
 		if (connectionError == nil) {
 			
 			id errorResponse = [[CJSONDeserializer deserializer] deserialize:responseData error:nil]; 
@@ -599,7 +602,8 @@
 												   [errorResponse valueForKey:@"error"], NSLocalizedFailureReasonErrorKey, nil]];
 			}
 		} else {
-			
+			DLog(@"hit");
+
 			if (error != NULL) {
 				*error = connectionError;
 			}

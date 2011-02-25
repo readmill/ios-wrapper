@@ -130,7 +130,7 @@ static NSString * const kReadmillAPIReadIdKey = @"id";
 #pragma mark Initialization and Serialization 
 
 /*!
- @result The created ReamillAPIWrapper object.
+ @result The created ReadmillAPIWrapper object.
  @brief   Create a Readmill API object with the default endpoint URL (the live server).
  
  This method will create a Readmill API object with the default endpoint URL (the live
@@ -139,7 +139,7 @@ static NSString * const kReadmillAPIReadIdKey = @"id";
 -(id)init;
 
 /*!
- @result The created ReamillAPIWrapper object.
+ @result The created ReadmillAPIWrapper object.
  @brief   Create a Readmill API object with the staging endpoint URL.
  
  This method will create a Readmill API object with the staging endpoint URL.
@@ -149,7 +149,7 @@ static NSString * const kReadmillAPIReadIdKey = @"id";
 
 /*!
  @param plist The saved credentials. 
- @result The created ReamillAPIWrapper object.
+ @result The created ReadmillAPIWrapper object.
  @brief   Create a Readmill API object with the saved authentication details.
  
  This method will create a Readmill API object with the given authentication details

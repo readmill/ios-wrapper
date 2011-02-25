@@ -360,6 +360,7 @@
                          author:(NSString *)author
                        delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate {
     
+	
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 bookfindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
@@ -368,14 +369,14 @@
                                 author, @"author",
                                 [NSNumber numberWithBool:YES], @"createIfNotFound",
                                 nil];
-    
+    	
+	
     [self performSelectorInBackground:@selector(findBooksWithProperties:)
                            withObject:properties];
     
 }
 
 -(void)findBooksWithProperties:(NSDictionary *)properties {
-    
     [self retain];
     
     NSAutoreleasePool *pool;
@@ -390,8 +391,10 @@
     NSString *isbn = [properties valueForKey:@"isbn"];
     NSString *title = [properties valueForKey:@"title"];
     NSString *author = [properties valueForKey:@"author"];
+
     BOOL createIfNotFound = [[properties valueForKey:@"createIfNotFound"] boolValue];
-    
+
+
     // Search by ISBN
     if ([isbn length] > 0) {
         bookDicts = [[self apiWrapper] booksMatchingISBN:isbn
@@ -404,7 +407,7 @@
     }
     
     // Create if not found
-    if ([bookDicts count] == 0 && error == nil && createIfNotFound == YES) {
+	if ([bookDicts count] == 0 && error == nil && createIfNotFound == YES) {
         
         NSDictionary *bookDict = [[self apiWrapper] addBookWithTitle:title
                                                               author:author
@@ -563,13 +566,14 @@
     
 }
 
--(void)findOrCreateReadForBook:(ReadmillBook *)book createdReadIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate {
+-(void)findOrCreateReadForBook:(ReadmillBook *)book state:(ReadmillReadState)readState createdReadIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate {
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 readFindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
                                 book, @"book", 
                                 [NSNumber numberWithBool:YES], @"createIfNotFound",
+								[NSNumber numberWithInteger:readState], @"state",
                                 [NSNumber numberWithBool:isPrivate], @"isPrivate",
                                 nil];
     
@@ -578,7 +582,6 @@
 }
 
 -(void)findReadWithProperties:(NSDictionary *)properties {
-    
     [self retain];
     
     NSAutoreleasePool *pool;
@@ -589,6 +592,7 @@
     ReadmillBook *book = [properties valueForKey:@"book"];
     BOOL createIfNotFound = [[properties valueForKey:@"createIfNotFound"] boolValue];
     BOOL isPrivate = [[properties valueForKey:@"isPrivate"] boolValue];
+	ReadmillReadState readState = [[properties valueForKey:@"state"] integerValue];
     
     NSError *error = nil;
     NSMutableArray *matchingReads = [NSMutableArray array];
@@ -604,11 +608,10 @@
             }
         }
     }
-    
     if ([matchingReads count] == 0 && createIfNotFound == YES) {
-        
+		
         NSDictionary *readDict = [[self apiWrapper] createReadWithBookId:[book bookId]
-                                                                   state:ReadStateInteresting
+                                                                   state:readState
                                                                  private:isPrivate
                                                                    error:&error];
         if (readDict != nil) {
@@ -684,13 +687,14 @@
 }
 
 
--(void)createReadForBook:(ReadmillBook *)book isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate {
+-(void)createReadForBook:(ReadmillBook *)book state:(ReadmillReadState)readState isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate {
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 readFindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
                                 book, @"book", 
                                 [NSNumber numberWithBool:isPrivate], @"isPrivate",
+								[NSNumber numberWithInteger:readState], @"state",
                                 nil];
     
     [self performSelectorInBackground:@selector(createReadWithProperties:)
@@ -708,10 +712,11 @@
     id <ReadmillReadFindingDelegate> readFindingDelegate = [properties valueForKey:@"delegate"];
     ReadmillBook *book = [properties valueForKey:@"book"];
     BOOL isPrivate = [[properties valueForKey:@"isPrivate"] boolValue];
+	ReadmillReadState readState = [[properties valueForKey:@"state"] integerValue];
     
     NSError *error = nil;
     NSDictionary *readDict = [[self apiWrapper] createReadWithBookId:[book bookId]
-                                                               state:ReadStateInteresting
+                                                               state:readState
                                                              private:isPrivate
                                                                error:&error];
     

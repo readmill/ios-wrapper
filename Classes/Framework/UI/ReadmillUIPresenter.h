@@ -22,8 +22,8 @@
 
 #import <UIKit/UIKit.h>
 
-static NSString * const ReamillUIPresenterShouldDismissViewNotification = @"ReamillUIPresenterShouldDismissViewNotification";
-static NSString * const ReamillUIPresenterWillDismissViewFromCloseButtonNotification = @"ReamillUIPresenterWillDismissViewFromCloseButtonNotification";
+static NSString * const ReadmillUIPresenterShouldDismissViewNotification = @"ReadmillUIPresenterShouldDismissViewNotification";
+static NSString * const ReadmillUIPresenterWillDismissViewFromCloseButtonNotification = @"ReadmillUIPresenterWillDismissViewFromCloseButtonNotification";
 
 @interface ReadmillUIPresenter : UIViewController {
 @private

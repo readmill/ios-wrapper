@@ -40,7 +40,7 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(willBeDismissed:)
-                                                     name:ReamillUIPresenterWillDismissViewFromCloseButtonNotification
+                                                     name:ReadmillUIPresenterWillDismissViewFromCloseButtonNotification
                                                    object:nil];
     }
     return self;
@@ -140,7 +140,7 @@
         // ^ Load failed because the user clicked a new link to load
         
         [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
-        [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+        [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                             object:self];
 	}
 }
@@ -158,7 +158,7 @@
         
         if ([parameters containsObject:@"close-window"]) {
             [[self delegate] finishReadUIWillCloseWithNoAction:self];
-            [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+            [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                                 object:self];
         } else if ([parameters containsObject:@"finish-with-remark"]) {
         
@@ -193,7 +193,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] finishReadUI:self didFinishRead:[self read]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                         object:self];
 }
 
@@ -201,7 +201,7 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReamillUIPresenterShouldDismissViewNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                         object:self];
 }
 
