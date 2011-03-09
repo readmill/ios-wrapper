@@ -163,15 +163,15 @@
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
     if ([bookTitle length] > 0) {
-        [parameters setValue:bookTitle forKey:@"title"];
+        [parameters setValue:bookTitle forKey:@"book[title]"];
     }
     
     if ([bookAuthor length] > 0) {
-        [parameters setValue:bookAuthor forKey:@"author"];
+        [parameters setValue:bookAuthor forKey:@"book[author]"];
     }
     
     if ([bookIsbn length] > 0) {
-        [parameters setValue:bookIsbn forKey:@"isbn"];
+        [parameters setValue:bookIsbn forKey:@"book[isbn]"];
     }
     
     NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]]
@@ -191,9 +191,9 @@
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
-    [parameters setValue:[NSNumber numberWithInteger:readState] forKey:@"state"];
-    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:@"is_private"];
-    [parameters setValue:kReadmillClientId forKey:@"client_id"];
+    [parameters setValue:[NSNumber numberWithInteger:readState] forKey:@"read[state]"];
+    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:@"read[is_private]"];
+    [parameters setValue:kReadmillClientId forKey:@"read[client_id]"];
     
     
     NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books/%d/reads.json", [self apiEndPoint], bookId]]
@@ -294,22 +294,22 @@
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
-    [parameters setValue:[NSNumber numberWithInteger:progress] forKey:@"progress"];
-    [parameters setValue:[NSNumber numberWithInteger:duration] forKey:@"duration"];
+    [parameters setValue:[NSNumber numberWithInteger:progress] forKey:@"ping[progress]"];
+    [parameters setValue:[NSNumber numberWithInteger:duration] forKey:@"ping[duration]"];
     
     if ([sessionId length] > 0) {
-        [parameters setValue:sessionId forKey:@"identifier"];
+        [parameters setValue:sessionId forKey:@"ping[identifier]"];
     }
     
     if (occurrenceTime != nil) {
         // 2011-01-06T11:47:14Z
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-		[formatter setDateFormat:@"%Y-%m-%dT%H:%M:%SZ"];
-		[parameters setValue:[formatter stringFromDate:occurrenceTime] forKey:@"occurred_at"];
+		[formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+		[parameters setValue:[formatter stringFromDate:occurrenceTime] forKey:@"ping[occurred_at]"];
         [formatter release];
         formatter = nil;
     }
-    
+	
     [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings.json", [self apiEndPoint], readId]] 
                 withParameters:parameters
        canBeCalledUnauthorized:NO
@@ -560,9 +560,9 @@
 		
 		if (value) {
 			[parameterString appendFormat:@"%@%@=%@",
-			 first ? @"" : @"&", 
-			 key, 
-			 [value isKindOfClass:[NSString class]] ? [value urlEncodedString] : [[value stringValue] urlEncodedString]];
+			first ? @"" : @"&", 
+			key, 
+			[value isKindOfClass:[NSString class]] ? [value urlEncodedString] : [[value stringValue] urlEncodedString]];
 			first = NO;
 		}		
 	}
@@ -582,13 +582,18 @@
     
 	DLog(@"request: %@", request);
 
+	
+	NSString *httpbody = [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding];
+	DLog(@"httpbody: %@", httpbody);
+
 	NSHTTPURLResponse *response = nil;
 	NSError *connectionError = nil;
 	
 	NSData *responseData = [NSURLConnection sendSynchronousRequest:request
 												 returningResponse:&response
 															 error:&connectionError];
-    
+	
+    DLog(@"response: %@", [response allHeaderFields]);
 	if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
 
 		if (connectionError == nil) {
@@ -602,8 +607,6 @@
 												   [errorResponse valueForKey:@"error"], NSLocalizedFailureReasonErrorKey, nil]];
 			}
 		} else {
-			DLog(@"hit");
-
 			if (error != NULL) {
 				*error = connectionError;
 			}
@@ -618,10 +621,16 @@
         // Do we have an empty response?
         
         NSString *jsonString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+		
+		// TODO REMOVE ME
+		if (jsonString != nil) {
+			DLog(@"json: %@", jsonString);
+		}
+		// TODO
         
         if ([[jsonString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
             id parsedJsonValue = [[CJSONDeserializer deserializer] deserialize:responseData error:&parseError];
-            
+		
             if (parseError != nil) {
                 if (error != NULL) {
                     *error = parseError;
