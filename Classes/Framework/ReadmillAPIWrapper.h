@@ -21,6 +21,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "Reachability.h"
 
 typedef NSUInteger ReadmillBookId;
 typedef NSUInteger ReadmillReadId;
@@ -100,11 +101,14 @@ static NSString * const kReadmillAPIReadDateFinishedKey = @"finished_at";
 static NSString * const kReadmillAPIReadDateModifiedKey = @"touched_at";
 static NSString * const kReadmillAPIReadDateStarted = @"started_at";
 static NSString * const kReadmillAPIReadClosingRemarkKey = @"closing_remark";
-static NSString * const kReadmillAPIReadIsPrivateKey = @"private";
+static NSString * const kReadmillAPIReadIsPrivateKey = @"is_private";
 static NSString * const kReadmillAPIReadStateKey = @"state";
 static NSString * const kReadmillAPIReadBookKey = @"book";
 static NSString * const kReadmillAPIReadUserKey = @"user";
 static NSString * const kReadmillAPIReadIdKey = @"id";
+
+static NSString * const kReadmillAPIClientIdKey = @"client";
+
 
 #pragma mark -
 
@@ -288,6 +292,14 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 -(NSArray *)booksMatchingISBN:(NSString *)isbn error:(NSError **)error;
 
 /*!
+ @param pathToBook The relative path of the book to retrieve.
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
+ @brief   Get a specific book in the Readmill system. 
+ */
+- (NSDictionary *)bookWithRelativePath:(NSString *)pathToBook error:(NSError **)error;
+
+/*!
  @param bookId The Readmill id of the book to retrieve.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
@@ -348,6 +360,15 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Get a list of reads for a given user name. 
  */
 -(NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error;
+
+/*!
+ @param pathToRead The relative path of the read you'd like to get details for.
+ @param userId The user Id of the user the requested read belongs to.
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @result A specific read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
+ @brief   Get a specific read by its id and user id. 
+ */
+- (NSDictionary *)readWithRelativePath:(NSString *)pathToRead error:(NSError **)error;
 
 /*!
  @param readId The Id of the read you'd like to get details for.

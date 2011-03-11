@@ -118,6 +118,7 @@
     NSUInteger openBookCount;
     
     ReadmillAPIWrapper *apiWrapper;
+	
 }
 
 #pragma mark Static Methods

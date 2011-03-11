@@ -88,6 +88,7 @@
  
     ReadmillUser *user = [[ReadmillUser alloc] initWithPropertyListRepresentation:plistRep];
     [user verifyAuthentication:authenticationDelegate];
+	DLog(@"user: %@", user);
 }
 
 - (id)init {
@@ -127,7 +128,6 @@
 }
 
 -(void)updateWithAPIDictionary:(NSDictionary *)apiDict {
-    
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
     [self setCity:[cleanedDict valueForKey:kReadmillAPIUserCityKey]];
@@ -158,7 +158,6 @@
     [self setFinishedBookCount:[[cleanedDict valueForKey:kReadmillAPIUserFinishedBooksKey] unsignedIntegerValue]];
     [self setInterestingBookCount:[[cleanedDict valueForKey:kReadmillAPIUserInterestingBooksKey] unsignedIntegerValue]];
     [self setOpenBookCount:[[cleanedDict valueForKey:kReadmillAPIUserOpenBooksKey] unsignedIntegerValue]];
-    
 }
 
 @synthesize city;
@@ -306,18 +305,17 @@
 
 
 -(void)verifyAuthenticationWithProperties:(NSDictionary *)properties {
-    
     [self retain];
-    
     NSAutoreleasePool *pool;
     pool = [[NSAutoreleasePool alloc] init];
     
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
+	
     id <ReadmillUserAuthenticationDelegate> authenticationDelegate = [properties valueForKey:@"delegate"];
-    
     NSError *error = nil;
     [self updateWithAPIDictionary:[[self apiWrapper] currentUser:&error]];
-    
+	
+	DLog(@"error: %@", error);
     if (error == nil && authenticationDelegate != nil) {
         
         [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidSucceedWithLoggedInUser:)
@@ -347,8 +345,8 @@
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 bookfindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
-                                isbn, @"isbn", 
-                                title, @"title",
+                                isbn, kReadmillAPIBookISBNKey, 
+                                title, kReadmillAPIBookTitleKey,
                                 nil];
     
     [self performSelectorInBackground:@selector(findBooksWithProperties:)
@@ -364,13 +362,13 @@
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 bookfindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
-                                title, @"title",
-                                isbn, @"isbn", 
-                                author, @"author",
+                                title, kReadmillAPIBookTitleKey,
+                                isbn, kReadmillAPIBookISBNKey, 
+                                author, kReadmillAPIBookAuthorKey,
                                 [NSNumber numberWithBool:YES], @"createIfNotFound",
                                 nil];
     	
-	
+	DLog(@"properties: %@", properties);
     [self performSelectorInBackground:@selector(findBooksWithProperties:)
                            withObject:properties];
     
@@ -388,9 +386,9 @@
     NSError *error = nil;
     NSArray *bookDicts = nil;
     
-    NSString *isbn = [properties valueForKey:@"isbn"];
-    NSString *title = [properties valueForKey:@"title"];
-    NSString *author = [properties valueForKey:@"author"];
+    NSString *isbn = [properties valueForKey:kReadmillAPIBookISBNKey];
+    NSString *title = [properties valueForKey:kReadmillAPIBookTitleKey];
+    NSString *author = [properties valueForKey:kReadmillAPIBookAuthorKey];
 
     BOOL createIfNotFound = [[properties valueForKey:@"createIfNotFound"] boolValue];
 
@@ -404,6 +402,7 @@
     // Search by title
     if ([title length] > 0 && [bookDicts count] == 0 && error == nil) {
         bookDicts = [[self apiWrapper] booksMatchingTitle:title error:&error];
+
     }
     
     // Create if not found
@@ -414,8 +413,11 @@
                                                                 isbn:isbn
                                                                error:&error];
         
+        DLog(@"bookDict: %@", bookDict);
+
         if (bookDict != nil) {
             bookDicts = [NSArray arrayWithObject:bookDict];
+            
         }
     }
     
@@ -434,7 +436,6 @@
         for (NSDictionary *bookDict in bookDicts) {
             [books addObject:[[[ReadmillBook alloc] initWithAPIDictionary:bookDict] autorelease]];
         }
-        
         NSInvocation *successInvocation = [NSInvocation invocationWithMethodSignature:
                                            [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:didFindBooks:)]];
         [successInvocation setSelector:@selector(readmillUser:didFindBooks:)];
@@ -480,9 +481,9 @@
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 bookfindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
-                                isbn, @"isbn", 
-                                title, @"title",
-                                author, @"author",
+                                isbn, kReadmillAPIBookISBNKey, 
+                                title, kReadmillAPIBookTitleKey,
+                                author, kReadmillAPIBookAuthorKey,
                                 nil];
     
     [self performSelectorInBackground:@selector(createBookWithProperties:)
@@ -501,9 +502,9 @@
     id <ReadmillBookFindingDelegate> bookFindingDelegate = [properties valueForKey:@"delegate"];
     
     NSError *error = nil;
-    NSDictionary *bookDict = [[self apiWrapper] addBookWithTitle:[properties valueForKey:@"title"]
-                                                          author:[properties valueForKey:@"author"]
-                                                            isbn:[properties valueForKey:@"isbn"]
+    NSDictionary *bookDict = [[self apiWrapper] addBookWithTitle:[properties valueForKey:kReadmillAPIBookTitleKey]
+                                                          author:[properties valueForKey:kReadmillAPIBookAuthorKey]
+                                                            isbn:[properties valueForKey:kReadmillAPIBookISBNKey]
                                                            error:&error];
     
     if (error == nil && bookFindingDelegate != nil && bookDict == nil) {
@@ -573,8 +574,8 @@
                                 [NSThread currentThread], @"callbackThread",
                                 book, @"book", 
                                 [NSNumber numberWithBool:YES], @"createIfNotFound",
-								[NSNumber numberWithInteger:readState], @"state",
-                                [NSNumber numberWithBool:isPrivate], @"isPrivate",
+								[NSNumber numberWithInteger:readState],kReadmillAPIReadStateKey,
+                                [NSNumber numberWithBool:isPrivate], kReadmillAPIReadIsPrivateKey,
                                 nil];
     
     [self performSelectorInBackground:@selector(findReadWithProperties:)
@@ -591,8 +592,8 @@
     id <ReadmillReadFindingDelegate> readFindingDelegate = [properties valueForKey:@"delegate"];
     ReadmillBook *book = [properties valueForKey:@"book"];
     BOOL createIfNotFound = [[properties valueForKey:@"createIfNotFound"] boolValue];
-    BOOL isPrivate = [[properties valueForKey:@"isPrivate"] boolValue];
-	ReadmillReadState readState = [[properties valueForKey:@"state"] integerValue];
+    BOOL isPrivate = [[properties valueForKey:kReadmillAPIReadIsPrivateKey] boolValue];
+	ReadmillReadState readState = [[properties valueForKey:kReadmillAPIReadStateKey] integerValue];
     
     NSError *error = nil;
     NSMutableArray *matchingReads = [NSMutableArray array];
@@ -693,8 +694,8 @@
                                 readFindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
                                 book, @"book", 
-                                [NSNumber numberWithBool:isPrivate], @"isPrivate",
-								[NSNumber numberWithInteger:readState], @"state",
+                                [NSNumber numberWithBool:isPrivate], kReadmillAPIReadIsPrivateKey,
+								[NSNumber numberWithInteger:readState], kReadmillAPIReadStateKey,
                                 nil];
     
     [self performSelectorInBackground:@selector(createReadWithProperties:)
@@ -711,8 +712,8 @@
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillReadFindingDelegate> readFindingDelegate = [properties valueForKey:@"delegate"];
     ReadmillBook *book = [properties valueForKey:@"book"];
-    BOOL isPrivate = [[properties valueForKey:@"isPrivate"] boolValue];
-	ReadmillReadState readState = [[properties valueForKey:@"state"] integerValue];
+    BOOL isPrivate = [[properties valueForKey:kReadmillAPIReadIsPrivateKey] boolValue];
+	ReadmillReadState readState = [[properties valueForKey:kReadmillAPIReadStateKey] integerValue];
     
     NSError *error = nil;
     NSDictionary *readDict = [[self apiWrapper] createReadWithBookId:[book bookId]
