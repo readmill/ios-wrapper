@@ -315,7 +315,7 @@
     NSError *error = nil;
     [self updateWithAPIDictionary:[[self apiWrapper] currentUser:&error]];
 	
-	DLog(@"error: %@", error);
+	DLog(@"error in verifyAuthenticationWithProperties: %@", error);
     if (error == nil && authenticationDelegate != nil) {
         
         [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidSucceedWithLoggedInUser:)

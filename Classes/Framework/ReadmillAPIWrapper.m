@@ -72,7 +72,7 @@
         [self setRefreshToken:[plist valueForKey:@"refreshToken"]];
         [self setApiEndPoint:[plist valueForKey:@"apiEndPoint"]];
 		[self setAccessToken:[plist valueForKey:@"accessToken"]];
-		[self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
+		//[self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
     }
     return self;
 }
@@ -82,7 +82,7 @@
             [self authorizedRedirectURL], @"authorizedRedirectURL",
             [self refreshToken], @"refreshToken", 
             [self apiEndPoint], @"apiEndPoint",
-			[self accessTokenExpiryDate], @"accessTokenExpiryDate",
+			//[self accessTokenExpiryDate], @"accessTokenExpiryDate",
 			[self accessToken], @"accessToken",
 			nil];
 	 
@@ -139,7 +139,7 @@
 
 - (NSDictionary *)bookWithRelativePath:(NSString *)pathToBook error:(NSError **)error {
     
-    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self apiEndPoint], pathToBook]] 
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@.json", [self apiEndPoint], pathToBook]] 
                                            withParameters:nil
                                shouldBeCalledUnauthorized:YES
                                                     error:error];
@@ -190,10 +190,14 @@
         [parameters setValue:bookIsbn forKey:[NSString stringWithFormat:bookScope, kReadmillAPIBookISBNKey]];
     }
     
-    NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]]
+    NSString *pathToBook = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]]
                                             withParameters:parameters
                                    canBeCalledUnauthorized:NO
                                                      error:error];
+    
+    DLog(@"pathToBook: %@", pathToBook);
+    NSDictionary *apiResponse = [self bookWithRelativePath:pathToBook error:error];
+    DLog(@"book apiresponse: %@", apiResponse);
     return apiResponse;
 }
 
@@ -218,7 +222,7 @@
                                    canBeCalledUnauthorized:NO
                                                      error:error];
     
-    NSDictionary *apiResponse = [self readWithRelativePath:pathToRead];
+    NSDictionary *apiResponse = [self readWithRelativePath:pathToRead error:error];
     DLog(@"params: %@", parameters);
     DLog(@"createRead: %@", apiResponse);
     return apiResponse;
@@ -273,7 +277,7 @@
 }
  
 - (NSDictionary *)readWithRelativePath:(NSString *)pathToRead error:(NSError **)error {
-    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self apiEndPoint], pathToRead]]
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@.json", [self apiEndPoint], pathToRead]]
                                            withParameters:nil
                                shouldBeCalledUnauthorized:NO
                                                     error:error];
@@ -378,17 +382,15 @@
     if (![self ensureAccessTokenIsCurrent:error]) {
         return nil;
     }*/
+    /*
 	if (![self canReachReadmill]) {
-		//DLog(@"yes we can");
 		if (accessTokenExpiryDate != nil && [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedAscending) {
 			return nil;
 		}
-	}	
-	else {
-		if (![self ensureAccessTokenIsCurrent:error]) {
+	}*/
+	if (![self ensureAccessTokenIsCurrent:error]) {
 			return nil;
-		}	
-	}
+    }
     DLog(@"accessToken: %@", [self accessToken]);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/echo.json?access_token=%@",
                                                                                              [self oAuthBaseURL],
@@ -420,7 +422,7 @@
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
 	
     NSDictionary *response = [self sendPreparedRequest:request error:error];
-	DLog(@"response: %@", response);
+	DLog(@"response in authorizeWithAuthorizationCode: %@", response);
 
 	if (response != nil) {
         NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
@@ -453,7 +455,7 @@
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
 	
     NSDictionary *response = [self sendPreparedRequest:request error:error];
-    
+    DLog(@"response in refreshAccessToken: %@", response);
 	if (response != nil) {
         
         NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
@@ -523,10 +525,11 @@
 #pragma mark Sending Requests
 
 -(BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
-    DLog(@"accesstoken: %@", [self accessToken]);
     if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
+        DLog(@"try to refreshAccessToken");
         return [self refreshAccessToken:error];
     } else {
+        DLog(@"accessexpirydate not nil or new");
         return YES;
     }
 }
@@ -627,7 +630,11 @@
 												 returningResponse:&response
 															 error:&connectionError];
 	DLog(@"request: %@", [[request URL] absoluteString]);
-	//DLog(@"response: %@", jsonString);
+    NSString *jsonString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+
+    DLog(@"statuscode: %d", [response statusCode]);
+	DLog(@"response: %@", jsonString);
+    [jsonString release];
 	if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
 
 		if (connectionError == nil) {
@@ -658,11 +665,11 @@
 		// If we created something (book, read etc) we receive a 201 Created response.
         // The location of the created object is in the "location" header.
         if ([response statusCode] == 201) {
-                
+            DLog(@"statuscode: 201");
             DLog(@"headerfields: %@", [response allHeaderFields]);
             NSString *location = [[response allHeaderFields] valueForKey:@"Location"];
-            
-            return location;
+            // Strip the beginning '/'
+            return [location substringFromIndex:1];
 		}
         
         // Return the parsed JSON
@@ -687,10 +694,7 @@
 - (BOOL)canReachReadmill {
 	Reachability *r = [Reachability reachabilityWithHostName:@"www.readmill.com"];
 	NetworkStatus internetStatus = [r currentReachabilityStatus];
-	if(internetStatus == NotReachable) {
-		return NO;
-	}
-	return YES;	
+	return (internetStatus != NotReachable);
 }
 
 @end
