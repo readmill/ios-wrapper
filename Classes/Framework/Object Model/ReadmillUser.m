@@ -88,7 +88,7 @@
  
     ReadmillUser *user = [[ReadmillUser alloc] initWithPropertyListRepresentation:plistRep];
     [user verifyAuthentication:authenticationDelegate];
-	DLog(@"user: %@", user);
+    [user release];
 }
 
 - (id)init {
@@ -413,8 +413,6 @@
                                                                 isbn:isbn
                                                                error:&error];
         
-        DLog(@"bookDict: %@", bookDict);
-
         if (bookDict != nil) {
             bookDicts = [NSArray arrayWithObject:bookDict];
             
