@@ -343,7 +343,6 @@
         [formatter release];
         formatter = nil;
     }
-	
     [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings.json", [self apiEndPoint], readId]] 
                 withParameters:parameters
        canBeCalledUnauthorized:NO
@@ -382,16 +381,18 @@
     if (![self ensureAccessTokenIsCurrent:error]) {
         return nil;
     }*/
-    /*
+    #ifdef DEBUG
+    return nil;
+    #endif
 	if (![self canReachReadmill]) {
+
 		if (accessTokenExpiryDate != nil && [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedAscending) {
 			return nil;
 		}
-	}*/
+	}
 	if (![self ensureAccessTokenIsCurrent:error]) {
 			return nil;
     }
-    DLog(@"accessToken: %@", [self accessToken]);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/echo.json?access_token=%@",
                                                                                              [self oAuthBaseURL],
                                                                                              [self accessToken]]]

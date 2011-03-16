@@ -428,4 +428,6 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 -(NSDictionary *)currentUser:(NSError **)error;
 
+- (BOOL)canReachReadmill;
+
 @end

@@ -449,7 +449,7 @@
                              waitUntilDone:YES]; 
         
     } else if (error != nil && bookFindingDelegate != nil) {
-        
+        DLog(@"error: %@", error);
         NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
                                           [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:failedToFindBooksWithError:)]];
         [failedInvocation setSelector:@selector(readmillUser:failedToFindBooksWithError:)];
