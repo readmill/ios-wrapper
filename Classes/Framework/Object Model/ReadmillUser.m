@@ -666,7 +666,7 @@
                                           [(NSObject *)readFindingDelegate 
                                            methodSignatureForSelector:@selector(readmillUser:failedToFindReadForBook:withError:)]];
         
-        [failedInvocation setSelector:@selector(readmillUser:failedToFindBooksWithError:)];
+        [failedInvocation setSelector:@selector(readmillUser:failedToFindReadForBook:withError:)];
         
         [failedInvocation setArgument:&self atIndex:2];
         [failedInvocation setArgument:&book atIndex:3];
