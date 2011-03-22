@@ -401,8 +401,8 @@
     
     // Search by title
     if ([title length] > 0 && [bookDicts count] == 0 && error == nil) {
-        bookDicts = [[self apiWrapper] booksMatchingTitle:title error:&error];
-
+        bookDicts = [[self apiWrapper] booksMatchingTitle:title 
+                                                    error:&error];
     }
     
     // Create if not found

@@ -223,7 +223,6 @@
                                                      error:error];
     
     NSDictionary *apiResponse = [self readWithRelativePath:pathToRead error:error];
-    DLog(@"params: %@", parameters);
     DLog(@"createRead: %@", apiResponse);
     return apiResponse;
     
@@ -382,14 +381,13 @@
         return nil;
     }*/
     #ifdef DEBUG
-    return nil;
-    #endif
 	if (![self canReachReadmill]) {
 
 		if (accessTokenExpiryDate != nil && [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedAscending) {
 			return nil;
 		}
 	}
+    #endif
 	if (![self ensureAccessTokenIsCurrent:error]) {
 			return nil;
     }

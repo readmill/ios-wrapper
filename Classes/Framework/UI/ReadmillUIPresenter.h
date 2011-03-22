@@ -21,17 +21,21 @@
  */
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
+#import "DismissingView.h"
 
 static NSString * const ReadmillUIPresenterShouldDismissViewNotification = @"ReadmillUIPresenterShouldDismissViewNotification";
-static NSString * const ReadmillUIPresenterWillDismissViewFromCloseButtonNotification = @"ReadmillUIPresenterWillDismissViewFromCloseButtonNotification";
+static NSString * const ReadmillUIPresenterDidAnimateOut = @"ReadmillUIPresenterDidAnimateOut";
+static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterDidAnimateIn";
 
 @interface ReadmillUIPresenter : UIViewController {
 @private
     
     UIView *contentContainerView;
-    UIView *closeButtonView;
     UIView *backgroundView;
+    UIActivityIndicatorView *spinner;
     UIViewController *contentViewController;
+    DismissingView *dismissingView;
     
 }
 
@@ -46,7 +50,7 @@ static NSString * const ReadmillUIPresenterWillDismissViewFromCloseButtonNotific
  @property contentViewController
  @brief   The view controller being presented.
 */
-@property (nonatomic, readonly, retain) UIViewController *contentViewController;
+@property (nonatomic, retain) UIViewController *contentViewController;
 
 /*!
  @param theParentViewController The view controller that this presenter should be displayed in.
@@ -64,5 +68,6 @@ static NSString * const ReadmillUIPresenterWillDismissViewFromCloseButtonNotific
  @brief   Remove a presented view controller.
  */
 -(void)dismissPresenterAnimated:(BOOL)animated;
-
+- (void)stopSpinner;
+- (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController;
 @end

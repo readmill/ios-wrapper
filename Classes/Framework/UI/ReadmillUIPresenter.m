@@ -25,7 +25,7 @@
 
 @interface ReadmillUIPresenter ()
 
-@property (nonatomic, readwrite, retain) UIViewController *contentViewController;
+//@property (nonatomic, readwrite, retain) UIViewController *contentViewController;
 
 @end
 
@@ -39,10 +39,11 @@
 }
 
 -(void)dealloc {
+    [spinner release];
+    spinner = nil;
+    
     [backgroundView release];
     backgroundView = nil;
-    [closeButtonView release];
-    closeButtonView = nil;
     
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
     [contentContainerView release];
@@ -66,19 +67,15 @@
     [self dismissPresenterAnimated:animated];
 }
 
--(void)closeButtonPushed {
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterWillDismissViewFromCloseButtonNotification 
-                                                        object:self];
-    [self dismissPresenterAnimated:YES];
-}
-
 #pragma mark -
 
-#define kAnimationDuration 0.3
-#define kBackgroundOpactity 0.4 
+#define kAnimationDuration 0.2
+#define kBackgroundOpacity 0.3 
 
 -(void)presentInViewController:(UIViewController *)theParentViewController animated:(BOOL)animated {
-    
+    if (![UIView areAnimationsEnabled]) {
+        return;
+    }
     [self retain];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -95,64 +92,77 @@
     
     if (animated) {
         // Set up animation!
-        
-        [UIView beginAnimations:@"animateIn" context:nil];
+        [UIView beginAnimations:ReadmillUIPresenterDidAnimateIn context:nil];
         [UIView setAnimationDuration:kAnimationDuration];
+        //[UIView setAnimationBeginsFromCurrentState:YES];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDidStopSelector:@selector(animation:finished:context:)];
     }
     
-    [[self view] setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:kBackgroundOpactity]];
+    [[self view] setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:kBackgroundOpacity]];
     
     [contentContainerView setCenter:[[self view] center]];
     
-    [closeButtonView setCenter:CGPointMake(floor([contentContainerView frame].origin.x) + .5, 
-                                           floor([contentContainerView frame].origin.y) + .5)];    
     if (animated) {
         // Commit animation
         [UIView commitAnimations];
+        //[UIView setAnimationsEnabled:NO];
     }
-    
+    DismissingView *dismiss = [[DismissingView alloc] initWithFrame:[[UIScreen mainScreen] bounds]
+                                                           selector:@selector(dismissView:) 
+                                                             target:self];
+    [dismiss addToView:self.view];
+    [dismiss release]; 
 }
-
--(void)contentViewControllerShouldBeDismissed:(NSNotification *)aNotification {
+- (void)dismissView:(UIView *)dismissView {
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification object:[self contentViewController]];
+}
+- (void)contentViewControllerShouldBeDismissed:(NSNotification *)aNotification {
     [self dismissPresenterAnimated:YES];
 }
 
--(void)dismissPresenterAnimated:(BOOL)animated {
-    
+- (void)dismissPresenterAnimated:(BOOL)animated {
+
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:ReadmillUIPresenterShouldDismissViewNotification
                                                   object:[self contentViewController]];
     
     if (animated) {
         
-        [UIView beginAnimations:@"animateOut" context:nil];
+        [UIView beginAnimations:ReadmillUIPresenterDidAnimateOut context:nil];
         [UIView setAnimationDuration:kAnimationDuration];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+        //[UIView setAnimationBeginsFromCurrentState:YES];
         [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(animateOut:finished:context:)];
+        [UIView setAnimationDidStopSelector:@selector(animation:finished:context:)];
         
         [[self view] setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
         
         [contentContainerView setCenter:CGPointMake(CGRectGetMidX([[self view] bounds]),
                                                     CGRectGetMaxY([[self view] bounds]) + (CGRectGetHeight([contentContainerView frame]) / 2))];
         
-        [closeButtonView setCenter:CGPointMake(floor([contentContainerView frame].origin.x) + .5, 
-                                               floor([contentContainerView frame].origin.y) + .5)];  
-        
         [UIView commitAnimations];
-        
+        //[UIView setAnimationsEnabled:NO];
+
         
     } else {
         [[self view] removeFromSuperview];
         [self release];
     }
-    
 }
 
--(void)animateOut:(NSString*)animationID finished:(BOOL)didFinish context:(void *)context {
-    [[self view] removeFromSuperview];
-    [self release];
+-(void)animation:(NSString*)animationID finished:(BOOL)didFinish context:(void *)context {
+    //[UIView setAnimationsEnabled:YES];
+    if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateOut]) {
+        [[self view] removeFromSuperview];
+        [self release];
+    }
+    else if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateIn]) {
+        //[spinner setCenter:CGPointMake(CGRectGetMidX([contentContainerView frame]), CGRectGetMidY([contentContainerView frame]))];
+        [spinner startAnimating];  
+    }
+
 }
 
 
@@ -160,8 +170,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"frame"]) {
-        [closeButtonView setCenter:CGPointMake(floor([contentContainerView frame].origin.x) + .5, 
-                                               floor([contentContainerView frame].origin.y) + .5)];  
+        [[contentContainerView layer] setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];  
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -173,59 +182,63 @@
 
     backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 0.0, 0.0)];
     [backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
-    [backgroundView setOpaque:NO];
+    [backgroundView setOpaque:YES];
     [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
     [self setView:backgroundView];
 
-    contentContainerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 100.0)];
+    contentContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 600, 400)];
     [contentContainerView setBackgroundColor:[UIColor whiteColor]];
+    [[contentContainerView layer] setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];
     [[contentContainerView layer] setShadowColor:[[UIColor blackColor] CGColor]];
-    [[contentContainerView layer] setShadowRadius:15.0];
-    [[contentContainerView layer] setShadowOpacity:0.8];
-    [[contentContainerView layer] setShadowOffset:CGSizeMake(0.0, 10.0)];
+    [[contentContainerView layer] setShadowRadius:8.0];
+    [[contentContainerView layer] setShadowOpacity:0.5];
+    [[contentContainerView layer] setShadowOffset:CGSizeMake(0.0, 5.0)];
     [contentContainerView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin];
     
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
     
+    spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [spinner setCenter:[contentContainerView center]];
+    [contentContainerView addSubview:spinner];
+    
     [backgroundView addSubview:contentContainerView];
+
     
-    closeButtonView = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-    [(UIButton *)closeButtonView setImage:[UIImage imageNamed:@"button_close.png"] forState:UIControlStateNormal]; 
-    [closeButtonView setFrame:CGRectMake(0.0, 0.0, 31.0, 31.0)];
-    [(UIButton *)closeButtonView addTarget:self
-                                    action:@selector(closeButtonPushed) 
-                          forControlEvents:UIControlEventTouchUpInside];
-    
-    [backgroundView addSubview:closeButtonView];
-    
+
+
+    //[self setView:contentContainerView];
+}
+- (void)displayContentViewController {
+    if ([self contentViewController] != nil) {
+        [contentContainerView setFrame:[[[self contentViewController] view] bounds]];
+        [contentContainerView setCenter:[[self view] center]];
+        [contentContainerView addSubview:[[self contentViewController] view]];
+    }
+}
+- (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController {
+    [self setContentViewController:aContentViewController];
+    [spinner stopAnimating];
+    [self displayContentViewController];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    
-    if ([self contentViewController] != nil) {
-        [contentContainerView setFrame:[[[self contentViewController] view] bounds]];
-        
-        [contentContainerView addSubview:[[self contentViewController] view]];
-    }
-    
+
+    [self displayContentViewController];
+            
     [contentContainerView setCenter:CGPointMake(CGRectGetMidX([[self view] bounds]),
                                                 CGRectGetMaxY([[self view] bounds]) + (CGRectGetHeight([contentContainerView frame]) / 2))];
-    
-    
-    [closeButtonView setCenter:CGPointMake(floor([contentContainerView frame].origin.x) + .5, 
-                                           floor([contentContainerView frame].origin.y) + .5)];  
-    
 }
 
 -(void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    [spinner release];
+    spinner = nil;
+    
     [backgroundView release];
     backgroundView = nil;
-    [closeButtonView release];
-    closeButtonView = nil;
     
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
     [contentContainerView release];

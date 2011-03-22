@@ -37,11 +37,6 @@
     
     if ((self = [super init])) {
         [self setRead:aRead];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(willBeDismissed:)
-                                                     name:ReadmillUIPresenterWillDismissViewFromCloseButtonNotification
-                                                   object:nil];
     }
     return self;
 }
@@ -80,14 +75,14 @@
     [webView setHidden:YES];
     
     UIView *containerView = [[[UIView alloc] initWithFrame:[webView frame]] autorelease];
-    
+    /*
     activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [activityIndicator setCenter:CGPointMake(floorf([containerView frame].size.width / 2), floorf([containerView frame].size.height / 2))];
     [activityIndicator setHidesWhenStopped:YES];
-    [activityIndicator startAnimating];
+    [activityIndicator startAnimating];*/
     
     [containerView addSubview:webView];
-    [containerView addSubview:activityIndicator];
+    //[containerView addSubview:activityIndicator];
     
     [self setView:containerView];
     
@@ -97,7 +92,7 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [[self view] setFrame:CGRectMake(0.0, 0.0, 600.0, 578.0)];
+    //[[self view] setFrame:CGRectMake(0.0, 0.0, 600.0, 578.0)];
 }
 
 -(void)viewDidUnload {
@@ -105,8 +100,8 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     [self setView:nil];
-    [activityIndicator release];
-    activityIndicator = nil;
+    //[activityIndicator release];
+    //activityIndicator = nil;
     
 }
 
@@ -120,20 +115,28 @@
 
 -(void)webViewDidStartLoad:(UIWebView *)webView {
 	
-    [activityIndicator startAnimating];
+    //[activityIndicator startAnimating];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView {
 	
-    [activityIndicator stopAnimating];
+    //[activityIndicator stopAnimating];
+    [webView setAlpha:0.0];
     [webView setHidden:NO];
+    [webView setBackgroundColor:[UIColor whiteColor]];
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    [UIView setAnimationDuration:0.2];
+    [webView setAlpha:1.0];
+    [UIView commitAnimations];
+
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
 	
-    [activityIndicator stopAnimating];
+    //[activityIndicator stopAnimating];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	
 	if ([error code] != -999) {
@@ -172,7 +175,7 @@
             }
         
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            [activityIndicator startAnimating];
+            //[activityIndicator startAnimating];
             
             [[self read] updateWithState:ReadStateFinished
                                isPrivate:[[self read] isPrivate]

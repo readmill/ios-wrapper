@@ -39,11 +39,6 @@
         [self setUser:aUser];
         [self setBook:bookToConnectTo];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(willBeDismissed:)
-                                                     name:ReadmillUIPresenterWillDismissViewFromCloseButtonNotification
-                                                   object:nil];
-        
     }
     return self;
 }
@@ -85,15 +80,17 @@
     
     UIView *containerView = [[[UIView alloc] initWithFrame:[webView frame]] autorelease];
     
+    /*
     activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [activityIndicator setCenter:CGPointMake(floorf([containerView frame].size.width / 2), floorf([containerView frame].size.height / 2))];
     [activityIndicator setHidesWhenStopped:YES];
-    [activityIndicator startAnimating];
+    [activityIndicator startAnimating];*/
     
     [containerView addSubview:webView];
-    [containerView addSubview:activityIndicator];
+    //[containerView addSubview:activityIndicator];
     
     [self setView:containerView];
+    [[self view] setHidden:YES];
     
     NSURL *url = [[[self user] apiWrapper] connectBookUIURLForBookWithId:[[self book] bookId]];
     
@@ -101,16 +98,17 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [[self view] setFrame:CGRectMake(0.0, 0.0, 600.0, 400.0)];
+    //[[self view] setFrame:CGRectMake(0.0, 0.0, 600.0, 400.0)];
 }
 
 -(void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    [self setView:nil];
     [activityIndicator release];
     activityIndicator = nil;
+    [self setView:nil];
+
     
 }
 
@@ -124,14 +122,22 @@
 
 -(void)webViewDidStartLoad:(UIWebView *)webView {
 	
-    [activityIndicator startAnimating];
+    //[activityIndicator startAnimating];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView {
 	
-    [activityIndicator stopAnimating];
+    //[activityIndicator stopAnimating];
+    [webView setAlpha:0.0];
     [webView setHidden:NO];
+    [self.view setHidden:NO];
+    [webView setBackgroundColor:[UIColor whiteColor]];
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    [UIView setAnimationDuration:0.2];
+    [webView setAlpha:1.0];
+    [UIView commitAnimations];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
