@@ -68,6 +68,5 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
  @brief   Remove a presented view controller.
  */
 -(void)dismissPresenterAnimated:(BOOL)animated;
-- (void)stopSpinner;
 - (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController;
 @end
