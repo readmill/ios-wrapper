@@ -51,6 +51,7 @@
     NSDate *dateFinished;
     NSDate *dateModified;
     NSDate *dateStarted;
+    NSNumber *timeSpent, *estimatedTimeLeft;
     
     NSString *closingRemark;
     
@@ -166,6 +167,18 @@
  @brief The date the user started reading this book.
  */
 @property (readonly, copy) NSDate *dateStarted;
+
+/*!
+ @property  estimatedTimeLeft
+ @brief The estimated time left for a read.
+ */
+@property (readonly, copy) NSNumber *estimatedTimeLeft;
+
+/*!
+ @property  timeSpent
+ @brief The time spent on a read.
+ */
+@property (readonly, copy) NSNumber *timeSpent;
 
 /*!
  @property  closingRemark

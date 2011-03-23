@@ -31,6 +31,9 @@
 @property (readwrite, copy) NSDate *dateModified;
 @property (readwrite, copy) NSDate *dateStarted;
 
+@property (readwrite, copy) NSNumber *estimatedTimeLeft;
+@property (readwrite, copy) NSNumber *timeSpent;
+
 @property (readwrite, copy) NSString *closingRemark;
 
 @property (readwrite) BOOL isPrivate;
@@ -84,7 +87,9 @@
     [self setUserId:[[[cleanedDict valueForKey:kReadmillAPIReadUserKey] valueForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
     [self setBookId:[[[cleanedDict valueForKey:kReadmillAPIReadBookKey] valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
     [self setReadId:[[cleanedDict valueForKey:kReadmillAPIReadIdKey] unsignedIntegerValue]];
-
+    
+    [self setEstimatedTimeLeft:[cleanedDict valueForKey:kReadmillAPIReadEstimatedTimeLeft]];
+    [self setTimeSpent:[cleanedDict valueForKey:kReadmillAPIReadDuration]];
 }
 
 -(NSString *)description {
@@ -104,6 +109,8 @@
 @synthesize dateFinished;
 @synthesize dateModified;
 @synthesize dateStarted;
+@synthesize estimatedTimeLeft;
+@synthesize timeSpent;
 
 @synthesize closingRemark;
 @synthesize isPrivate;
@@ -126,6 +133,8 @@
     [self setDateModified:nil];
     [self setDateStarted:nil];
     [self setClosingRemark:nil];
+    [self setEstimatedTimeLeft:nil];
+    [self setTimeSpent:nil];
     
     [super dealloc];
 }
