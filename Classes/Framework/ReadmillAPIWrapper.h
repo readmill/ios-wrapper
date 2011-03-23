@@ -106,6 +106,8 @@ static NSString * const kReadmillAPIReadStateKey = @"state";
 static NSString * const kReadmillAPIReadBookKey = @"book";
 static NSString * const kReadmillAPIReadUserKey = @"user";
 static NSString * const kReadmillAPIReadIdKey = @"id";
+static NSString * const kReadmillAPIReadEstimatedTimeLeft = @"estimated_time_left";
+static NSString * const kReadmillAPIReadDuration = @"duration";
 
 static NSString * const kReadmillAPIClientIdKey = @"client";
 
