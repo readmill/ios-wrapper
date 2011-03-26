@@ -47,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		502698D1130C87D300E67974 /* README.asciidoc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.asciidoc; sourceTree = "<group>"; };
+		737035C6133E62960014318B /* ReadmillAPIConstantsExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIConstantsExample.h; sourceTree = "<group>"; };
 		9647F57B12F1A0140088CAA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9647F57D12F1AD8F0088CAA0 /* button_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button_close.png; path = UI/button_close.png; sourceTree = "<group>"; };
 		9647F57F12F1B04C0088CAA0 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
@@ -279,6 +280,7 @@
 		96BEAF3612F071D6006028D0 /* iPad UI */ = {
 			isa = PBXGroup;
 			children = (
+				737035C6133E62960014318B /* ReadmillAPIConstantsExample.h */,
 				9647F57D12F1AD8F0088CAA0 /* button_close.png */,
 				96E2A90212F192EF00D7D249 /* ReadmillUIPresenter.h */,
 				96E2A90312F192EF00D7D249 /* ReadmillUIPresenter.m */,
