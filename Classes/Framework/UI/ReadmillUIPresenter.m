@@ -39,8 +39,8 @@
 }
 
 -(void)dealloc {
-    [spinner release];
-    spinner = nil;
+    //[spinner release];
+    //spinner = nil;
     
     [backgroundView release];
     backgroundView = nil;
@@ -198,10 +198,10 @@
     
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
     
-    spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    spinner = [[ReadmillSpinner alloc] init];
     [spinner setCenter:[contentContainerView center]];
     [contentContainerView addSubview:spinner];
-    
+    //[spinner release];
     [backgroundView addSubview:contentContainerView];
 
     
@@ -234,8 +234,8 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    [spinner release];
-    spinner = nil;
+    //[spinner release];
+    //spinner = nil;
     
     [backgroundView release];
     backgroundView = nil;

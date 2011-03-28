@@ -23,6 +23,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "DismissingView.h"
+#import "ReadmillSpinner.h"
 
 static NSString * const ReadmillUIPresenterShouldDismissViewNotification = @"ReadmillUIPresenterShouldDismissViewNotification";
 static NSString * const ReadmillUIPresenterDidAnimateOut = @"ReadmillUIPresenterDidAnimateOut";
@@ -33,10 +34,8 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
     
     UIView *contentContainerView;
     UIView *backgroundView;
-    UIActivityIndicatorView *spinner;
-    UIViewController *contentViewController;
-    DismissingView *dismissingView;
-    
+    ReadmillSpinner *spinner;
+    UIViewController *contentViewController;    
 }
 
 /*!

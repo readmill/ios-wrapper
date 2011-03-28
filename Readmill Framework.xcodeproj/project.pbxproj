@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		502698D2130C87D400E67974 /* README.asciidoc in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.asciidoc */; };
 		9647F57C12F1A0140088CAA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9647F57B12F1A0140088CAA0 /* QuartzCore.framework */; };
-		9647F57E12F1AD8F0088CAA0 /* button_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 9647F57D12F1AD8F0088CAA0 /* button_close.png */; };
 		9647F58012F1B04C0088CAA0 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 9647F57F12F1B04C0088CAA0 /* logo.png */; };
 		966E3E5412F2F7290027E05F /* Readmill_SigningInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 966E3E5212F2F7290027E05F /* Readmill_SigningInViewController.m */; };
 		966E3E5512F2F7290027E05F /* Readmill_SigningInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 966E3E5312F2F7290027E05F /* Readmill_SigningInViewController.xib */; };
@@ -49,7 +48,6 @@
 		502698D1130C87D300E67974 /* README.asciidoc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.asciidoc; sourceTree = "<group>"; };
 		737035C6133E62960014318B /* ReadmillAPIConstantsExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIConstantsExample.h; sourceTree = "<group>"; };
 		9647F57B12F1A0140088CAA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		9647F57D12F1AD8F0088CAA0 /* button_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button_close.png; path = UI/button_close.png; sourceTree = "<group>"; };
 		9647F57F12F1B04C0088CAA0 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		966E3E5112F2F7290027E05F /* Readmill_SigningInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Readmill_SigningInViewController.h; path = Classes/Readmill_SigningInViewController.h; sourceTree = "<group>"; };
 		966E3E5212F2F7290027E05F /* Readmill_SigningInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Readmill_SigningInViewController.m; path = Classes/Readmill_SigningInViewController.m; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 			isa = PBXGroup;
 			children = (
 				737035C6133E62960014318B /* ReadmillAPIConstantsExample.h */,
-				9647F57D12F1AD8F0088CAA0 /* button_close.png */,
 				96E2A90212F192EF00D7D249 /* ReadmillUIPresenter.h */,
 				96E2A90312F192EF00D7D249 /* ReadmillUIPresenter.m */,
 				96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */,
@@ -368,7 +365,6 @@
 				96F0758612F0624100F6369D /* InfoPlist.strings in Resources */,
 				96F0758B12F0624F00F6369D /* MainWindow.xib in Resources */,
 				96F0758C12F0624F00F6369D /* Readmill_SignedInViewController.xib in Resources */,
-				9647F57E12F1AD8F0088CAA0 /* button_close.png in Resources */,
 				9647F58012F1B04C0088CAA0 /* logo.png in Resources */,
 				966E3E5512F2F7290027E05F /* Readmill_SigningInViewController.xib in Resources */,
 				502698D2130C87D400E67974 /* README.asciidoc in Resources */,

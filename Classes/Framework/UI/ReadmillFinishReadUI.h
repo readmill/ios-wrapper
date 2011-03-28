@@ -54,7 +54,7 @@
 @private
     
     ReadmillRead *read;
-    UIActivityIndicatorView *activityIndicator;
+    //UIActivityIndicatorView *activityIndicator;
     
     id <ReadmillFinishReadUIDelegate> delegate;
     
