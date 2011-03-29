@@ -195,9 +195,7 @@
                                    canBeCalledUnauthorized:NO
                                                      error:error];
     
-    DLog(@"pathToBook: %@", pathToBook);
     NSDictionary *apiResponse = [self bookWithRelativePath:pathToBook error:error];
-    DLog(@"book apiresponse: %@", apiResponse);
     return apiResponse;
 }
 
@@ -223,7 +221,6 @@
                                                      error:error];
     
     NSDictionary *apiResponse = [self readWithRelativePath:pathToRead error:error];
-    DLog(@"createRead: %@", apiResponse);
     return apiResponse;
     
 }
@@ -421,7 +418,6 @@
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
 	
     NSDictionary *response = [self sendPreparedRequest:request error:error];
-	DLog(@"response in authorizeWithAuthorizationCode: %@", response);
 
 	if (response != nil) {
         NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
@@ -454,7 +450,6 @@
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
 	
     NSDictionary *response = [self sendPreparedRequest:request error:error];
-    DLog(@"response in refreshAccessToken: %@", response);
 	if (response != nil) {
         
         NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
@@ -525,10 +520,8 @@
 
 -(BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
     if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
-        DLog(@"try to refreshAccessToken");
         return [self refreshAccessToken:error];
     } else {
-        DLog(@"accessexpirydate not nil or new");
         return YES;
     }
 }
@@ -628,12 +621,7 @@
 	NSData *responseData = [NSURLConnection sendSynchronousRequest:request
 												 returningResponse:&response
 															 error:&connectionError];
-	DLog(@"request: %@", [[request URL] absoluteString]);
-    NSString *jsonString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 
-    DLog(@"statuscode: %d", [response statusCode]);
-	DLog(@"response: %@", jsonString);
-    [jsonString release];
 	if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
 
 		if (connectionError == nil) {
@@ -664,8 +652,6 @@
 		// If we created something (book, read etc) we receive a 201 Created response.
         // The location of the created object is in the "location" header.
         if ([response statusCode] == 201) {
-            DLog(@"statuscode: 201");
-            DLog(@"headerfields: %@", [response allHeaderFields]);
             NSString *location = [[response allHeaderFields] valueForKey:@"Location"];
             // Strip the beginning '/'
             return [location substringFromIndex:1];

@@ -59,7 +59,6 @@
     
     ReadmillUser *user;
     ReadmillBook *book;
-    UIActivityIndicatorView *activityIndicator;
     
     id <ReadmillConnectBookUIDelegate> delegate;
     

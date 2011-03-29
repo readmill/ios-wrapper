@@ -176,7 +176,6 @@
     }
 }
 
-
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 -(void)loadView {
 
@@ -203,10 +202,7 @@
     [contentContainerView addSubview:spinner];
     //[spinner release];
     [backgroundView addSubview:contentContainerView];
-
     
-
-
     //[self setView:contentContainerView];
 }
 - (void)displayContentViewController {
@@ -218,8 +214,8 @@
 }
 - (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController {
     [self setContentViewController:aContentViewController];
-    [spinner stopAnimating];
     [self displayContentViewController];
+    [spinner stopAnimating];
 }
 
 -(void)viewDidAppear:(BOOL)animated {

@@ -315,7 +315,6 @@
     NSError *error = nil;
     [self updateWithAPIDictionary:[[self apiWrapper] currentUser:&error]];
 	
-	DLog(@"error in verifyAuthenticationWithProperties: %@", error);
     if (error == nil && authenticationDelegate != nil) {
         
         [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidSucceedWithLoggedInUser:)
@@ -368,7 +367,6 @@
                                 [NSNumber numberWithBool:YES], @"createIfNotFound",
                                 nil];
     	
-	DLog(@"properties: %@", properties);
     [self performSelectorInBackground:@selector(findBooksWithProperties:)
                            withObject:properties];
     
@@ -449,8 +447,7 @@
                              waitUntilDone:YES]; 
         
     } else if (error != nil && bookFindingDelegate != nil) {
-        DLog(@"error: %@", error);
-        NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
+            NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
                                           [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:failedToFindBooksWithError:)]];
         [failedInvocation setSelector:@selector(readmillUser:failedToFindBooksWithError:)];
         

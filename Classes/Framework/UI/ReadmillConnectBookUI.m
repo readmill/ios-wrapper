@@ -79,18 +79,10 @@
     [webView setHidden:YES];
     
     UIView *containerView = [[[UIView alloc] initWithFrame:[webView frame]] autorelease];
-    
-    /*
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [activityIndicator setCenter:CGPointMake(floorf([containerView frame].size.width / 2), floorf([containerView frame].size.height / 2))];
-    [activityIndicator setHidesWhenStopped:YES];
-    [activityIndicator startAnimating];*/
-    
+
     [containerView addSubview:webView];
-    //[containerView addSubview:activityIndicator];
-    
+    [containerView setHidden:YES];
     [self setView:containerView];
-    [[self view] setHidden:YES];
     
     NSURL *url = [[[self user] apiWrapper] connectBookUIURLForBookWithId:[[self book] bookId]];
     
@@ -105,8 +97,6 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    [activityIndicator release];
-    activityIndicator = nil;
     [self setView:nil];
 
     
@@ -122,13 +112,11 @@
 
 -(void)webViewDidStartLoad:(UIWebView *)webView {
 	
-    //[activityIndicator startAnimating];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView {
 	
-    //[activityIndicator stopAnimating];
     [webView setAlpha:0.0];
     [webView setHidden:NO];
     [self.view setHidden:NO];
@@ -143,7 +131,6 @@
 
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
 	
-    [activityIndicator stopAnimating];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	
 	if ([error code] != -999) {
@@ -177,7 +164,6 @@
         } else if ([parameters containsObject:@"connect"]) {
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            [activityIndicator startAnimating];
             
             [[self user] findOrCreateReadForBook:[self book]
 										   state:ReadStateReading
