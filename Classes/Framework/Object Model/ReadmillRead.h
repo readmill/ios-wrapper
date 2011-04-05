@@ -64,6 +64,8 @@
     ReadmillReadId readId;
     
     ReadmillAPIWrapper *apiWrapper;
+    
+    ReadmillReadProgress progress;
 }
 
 /*!
@@ -218,9 +220,17 @@
 @property (readonly) ReadmillReadId readId;
 
 /*!
+ @property  progress
+ @brief The progress of this read in Readmill.
+ */
+@property (readonly) ReadmillReadProgress progress;
+
+/*!
  @property  apiWrapper
  @brief The ReadmillAPIWrapper object this read uses.
  */
 @property (readonly, retain) ReadmillAPIWrapper *apiWrapper;
+
+
 
 @end

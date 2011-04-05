@@ -44,6 +44,8 @@
 @property (readwrite) ReadmillUserId userId;
 @property (readwrite) ReadmillReadId readId;
 
+@property (readwrite) ReadmillReadProgress progress;
+
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 
 @end
@@ -90,6 +92,8 @@
     
     [self setEstimatedTimeLeft:[cleanedDict valueForKey:kReadmillAPIReadEstimatedTimeLeft]];
     [self setTimeSpent:[cleanedDict valueForKey:kReadmillAPIReadDuration]];
+ 
+    [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadProgress] unsignedIntegerValue]];
 }
 
 -(NSString *)description {
@@ -119,6 +123,8 @@
 @synthesize bookId;
 @synthesize userId;
 @synthesize readId;
+
+@synthesize progress;
 
 @synthesize apiWrapper;
 
