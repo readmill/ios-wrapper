@@ -110,9 +110,8 @@
                        occurrenceTime:pingTime
                                 error:&error];
     
-    if (error != nil) {
-        [self setLastPingDate:pingTime];
-    }
+
+    [self setLastPingDate:pingTime];
     
     if (error == nil && pingDelegate != nil) {
         
