@@ -72,15 +72,65 @@
     [super dealloc];
 }
 
+- (NSString *)readmillPingArchivePath {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *libraryDirectory = [paths objectAtIndex:0];
+    return [libraryDirectory stringByAppendingPathComponent:@"ReadmillFailedPings.arch"];       
+}
+- (NSArray *)fetchFailedPings {
+    NSArray *failedPings = [NSKeyedUnarchiver unarchiveObjectWithFile:[self readmillPingArchivePath]];
+    if (failedPings == nil) {
+        return [NSArray array];
+    }
+    return failedPings;
+}
+- (void)archiveFailedPing:(ReadmillPing *)ping {
+    // Grab all archived pings
+    
+    NSMutableArray *failedPings = [[self fetchFailedPings] mutableCopy];
+    NSLog(@"archiveFailedPing: %@, failedPings: %@", ping, failedPings);
+    // Add the new one
+    [failedPings addObject:ping];
+    // Archive all pings
+    [NSKeyedArchiver archiveRootObject:failedPings
+                                toFile:[self readmillPingArchivePath]];
+    [failedPings release];
+}
+
+- (void)pingArchived {
+    NSArray *failedPings = [self fetchFailedPings];
+    if ([failedPings count] == 0) {
+        NSLog(@"failedPings == 0");
+        return;
+    }
+    for (ReadmillPing *ping in failedPings) {
+        NSError *error = nil;
+        [[self apiWrapper] pingReadWithId:[ping readId] 
+                             withProgress:[ping progress] 
+                        sessionIdentifier:[ping sessionIdentifier] 
+                                 duration:[ping duration]
+                           occurrenceTime:[ping occurrenceTime] 
+                                    error:&error];
+        if (!error) {
+            NSLog(@"Sending archived ping: %@", ping);
+        } else {
+            NSLog(@"Failed to send archived ping: %@", ping);
+        }
+    }
+    [NSKeyedArchiver archiveRootObject:[NSMutableArray array]
+                                toFile:[self readmillPingArchivePath]];
+
+}
 #pragma mark -
 #pragma mark Threaded Messages
 
--(void)pingWithProgress:(ReadmillReadProgress)progress delegate:(id <ReadmillPingDelegate>)delegate {
+-(void)pingWithProgress:(ReadmillReadProgress)progress pingDuration:(ReadmillPingDuration)pingDuration delegate:(id <ReadmillPingDelegate>)delegate {
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 delegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
                                 [NSNumber numberWithUnsignedInteger:progress], @"progress",
+                                [NSNumber numberWithUnsignedInteger:pingDuration], @"pingDuration",
                                 nil];
     
     [self performSelectorInBackground:@selector(pingWithProperties:)
@@ -97,21 +147,21 @@
     
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillPingDelegate> pingDelegate = [properties valueForKey:@"delegate"];
-    NSUInteger progress = [[properties valueForKey:@"progress"] unsignedIntegerValue];
-    
+    ReadmillReadProgress progress = [[properties valueForKey:@"progress"] unsignedIntegerValue];
+    ReadmillPingDuration pingDuration = [[properties valueForKey:@"pingDuration"] unsignedIntegerValue];
     NSDate *pingTime = [NSDate date];
-    NSTimeInterval timeSinceLastPing = [pingTime timeIntervalSinceDate:[self lastPingDate]];
+    //NSTimeInterval timeSinceLastPing = [pingTime timeIntervalSinceDate:[self lastPingDate]];
     
     NSError *error = nil;
     [[self apiWrapper] pingReadWithId:[self readId]
                          withProgress:progress
                     sessionIdentifier:[self sessionIdentifier]
-                             duration:(NSUInteger)timeSinceLastPing
+                             duration:pingDuration
                        occurrenceTime:pingTime
                                 error:&error];
     
 
-    [self setLastPingDate:pingTime];
+    //[self setLastPingDate:pingTime];
     
     if (error == nil && pingDelegate != nil) {
         
@@ -119,6 +169,8 @@
                                                  onThread:callbackThread
                                                withObject:self
                                             waitUntilDone:YES];
+        
+        [self pingArchived];
         
     } else if (error != nil && pingDelegate != nil) {
         
@@ -135,6 +187,15 @@
                                  onThread:callbackThread
                                withObject:pingDelegate
                             waitUntilDone:YES]; 
+        
+
+        ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
+                                                     readProgress:progress 
+                                                sessionIdentifier:[self sessionIdentifier] 
+                                                         duration:pingDuration 
+                                                   occurrenceTime:pingTime];
+
+        [self archiveFailedPing:[ping autorelease]];
     }
     
     [pool drain];

@@ -132,6 +132,7 @@ static NSString * const kReadmillAPIClientIdKey = @"client";
     NSString *authorizedRedirectURL;
     NSDate *accessTokenExpiryDate;
     NSString *apiEndPoint;
+    
 }
 
 #pragma mark Initialization and Serialization 

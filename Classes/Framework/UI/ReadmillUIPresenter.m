@@ -73,9 +73,7 @@
 #define kBackgroundOpacity 0.3 
 
 -(void)presentInViewController:(UIViewController *)theParentViewController animated:(BOOL)animated {
-    if (![UIView areAnimationsEnabled]) {
-        return;
-    }
+
     [self retain];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -123,6 +121,7 @@
 }
 
 - (void)dismissPresenterAnimated:(BOOL)animated {
+    DLog(@"dismissPresenterAnimated:(BOOL)animated {");
 
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:ReadmillUIPresenterShouldDismissViewNotification

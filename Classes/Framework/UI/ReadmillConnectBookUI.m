@@ -144,6 +144,7 @@
                                                             object:self];
         
 	}
+    
 }
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
@@ -165,10 +166,15 @@
             
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
             
+            [[self user] createReadForBook:[self book] 
+                                     state:ReadStateReading 
+                                 isPrivate:[parameters containsObject:@"private"] 
+                                  delegate:self];
+            /*
             [[self user] findOrCreateReadForBook:[self book]
 										   state:ReadStateReading
                             createdReadIsPrivate:[parameters containsObject:@"private"]
-                                        delegate:self];
+                                        delegate:self];*/
             
         }
 		

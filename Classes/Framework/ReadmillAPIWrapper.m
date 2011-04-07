@@ -53,7 +53,6 @@
         
         [self setApiEndPoint:kLiveAPIEndPoint];
     }
-    
     return self;
 }
 
@@ -72,17 +71,16 @@
         [self setRefreshToken:[plist valueForKey:@"refreshToken"]];
         [self setApiEndPoint:[plist valueForKey:@"apiEndPoint"]];
 		[self setAccessToken:[plist valueForKey:@"accessToken"]];
-		//[self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
     }
     return self;
 }
 
 -(NSDictionary *)propertyListRepresentation {
     return [NSDictionary dictionaryWithObjectsAndKeys:
+            
             [self authorizedRedirectURL], @"authorizedRedirectURL",
             [self refreshToken], @"refreshToken", 
             [self apiEndPoint], @"apiEndPoint",
-			//[self accessTokenExpiryDate], @"accessTokenExpiryDate",
 			[self accessToken], @"accessToken",
 			nil];
 	 
@@ -373,18 +371,7 @@
 }
 
 -(NSDictionary *)currentUser:(NSError **)error {
-    /*
-    if (![self ensureAccessTokenIsCurrent:error]) {
-        return nil;
-    }*/
-    #ifdef DEBUG
-	if (![self canReachReadmill]) {
 
-		if (accessTokenExpiryDate != nil && [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedAscending) {
-			return nil;
-		}
-	}
-    #endif
 	if (![self ensureAccessTokenIsCurrent:error]) {
 			return nil;
     }
@@ -422,13 +409,12 @@
 	if (response != nil) {
         NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
     
-        [self willChangeValueForKey:@"propertyListRepresentation"];
-		[self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
-		
+        [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
+
+        [self willChangeValueForKey:@"propertyListRepresentation"];		
         [self setRefreshToken:[response valueForKey:@"refresh_token"]];
         [self setAccessToken:[response valueForKey:@"access_token"]];
         [self setAuthorizedRedirectURL:redirectURLString];
-        
         [self didChangeValueForKey:@"propertyListRepresentation"];
     }
 }
@@ -453,13 +439,11 @@
 	if (response != nil) {
         
         NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
-
-        [self willChangeValueForKey:@"propertyListRepresentation"];
 		[self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
-
+        
+        [self willChangeValueForKey:@"propertyListRepresentation"];
         [self setRefreshToken:[response valueForKey:@"refresh_token"]];
         [self setAccessToken:[response valueForKey:@"access_token"]];
-        
         [self didChangeValueForKey:@"propertyListRepresentation"];
         
         return YES;
@@ -648,14 +632,18 @@
         
         // Do we have an empty response?
         NSString *jsonString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-		
+
 		// If we created something (book, read etc) we receive a 201 Created response.
         // The location of the created object is in the "location" header.
-        if ([response statusCode] == 201) {
-            NSString *location = [[response allHeaderFields] valueForKey:@"Location"];
-            // Strip the beginning '/'
-            return [location substringFromIndex:1];
-		}
+        
+        if ([[response allHeaderFields] valueForKey:@"Location"] != nil) {
+            if ([response statusCode] == 201 || [response statusCode] == 200) {
+                
+                NSString *location = [[response allHeaderFields] valueForKey:@"Location"];
+                // Strip the beginning '/'
+                return [location substringFromIndex:1];
+            }
+        }
         
         // Return the parsed JSON
         if ([[jsonString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {

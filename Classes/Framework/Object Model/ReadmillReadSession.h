@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
+#import "ReadmillPing.h"
 
 @class ReadmillReadSession;
 
@@ -49,6 +50,7 @@
     NSString *sessionIdentifier;
     ReadmillAPIWrapper *apiWrapper;
     ReadmillReadId readId;
+    
 }
 
 /*!
@@ -104,11 +106,12 @@
 
 /*!
  @param progress The user's progress through the book, as in integer percentage. 
+ @param pingDuration The duration between pings, as in integer seconds. 
  @param delegate The delegate object to be informed of success for failure.
  @brief   "Ping" this session, informing the Readmill service that the user is reading the book at the moment with the given progress.
  
  This should be called periodically while the user is reading, every few minutes or so.
  */
--(void)pingWithProgress:(ReadmillReadProgress)progress delegate:(id <ReadmillPingDelegate>)delegate;
+-(void)pingWithProgress:(ReadmillReadProgress)progress pingDuration:(ReadmillPingDuration)duration delegate:(id <ReadmillPingDelegate>)delegate;
 
 @end
