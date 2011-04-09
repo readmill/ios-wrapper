@@ -22,8 +22,10 @@
 
 #import "ReadmillAPIWrapper.h"
 #import "ReadmillStringExtensions.h"
+#import "ReadmillURLExtensions.h"
 #import "ReadmillAPIConstants.h"
 #import "CJSONDeserializer.h"
+
 
 @interface ReadmillAPIWrapper ()
 
@@ -222,7 +224,6 @@
     return apiResponse;
     
 }
-
 -(void)updateReadWithId:(ReadmillReadId)readId 
               withState:(ReadmillReadState)readState
                 private:(BOOL)isPrivate 
@@ -488,6 +489,23 @@
     NSString *urlString = [NSString stringWithFormat:@"%@books/%d/reads/new?access_token=%@", [self apiEndPoint], bookId, [self accessToken]];
     return [NSURL URLWithString:urlString];
 }
+- (NSURL *)connectBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author {
+    if (![self ensureAccessTokenIsCurrent:nil]) {
+        return nil;
+    }
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setValue:ISBN forKey:@"isbn"];
+    [parameters setValue:title forKey:@"title"];
+    [parameters setValue:author forKey:@"author"];
+    [parameters setValue:kReadmillClientId forKey:@"client_id"];
+    [parameters setValue:[self accessToken] forKey:@"access_token"];
+    
+    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/connect/book", [self apiEndPoint]]];
+    NSURL *URL = [baseURL URLByAddingParameters:parameters];
+    
+    return URL;
+}
 
 -(NSURL *)editReadUIURLForReadWithId:(ReadmillReadId)readId {
     
@@ -526,10 +544,12 @@
         [parameterString appendFormat:@"?access_token=%@", [self accessToken]];
         first = NO;
     }
+    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:kReadmillClientId forKey:@"client_id"];
+    [parametersWithClientId addEntriesFromDictionary:parameters];
     
-	for (NSString *key in [parameters allKeys]) {		
+	for (NSString *key in [parametersWithClientId allKeys]) {		
 		
-		id value = [parameters valueForKey:key];
+		id value = [parametersWithClientId valueForKey:key];
 		
 		if (value) {
 			[parameterString appendFormat:@"%@%@=%@",
@@ -539,7 +559,6 @@
 			first = NO;
 		}		
 	}
-	
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",
 																								  [url absoluteString], 
 																								  parameterString]]];
@@ -573,8 +592,10 @@
         [parameterString appendFormat:@"access_token=%@", [self accessToken]];
         first = NO;
     }
+    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:kReadmillClientId forKey:@"client_id"];
+    [parametersWithClientId addEntriesFromDictionary:parameters];
     
-	for (NSString *key in [parameters allKeys]) {		
+	for (NSString *key in [parametersWithClientId allKeys]) {		
 		
 		id value = [parameters valueForKey:key];
 		
@@ -586,9 +607,8 @@
 			first = NO;
 		}		
 	}
-    
+
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-    
 	[request setHTTPMethod:httpMethod];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];

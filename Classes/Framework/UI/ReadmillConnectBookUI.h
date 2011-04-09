@@ -24,6 +24,7 @@
 #import "ReadmillUser.h"
 #import "ReadmillRead.h"
 #import "ReadmillBook.h"
+#import "ReadmillURLExtensions.h"
 
 @class ReadmillConnectBookUI;
 
@@ -60,9 +61,12 @@
     ReadmillUser *user;
     ReadmillBook *book;
     
+    NSString *ISBN, *bookTitle, *author;
     id <ReadmillConnectBookUIDelegate> delegate;
     
 }
+// TODO desc
+- (id)initWithUser:(ReadmillUser *)aUser ISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author;
 
 /*!
  @param aUser The Readmill user to connect.
@@ -90,4 +94,8 @@
  */
 @property (nonatomic, readwrite, retain) id <ReadmillConnectBookUIDelegate> delegate;
 
+// TODO
+@property (nonatomic, readonly, retain) NSString *ISBN;
+@property (nonatomic, readonly, retain) NSString *bookTitle;
+@property (nonatomic, readonly, retain) NSString *author;
 @end

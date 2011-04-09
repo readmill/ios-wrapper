@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
-@interface ReadmillURLExtensions : NSObject {
-    
-}
-
+@interface NSURL (ReadmillURLExtensions)
++ (NSURL *)URLWithParameters:(NSDictionary *)parameters;
+- (NSURL *)URLByAddingParameters:(NSDictionary *)parameters;
+- (NSDictionary *)queryAsDictionary;
 @end

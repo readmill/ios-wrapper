@@ -259,6 +259,9 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 -(NSURL *)connectBookUIURLForBookWithId:(ReadmillBookId)bookId;
 
+// TODO
+- (NSURL *)connectBookWithISBN:(NSString *)bookISBN title:(NSString *)title author:(NSString *)author;
+
 /*!
  @param readId The Readmill id of the read to edit. 
  @result An NSURL pointing to the Readmill read edit page with the appropriate parameters.  

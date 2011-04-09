@@ -29,10 +29,25 @@
 @property (nonatomic, readwrite, retain) ReadmillUser *user;
 @property (nonatomic, readwrite, retain) ReadmillBook *book;
 
+@property (nonatomic, readwrite, retain) NSString *ISBN;
+@property (nonatomic, readwrite, retain) NSString *bookTitle;
+@property (nonatomic, readwrite, retain) NSString *author;
 @end
 
 @implementation ReadmillConnectBookUI
 
+-(id)initWithUser:(ReadmillUser *)aUser ISBN:(NSString *)anISBN title:(NSString *)aTitle author:(NSString *)anAuthor {
+    
+    if ((self = [super init])) {
+        [self setUser:aUser];
+        //[self setBook:bookToConnectTo];
+        [self setISBN:anISBN];
+        [self setTitle:aTitle];
+        [self setAuthor:anAuthor];
+        
+    }
+    return self;
+}
 -(id)initWithUser:(ReadmillUser *)aUser book:(ReadmillBook *)bookToConnectTo {
     
     if ((self = [super init])) {
@@ -57,6 +72,10 @@
 @synthesize delegate;
 @synthesize book;
 
+@synthesize ISBN;
+@synthesize bookTitle;
+@synthesize author;
+
 -(void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
@@ -73,7 +92,7 @@
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 -(void)loadView {
     
-    UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 600.0, 400.0)] autorelease];
+    UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)] autorelease];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
     [webView setHidden:YES];
@@ -84,7 +103,8 @@
     [containerView setHidden:YES];
     [self setView:containerView];
     
-    NSURL *url = [[[self user] apiWrapper] connectBookUIURLForBookWithId:[[self book] bookId]];
+    //NSURL *url = [[[self user] apiWrapper] connectBookUIURLForBookWithId:[[self book] bookId]];
+    NSURL *url = [[[self user] apiWrapper] connectBookWithISBN:[self ISBN] title:[self title] author:[self author]];
     
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
@@ -148,40 +168,42 @@
 }
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-	
-    if ([[[request URL] absoluteString] hasPrefix:@"callback"]) {
+	NSURL *URL = [request URL];
+    if ([[URL absoluteString] hasPrefix:@"readmill"]) {
 		
         // Can be...
-        // callback://skip
-        // callback://connect/public
-        // callback://connect/private
+        // readmill://connect?skip=true
+        // readmill://connect?uri=uri location
+        // readmill://connect?error?message=something
         
-        NSArray *parameters = [[[[request URL] absoluteURL] absoluteString] componentsSeparatedByString:@"/"];
+        // Immediately remove the popover
+        [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
+                                                            object:self];
         
-        if ([parameters containsObject:@"skip"]) {
-            [[self delegate] connect:self didSkipLinkingToBook:[self book]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
-                                                                object:self];
-        } else if ([parameters containsObject:@"connect"]) {
-            
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            
-            [[self user] createReadForBook:[self book] 
-                                     state:ReadStateReading 
-                                 isPrivate:[parameters containsObject:@"private"] 
-                                  delegate:self];
-            /*
-            [[self user] findOrCreateReadForBook:[self book]
-										   state:ReadStateReading
-                            createdReadIsPrivate:[parameters containsObject:@"private"]
-                                        delegate:self];*/
-            
-        }
-		
-		return NO;
-	} else {
-		return YES;
-	}
+        NSString *action = [URL host];
+        if ([action isEqualToString:@"connect"]) {
+            NSDictionary *parameters = [URL queryAsDictionary];
+            NSString *uri = @"uri";
+            if ([[parameters valueForKey:@"skip"] isEqualToString:@"true"]) {
+                [[self delegate] connect:self didSkipLinkingToBook:[self book]];
+            } else if ((uri = [parameters valueForKey:uri])) {
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+                uri = [uri substringFromIndex:1];
+                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithRelativePath:uri error:nil];
+                ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse apiWrapper:[[self user] apiWrapper]];
+                [[self delegate] connect:self didSucceedToLinkToBook:[self book] withRead:read];
+            } else if ([parameters valueForKey:@"error"]) {
+                //NSError *error = [[NSError alloc]
+                [[self delegate] connect:self didFailToLinkToBook:[self book] withError:nil];
+            }
+        } else if ([action isEqualToString:@"error"]) {
+            //NSError *error = [[NSError alloc] initWithDomain:nil code:0 userInfo:nil];
+            [[self delegate] connect:self didFailToLinkToBook:[self book] withError:nil];
+        } 
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 #pragma mark -
