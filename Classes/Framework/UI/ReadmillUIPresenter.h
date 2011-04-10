@@ -34,7 +34,6 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
     
     UIView *contentContainerView;
     UIView *backgroundView;
-    ReadmillSpinner *spinner;
     UIViewController *contentViewController;    
 }
 

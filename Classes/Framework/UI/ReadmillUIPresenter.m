@@ -39,8 +39,6 @@
 }
 
 -(void)dealloc {
-    //[spinner release];
-    //spinner = nil;
     
     [backgroundView release];
     backgroundView = nil;
@@ -159,7 +157,7 @@
     }
     else if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateIn]) {
         //[spinner setCenter:CGPointMake(CGRectGetMidX([contentContainerView frame]), CGRectGetMidY([contentContainerView frame]))];
-        [spinner startAnimating];  
+        //[spinner startAnimating];  
     }
 
 }
@@ -185,7 +183,7 @@
     
     [self setView:backgroundView];
 
-    contentContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 600, 400)];
+    contentContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 648.0, 440.0)];
     [contentContainerView setBackgroundColor:[UIColor whiteColor]];
     [[contentContainerView layer] setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];
     [[contentContainerView layer] setShadowColor:[[UIColor blackColor] CGColor]];
@@ -196,10 +194,11 @@
     
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
     
-    spinner = [[ReadmillSpinner alloc] init];
+    ReadmillSpinner *spinner = [[ReadmillSpinner alloc] init];
     [spinner setCenter:[contentContainerView center]];
+    [spinner startAnimating];
     [contentContainerView addSubview:spinner];
-    //[spinner release];
+    [spinner release];
     [backgroundView addSubview:contentContainerView];
     
     //[self setView:contentContainerView];
@@ -214,7 +213,7 @@
 - (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController {
     [self setContentViewController:aContentViewController];
     [self displayContentViewController];
-    [spinner stopAnimating];
+    //[spinner stopAnimating];
 }
 
 -(void)viewDidAppear:(BOOL)animated {

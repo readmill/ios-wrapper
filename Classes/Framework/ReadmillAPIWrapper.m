@@ -489,7 +489,7 @@
     NSString *urlString = [NSString stringWithFormat:@"%@books/%d/reads/new?access_token=%@", [self apiEndPoint], bookId, [self accessToken]];
     return [NSURL URLWithString:urlString];
 }
-- (NSURL *)connectBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author {
+- (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author {
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
     }
@@ -506,7 +506,21 @@
     
     return URL;
 }
+- (NSURL *)URLForViewingReadWithReadId:(ReadmillReadId)readId {
+    if (![self ensureAccessTokenIsCurrent:nil]) {
+        return nil;
+    }
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setValue:kReadmillClientId forKey:@"client_id"];
+    [parameters setValue:[self accessToken] forKey:@"access_token"];
+    
+    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/read/%d", [self apiEndPoint], readId]];
+    NSURL *URL = [baseURL URLByAddingParameters:parameters];
+    
+    return URL;
 
+}
 -(NSURL *)editReadUIURLForReadWithId:(ReadmillReadId)readId {
     
     if (![self ensureAccessTokenIsCurrent:nil]) {
@@ -683,11 +697,4 @@
         return nil;
 	}	
 }
-
-- (BOOL)canReachReadmill {
-	Reachability *r = [Reachability reachabilityWithHostName:@"www.readmill.com"];
-	NetworkStatus internetStatus = [r currentReachabilityStatus];
-	return (internetStatus != NotReachable);
-}
-
 @end

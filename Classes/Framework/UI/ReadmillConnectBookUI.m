@@ -40,19 +40,9 @@
     
     if ((self = [super init])) {
         [self setUser:aUser];
-        //[self setBook:bookToConnectTo];
         [self setISBN:anISBN];
-        [self setTitle:aTitle];
+        [self setBookTitle:aTitle];
         [self setAuthor:anAuthor];
-        
-    }
-    return self;
-}
--(id)initWithUser:(ReadmillUser *)aUser book:(ReadmillBook *)bookToConnectTo {
-    
-    if ((self = [super init])) {
-        [self setUser:aUser];
-        [self setBook:bookToConnectTo];
         
     }
     return self;
@@ -94,6 +84,7 @@
     
     UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)] autorelease];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
+    //[[[webView subviews] lastObject] setBackgroundColor:[UIColor clearColor]];
     [webView setDelegate:self];
     [webView setHidden:YES];
     
@@ -103,8 +94,7 @@
     [containerView setHidden:YES];
     [self setView:containerView];
     
-    //NSURL *url = [[[self user] apiWrapper] connectBookUIURLForBookWithId:[[self book] bookId]];
-    NSURL *url = [[[self user] apiWrapper] connectBookWithISBN:[self ISBN] title:[self title] author:[self author]];
+    NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[self ISBN] title:[self bookTitle] author:[self author]];
     
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
@@ -137,10 +127,12 @@
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView {
 	
+    [webView sizeToFit];
+
     [webView setAlpha:0.0];
     [webView setHidden:NO];
     [self.view setHidden:NO];
-    [webView setBackgroundColor:[UIColor whiteColor]];
+    [webView setBackgroundColor:[UIColor clearColor]];
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
     [UIView setAnimationDuration:0.2];
@@ -155,7 +147,6 @@
 	
 	if ([error code] != -999) {
         // ^ Load failed because the user clicked a new link to load
-        
         [[self delegate] connect:self 
              didFailToLinkToBook:[self book]
                        withError:error];
@@ -181,8 +172,8 @@
                                                             object:self];
         
         NSString *action = [URL host];
+        NSDictionary *parameters = [URL queryAsDictionary];
         if ([action isEqualToString:@"connect"]) {
-            NSDictionary *parameters = [URL queryAsDictionary];
             NSString *uri = @"uri";
             if ([[parameters valueForKey:@"skip"] isEqualToString:@"true"]) {
                 [[self delegate] connect:self didSkipLinkingToBook:[self book]];
@@ -192,13 +183,15 @@
                 NSDictionary *apiResponse = [[[self user] apiWrapper] readWithRelativePath:uri error:nil];
                 ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse apiWrapper:[[self user] apiWrapper]];
                 [[self delegate] connect:self didSucceedToLinkToBook:[self book] withRead:read];
-            } else if ([parameters valueForKey:@"error"]) {
-                //NSError *error = [[NSError alloc]
-                [[self delegate] connect:self didFailToLinkToBook:[self book] withError:nil];
             }
         } else if ([action isEqualToString:@"error"]) {
-            //NSError *error = [[NSError alloc] initWithDomain:nil code:0 userInfo:nil];
-            [[self delegate] connect:self didFailToLinkToBook:[self book] withError:nil];
+            NSString *http_status = [parameters valueForKey:@"http_status"];
+            NSInteger code = 0;
+            if (http_status != nil) {
+                code = [http_status integerValue];
+            }
+            NSError *error = [[NSError alloc] initWithDomain:kReadmillErrorDomain code:code userInfo:parameters];
+            [[self delegate] connect:self didFailToLinkToBook:[self book] withError:[error autorelease]];
         } 
         return NO;
     } else {

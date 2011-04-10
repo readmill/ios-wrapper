@@ -69,25 +69,18 @@
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 -(void)loadView {
     
-    UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 600.0, 578.0)] autorelease];
+    UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)] autorelease];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
     [webView setHidden:YES];
     
     UIView *containerView = [[[UIView alloc] initWithFrame:[webView frame]] autorelease];
-    /*
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [activityIndicator setCenter:CGPointMake(floorf([containerView frame].size.width / 2), floorf([containerView frame].size.height / 2))];
-    [activityIndicator setHidesWhenStopped:YES];
-    [activityIndicator startAnimating];*/
     
     [containerView addSubview:webView];
-    //[containerView addSubview:activityIndicator];
     
     [self setView:containerView];
     
-    NSURL *url = [[[self read] apiWrapper] editReadUIURLForReadWithId:[[self read] readId]];
-    
+    NSURL *url = [[[self read] apiWrapper] URLForViewingReadWithReadId:[[self read] readId]];
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
@@ -121,7 +114,7 @@
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView {
 	
-    //[activityIndicator stopAnimating];
+    [webView sizeToFit];
     [webView setAlpha:0.0];
     [webView setHidden:NO];
     [webView setBackgroundColor:[UIColor whiteColor]];
@@ -150,13 +143,14 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
 	
-    if ([[[request URL] absoluteString] hasPrefix:@"callback"]) {
+    if ([[[request URL] absoluteString] hasPrefix:@"readmill"]) {
 		
         // Can be...
         // callback://skip
         // callback://connect/public
         // callback://connect/private
         
+        DLog(@"hasprefix");
         NSArray *parameters = [[[[request URL] absoluteURL] absoluteString] componentsSeparatedByString:@"/"];
         
         if ([parameters containsObject:@"close-window"]) {
@@ -182,7 +176,6 @@
                            closingRemark:remark
                                 delegate:self];
         }         
-        
 		return NO;
 	} else {
 		return YES;

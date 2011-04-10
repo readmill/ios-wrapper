@@ -21,7 +21,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "Reachability.h"
 
 typedef NSUInteger ReadmillBookId;
 typedef NSUInteger ReadmillReadId;
@@ -259,8 +258,23 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 -(NSURL *)connectBookUIURLForBookWithId:(ReadmillBookId)bookId;
 
-// TODO
-- (NSURL *)connectBookWithISBN:(NSString *)bookISBN title:(NSString *)title author:(NSString *)author;
+/*!
+ @param ISBN The ISBN number of the book to link to. 
+ @param title The title of the book to link to. 
+ @param author The author of the book to link to. 
+ @result An NSURL pointing to the Readmill book link page with the appropriate parameters.  
+ @brief   Obtain a book link URL containing the parameters to have Readmill present a UI to the user 
+ for linking the book to their Readmill account.
+ */
+- (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author;
+
+/*!
+ @param readId The ReadmillReadId of the read to view. 
+ @result An NSURL pointing to the Readmill read.  
+ @brief   Obtain a read link URL containing the parameters to have Readmill present a UI to the user 
+ for editing their read of this book in their Readmill account.
+ */
+- (NSURL *)URLForViewingReadWithReadId:(ReadmillReadId)readId;
 
 /*!
  @param readId The Readmill id of the read to edit. 
@@ -434,7 +448,5 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Get the currently logged in user. 
  */
 -(NSDictionary *)currentUser:(NSError **)error;
-
-- (BOOL)canReachReadmill;
 
 @end
