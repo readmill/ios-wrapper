@@ -150,7 +150,6 @@
         // callback://connect/public
         // callback://connect/private
         
-        DLog(@"hasprefix");
         NSArray *parameters = [[[[request URL] absoluteURL] absoluteString] componentsSeparatedByString:@"/"];
         
         if ([parameters containsObject:@"close-window"]) {

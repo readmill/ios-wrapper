@@ -119,7 +119,6 @@
 }
 
 - (void)dismissPresenterAnimated:(BOOL)animated {
-    DLog(@"dismissPresenterAnimated:(BOOL)animated {");
 
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:ReadmillUIPresenterShouldDismissViewNotification
