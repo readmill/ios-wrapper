@@ -96,9 +96,9 @@
     if (archive == nil || [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]] > 30 * 60) {
         archive = [[[ReadmillReadSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
         [NSKeyedArchiver archiveReadmillReadSession:archive];
-        DLog(@"archive nil or date generated more than 30 minutes ago, generated one: %@", archive);
+        NSLog(@"archive nil or date generated more than 30 minutes ago, generated one: %@", archive);
     } else {
-        DLog(@"had an archive, with time since last ping: %f", [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]]);
+        NSLog(@"had an archive, with time since last ping: %f", [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]]);
     }
     return [archive sessionIdentifier];
 }
@@ -137,7 +137,7 @@
     return NO;
 }
 - (void)pingArchived {
-    DLog(@"pingArchived");
+    NSLog(@"pingArchived");
     NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
     if (nil != unarchivedPings) {
         NSMutableArray *failedPings = [[NSMutableArray alloc] init];
@@ -165,7 +165,7 @@
         [NSKeyedArchiver archiveReadmillPings:failedPings];
         [failedPings release];
     } else {
-        DLog(@"no pings");
+        NSLog(@"no pings");
     }
 }
 #pragma mark -
@@ -201,7 +201,7 @@
     NSDate *pingTime = [NSDate date];
     
     NSString *sessionIdentifier = [self generateSessionIdentifier];
-    DLog(@"sessionIdentifier: %@", sessionIdentifier);
+    NSLog(@"sessionIdentifier: %@", sessionIdentifier);
     
     NSError *error = nil;
     [[self apiWrapper] pingReadWithId:[self readId]

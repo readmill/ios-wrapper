@@ -10,6 +10,7 @@
 		502698D2130C87D400E67974 /* README.asciidoc in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.asciidoc */; };
 		731471C9135304F900A41B49 /* ReadmillURLExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471C8135304F900A41B49 /* ReadmillURLExtensions.m */; };
 		731471CC1353054F00A41B49 /* ReadmillPing.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471CB1353054F00A41B49 /* ReadmillPing.m */; };
+		731471ED1353601200A41B49 /* ReadmillArchiverExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471EC1353601200A41B49 /* ReadmillArchiverExtensions.m */; };
 		73370EE6134116F000880F5B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73370EE5134116F000880F5B /* SystemConfiguration.framework */; };
 		73370EE91341172C00880F5B /* DismissingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 73370EE81341172C00880F5B /* DismissingView.m */; };
 		73370F831341183400880F5B /* 001c.png in Resources */ = {isa = PBXBuildFile; fileRef = 73370F291341183400880F5B /* 001c.png */; };
@@ -85,6 +86,8 @@
 		731471C8135304F900A41B49 /* ReadmillURLExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillURLExtensions.m; path = Classes/Framework/ReadmillURLExtensions.m; sourceTree = SOURCE_ROOT; };
 		731471CA1353054F00A41B49 /* ReadmillPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillPing.h; sourceTree = "<group>"; };
 		731471CB1353054F00A41B49 /* ReadmillPing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillPing.m; sourceTree = "<group>"; };
+		731471EB1353601200A41B49 /* ReadmillArchiverExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillArchiverExtensions.h; sourceTree = "<group>"; };
+		731471EC1353601200A41B49 /* ReadmillArchiverExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillArchiverExtensions.m; sourceTree = "<group>"; };
 		73370EE5134116F000880F5B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		73370EE71341172C00880F5B /* DismissingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DismissingView.h; path = UI/DismissingView.h; sourceTree = "<group>"; };
 		73370EE81341172C00880F5B /* DismissingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DismissingView.m; path = UI/DismissingView.m; sourceTree = "<group>"; };
@@ -416,6 +419,8 @@
 				96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */,
 				96BEAF3D12F0951F006028D0 /* ReadmillFinishReadUI.h */,
 				96BEAF3E12F0951F006028D0 /* ReadmillFinishReadUI.m */,
+				731471EB1353601200A41B49 /* ReadmillArchiverExtensions.h */,
+				731471EC1353601200A41B49 /* ReadmillArchiverExtensions.m */,
 			);
 			name = "iPad UI";
 			sourceTree = "<group>";
@@ -568,6 +573,7 @@
 				73370FA41341197300880F5B /* ReadmillSpinner.m in Sources */,
 				731471C9135304F900A41B49 /* ReadmillURLExtensions.m in Sources */,
 				731471CC1353054F00A41B49 /* ReadmillPing.m in Sources */,
+				731471ED1353601200A41B49 /* ReadmillArchiverExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
