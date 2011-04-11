@@ -204,7 +204,7 @@
                        occurrenceTime:pingTime
                                 error:&error];
     
-
+    DLog(@"error; %@", error);
     [self updateReadmillReadSession];
     
     if (error == nil && pingDelegate != nil) {

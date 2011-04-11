@@ -184,7 +184,7 @@
                 code = [http_status integerValue];
             }
             NSError *error = [[NSError alloc] initWithDomain:kReadmillErrorDomain code:code userInfo:parameters];
-            [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
+            [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:[error autorelease]];
         }         
 		return NO;
 	} else {
