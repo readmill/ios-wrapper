@@ -155,17 +155,21 @@
         NSDictionary *parameters = [URL queryAsDictionary];
         
         if ([action isEqualToString:@"view"]) {
-            ReadmillReadState readState = [[parameters valueForKey:@"state"] unsignedIntValue];
-            if (readState == ReadStateFinished || readState == ReadStateAbandoned) {
-                // Read was finished or abandoned
-                
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-                NSString *remark = nil;
-                remark = [parameters valueForKey:@"closing_remark"];
-                [[self read] updateWithState:readState
-                                   isPrivate:[[self read] isPrivate]
-                               closingRemark:remark
-                                    delegate:self];
+            NSString *readStateString = [parameters valueForKey:@"state"];
+            DLog(@"readStateString: %@", readStateString);
+            if (nil != readStateString) {
+                ReadmillReadState readState = [readStateString integerValue];
+                if (readState == ReadStateFinished || readState == ReadStateAbandoned) {
+                    // Read was finished or abandoned
+                    
+                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+                    NSString *remark = nil;
+                    remark = [parameters valueForKey:@"closing_remark"];
+                    [[self read] updateWithState:readState
+                                       isPrivate:[[self read] isPrivate]
+                                   closingRemark:remark
+                                        delegate:self];
+                }
             }
         } else if ([action isEqualToString:@"error"]) {
             
