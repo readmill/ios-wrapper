@@ -23,6 +23,7 @@
 #import "ReadmillFinishReadUI.h"
 #import "ReadmillUser.h"
 #import "ReadmillStringExtensions.h"
+#import "ReadmillURLExtensions.h"
 #import "ReadmillUIPresenter.h"
 
 @interface ReadmillFinishReadUI ()
@@ -143,37 +144,43 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
 	
-    if ([[[request URL] absoluteString] hasPrefix:@"readmill"]) {
+    NSURL *URL = [request URL];
+    if ([[URL absoluteString] hasPrefix:@"readmill"]) {
 		
         // Can be...
-        // callback://skip
-        // callback://connect/public
-        // callback://connect/private
+        // callback://view?state=3/4&closing_remark=messege
         
-        NSArray *parameters = [[[[request URL] absoluteURL] absoluteString] componentsSeparatedByString:@"/"];
+        // host == action, i.e. view 
+        NSString *action = [URL host];
+        NSDictionary *parameters = [URL queryAsDictionary];
         
-        if ([parameters containsObject:@"close-window"]) {
-            [[self delegate] finishReadUIWillCloseWithNoAction:self];
-            [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
-                                                                object:self];
-        } else if ([parameters containsObject:@"finish-with-remark"]) {
-        
-            NSUInteger indexOfParameter = [parameters indexOfObjectIdenticalTo:@"finish-with-remark"];
-            NSString *remark = nil;
-            
-            // Remark is the parameter after this
-            
-            if ([parameters count] >= indexOfParameter) {
-                remark = [parameters objectAtIndex:indexOfParameter + 1];
+        if ([action isEqualToString:@"view"]) {
+            ReadmillReadState readState = [[parameters valueForKey:@"state"] unsignedIntValue];
+            if (readState == ReadStateFinished || readState == ReadStateAbandoned) {
+                // Read was finished or abandoned
+                
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+                NSString *remark = nil;
+                remark = [parameters valueForKey:@"closing_remark"];
+                [[self read] updateWithState:readState
+                                   isPrivate:[[self read] isPrivate]
+                               closingRemark:remark
+                                    delegate:self];
             }
-        
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            //[activityIndicator startAnimating];
+        } else if ([action isEqualToString:@"error"]) {
             
-            [[self read] updateWithState:ReadStateFinished
-                               isPrivate:[[self read] isPrivate]
-                           closingRemark:remark
-                                delegate:self];
+            //[[self delegate] finishReadUIWillCloseWithNoAction:self];
+            
+            //[[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
+            //                                                    object:self];
+            
+            NSString *http_status = [parameters valueForKey:@"http_status"];
+            NSInteger code = 0;
+            if (http_status != nil) {
+                code = [http_status integerValue];
+            }
+            NSError *error = [[NSError alloc] initWithDomain:kReadmillErrorDomain code:code userInfo:parameters];
+            [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
         }         
 		return NO;
 	} else {
