@@ -183,6 +183,7 @@
                 NSDictionary *apiResponse = [[[self user] apiWrapper] readWithRelativePath:uri error:nil];
                 ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse apiWrapper:[[self user] apiWrapper]];
                 [[self delegate] connect:self didSucceedToLinkToBook:[self book] withRead:read];
+                [read release];
             }
         } else if ([action isEqualToString:@"error"]) {
             NSString *http_status = [parameters valueForKey:@"http_status"];

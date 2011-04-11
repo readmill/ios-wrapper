@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		502698D2130C87D400E67974 /* README.asciidoc in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.asciidoc */; };
-		73370EE1134116AD00880F5B /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 73370EE0134116AD00880F5B /* Reachability.m */; };
+		731471C9135304F900A41B49 /* ReadmillURLExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471C8135304F900A41B49 /* ReadmillURLExtensions.m */; };
+		731471CC1353054F00A41B49 /* ReadmillPing.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471CB1353054F00A41B49 /* ReadmillPing.m */; };
 		73370EE6134116F000880F5B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73370EE5134116F000880F5B /* SystemConfiguration.framework */; };
 		73370EE91341172C00880F5B /* DismissingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 73370EE81341172C00880F5B /* DismissingView.m */; };
 		73370F831341183400880F5B /* 001c.png in Resources */ = {isa = PBXBuildFile; fileRef = 73370F291341183400880F5B /* 001c.png */; };
@@ -80,8 +81,10 @@
 
 /* Begin PBXFileReference section */
 		502698D1130C87D300E67974 /* README.asciidoc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.asciidoc; sourceTree = "<group>"; };
-		73370EDF134116AD00880F5B /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		73370EE0134116AD00880F5B /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		731471C7135304F900A41B49 /* ReadmillURLExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillURLExtensions.h; path = Classes/Framework/ReadmillURLExtensions.h; sourceTree = SOURCE_ROOT; };
+		731471C8135304F900A41B49 /* ReadmillURLExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillURLExtensions.m; path = Classes/Framework/ReadmillURLExtensions.m; sourceTree = SOURCE_ROOT; };
+		731471CA1353054F00A41B49 /* ReadmillPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillPing.h; sourceTree = "<group>"; };
+		731471CB1353054F00A41B49 /* ReadmillPing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillPing.m; sourceTree = "<group>"; };
 		73370EE5134116F000880F5B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		73370EE71341172C00880F5B /* DismissingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DismissingView.h; path = UI/DismissingView.h; sourceTree = "<group>"; };
 		73370EE81341172C00880F5B /* DismissingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DismissingView.m; path = UI/DismissingView.m; sourceTree = "<group>"; };
@@ -303,8 +306,6 @@
 		96BEAEF312F06360006028D0 /* Readmill Framework */ = {
 			isa = PBXGroup;
 			children = (
-				73370EDF134116AD00880F5B /* Reachability.h */,
-				73370EE0134116AD00880F5B /* Reachability.m */,
 				96BEAF3112F0636C006028D0 /* Extensions */,
 				96BEAF0412F06360006028D0 /* TouchJSON */,
 				96BEAEF412F06360006028D0 /* Object Model */,
@@ -320,6 +321,8 @@
 		96BEAEF412F06360006028D0 /* Object Model */ = {
 			isa = PBXGroup;
 			children = (
+				731471CA1353054F00A41B49 /* ReadmillPing.h */,
+				731471CB1353054F00A41B49 /* ReadmillPing.m */,
 				96BEAEF512F06360006028D0 /* ReadmillBook.h */,
 				96BEAEF612F06360006028D0 /* ReadmillBook.m */,
 				96BEAEF712F06360006028D0 /* ReadmillRead.h */,
@@ -389,6 +392,8 @@
 		96BEAF3112F0636C006028D0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				731471C7135304F900A41B49 /* ReadmillURLExtensions.h */,
+				731471C8135304F900A41B49 /* ReadmillURLExtensions.m */,
 				96BEAF0012F06360006028D0 /* ReadmillDictionaryExtensions.h */,
 				96BEAF0112F06360006028D0 /* ReadmillDictionaryExtensions.m */,
 				96BEAF0212F06360006028D0 /* ReadmillStringExtensions.h */,
@@ -559,9 +564,10 @@
 				96BEAF3F12F0951F006028D0 /* ReadmillFinishReadUI.m in Sources */,
 				96E2A90412F192EF00D7D249 /* ReadmillUIPresenter.m in Sources */,
 				966E3E5412F2F7290027E05F /* Readmill_SigningInViewController.m in Sources */,
-				73370EE1134116AD00880F5B /* Reachability.m in Sources */,
 				73370EE91341172C00880F5B /* DismissingView.m in Sources */,
 				73370FA41341197300880F5B /* ReadmillSpinner.m in Sources */,
+				731471C9135304F900A41B49 /* ReadmillURLExtensions.m in Sources */,
+				731471CC1353054F00A41B49 /* ReadmillPing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

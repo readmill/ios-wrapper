@@ -22,7 +22,7 @@
 
 #import <Foundation/Foundation.h>
 
-#warning Rename this file to ReadmillAPIConstants.h, and replace these keys with your own.
+#warning Replace these keys with your own.
 
-static NSString * const kReadmillClientSecret = @"ClientSecretToReplace";
-static NSString * const kReadmillClientId = @"ClientIdToReplace";
+static NSString * const kReadmillClientSecret = @"750452e5fc0c20531e94f44215475094";
+static NSString * const kReadmillClientId = @"99dce8a929298cb95e534e86861db6de";

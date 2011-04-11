@@ -23,6 +23,7 @@
 #import "Readmill_SignedInViewController.h"
 #import "ReadmillReadSession.h"
 #import "ReadmillUIPresenter.h"
+#define kPingDuration 300
 
 @implementation Readmill_SignedInViewController
 
@@ -113,56 +114,21 @@
 
 -(IBAction)linkToBookButtonWasPushed {
     
-    [[self user] findOrCreateBookWithISBN:@"0340896981"
-                                    title:@"One Day"
-                                   author:@"David Nicholls"
-                                 delegate:self];
+    ReadmillUIPresenter *readmillUIPresenter = [[ReadmillUIPresenter alloc] init];    
+    [readmillUIPresenter presentInViewController:self animated:YES];
     
-}
-
-#pragma mark STEP 2: Handle book finding delegate methods.
-
--(void)readmillUserFoundNoBooks:(ReadmillUser *)user {
     
-    // STEP 2.1: This shouldn't be called when using findOrCreateBook..., but we'll include it for completeness.
+    ReadmillConnectBookUI *readmillConnectBookUI = [[ReadmillConnectBookUI alloc] initWithUser:[self user] 
+                                                                                          ISBN:@"0340896981" 
+                                                                                         title:@"One Day"
+                                                                                        author:@"David Nicholls"];
+        
+        
+    [readmillConnectBookUI setDelegate:self];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Books Found!"
-                                                    message:@""
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:nil];
-    
-    [[alert autorelease] show];
-}
-
--(void)readmillUser:(ReadmillUser *)user failedToFindBooksWithError:(NSError *)error {
-    
-    // STEP 2.2: Maybe we're not connected to the internet?
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't Find Book"
-                                                    message:[error localizedDescription]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:nil];
-    
-    [[alert autorelease] show];
-
-}
-
-#pragma mark STEP 3: We successfully found a book - ask the user if they want to link to it.
-
--(void)readmillUser:(ReadmillUser *)user didFindBooks:(NSArray *)books {
-    
-    ReadmillBook *book = [books lastObject];
-    
-    ReadmillConnectBookUI *popup = [[ReadmillConnectBookUI alloc] initWithUser:[self user]
-                                                                          book:book];
-    [popup setDelegate:self];
-    
-    ReadmillUIPresenter *presenter = [[ReadmillUIPresenter alloc] initWithContentViewController:popup];
-    
-    [presenter presentInViewController:self animated:YES];
-    [presenter release];
+    [readmillUIPresenter setAndDisplayContentViewController:readmillConnectBookUI];
+    [readmillConnectBookUI release];
+    [readmillUIPresenter release];
 }
 
 #pragma mark STEP 4: Handle book connection delegate methods. 
@@ -194,7 +160,7 @@
     [self setRead:aRead];
     
     ReadmillReadSession *session = [aRead createReadSession];
-    [session pingWithProgress:0 delegate:nil];
+    [session pingWithProgress:0 pingDuration:kPingDuration delegate:nil];
     
 }
 
