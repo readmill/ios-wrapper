@@ -102,13 +102,6 @@
     }
     return [archive sessionIdentifier];
 }
-- (NSArray *)fetchFailedPings {
-    NSArray *failedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
-    if (failedPings == nil) {
-        return [NSArray array];
-    }
-    return failedPings;
-}
 - (void)archiveFailedPingWithReadId:(ReadmillReadId)aReadId readProgress:(ReadmillReadProgress)progress sessionIdentifier:(NSString *)sessionIdentifier duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime {
     
     ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
