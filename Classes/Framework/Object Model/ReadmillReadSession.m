@@ -21,14 +21,42 @@
  */
 
 #import "ReadmillReadSession.h"
+#import "ReadmillArchiverExtensions.h"
+#import "ReadmillPing.h"
+
+@implementation ReadmillReadSessionArchive
+
+@synthesize lastSessionDate;
+@synthesize sessionIdentifier;
+
+- (id)initWithSessionIdentifier:(NSString *)aSessionIdentifier {
+    if ((self = [super init])) {
+        [self setSessionIdentifier:aSessionIdentifier];
+        [self setLastSessionDate:[NSDate date]];
+    }
+    return self;
+}
+- (void)encodeWithCoder:(NSCoder *)coder {   
+    [coder encodeObject:lastSessionDate forKey:@"lastSessionDate"];
+    [coder encodeObject:sessionIdentifier forKey:@"sessionIdentifier"];
+} 
+
+- (id)initWithCoder:(NSCoder *)coder {
+    self.lastSessionDate = [coder decodeObjectForKey:@"lastSessionDate"];
+    self.sessionIdentifier = [coder decodeObjectForKey:@"sessionIdentifier"];
+    return self; 
+}
+-(NSString *)description {
+    return [NSString stringWithFormat:@"%@ sessionIdentifier %@ withDate %@", [super description], [self sessionIdentifier], [self lastSessionDate]]; 
+}
+@end
+
+
 
 @interface ReadmillReadSession ()
-
-@property (readwrite, copy) NSDate *lastPingDate;
-@property (readwrite, copy) NSString *sessionIdentifier;
+- (void)pingArchived;
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 @property (readwrite) ReadmillReadId readId;
-
 @end
 
 @implementation ReadmillReadSession
@@ -38,93 +66,114 @@
 }
 
 -(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadId)sessionReadId {
-    return [self initWithAPIWrapper:wrapper readId:sessionReadId sessionId:[[NSProcessInfo processInfo] globallyUniqueString]];
-}
-
--(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadId)sessionReadId sessionId:(NSString *)sessionId {
+    
     if ((self = [super init])) {
         // Initialization code here.
-        
         [self setApiWrapper:wrapper];
         [self setReadId:sessionReadId];
-        [self setLastPingDate:[NSDate date]];
-        [self setSessionIdentifier:sessionId];
+        [self pingArchived];
     }
     return self;
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"%@ id %@ for read %d", [super description], [self sessionIdentifier], [self readId]]; 
+    return [NSString stringWithFormat:@"%@ read %d", [super description], [self readId]]; 
 }
 
-@synthesize lastPingDate;
-@synthesize sessionIdentifier;
 @synthesize apiWrapper;
 @synthesize readId;
 
-- (void)dealloc {
-    // Clean-up code here.
-    
-    [self setApiWrapper:nil];
-    [self setLastPingDate:nil];
-    [self setSessionIdentifier:nil];
-    
-    [super dealloc];
+- (void)updateReadmillReadSession {
+    ReadmillReadSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadSession];
+    [archive setLastSessionDate:[NSDate date]];
+    [NSKeyedArchiver archiveReadmillReadSession:archive];
 }
 
-- (NSString *)readmillPingArchivePath {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-    NSString *libraryDirectory = [paths objectAtIndex:0];
-    return [libraryDirectory stringByAppendingPathComponent:@"ReadmillFailedPings.arch"];       
+- (NSString *)generateSessionIdentifier {
+    ReadmillReadSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadSession];
+    
+    // Do we have a saved archive that was generated less than 30 minutes ago?
+    if (archive == nil || [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]] > 30 * 60) {
+        archive = [[[ReadmillReadSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
+        [NSKeyedArchiver archiveReadmillReadSession:archive];
+        DLog(@"archive nil or date generated more than 30 minutes ago, generated one: %@", archive);
+    } else {
+        DLog(@"had an archive, with time since last ping: %f", [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]]);
+    }
+    return [archive sessionIdentifier];
 }
 - (NSArray *)fetchFailedPings {
-    NSArray *failedPings = [NSKeyedUnarchiver unarchiveObjectWithFile:[self readmillPingArchivePath]];
+    NSArray *failedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
     if (failedPings == nil) {
         return [NSArray array];
     }
     return failedPings;
 }
-- (void)archiveFailedPing:(ReadmillPing *)ping {
+- (void)archiveFailedPingWithReadId:(ReadmillReadId)aReadId readProgress:(ReadmillReadProgress)progress sessionIdentifier:(NSString *)sessionIdentifier duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime {
+    
+    ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
+                                                 readProgress:progress 
+                                            sessionIdentifier:sessionIdentifier
+                                                     duration:duration 
+                                               occurrenceTime:occurrenceTime];
     // Grab all archived pings
     
-    NSMutableArray *failedPings = [[self fetchFailedPings] mutableCopy];
+    NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
+    NSMutableArray *failedPings = [[NSMutableArray alloc] init];
+    if (nil != unarchivedPings) {
+        [failedPings addObjectsFromArray:unarchivedPings];
+    }
     NSLog(@"archiveFailedPing: %@, failedPings: %@", ping, failedPings);
     // Add the new one
     [failedPings addObject:ping];
+    [ping release];
     // Archive all pings
-    [NSKeyedArchiver archiveRootObject:failedPings
-                                toFile:[self readmillPingArchivePath]];
+    [NSKeyedArchiver archiveReadmillPings:failedPings];
     [failedPings release];
 }
-
+- (BOOL)pingErrorWasUnprocessable:(NSError *)pingError {
+    if ([[pingError domain] isEqualToString:kReadmillErrorDomain] && [pingError code] == 422) 
+        return YES;
+    return NO;
+}
 - (void)pingArchived {
-    NSArray *failedPings = [self fetchFailedPings];
-    if ([failedPings count] == 0) {
-        NSLog(@"failedPings == 0");
-        return;
-    }
-    for (ReadmillPing *ping in failedPings) {
-        NSError *error = nil;
-        [[self apiWrapper] pingReadWithId:[ping readId] 
-                             withProgress:[ping progress] 
-                        sessionIdentifier:[ping sessionIdentifier] 
-                                 duration:[ping duration]
-                           occurrenceTime:[ping occurrenceTime] 
-                                    error:&error];
-        if (!error) {
-            NSLog(@"Sending archived ping: %@", ping);
-        } else {
-            NSLog(@"Failed to send archived ping: %@", ping);
+    DLog(@"pingArchived");
+    NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
+    if (nil != unarchivedPings) {
+        NSMutableArray *failedPings = [[NSMutableArray alloc] init];
+        for (ReadmillPing *ping in unarchivedPings) {
+            NSError *error = nil;
+            [[self apiWrapper] pingReadWithId:[ping readId] 
+                                 withProgress:[ping progress] 
+                            sessionIdentifier:[ping sessionIdentifier] 
+                                     duration:[ping duration]
+                               occurrenceTime:[ping occurrenceTime] 
+                                        error:&error];
+            if (!error) {
+                NSLog(@"Sent archived ping: %@", ping);
+            } else {
+                if ([self pingErrorWasUnprocessable:error]) {
+                    NSLog(@"Error 422 (book is probably finished");
+                    // The request was well-formed but was unable to be followed due to semantic errors.
+                    // E.g book is finished 
+                } else {
+                    NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
+                    [failedPings addObject:ping];
+                }
+            }
         }
+        [NSKeyedArchiver archiveReadmillPings:failedPings];
+        [failedPings release];
+    } else {
+        DLog(@"no pings");
     }
-    [NSKeyedArchiver archiveRootObject:[NSMutableArray array]
-                                toFile:[self readmillPingArchivePath]];
-
 }
 #pragma mark -
 #pragma mark Threaded Messages
 
 -(void)pingWithProgress:(ReadmillReadProgress)progress pingDuration:(ReadmillPingDuration)pingDuration delegate:(id <ReadmillPingDelegate>)delegate {
+    
+    
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 delegate, @"delegate",
@@ -150,18 +199,20 @@
     ReadmillReadProgress progress = [[properties valueForKey:@"progress"] unsignedIntegerValue];
     ReadmillPingDuration pingDuration = [[properties valueForKey:@"pingDuration"] unsignedIntegerValue];
     NSDate *pingTime = [NSDate date];
-    //NSTimeInterval timeSinceLastPing = [pingTime timeIntervalSinceDate:[self lastPingDate]];
+    
+    NSString *sessionIdentifier = [self generateSessionIdentifier];
+    DLog(@"sessionIdentifier: %@", sessionIdentifier);
     
     NSError *error = nil;
     [[self apiWrapper] pingReadWithId:[self readId]
                          withProgress:progress
-                    sessionIdentifier:[self sessionIdentifier]
+                    sessionIdentifier:sessionIdentifier
                              duration:pingDuration
                        occurrenceTime:pingTime
                                 error:&error];
     
 
-    //[self setLastPingDate:pingTime];
+    [self updateReadmillReadSession];
     
     if (error == nil && pingDelegate != nil) {
         
@@ -169,8 +220,6 @@
                                                  onThread:callbackThread
                                                withObject:self
                                             waitUntilDone:YES];
-        
-        [self pingArchived];
         
     } else if (error != nil && pingDelegate != nil) {
         
@@ -188,19 +237,24 @@
                                withObject:pingDelegate
                             waitUntilDone:YES]; 
         
-
-        ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
-                                                     readProgress:progress 
-                                                sessionIdentifier:[self sessionIdentifier] 
-                                                         duration:pingDuration 
-                                                   occurrenceTime:pingTime];
-
-        [self archiveFailedPing:[ping autorelease]];
+        if (![self pingErrorWasUnprocessable:error]) {
+            [self archiveFailedPingWithReadId:[self readId]
+                                 readProgress:progress
+                            sessionIdentifier:sessionIdentifier
+                                     duration:pingDuration
+                               occurrenceTime:pingTime];
+        }
     }
     
     [pool drain];
     
     [self release];
 }
-
+- (void)dealloc {
+    // Clean-up code here.
+    
+    [self setApiWrapper:nil];    
+    [super dealloc];
+}
 @end
+

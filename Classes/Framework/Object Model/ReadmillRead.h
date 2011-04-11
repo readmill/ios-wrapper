@@ -130,13 +130,6 @@
  */
 -(ReadmillReadSession *)createReadSession;
 
-/*!
- @param sessionId The existing session identifier to use. 
- @result The created read session.
- @brief   Create a reading session for the existing session identifier. 
- */
--(ReadmillReadSession *)createReadSessionWithExistingSessionId:(NSString *)sessionId;
-
 #pragma mark -
 #pragma mark Properties
 

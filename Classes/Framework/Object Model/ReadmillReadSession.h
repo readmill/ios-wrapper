@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
-#import "ReadmillPing.h"
 
 @class ReadmillReadSession;
 
@@ -46,8 +45,6 @@
 @interface ReadmillReadSession : NSObject {
 @private
     
-    NSDate *lastPingDate;
-    NSString *sessionIdentifier;
     ReadmillAPIWrapper *apiWrapper;
     ReadmillReadId readId;
     
@@ -65,32 +62,6 @@
  -createReadSessionWithExistingSessionId: convenience methods in the ReadmillRead class.
  */
 -(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadId)sessionReadId;
-
-/*!
- @param wrapper The ReadmillAPIWrapper to be used by the session. 
- @param sessionReadId The read id this session is for. 
- @param sessionId The session identifier to use.
- @result The created read session.
- @brief   Create a new reading session for the given read id and session identifier. 
- 
- This is the designated initializer for this class.
- 
- Note: The typical way to obtain a ReadmillReadSession is to use the -createReadSession or 
- -createReadSessionWithExistingSessionId: convenience methods in the ReadmillRead class.
- */
--(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadId)sessionReadId sessionId:(NSString *)sessionId;
-
-/*!
- @property  lastPingDate
- @brief The date this session was last pinged.  
- */
-@property (readonly, copy) NSDate *lastPingDate;
-
-/*!
- @property  sessionIdentifier
- @brief The session identifier for this session.  
- */
-@property (readonly, copy) NSString *sessionIdentifier;
 
 /*!
  @property  apiWrapper
@@ -113,5 +84,16 @@
  This should be called periodically while the user is reading, every few minutes or so.
  */
 -(void)pingWithProgress:(ReadmillReadProgress)progress pingDuration:(ReadmillPingDuration)duration delegate:(id <ReadmillPingDelegate>)delegate;
+
+@end
+
+
+@interface ReadmillReadSessionArchive : NSObject <NSCoding> {
+    NSDate *lastSessionDate;
+    NSString *sessionIdentifier;
+}
+
+@property (readwrite, copy) NSDate *lastSessionDate;
+@property (readwrite, copy) NSString *sessionIdentifier;
 
 @end

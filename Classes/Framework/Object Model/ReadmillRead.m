@@ -104,10 +104,6 @@
     return [[[ReadmillReadSession alloc] initWithAPIWrapper:[self apiWrapper] readId:[self readId]] autorelease];
 }
 
--(ReadmillReadSession *)createReadSessionWithExistingSessionId:(NSString *)sessionId {
-    return [[[ReadmillReadSession alloc] initWithAPIWrapper:[self apiWrapper] readId:[self readId] sessionId:sessionId] autorelease];
-}
-
 @synthesize dateAbandoned;
 @synthesize dateCreated;
 @synthesize dateFinished;

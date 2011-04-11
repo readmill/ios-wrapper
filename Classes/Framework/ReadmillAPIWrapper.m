@@ -321,6 +321,7 @@
        occurrenceTime:(NSDate *)occurrenceTime 
                 error:(NSError **)error {
     
+
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *pingScope = @"ping[%@]";
     [parameters setValue:[NSNumber numberWithInteger:progress] forKey:[NSString stringWithFormat:pingScope, @"progress"]];
@@ -611,7 +612,7 @@
     
 	for (NSString *key in [parametersWithClientId allKeys]) {		
 		
-		id value = [parameters valueForKey:key];
+		id value = [parametersWithClientId valueForKey:key];
 		
 		if (value) {
 			[parameterString appendFormat:@"%@%@=%@",
@@ -632,7 +633,7 @@
 }
 
 -(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {
-    
+
 	NSHTTPURLResponse *response = nil;
 	NSError *connectionError = nil;
 	
@@ -647,7 +648,7 @@
 			id errorResponse = [[CJSONDeserializer deserializer] deserialize:responseData error:nil]; 
 			
 			if (error != NULL) {
-				*error = [NSError errorWithDomain:@"com.readmill.api"
+				*error = [NSError errorWithDomain:kReadmillErrorDomain
 											 code:[response statusCode]
 										 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
 												   [errorResponse valueForKey:@"error"], NSLocalizedFailureReasonErrorKey, nil]];
@@ -661,7 +662,7 @@
 		
 	} else {
 		// All was OK in the URL, let's try and parse the JSON.
-		
+
 		NSError *parseError = nil;
         
         // Do we have an empty response?
