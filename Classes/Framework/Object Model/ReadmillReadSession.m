@@ -71,7 +71,7 @@
         // Initialization code here.
         [self setApiWrapper:wrapper];
         [self setReadId:sessionReadId];
-        [self pingArchived];
+        [self performSelectorInBackground:@selector(pingArchived) withObject:nil];
     }
     return self;
 }
@@ -130,6 +130,7 @@
     return NO;
 }
 - (void)pingArchived {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"pingArchived");
     NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
     if (nil != unarchivedPings) {
@@ -160,6 +161,7 @@
     } else {
         NSLog(@"no pings");
     }
+    [pool drain];
 }
 #pragma mark -
 #pragma mark Threaded Messages
