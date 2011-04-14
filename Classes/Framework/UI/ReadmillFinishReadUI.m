@@ -156,7 +156,6 @@
         
         if ([action isEqualToString:@"view"]) {
             NSString *readStateString = [parameters valueForKey:@"state"];
-            DLog(@"readStateString: %@", readStateString);
             if (nil != readStateString) {
                 ReadmillReadState readState = [readStateString integerValue];
                 if (readState == ReadStateFinished || readState == ReadStateAbandoned) {
