@@ -161,7 +161,6 @@
                 if (readState == ReadStateFinished || readState == ReadStateAbandoned) {
                     // Read was finished or abandoned
                     
-                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
                     NSString *remark = nil;
                     remark = [parameters valueForKey:@"closing_remark"];
                     [[self read] updateWithState:readState
@@ -171,11 +170,6 @@
                 }
             }
         } else if ([action isEqualToString:@"error"]) {
-            
-            //[[self delegate] finishReadUIWillCloseWithNoAction:self];
-            
-            //[[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
-            //                                                    object:self];
             
             NSString *http_status = [parameters valueForKey:@"http_status"];
             NSInteger code = 0;

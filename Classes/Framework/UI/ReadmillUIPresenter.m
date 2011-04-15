@@ -25,7 +25,7 @@
 
 @interface ReadmillUIPresenter ()
 
-//@property (nonatomic, readwrite, retain) UIViewController *contentViewController;
+@property (nonatomic, readwrite, retain) UIViewController *contentViewController;
 
 @end
 
@@ -111,7 +111,6 @@
     [dismiss release];
 }
 - (void)dismissView {
-    NSLog(@"dismissView dismiss");
     [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification object:[self contentViewController]];
 }
 - (void)contentViewControllerShouldBeDismissed:(NSNotification *)aNotification {
@@ -124,6 +123,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:ReadmillUIPresenterShouldDismissViewNotification
                                                   object:[self contentViewController]];
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     
     if (animated) {
         

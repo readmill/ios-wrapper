@@ -48,7 +48,7 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
  @property contentViewController
  @brief   The view controller being presented.
 */
-@property (nonatomic, retain) UIViewController *contentViewController;
+@property (nonatomic, readonly, retain) UIViewController *contentViewController;
 
 /*!
  @param theParentViewController The view controller that this presenter should be displayed in.

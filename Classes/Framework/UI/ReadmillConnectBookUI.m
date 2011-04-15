@@ -94,7 +94,9 @@
     [containerView setHidden:YES];
     [self setView:containerView];
     
-    NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[self ISBN] title:[self bookTitle] author:[self author]];
+    NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[self ISBN] 
+                                                                  title:[self bookTitle] 
+                                                                 author:[self author]];
     
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
@@ -160,7 +162,6 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	NSURL *URL = [request URL];
     if ([[URL absoluteString] hasPrefix:@"readmill"]) {
 		
