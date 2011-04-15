@@ -11,16 +11,14 @@
 
 @implementation DismissingView
 
-@synthesize target;
-@synthesize selector;
+@synthesize delegate;
 
-- (id)initWithFrame:(CGRect)frame selector:(SEL)aSelector target:(id)aTarget {
+- (id)initWithFrame:(CGRect)frame delegate:(id<DismissingViewDelegate>)dismissingViewDelegate {
     self = [super initWithFrame:frame];
     if (self) {
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
-        self.selector = aSelector;
-        self.target = aTarget;
+        self.delegate = dismissingViewDelegate;
     }
     return self;
 }
@@ -32,7 +30,11 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [target performSelector:selector withObject:self];
+    [delegate dismissView];
     [self removeFromSuperview];
+}
+- (void)dealloc {
+    self.delegate = nil;
+    [super dealloc];
 }
 @end

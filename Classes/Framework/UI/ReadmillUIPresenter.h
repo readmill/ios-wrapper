@@ -29,7 +29,7 @@ static NSString * const ReadmillUIPresenterShouldDismissViewNotification = @"Rea
 static NSString * const ReadmillUIPresenterDidAnimateOut = @"ReadmillUIPresenterDidAnimateOut";
 static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterDidAnimateIn";
 
-@interface ReadmillUIPresenter : UIViewController {
+@interface ReadmillUIPresenter : UIViewController <DismissingViewDelegate> {
 @private
     
     UIView *contentContainerView;

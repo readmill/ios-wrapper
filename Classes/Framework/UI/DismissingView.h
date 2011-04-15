@@ -8,14 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol DismissingViewDelegate
+- (void)dismissView;
+@end
 
 @interface DismissingView : UIView {
-    
+    id<DismissingViewDelegate> delegate;
 }
-@property (nonatomic, retain) id target;
-@property (nonatomic) SEL selector;
+@property (nonatomic, assign) id<DismissingViewDelegate> delegate;
 
-- (id)initWithFrame:(CGRect)frame selector:(SEL)selector target:(id)target ;
+- (id)initWithFrame:(CGRect)frame delegate:(id<DismissingViewDelegate>)target;
 - (void)addToView:(UIView *)aView;
 
 @end

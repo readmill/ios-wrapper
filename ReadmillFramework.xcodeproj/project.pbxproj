@@ -92,7 +92,7 @@
 		73E1F61013561F91008FEC3A /* ReadmillRead.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF712F06360006028D0 /* ReadmillRead.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73E1F61113561F91008FEC3A /* ReadmillReadSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF912F06360006028D0 /* ReadmillReadSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73E1F61213561F91008FEC3A /* ReadmillUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFB12F06360006028D0 /* ReadmillUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		73E1F61313561F91008FEC3A /* DismissingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370EE71341172C00880F5B /* DismissingView.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		73E1F61313561F91008FEC3A /* DismissingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370EE71341172C00880F5B /* DismissingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73E1F61413561F91008FEC3A /* ReadmillSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370FA21341197300880F5B /* ReadmillSpinner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73E1F61513561F91008FEC3A /* ReadmillUIPresenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A90212F192EF00D7D249 /* ReadmillUIPresenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73E1F61613561F91008FEC3A /* ReadmillConnectBookUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */; settings = {ATTRIBUTES = (Public, ); }; };

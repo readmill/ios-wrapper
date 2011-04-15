@@ -159,6 +159,8 @@
 }
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	NSURL *URL = [request URL];
     if ([[URL absoluteString] hasPrefix:@"readmill"]) {
 		
@@ -178,7 +180,6 @@
             if ([[parameters valueForKey:@"skip"] isEqualToString:@"true"]) {
                 [[self delegate] connect:self didSkipLinkingToBook:[self book]];
             } else if ((uri = [parameters valueForKey:uri])) {
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
                 uri = [uri substringFromIndex:1];
                 NSDictionary *apiResponse = [[[self user] apiWrapper] readWithRelativePath:uri error:nil];
                 ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse apiWrapper:[[self user] apiWrapper]];

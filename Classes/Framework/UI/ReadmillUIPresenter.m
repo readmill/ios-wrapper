@@ -106,12 +106,12 @@
         //[UIView setAnimationsEnabled:NO];
     }
     DismissingView *dismiss = [[DismissingView alloc] initWithFrame:[[UIScreen mainScreen] bounds]
-                                                           selector:@selector(dismissView:) 
-                                                             target:self];
+                                                             delegate:self];
     [dismiss addToView:self.view];
-    [dismiss release]; 
+    [dismiss release];
 }
-- (void)dismissView:(UIView *)dismissView {
+- (void)dismissView {
+    NSLog(@"dismissView dismiss");
     [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification object:[self contentViewController]];
 }
 - (void)contentViewControllerShouldBeDismissed:(NSNotification *)aNotification {
@@ -120,6 +120,7 @@
 
 - (void)dismissPresenterAnimated:(BOOL)animated {
 
+    NSLog(@"dismissPresenterAnimated");
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:ReadmillUIPresenterShouldDismissViewNotification
                                                   object:[self contentViewController]];
@@ -139,8 +140,6 @@
                                                     CGRectGetMaxY([[self view] bounds]) + (CGRectGetHeight([contentContainerView frame]) / 2))];
         
         [UIView commitAnimations];
-        //[UIView setAnimationsEnabled:NO];
-
         
     } else {
         [[self view] removeFromSuperview];
@@ -155,10 +154,9 @@
         [self release];
     }
     else if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateIn]) {
-        //[spinner setCenter:CGPointMake(CGRectGetMidX([contentContainerView frame]), CGRectGetMidY([contentContainerView frame]))];
-        //[spinner startAnimating];  
+        NSLog(@"posting ReadmillUIPresenterDidAnimateIn");
+        [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterDidAnimateIn object:nil]; 
     }
-
 }
 
 
