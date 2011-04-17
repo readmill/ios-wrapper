@@ -23,6 +23,7 @@
 #import "ReadmillConnectBookUI.h"
 #import "ReadmillUser.h"
 #import "ReadmillUIPresenter.h"
+#import "ReadmillURLExtensions.h"
 
 @interface ReadmillConnectBookUI ()
 

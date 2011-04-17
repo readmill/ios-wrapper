@@ -24,7 +24,6 @@
 #import "ReadmillUser.h"
 #import "ReadmillRead.h"
 #import "ReadmillBook.h"
-#import "ReadmillURLExtensions.h"
 
 @class ReadmillConnectBookUI;
 

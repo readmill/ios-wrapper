@@ -21,10 +21,10 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "ReadmillConnectBookUI.h"
-#import "ReadmillFinishReadUI.h"
-#import "ReadmillBook.h"
-#import "ReadmillRead.h"
+#import <ReadmillAPI/ReadmillConnectBookUI.h>
+#import <ReadmillAPI/ReadmillFinishReadUI.h>
+#import <ReadmillAPI/ReadmillBook.h>
+#import <ReadmillAPI/ReadmillRead.h>
 
 @interface Readmill_SignedInViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillFinishReadUIDelegate> {
 @private

@@ -1,15 +1,15 @@
 //
-//  ReadmillTests.m
-//  ReadmillTests
+//  ReadmillAPITests.m
+//  ReadmillAPITests
 //
-//  Created by Martin Hwasser on 4/13/11.
+//  Created by Martin Hwasser on 4/16/11.
 //  Copyright 2011 Readmill. All rights reserved.
 //
 
-#import "ReadmillTests.h"
+#import "ReadmillAPITests.h"
 
 
-@implementation ReadmillTests
+@implementation ReadmillAPITests
 
 - (void)setUp
 {
@@ -27,7 +27,7 @@
 
 - (void)testExample
 {
-    STFail(@"Unit tests are not implemented yet in ReadmillTests");
+    STFail(@"Unit tests are not implemented yet in ReadmillAPITests");
 }
 
 @end

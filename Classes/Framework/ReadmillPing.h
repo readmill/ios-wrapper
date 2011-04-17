@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ReadmillAPIWrapper.h"
+#import <ReadmillAPI/ReadmillAPIWrapper.h>
 
 @interface ReadmillPing : NSObject <NSCoding> {
     NSDate *date;
