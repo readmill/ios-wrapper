@@ -163,10 +163,12 @@
                     
                     NSString *remark = nil;
                     remark = [parameters valueForKey:@"closing_remark"];
+                    /*
                     [[self read] updateWithState:readState
                                        isPrivate:[[self read] isPrivate]
                                    closingRemark:remark
-                                        delegate:self];
+                                        delegate:self];*/
+                    [[self delegate] finishReadUI:self didFinishRead:[self read]];
                 }
             }
         } else if ([action isEqualToString:@"error"]) {
