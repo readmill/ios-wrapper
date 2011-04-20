@@ -161,8 +161,8 @@
                 if (readState == ReadStateFinished || readState == ReadStateAbandoned) {
                     // Read was finished or abandoned
                     
-                    NSString *remark = nil;
-                    remark = [parameters valueForKey:@"closing_remark"];
+                    //NSString *remark = nil;
+                    //remark = [parameters valueForKey:@"closing_remark"];
                     [[self read] updateState:readState delegate:self];
                     [[self delegate] finishReadUI:self didFinishRead:[self read]];
                 }
