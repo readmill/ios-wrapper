@@ -41,6 +41,29 @@
 -(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser;
 
 @end
+@protocol ReadmillBookFindingDelegate <NSObject>
+
+/*!
+ @param user The user object that was performing the request.
+ @param books An array of ReadmillBook objects that matched the given search parameters or were created. 
+ @brief   Delegate method informing the target that Readmill found or created the given books. 
+ */
+-(void)readmillUser:(ReadmillUser *)user didFindBooks:(NSArray *)books;
+
+/*!
+ @param user The user object that was performing the request.
+ @brief   Delegate method informing the target that Readmill could not find any books matching the previously given search criteria. 
+ */
+-(void)readmillUserFoundNoBooks:(ReadmillUser *)user;
+
+/*!
+ @param user The user object that was performing the request
+ @param error An NSError object describing the error that occurred. 
+ @brief   Delegate method informing the target that and error occurred attempting to search for or create book(s). 
+ */
+-(void)readmillUser:(ReadmillUser *)user failedToFindBooksWithError:(NSError *)error;
+
+@end
 @protocol ReadmillReadFindingDelegate <NSObject>
 
 /*!
@@ -239,7 +262,7 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:onSt
  with a title different to that passed in, it will still be returned. This also applies if no books with the passed ISBN 
  are found but match the passed title. 
  */
-//-(void)findBooksWithISBN:(NSString *)isbn title:(NSString *)title delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+-(void)findBooksWithISBN:(NSString *)isbn title:(NSString *)title delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 /*!
  @param isbn The full ISBN of the book to create.
@@ -251,7 +274,7 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:onSt
 IMPORTANT: The book will be created even if it exists in Readmill. Please search first, or use the convenience method
  -findOrCreateBookWithISBN:title:author:delegate:.
  */
-//-(void)createBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+-(void)createBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 /*!
  @param isbn The full ISBN of the book to find or create.
@@ -266,7 +289,7 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
  
  This is equivalent of calling -findBooksWithISBN:title:author:delegate:, then calling createBookWithISBN:title:author:delegate: if none are found.
  */
-//-(void)findOrCreateBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+-(void)findOrCreateBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 #pragma mark -
 #pragma mark Reads

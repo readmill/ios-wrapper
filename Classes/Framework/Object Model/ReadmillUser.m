@@ -336,7 +336,7 @@
 
 
 #pragma mark -
-/*
+
 -(void)findBooksWithISBN:(NSString *)isbn
                    title:(NSString *)title 
                 delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate {
@@ -546,7 +546,7 @@
     
     [self release];
 }
-*/
+
 #pragma mark -
 
 -(void)findReadForBook:(ReadmillBook *)book delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate {
