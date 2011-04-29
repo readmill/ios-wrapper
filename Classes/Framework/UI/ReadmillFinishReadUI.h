@@ -77,6 +77,6 @@
  @property delegate 
  @brief The delegate object to be informed of success or failure.
  */
-@property (nonatomic, readwrite, retain) id <ReadmillFinishReadUIDelegate> delegate;
+@property (nonatomic, readwrite, assign) id <ReadmillFinishReadUIDelegate> delegate;
 
 @end
