@@ -163,7 +163,7 @@
                     
                     //NSString *remark = nil;
                     //remark = [parameters valueForKey:@"closing_remark"];
-                    [[self read] updateState:readState delegate:self];
+                    //[[self read] updateState:readState delegate:self];
                     [[self delegate] finishReadUI:self didFinishRead:[self read]];
                 }
             }

@@ -164,6 +164,7 @@
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
 	NSURL *URL = [request URL];
+    NSLog(@"url: %@", URL);
     if ([[URL absoluteString] hasPrefix:@"readmill"]) {
 		
         // Can be...
