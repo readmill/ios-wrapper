@@ -168,7 +168,7 @@
 		
         // Can be...
         // readmill://connect?skip=true
-        // readmill://connect?uri=uri location
+        // readmill://connect?uri=location to read
         // readmill://connect?error?message=something
         
         // Immediately remove the popover
@@ -182,11 +182,19 @@
             if ([[parameters valueForKey:@"skip"] isEqualToString:@"true"]) {
                 [[self delegate] connect:self didSkipLinkingToBook:[self book]];
             } else if ((uri = [parameters valueForKey:uri])) {
-                uri = [uri substringFromIndex:1];
-                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithRelativePath:uri error:nil];
-                ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse apiWrapper:[[self user] apiWrapper]];
-                [[self delegate] connect:self didSucceedToLinkToBook:[self book] withRead:read];
-                [read release];
+                
+                // The uri parameter is the full URL to the read we want to connect to. 
+                NSError *error = nil;
+                NSURL *url = [NSURL URLWithString:uri];
+                NSLog(@"url: %@", url);
+                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithURL:url error:&error];
+                if (nil == error) {
+                    ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse apiWrapper:[[self user] apiWrapper]];
+                    [[self delegate] connect:self didSucceedToLinkToBook:[self book] withRead:read];
+                    [read release];
+                } else {
+                    NSLog(@"Error: %@", error);
+                }
             }
         } else if ([action isEqualToString:@"error"]) {
             NSString *http_status = [parameters valueForKey:@"http_status"];

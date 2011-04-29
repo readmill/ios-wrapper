@@ -220,7 +220,8 @@
                                    canBeCalledUnauthorized:NO
                                                      error:error];
     
-    NSDictionary *apiResponse = [self readWithRelativePath:pathToRead error:error];
+    NSLog(@"path: %@", pathToRead);
+    NSDictionary *apiResponse = [self readWithURL:[NSURL URLWithString:pathToRead] error:error];
     return apiResponse;
     
 }
@@ -311,6 +312,18 @@
     }
 }
 
+- (NSDictionary *)readWithURL:(NSURL *)url error:(NSError **)error {
+    NSString *urlString = [url absoluteString];
+    NSRange range = [urlString rangeOfString:@".json"];
+    if (range.location == NSNotFound) {
+        urlString = [urlString stringByAppendingString:@".json"];
+    }
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:urlString]
+                                           withParameters:nil 
+                               shouldBeCalledUnauthorized:NO 
+                                                    error:error];
+    return apiResponse;
+}
 
 //Pings     
 
@@ -318,7 +331,7 @@
          withProgress:(ReadmillReadProgress)progress 
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
-       occurrenceTime:(NSDate *)occurrenceTime 
+       occurrenceTime:(NSDate *)occurrenceTime
                 error:(NSError **)error {
     
 
@@ -373,13 +386,14 @@
 }
 
 -(NSDictionary *)currentUser:(NSError **)error {
-
+    
 	if (![self ensureAccessTokenIsCurrent:error]) {
 			return nil;
     }
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/echo.json?access_token=%@",
-                                                                                             [self oAuthBaseURL],
-                                                                                             [self accessToken]]]
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@me.json?access_token=%@&client_id=%@",
+                                                                                             [self apiEndPoint],
+                                                                                             [self accessToken],
+                                                                                             [kReadmillClientId urlEncodedString]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:10.0];
     [request setHTTPMethod:@"GET"];
@@ -459,7 +473,7 @@
     
     NSString *baseURL = [self oAuthBaseURL];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@", baseURL, kReadmillClientId];
+    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@&mobile=1", baseURL, kReadmillClientId];
     
     if ([redirect length] > 0) {
         urlString = [NSString stringWithFormat:@"%@&redirect_uri=%@", urlString, [redirect urlEncodedString]];
@@ -536,6 +550,7 @@
 #pragma mark Sending Requests
 
 -(BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
+    NSLog(@"now: %@, accessExpiry: %@", [NSDate date], [self accessTokenExpiryDate]);
     if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
         return [self refreshAccessToken:error];
     } else {
@@ -633,7 +648,7 @@
 }
 
 -(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {
-
+    NSLog(@"request: %@", request);
 	NSHTTPURLResponse *response = nil;
 	NSError *connectionError = nil;
 	
