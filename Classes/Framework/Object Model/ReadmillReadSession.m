@@ -114,12 +114,12 @@
     if (nil != unarchivedPings) {
         [failedPings addObjectsFromArray:unarchivedPings];
     }
-    NSLog(@"archiveFailedPing: %@, failedPings: %@", ping, failedPings);
     // Add the new one
     [failedPings addObject:ping];
-    [ping release];
     // Archive all pings
     [NSKeyedArchiver archiveReadmillPings:failedPings];
+    
+    NSLog(@"Failed ping: %@\n All pings: %@", ping, failedPings);
     [failedPings release];
 }
 - (BOOL)pingErrorWasUnprocessable:(NSError *)pingError {
@@ -228,13 +228,13 @@
     NSLog(@"ping with prop in session, lat, long, %f, %f", latitude, longitude);
     
     // Create the ping so we can archive it if the ping fails
-    ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
+    ReadmillPing *ping = [[[ReadmillPing alloc] initWithReadId:[self readId] 
                                                  readProgress:progress 
                                             sessionIdentifier:sessionIdentifier 
                                                      duration:pingDuration
                                                occurrenceTime:pingTime 
                                                      latitude:latitude 
-                                                    longitude:longitude];
+                                                    longitude:longitude] autorelease];
     NSError *error = nil;
     [[self apiWrapper] pingReadWithId:[ping readId]
                          withProgress:[ping progress]
@@ -274,7 +274,6 @@
             [self archiveFailedPing:ping];
         }
     }
-    [ping release];
     [pool drain];
     
     [self release];

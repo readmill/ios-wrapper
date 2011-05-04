@@ -58,8 +58,8 @@
 
  A new session identifier will be generated automatically.
  
- Note: The typical way to obtain a ReadmillReadSession is to use the -createReadSession or 
- -createReadSessionWithExistingSessionId: convenience methods in the ReadmillRead class.
+ Note: The typical way to obtain a ReadmillReadSession is to use the -createReadSession 
+       convenience method in the ReadmillRead class.
  */
 -(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadId)sessionReadId;
 
