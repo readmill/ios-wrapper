@@ -15,20 +15,25 @@
     ReadmillReadId readId;
     ReadmillReadProgress progress;
     ReadmillPingDuration duration;
+    CLLocationDegrees latitude, longitude;
     NSDate *occurenceTime;
 }
 
-@property (nonatomic, retain) NSString *sessionIdentifier;
-@property (nonatomic, retain) NSDate *occurrenceTime;
+@property (nonatomic, retain, readonly) NSString *sessionIdentifier;
+@property (nonatomic, retain, readonly) NSDate *occurrenceTime;
 
-@property (nonatomic, assign) ReadmillReadId readId;
-@property (nonatomic, assign) ReadmillReadProgress progress;
-@property (nonatomic, assign) ReadmillPingDuration duration;
+@property (nonatomic, readonly) ReadmillReadId readId;
+@property (nonatomic, readonly) ReadmillReadProgress progress;
+@property (nonatomic, readonly) ReadmillPingDuration duration;
+@property (nonatomic, readonly) CLLocationDegrees latitude;
+@property (nonatomic, readonly) CLLocationDegrees longitude;
 
 - (id)initWithReadId:(ReadmillReadId)aReadId 
         readProgress:(ReadmillReadProgress)aProgress 
    sessionIdentifier:(NSString *)aSessionIdentifier 
             duration:(ReadmillPingDuration)aDuration 
-      occurrenceTime:(NSDate *)anOccurrenceTime;
+      occurrenceTime:(NSDate *)anOccurrenceTime
+            latitude:(CLLocationDegrees)latitude
+           longitude:(CLLocationDegrees)longitude;
 
 @end

@@ -7,29 +7,34 @@
 //
 
 #import "ReadmillPing.h"
-
+@interface ReadmillPing ()
+@property (nonatomic, readwrite, retain) NSString *sessionIdentifier;
+@property (nonatomic, readwrite, retain) NSDate *occurrenceTime;
+@end
 
 @implementation ReadmillPing
 @synthesize sessionIdentifier;
 @synthesize occurrenceTime;
-@synthesize readId;
-@synthesize duration;
-@synthesize progress;
+@synthesize readId, progress, duration, latitude, longitude;
 
 - (id)initWithReadId:(ReadmillReadId)aReadId 
         readProgress:(ReadmillReadProgress)aProgress 
    sessionIdentifier:(NSString *)aSessionIdentifier 
             duration:(ReadmillPingDuration)aDuration 
-      occurrenceTime:(NSDate *)anOccurrenceTime {
+      occurrenceTime:(NSDate *)anOccurrenceTime
+            latitude:(CLLocationDegrees)lat
+           longitude:(CLLocationDegrees)lng {
     
     self = [super init];
     if (self) {
-        self.readId = aReadId;
-        self.progress = aProgress;
-        self.duration = aDuration;
+        readId = aReadId;
+        progress = aProgress;
+        duration = aDuration;
+        latitude = lat;
+        longitude = lng;
         
-        [self setSessionIdentifier:aSessionIdentifier];
-        [self setOccurrenceTime:anOccurrenceTime];
+        self.sessionIdentifier = aSessionIdentifier;
+        self.occurrenceTime = anOccurrenceTime;
     }
     return self;
 }
@@ -41,21 +46,30 @@
     [coder encodeObject:sessionIdentifier forKey:@"sessionIdentifier"];
     [coder encodeInteger:duration forKey:@"duration"];
     [coder encodeObject:occurrenceTime forKey:@"occurrenceTime"];     
+    [coder encodeDouble:latitude forKey:@"latitude"];
+    [coder encodeDouble:longitude forKey:@"longitude"];
 } 
 
 - (id)initWithCoder:(NSCoder *)coder 
 { 
-    self.readId = [coder decodeIntegerForKey:@"readId"];
-    self.progress = [coder decodeIntegerForKey:@"progress"];
+    readId = [coder decodeIntegerForKey:@"readId"];
+    progress = [coder decodeIntegerForKey:@"progress"];
+    duration = [coder decodeIntegerForKey:@"duration"];
+    latitude = [coder decodeDoubleForKey:@"latitude"];
+    longitude = [coder decodeDoubleForKey:@"longitude"];
+    
     self.sessionIdentifier = [coder decodeObjectForKey:@"sessionIdentifier"];
-    self.duration = [coder decodeIntegerForKey:@"duration"];
     self.occurrenceTime = [coder decodeObjectForKey:@"occurrenceTime"];
     return self; 
 }
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ readId: %d, progress: %d, sessionIdentifier: %@, duration: %d, occurrenceTime:%@", 
-            [super description], [self readId], [self progress], [self sessionIdentifier], [self duration], [self occurrenceTime]];
+    return [NSString stringWithFormat:@"%@ readId: %d, progress: %d, sessionIdentifier: %@, duration: %d, occurrenceTime:%@, lat: %f, lng: %f", 
+            [super description], [self readId], [self progress], [self sessionIdentifier], [self duration], [self occurrenceTime], latitude, longitude];
 
 }
-
+- (void)dealloc {
+    [sessionIdentifier release];
+    [occurenceTime release];
+    [super dealloc];
+}
 @end

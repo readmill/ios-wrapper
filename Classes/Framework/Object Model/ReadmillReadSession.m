@@ -107,17 +107,7 @@
     }
     return [archive sessionIdentifier];
 }
-- (void)archiveFailedPingWithReadId:(ReadmillReadId)aReadId 
-                       readProgress:(ReadmillReadProgress)progress
-                  sessionIdentifier:(NSString *)sessionIdentifier
-                           duration:(ReadmillPingDuration)duration
-                     occurrenceTime:(NSDate *)occurrenceTime {
-    
-    ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
-                                                 readProgress:progress 
-                                            sessionIdentifier:sessionIdentifier
-                                                     duration:duration 
-                                               occurrenceTime:occurrenceTime];
+- (void)archiveFailedPing:(ReadmillPing *)ping {    
     // Grab all archived pings
     
     NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
@@ -140,7 +130,7 @@
 }
 - (void)pingArchived {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"pingArchived");
+    NSLog(@"Ping archived pings.");
     NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
     if (nil != unarchivedPings) {
         NSMutableArray *failedPings = [[NSMutableArray alloc] init];
@@ -150,7 +140,9 @@
                                  withProgress:[ping progress] 
                             sessionIdentifier:[ping sessionIdentifier] 
                                      duration:[ping duration]
-                               occurrenceTime:[ping occurrenceTime] 
+                               occurrenceTime:[ping occurrenceTime]
+                                     latitude:[ping latitude] 
+                                    longitude:[ping longitude]
                                         error:&error];
             if (!error) {
                 NSLog(@"Sent archived ping: %@", ping);
@@ -168,7 +160,7 @@
         [NSKeyedArchiver archiveReadmillPings:failedPings];
         [failedPings release];
     } else {
-        NSLog(@"no pings");
+        NSLog(@"No archived pings.");
     }
     [pool drain];
 }
@@ -223,6 +215,8 @@
     
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillPingDelegate> pingDelegate = [properties valueForKey:@"delegate"];
+    
+    
     ReadmillReadProgress progress = [[properties valueForKey:@"progress"] unsignedIntegerValue];
     ReadmillPingDuration pingDuration = [[properties valueForKey:@"pingDuration"] unsignedIntegerValue];
     NSDate *pingTime = [NSDate date];
@@ -234,14 +228,21 @@
     CLLocationDegrees longitude = [[properties valueForKey:@"longitude"] doubleValue];
     NSLog(@"ping with prop in session, lat, long, %f, %f", latitude, longitude);
     
+    ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
+                                                 readProgress:progress 
+                                            sessionIdentifier:sessionIdentifier 
+                                                     duration:pingDuration
+                                               occurrenceTime:pingTime 
+                                                     latitude:latitude 
+                                                    longitude:longitude];
     NSError *error = nil;
-    [[self apiWrapper] pingReadWithId:[self readId]
-                         withProgress:progress
-                    sessionIdentifier:sessionIdentifier
-                             duration:pingDuration
-                       occurrenceTime:pingTime
-                             latitude:latitude 
-                            longitude:longitude
+    [[self apiWrapper] pingReadWithId:[ping readId]
+                         withProgress:[ping progress]
+                    sessionIdentifier:[ping sessionIdentifier]
+                             duration:[ping duration]
+                       occurrenceTime:[ping occurrenceTime]
+                             latitude:[ping latitude]
+                            longitude:[ping longitude]
                                 error:&error];
     
     [self updateReadmillReadSession];
@@ -270,14 +271,10 @@
                             waitUntilDone:YES]; 
         
         if (![self pingErrorWasUnprocessable:error]) {
-            [self archiveFailedPingWithReadId:[self readId]
-                                 readProgress:progress
-                            sessionIdentifier:sessionIdentifier
-                                     duration:pingDuration
-                               occurrenceTime:pingTime];
+            [self archiveFailedPing:ping];
         }
     }
-    
+    [ping release];
     [pool drain];
     
     [self release];

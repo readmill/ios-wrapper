@@ -27,6 +27,8 @@ typedef NSUInteger ReadmillReadId;
 typedef NSUInteger ReadmillUserId;
 typedef NSUInteger ReadmillReadProgress; // Integer, 1-100 (%)
 typedef NSUInteger ReadmillPingDuration; // Integer, seconds
+typedef double CLLocationDegrees;
+
 
 /*!
  @enum ReadmillReadState
@@ -429,6 +431,19 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time.
  */
 -(void)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillReadProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime error:(NSError **)error;
+
+/*!
+ @param readId The id of the read you'd like to ping.
+ @param progress The current progress through the book as an integer percentage.
+ @param sessionId A session id. The specific value of this is not important, but it should persist through a user's "session" of reading a book. 
+ @param duration The forward-pointing duration of the ping. Aim to ping again after this duration has elapsed if the user is still reading. 
+ @param occurrenceTime The time of the ping. Pass nil for "now". 
+ @param latitude The latitude value
+ @param longitude The longitude value
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time. 
+ */
+-(void)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillReadProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude error:(NSError **)error;
 
 #pragma mark -
 #pragma mark Users

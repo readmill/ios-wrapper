@@ -342,6 +342,8 @@
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
        occurrenceTime:(NSDate *)occurrenceTime
+             latitude:(CLLocationDegrees)latitude
+            longitude:(CLLocationDegrees)longitude
                 error:(NSError **)error {
     
 
@@ -362,13 +364,34 @@
         [formatter release];
         formatter = nil;
     }
+    if (!(longitude == 0.0 && latitude == 0.0)) {
+        // Do not send gps values if lat/lng were not specified.
+        [parameters setValue:[NSNumber numberWithDouble:latitude] forKey:[NSString stringWithFormat:pingScope, @"lat"]];
+        [parameters setValue:[NSNumber numberWithDouble:longitude] forKey:[NSString stringWithFormat:pingScope, @"lng"]];
+    }
     [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings.json", [self apiEndPoint], readId]] 
                 withParameters:parameters
        canBeCalledUnauthorized:NO
                          error:error];
     
 }
-
+-(void)pingReadWithId:(ReadmillReadId)readId 
+         withProgress:(ReadmillReadProgress)progress 
+    sessionIdentifier:(NSString *)sessionId
+             duration:(ReadmillPingDuration)duration
+       occurrenceTime:(NSDate *)occurrenceTime
+                error:(NSError **)error {
+    
+    
+    [self pingReadWithId:readId 
+            withProgress:progress 
+       sessionIdentifier:sessionId 
+                duration:duration 
+          occurrenceTime:occurrenceTime 
+                latitude:0.0
+               longitude:0.0 
+                   error:error];
+}
 // Users
 
 -(NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error {
