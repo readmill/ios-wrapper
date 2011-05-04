@@ -42,6 +42,7 @@
 } 
 
 - (id)initWithCoder:(NSCoder *)coder {
+
     self.lastSessionDate = [coder decodeObjectForKey:@"lastSessionDate"];
     self.sessionIdentifier = [coder decodeObjectForKey:@"sessionIdentifier"];
     return self; 
@@ -49,9 +50,12 @@
 -(NSString *)description {
     return [NSString stringWithFormat:@"%@ sessionIdentifier %@ withDate %@", [super description], [self sessionIdentifier], [self lastSessionDate]]; 
 }
+- (void)dealloc {
+    [lastSessionDate release];
+    [sessionIdentifier release];
+    [super dealloc];
+}
 @end
-
-
 
 @interface ReadmillReadSession ()
 - (void)pingArchived;
@@ -94,15 +98,20 @@
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
     if (archive == nil || [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]] > 30 * 60) {
-        archive = [[[ReadmillReadSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
+        archive = [[ReadmillReadSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]];
         [NSKeyedArchiver archiveReadmillReadSession:archive];
+        [archive release];
         NSLog(@"archive nil or date generated more than 30 minutes ago, generated one: %@", archive);
     } else {
         NSLog(@"had an archive, with time since last ping: %f", [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]]);
     }
     return [archive sessionIdentifier];
 }
-- (void)archiveFailedPingWithReadId:(ReadmillReadId)aReadId readProgress:(ReadmillReadProgress)progress sessionIdentifier:(NSString *)sessionIdentifier duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime {
+- (void)archiveFailedPingWithReadId:(ReadmillReadId)aReadId 
+                       readProgress:(ReadmillReadProgress)progress
+                  sessionIdentifier:(NSString *)sessionIdentifier
+                           duration:(ReadmillPingDuration)duration
+                     occurrenceTime:(NSDate *)occurrenceTime {
     
     ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
                                                  readProgress:progress 
@@ -166,7 +175,9 @@
 #pragma mark -
 #pragma mark Threaded Messages
 
--(void)pingWithProgress:(ReadmillReadProgress)progress pingDuration:(ReadmillPingDuration)pingDuration delegate:(id <ReadmillPingDelegate>)delegate {
+-(void)pingWithProgress:(ReadmillReadProgress)progress 
+           pingDuration:(ReadmillPingDuration)pingDuration 
+               delegate:(id <ReadmillPingDelegate>)delegate {
     
     
     
@@ -182,6 +193,27 @@
     
 }
 
+-(void)pingWithProgress:(ReadmillReadProgress)progress
+           pingDuration:(ReadmillPingDuration)pingDuration 
+               latitude:(CLLocationDegrees)latitude 
+              longitude:(CLLocationDegrees)longitude 
+               delegate:(id<ReadmillPingDelegate>)delegate {
+    
+    
+    
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                delegate, @"delegate",
+                                [NSThread currentThread], @"callbackThread",
+                                [NSNumber numberWithUnsignedInteger:progress], @"progress",
+                                [NSNumber numberWithUnsignedInteger:pingDuration], @"pingDuration",
+                                [NSNumber numberWithDouble:latitude], @"latitude",
+                                [NSNumber numberWithDouble:longitude], @"longitude",
+                                nil];
+    
+    [self performSelectorInBackground:@selector(pingWithProperties:)
+                           withObject:properties];
+    
+}
 -(void)pingWithProperties:(NSDictionary *)properties {
     
     [self retain];
@@ -196,7 +228,11 @@
     NSDate *pingTime = [NSDate date];
     
     NSString *sessionIdentifier = [self generateSessionIdentifier];
-    NSLog(@"sessionIdentifier: %@", sessionIdentifier);
+
+    // Should always be 0.0 if not specified
+    CLLocationDegrees latitude = [[properties valueForKey:@"latitude"] doubleValue];
+    CLLocationDegrees longitude = [[properties valueForKey:@"longitude"] doubleValue];
+    NSLog(@"ping with prop in session, lat, long, %f, %f", latitude, longitude);
     
     NSError *error = nil;
     [[self apiWrapper] pingReadWithId:[self readId]
@@ -204,6 +240,8 @@
                     sessionIdentifier:sessionIdentifier
                              duration:pingDuration
                        occurrenceTime:pingTime
+                             latitude:latitude 
+                            longitude:longitude
                                 error:&error];
     
     [self updateReadmillReadSession];
