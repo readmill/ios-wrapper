@@ -98,9 +98,8 @@
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
     if (archive == nil || [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]] > 30 * 60) {
-        archive = [[ReadmillReadSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]];
+        archive = [[[ReadmillReadSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
         [NSKeyedArchiver archiveReadmillReadSession:archive];
-        [archive release];
         NSLog(@"archive nil or date generated more than 30 minutes ago, generated one: %@", archive);
     } else {
         NSLog(@"had an archive, with time since last ping: %f", [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]]);
@@ -228,6 +227,7 @@
     CLLocationDegrees longitude = [[properties valueForKey:@"longitude"] doubleValue];
     NSLog(@"ping with prop in session, lat, long, %f, %f", latitude, longitude);
     
+    // Create the ping so we can archive it if the ping fails
     ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
                                                  readProgress:progress 
                                             sessionIdentifier:sessionIdentifier 
