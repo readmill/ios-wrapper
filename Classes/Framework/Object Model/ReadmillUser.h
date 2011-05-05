@@ -146,7 +146,7 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  For example, let's say your application is set to handle readmillAuth:// URLs and you want to use this as a callback:
  
 NSURL *readmillAuthURL = [ReadmillUser clientAuthorizationURLWithRedirectURL:[NSURL URLWithString:@"readmillAuth://auth"] onStagingServer:NO];
- [[NSWorkSpace sharedWorkspace] openURL:readmillAuthURL];
+ [[UIApplication sharedApplication] openURL:readmillAuthURL];
  
  This will send the user off to Readmill to authenticate your application. If successful, Readmill will redirect to something like:
  
