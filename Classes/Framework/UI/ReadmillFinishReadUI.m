@@ -148,12 +148,12 @@
     if ([[URL absoluteString] hasPrefix:@"readmill"]) {
 		
         // Can be...
-        // callback://view?state=3/4&closing_remark=messege
+        // callback://view?state=3/4&closing_remark=message
         
         // host == action, i.e. view 
         NSString *action = [URL host];
         NSDictionary *parameters = [URL queryAsDictionary];
-        
+        NSLog(@"parameters: %@", parameters);
         if ([action isEqualToString:@"view"]) {
             NSString *readStateString = [parameters valueForKey:@"state"];
             if (nil != readStateString) {
@@ -161,10 +161,17 @@
                 if (readState == ReadStateFinished || readState == ReadStateAbandoned) {
                     // Read was finished or abandoned
                     
-                    //NSString *remark = nil;
-                    //remark = [parameters valueForKey:@"closing_remark"];
-                    //[[self read] updateState:readState delegate:self];
-                    [[self delegate] finishReadUI:self didFinishRead:[self read]];
+                    NSString *remark = nil;
+                    remark = [parameters valueForKey:@"closing_remark"];
+                    NSLog(@"remark: %@", remark);
+                    [[self read] updateWithState:readState
+                                       isPrivate:[read isPrivate] 
+                                   closingRemark:remark 
+                                     localUpdate:YES 
+                                        delegate:nil];
+                    
+                    [[self delegate] finishReadUI:self 
+                                    didFinishRead:[self read]];
                 }
             }
         } else if ([action isEqualToString:@"error"]) {
