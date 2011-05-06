@@ -25,7 +25,7 @@
 
 @interface ReadmillUIPresenter ()
 
-@property (nonatomic, readwrite, retain) UIViewController *contentViewController;
+//@property (nonatomic, readwrite, retain) UIViewController *contentViewController;
 
 @end
 
@@ -106,12 +106,13 @@
         //[UIView setAnimationsEnabled:NO];
     }
     DismissingView *dismiss = [[DismissingView alloc] initWithFrame:[[UIScreen mainScreen] bounds]
-                                                             delegate:self];
+                                                           delegate:self];
     [dismiss addToView:self.view];
     [dismiss release];
 }
 - (void)dismissView {
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification object:[self contentViewController]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification 
+                                                        object:[self contentViewController]];
 }
 - (void)contentViewControllerShouldBeDismissed:(NSNotification *)aNotification {
     [self dismissPresenterAnimated:YES];
@@ -138,7 +139,8 @@
         [[self view] setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
         
         [contentContainerView setCenter:CGPointMake(CGRectGetMidX([[self view] bounds]),
-                                                    CGRectGetMaxY([[self view] bounds]) + (CGRectGetHeight([contentContainerView frame]) / 2))];
+                                                    CGRectGetMaxY([[self view] bounds]) + 
+                                                        (CGRectGetHeight([contentContainerView frame]) / 2))];
         
         [UIView commitAnimations];
         
@@ -199,9 +201,10 @@
     [spinner release];
     [backgroundView addSubview:contentContainerView];
     
-    //[self setView:contentContainerView];
+     //[self setView:contentContainerView];
 }
 - (void)displayContentViewController {
+    NSLog(@"contentviewcontr: %@", [self contentViewController]);
     if ([self contentViewController] != nil) {
         [contentContainerView setFrame:[[[self contentViewController] view] bounds]];
         [contentContainerView setCenter:[[self view] center]];

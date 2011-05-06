@@ -188,10 +188,14 @@
                 NSError *error = nil;
                 NSURL *url = [NSURL URLWithString:uri];
                 NSLog(@"url: %@", url);
-                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithURL:url error:&error];
+                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithURL:url 
+                                                                            error:&error];
                 if (nil == error) {
-                    ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse apiWrapper:[[self user] apiWrapper]];
-                    [[self delegate] connect:self didSucceedToLinkToBook:[self book] withRead:read];
+                    ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse 
+                                                                          apiWrapper:[[self user] apiWrapper]];
+                    [[self delegate] connect:self
+                      didSucceedToLinkToBook:[self book] 
+                                    withRead:read];
                     [read release];
                 } else {
                     NSLog(@"Error: %@", error);
