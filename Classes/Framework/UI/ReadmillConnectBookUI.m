@@ -196,7 +196,7 @@
                     [[self delegate] connect:self
                       didSucceedToLinkToBook:[self book] 
                                     withRead:read];
-                    [read release];
+                    [read release]; 
                 } else {
                     NSLog(@"Error: %@", error);
                 }

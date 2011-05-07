@@ -218,7 +218,6 @@
     
     ReadmillReadProgress progress = [[properties valueForKey:@"progress"] unsignedIntegerValue];
     ReadmillPingDuration pingDuration = [[properties valueForKey:@"pingDuration"] unsignedIntegerValue];
-    NSDate *pingTime = [NSDate date];
     
     NSString *sessionIdentifier = [self generateSessionIdentifier];
 
@@ -228,13 +227,13 @@
     NSLog(@"ping with prop in session, lat, long, %f, %f", latitude, longitude);
     
     // Create the ping so we can archive it if the ping fails
-    ReadmillPing *ping = [[[ReadmillPing alloc] initWithReadId:[self readId] 
+    ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
                                                  readProgress:progress 
                                             sessionIdentifier:sessionIdentifier 
                                                      duration:pingDuration
-                                               occurrenceTime:pingTime 
+                                               occurrenceTime:[NSDate date] 
                                                      latitude:latitude 
-                                                    longitude:longitude] autorelease];
+                                                    longitude:longitude];
     NSError *error = nil;
     [[self apiWrapper] pingReadWithId:[ping readId]
                          withProgress:[ping progress]
@@ -274,6 +273,8 @@
             [self archiveFailedPing:ping];
         }
     }
+    NSLog(@"ping retain: %d", [ping retainCount]);
+    [ping release];
     [pool drain];
     
     [self release];
