@@ -25,7 +25,7 @@
 
 @interface ReadmillUIPresenter ()
 
-//@property (nonatomic, readwrite, retain) UIViewController *contentViewController;
+@property (nonatomic, readwrite, retain) UIViewController *contentViewController;
 
 @end
 
@@ -47,8 +47,10 @@
     [contentContainerView release];
     contentContainerView = nil;
 
+    contentViewController = nil;
+    
     [self setView:nil];
-    [self setContentViewController:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
 
@@ -204,7 +206,6 @@
      //[self setView:contentContainerView];
 }
 - (void)displayContentViewController {
-    NSLog(@"contentviewcontr: %@", [self contentViewController]);
     if ([self contentViewController] != nil) {
         [contentContainerView setFrame:[[[self contentViewController] view] bounds]];
         [contentContainerView setCenter:[[self view] center]];

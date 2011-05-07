@@ -54,8 +54,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self setUser:nil];
+    [self setISBN:nil];
+    [self setBookTitle:nil];
+    [self setAuthor:nil];
     [self setBook:nil];
-    [self setDelegate:nil];
+    //[self setDelegate:nil];
     [super dealloc];
 }
 
@@ -111,8 +114,6 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     [self setView:nil];
-
-    
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -207,8 +208,8 @@
             if (http_status != nil) {
                 code = [http_status integerValue];
             }
-            NSError *error = [[NSError alloc] initWithDomain:kReadmillErrorDomain code:code userInfo:parameters];
-            [[self delegate] connect:self didFailToLinkToBook:[self book] withError:[error autorelease]];
+            NSError *error = [NSError errorWithDomain:kReadmillErrorDomain code:code userInfo:parameters];
+            [[self delegate] connect:self didFailToLinkToBook:[self book] withError:error];
         } 
         return NO;
     } else {

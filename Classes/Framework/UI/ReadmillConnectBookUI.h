@@ -92,8 +92,4 @@
  */
 @property (nonatomic, readwrite, assign) id <ReadmillConnectBookUIDelegate> delegate;
 
-// TODO
-@property (nonatomic, readonly, retain) NSString *ISBN;
-@property (nonatomic, readonly, retain) NSString *bookTitle;
-@property (nonatomic, readonly, retain) NSString *author;
 @end
