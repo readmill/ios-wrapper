@@ -10,13 +10,12 @@
 #import <ReadmillAPI/ReadmillAPIWrapper.h>
 
 @interface ReadmillPing : NSObject <NSCoding> {
-    NSDate *date;
     NSString *sessionIdentifier;
     ReadmillReadId readId;
     ReadmillReadProgress progress;
     ReadmillPingDuration duration;
     CLLocationDegrees latitude, longitude;
-    NSDate *occurenceTime;
+    NSDate *occurrenceTime;
 }
 
 @property (nonatomic, retain, readonly) NSString *sessionIdentifier;

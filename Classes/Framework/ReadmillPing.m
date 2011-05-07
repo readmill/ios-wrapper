@@ -52,14 +52,16 @@
 
 - (id)initWithCoder:(NSCoder *)coder 
 { 
-    readId = [coder decodeIntegerForKey:@"readId"];
-    progress = [coder decodeIntegerForKey:@"progress"];
-    duration = [coder decodeIntegerForKey:@"duration"];
-    latitude = [coder decodeDoubleForKey:@"latitude"];
-    longitude = [coder decodeDoubleForKey:@"longitude"];
-    
-    self.sessionIdentifier = [coder decodeObjectForKey:@"sessionIdentifier"];
-    self.occurrenceTime = [coder decodeObjectForKey:@"occurrenceTime"];
+    if ((self == [super init])) {
+        readId = [coder decodeIntegerForKey:@"readId"];
+        progress = [coder decodeIntegerForKey:@"progress"];
+        duration = [coder decodeIntegerForKey:@"duration"];
+        latitude = [coder decodeDoubleForKey:@"latitude"];
+        longitude = [coder decodeDoubleForKey:@"longitude"];
+        
+        self.sessionIdentifier = [coder decodeObjectForKey:@"sessionIdentifier"];
+        self.occurrenceTime = [coder decodeObjectForKey:@"occurrenceTime"];
+    }
     return self; 
 }
 - (NSString *)description {
@@ -69,7 +71,7 @@
 }
 - (void)dealloc {
     [sessionIdentifier release];
-    [occurenceTime release];
+    [occurrenceTime release];
     [super dealloc];
 }
 @end
