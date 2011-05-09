@@ -103,6 +103,16 @@
               longitude:(CLLocationDegrees)longitude 
                delegate:(id <ReadmillPingDelegate>)delegate;
 
+/*!
+ @param wrapper The ReadmillAPIWrapper to be used by the session.
+ @brief Try to send all saved "Pings" that have been archived.
+ 
+ This is a static method which a ReadmillReadSession always calls upon instantiation. 
+ This should be called whenever there may be archived pings and a connection to Readmill
+ is possible to ensure progress data is synchronized.
+ */
++ (void)pingArchived:(ReadmillAPIWrapper *)wrapper;
+
 @end
 
 

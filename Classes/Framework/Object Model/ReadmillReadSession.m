@@ -58,7 +58,6 @@
 @end
 
 @interface ReadmillReadSession ()
-- (void)pingArchived;
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 @property (readwrite) ReadmillReadId readId;
 @end
@@ -75,7 +74,7 @@
         // Initialization code here.
         [self setApiWrapper:wrapper];
         [self setReadId:sessionReadId];
-        [self performSelectorInBackground:@selector(pingArchived) withObject:nil];
+        [ReadmillReadSession pingArchived:wrapper];
     }
     return self;
 }
@@ -122,12 +121,12 @@
     NSLog(@"Failed ping: %@\n All pings: %@", ping, failedPings);
     [failedPings release];
 }
-- (BOOL)pingErrorWasUnprocessable:(NSError *)pingError {
++ (BOOL)pingErrorWasUnprocessable:(NSError *)pingError {
     if ([[pingError domain] isEqualToString:kReadmillErrorDomain] && [pingError code] == 422) 
         return YES;
     return NO;
 }
-- (void)pingArchived {
++ (void)pingArchived:(ReadmillAPIWrapper *)wrapper {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"Ping archived pings.");
     NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
@@ -135,14 +134,14 @@
         NSMutableArray *failedPings = [[NSMutableArray alloc] init];
         for (ReadmillPing *ping in unarchivedPings) {
             NSError *error = nil;
-            [[self apiWrapper] pingReadWithId:[ping readId] 
-                                 withProgress:[ping progress] 
-                            sessionIdentifier:[ping sessionIdentifier] 
-                                     duration:[ping duration]
-                               occurrenceTime:[ping occurrenceTime]
-                                     latitude:[ping latitude] 
-                                    longitude:[ping longitude]
-                                        error:&error];
+            [wrapper pingReadWithId:[ping readId] 
+                       withProgress:[ping progress] 
+                  sessionIdentifier:[ping sessionIdentifier] 
+                           duration:[ping duration]
+                     occurrenceTime:[ping occurrenceTime]
+                           latitude:[ping latitude] 
+                          longitude:[ping longitude]
+                              error:&error];
             if (!error) {
                 NSLog(@"Sent archived ping: %@", ping);
             } else {
@@ -253,6 +252,8 @@
                                                withObject:self
                                             waitUntilDone:YES];
         
+        [ReadmillReadSession pingArchived:[self apiWrapper]];
+        
     } else if (error != nil && pingDelegate != nil) {
         
         NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
@@ -269,11 +270,10 @@
                                withObject:pingDelegate
                             waitUntilDone:YES]; 
         
-        if (![self pingErrorWasUnprocessable:error]) {
+        if (![ReadmillReadSession pingErrorWasUnprocessable:error]) {
             [self archiveFailedPing:ping];
         }
     }
-    NSLog(@"ping retain: %d", [ping retainCount]);
     [ping release];
     [pool drain];
     
