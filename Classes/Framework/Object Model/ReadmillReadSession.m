@@ -174,7 +174,7 @@
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 delegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
-                                [NSNumber numberWithUnsignedInteger:progress], @"progress",
+                                [NSNumber numberWithFloat:progress], @"progress",
                                 [NSNumber numberWithUnsignedInteger:pingDuration], @"pingDuration",
                                 nil];
     
@@ -194,7 +194,7 @@
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 delegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
-                                [NSNumber numberWithUnsignedInteger:progress], @"progress",
+                                [NSNumber numberWithFloat:progress], @"progress",
                                 [NSNumber numberWithUnsignedInteger:pingDuration], @"pingDuration",
                                 [NSNumber numberWithDouble:latitude], @"latitude",
                                 [NSNumber numberWithDouble:longitude], @"longitude",
@@ -215,7 +215,7 @@
     id <ReadmillPingDelegate> pingDelegate = [properties valueForKey:@"delegate"];
     
     
-    ReadmillReadProgress progress = [[properties valueForKey:@"progress"] unsignedIntegerValue];
+    ReadmillReadProgress progress = [[properties valueForKey:@"progress"] floatValue];
     ReadmillPingDuration pingDuration = [[properties valueForKey:@"pingDuration"] unsignedIntegerValue];
     
     NSString *sessionIdentifier = [self generateSessionIdentifier];

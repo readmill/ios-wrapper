@@ -76,7 +76,7 @@
 @property (readonly) ReadmillReadId readId;
 
 /*!
- @param progress The user's progress through the book, as in integer percentage. 
+ @param progress The user's progress through the book, as in float percentage. 
  @param pingDuration The duration between pings, as in integer seconds. 
  @param delegate The delegate object to be informed of success for failure.
  @brief   "Ping" this session, informing the Readmill service that the user is reading the book at the moment with the given progress.
@@ -88,7 +88,7 @@
                delegate:(id <ReadmillPingDelegate>)delegate;
 
 /*!
- @param progress The user's progress through the book, as in integer percentage. 
+ @param progress The user's progress through the book, as in float percentage. 
  @param pingDuration The duration between pings, as in integer seconds. 
  @param latitude The current latitude.
  @param longitude The currnet longitude.

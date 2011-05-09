@@ -42,7 +42,7 @@
 - (void)encodeWithCoder:(NSCoder *)coder 
 { 
     [coder encodeInteger:readId forKey:@"readId"];
-    [coder encodeInteger:progress forKey:@"progress"];
+    [coder encodeFloat:progress forKey:@"progress"];
     [coder encodeObject:sessionIdentifier forKey:@"sessionIdentifier"];
     [coder encodeInteger:duration forKey:@"duration"];
     [coder encodeObject:occurrenceTime forKey:@"occurrenceTime"];     
@@ -54,7 +54,7 @@
 { 
     if ((self == [super init])) {
         readId = [coder decodeIntegerForKey:@"readId"];
-        progress = [coder decodeIntegerForKey:@"progress"];
+        progress = [coder decodeFloatForKey:@"progress"];
         duration = [coder decodeIntegerForKey:@"duration"];
         latitude = [coder decodeDoubleForKey:@"latitude"];
         longitude = [coder decodeDoubleForKey:@"longitude"];
@@ -65,7 +65,7 @@
     return self; 
 }
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ readId: %d, progress: %d, sessionIdentifier: %@, duration: %d, occurrenceTime:%@, lat: %f, lng: %f", 
+    return [NSString stringWithFormat:@"%@ readId: %d, progress: %f, sessionIdentifier: %@, duration: %d, occurrenceTime:%@, lat: %f, lng: %f", 
             [super description], [self readId], [self progress], [self sessionIdentifier], [self duration], [self occurrenceTime], latitude, longitude];
 
 }
