@@ -215,7 +215,7 @@
     NSRange codePrefixRange = [callbackURLString rangeOfString:@"code="];
     
     if (codePrefixRange.location == NSNotFound) {
-        [authenticationDelegate readmillAuthenticationDidFailWithError:[NSError errorWithDomain:kReadmillErrorDomain
+        [authenticationDelegate readmillAuthenticationDidFailWithError:[NSError errorWithDomain:kReadmillDomain
                                                                                              code:0
                                                                                        userInfo:nil]];
         return;
@@ -230,7 +230,7 @@
     }
     
     if ([code length] == 0) {
-        [authenticationDelegate readmillAuthenticationDidFailWithError:[NSError errorWithDomain:kReadmillErrorDomain
+        [authenticationDelegate readmillAuthenticationDidFailWithError:[NSError errorWithDomain:kReadmillDomain
                                                                                            code:0
                                                                                        userInfo:nil]];
         return;

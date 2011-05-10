@@ -122,7 +122,7 @@
     [failedPings release];
 }
 + (BOOL)pingErrorWasUnprocessable:(NSError *)pingError {
-    if ([[pingError domain] isEqualToString:kReadmillErrorDomain] && [pingError code] == 422) 
+    if ([[pingError domain] isEqualToString:kReadmillDomain] && [pingError code] == 422) 
         return YES;
     return NO;
 }
