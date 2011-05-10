@@ -698,7 +698,7 @@
 			id errorResponse = [[CJSONDeserializer deserializer] deserialize:responseData error:nil]; 
 			
 			if (error != NULL) {
-				*error = [NSError errorWithDomain:kReadmillErrorDomain
+				*error = [NSError errorWithDomain:kReadmillDomain
 											 code:[response statusCode]
 										 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
 												   [errorResponse valueForKey:@"error"], NSLocalizedFailureReasonErrorKey, nil]];

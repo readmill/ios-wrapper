@@ -49,7 +49,7 @@ typedef enum {
 
 // General 
 
-static NSString * const kReadmillErrorDomain = @"com.readmill";
+static NSString * const kReadmillDomain = @"com.readmill";
 
 // URLs
 
