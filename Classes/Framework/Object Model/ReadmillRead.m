@@ -144,37 +144,31 @@
 #pragma mark -
 #pragma mark Threaded Methods
 
--(void)updateState:(ReadmillReadState)newState localUpdate:(BOOL)localUpdate delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
-    [self updateWithState:newState isPrivate:[self isPrivate] closingRemark:[self closingRemark] localUpdate:localUpdate delegate:delegate];
+-(void)updateState:(ReadmillReadState)newState delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
+    [self updateWithState:newState isPrivate:[self isPrivate] closingRemark:[self closingRemark] delegate:delegate];
 }
 
--(void)updateIsPrivate:(BOOL)readIsPrivate localUpdate:(BOOL)localUpdate delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
-    [self updateWithState:[self state] isPrivate:readIsPrivate closingRemark:[self closingRemark] localUpdate:localUpdate delegate:delegate];
+-(void)updateIsPrivate:(BOOL)readIsPrivate delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
+    [self updateWithState:[self state] isPrivate:readIsPrivate closingRemark:[self closingRemark] delegate:delegate];
 }
 
--(void)updateClosingRemark:(NSString *)newRemark localUpdate:(BOOL)localUpdate delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
-    [self updateWithState:[self state] isPrivate:[self isPrivate] closingRemark:newRemark localUpdate:localUpdate delegate:delegate];
+-(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
+    [self updateWithState:[self state] isPrivate:[self isPrivate] closingRemark:newRemark delegate:delegate];
 }
 
--(void)updateWithState:(ReadmillReadState)newState isPrivate:(BOOL)readIsPrivate closingRemark:(NSString *)newRemark localUpdate:(BOOL)localUpdate delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
+-(void)updateWithState:(ReadmillReadState)newState isPrivate:(BOOL)readIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
     
-    if (localUpdate) {
-        // Only update iVars
-        [self setState:newState];
-        [self setIsPrivate:readIsPrivate];
-        [self setClosingRemark:newRemark];
-    } else {
-        NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    delegate, @"delegate",
-                                    [NSThread currentThread], @"callbackThread",
-                                    [NSNumber numberWithUnsignedInteger:newState], @"state",
-                                    [NSNumber numberWithBool:readIsPrivate], @"privacy",
-                                    newRemark, @"remark",
-                                    nil];
-        
-        [self performSelectorInBackground:@selector(updateStateAndPrivacyWithProperties:)
-                               withObject:properties];
-    }
+    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
+                                delegate, @"delegate",
+                                [NSThread currentThread], @"callbackThread",
+                                [NSNumber numberWithUnsignedInteger:newState], @"state",
+                                [NSNumber numberWithBool:readIsPrivate], @"privacy",
+                                newRemark, @"remark",
+                                nil];
+    
+    [self performSelectorInBackground:@selector(updateStateAndPrivacyWithProperties:)
+                           withObject:properties];
+    
 }
 
 -(void)updateStateAndPrivacyWithProperties:(NSDictionary *)properties {

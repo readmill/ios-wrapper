@@ -93,39 +93,35 @@
 
 /*!
  @param newState The new read state.
- @param localUpdate Only update locally, do not send updates to the server.
  @param delegate The delegate object to be informed of success or failure. 
  @brief   Update the read state of this read. 
  */
--(void)updateState:(ReadmillReadState)newState localUpdate:(BOOL)localUpdate delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateState:(ReadmillReadState)newState delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
 
 /*!
  @param isPrivate The new privacy setting.
- @param localUpdate Only update locally, do not send updates to the server.
  @param delegate The delegate object to be informed of success or failure. 
  @brief   Update the privacy of this read. 
  */
--(void)updateIsPrivate:(BOOL)isPrivate localUpdate:(BOOL)localUpdate delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
 
 /*!
  @param newRemark The new closing remark.
- @param localUpdate Only update locally, do not send updates to the server.
  @param delegate The delegate object to be informed of success or failure. 
  @brief   Update the closing remark of this read. 
  
  The closing remark is typically asked for when a user finishes reading a book.
  */
--(void)updateClosingRemark:(NSString *)newRemark localUpdate:(BOOL)localUpdate delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
 
 /*!
  @param newState The new read state
  @param isPrivate The new privacy setting.
  @param newRemark The new closing remark.
- @param localUpdate Only update locally, do not send updates to the server.
  @param delegate The delegate object to be informed of success or failure. 
  @brief   Update the read state of this read. 
  */
--(void)updateWithState:(ReadmillReadState)newState isPrivate:(BOOL)readIsPrivate closingRemark:(NSString *)newRemark localUpdate:(BOOL)localUpdate delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateWithState:(ReadmillReadState)newState isPrivate:(BOOL)readIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
 
 #pragma mark -
 #pragma mark Sessions
