@@ -165,13 +165,11 @@
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
 	NSURL *URL = [request URL];
-    NSLog(@"url: %@", URL);
-    if ([[URL absoluteString] hasPrefix:@"readmill"]) {
+    if ([[URL scheme] isEqualToString:kReadmillDomain]) {
 		
         // Can be...
-        // readmill://connect?skip=true
-        // readmill://connect?uri=location to read
-        // readmill://connect?error?message=something
+        // com.readmill://dismiss
+        // com.readmill://change?uri="uri to read"
         
         // Immediately remove the popover
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
@@ -179,70 +177,42 @@
         
         NSString *action = [URL host];
         NSDictionary *parameters = [URL queryAsDictionary];
-        if ([action isEqualToString:@"connect"]) {
+        
+        if ([action isEqualToString:@"change"]) {
+            
             NSString *uri = @"uri";
-            if ([[parameters valueForKey:@"skip"] isEqualToString:@"true"]) {
-                [[self delegate] connect:self didSkipLinkingToBook:[self book]];
-            } else if ((uri = [parameters valueForKey:uri])) {
+            if ((uri = [parameters valueForKey:uri])) {
                 
                 // The uri parameter is the full URL to the read we want to connect to. 
                 NSError *error = nil;
-                NSURL *url = [NSURL URLWithString:uri];
-                NSLog(@"url: %@", url);
-                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithURL:url 
+                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithURL:[NSURL URLWithString:uri]
                                                                             error:&error];
                 if (nil == error) {
+                    
                     ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse 
                                                                           apiWrapper:[[self user] apiWrapper]];
+                    
                     [[self delegate] connect:self
                       didSucceedToLinkToBook:[self book] 
                                     withRead:read];
+                    
                     [read release]; 
-                } else {
-                    NSLog(@"Error: %@", error);
+                    
                 }
             }
         } else if ([action isEqualToString:@"error"]) {
-            NSString *http_status = [parameters valueForKey:@"http_status"];
-            NSInteger code = 0;
-            if (http_status != nil) {
-                code = [http_status integerValue];
-            }
-            NSError *error = [NSError errorWithDomain:kReadmillErrorDomain code:code userInfo:parameters];
-            [[self delegate] connect:self didFailToLinkToBook:[self book] withError:error];
-        } 
+            
+            NSError *error = [NSError errorWithDomain:kReadmillDomain code:0 userInfo:parameters];
+            [[self delegate] connect:self
+                 didFailToLinkToBook:[self book] 
+                           withError:error];
+        }
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         return NO;
     } else {
         return YES;
     }
 }
-
-#pragma mark -
-#pragma mark ReadmillReadFindingDelegate
-
--(void)readmillUser:(ReadmillUser *)user didFindReads:(NSArray *)reads forBook:(ReadmillBook *)aBook {
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [[self delegate] connect:self didSucceedToLinkToBook:aBook withRead:[reads lastObject]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
-                                                        object:self];
-}
-
--(void)readmillUser:(ReadmillUser *)user foundNoReadsForBook:(ReadmillBook *)aBook {
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [[self delegate] connect:self didSkipLinkingToBook:aBook];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
-                                                        object:self];
-}
-
--(void)readmillUser:(ReadmillUser *)user failedToFindReadForBook:(ReadmillBook *)aBook withError:(NSError *)error {
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [[self delegate] connect:self didFailToLinkToBook:aBook withError:error];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
-                                                        object:self];
-}
-
 
 @end

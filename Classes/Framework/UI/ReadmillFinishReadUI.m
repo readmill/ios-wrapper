@@ -145,68 +145,46 @@
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
 	
     NSURL *URL = [request URL];
-    if ([[URL absoluteString] hasPrefix:@"readmill"]) {
+    if ([[URL scheme] isEqualToString:kReadmillDomain]) {
 		
         // Can be...
-        // callback://view?state=3/4&closing_remark=message
+        // com.readmill://change?uri="uri to read"
         
+        // Dismiss the presenter immediately
+        [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
+                                                            object:self];
+
         // host == action, i.e. view 
         NSString *action = [URL host];
+        
         NSDictionary *parameters = [URL queryAsDictionary];
-        NSLog(@"parameters: %@", parameters);
-        if ([action isEqualToString:@"view"]) {
-            NSString *readStateString = [parameters valueForKey:@"state"];
-            if (nil != readStateString) {
-                ReadmillReadState readState = [readStateString integerValue];
-                if (readState == ReadStateFinished || readState == ReadStateAbandoned) {
-                    // Read was finished or abandoned
-                    
-                    NSString *remark = nil;
-                    remark = [parameters valueForKey:@"closing_remark"];
-                    NSLog(@"remark: %@", remark);
-                    [[self read] updateWithState:readState
-                                       isPrivate:[read isPrivate] 
-                                   closingRemark:remark 
-                                     localUpdate:YES 
-                                        delegate:nil];
-                    
-                    [[self delegate] finishReadUI:self 
-                                    didFinishRead:[self read]];
-                }
+        if ([action isEqualToString:@"change"]) {
+                            
+            NSError *error = nil;
+            NSDictionary *readDictionary = [[[self read] apiWrapper] readWithURL:[parameters valueForKey:@"uri"] 
+                                                                           error:&error];
+            
+            if (nil == error) {
+                [[self read] updateWithAPIDictionary:readDictionary];
+                [[self delegate] finishReadUI:self 
+                                didFinishRead:[self read]];
             }
+            
         } else if ([action isEqualToString:@"error"]) {
             
-            NSString *http_status = [parameters valueForKey:@"http_status"];
-            NSInteger code = 0;
-            if (http_status != nil) {
-                code = [http_status integerValue];
-            }
-            NSError *error = [[NSError alloc] initWithDomain:kReadmillErrorDomain code:code userInfo:parameters];
-            [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:[error autorelease]];
-        }         
+            NSError *error = [NSError errorWithDomain:kReadmillDomain 
+                                                 code:0 
+                                             userInfo:parameters];
+            
+            [[self delegate] finishReadUI:self 
+                      didFailToFinishRead:[self read] 
+                                withError:error];
+        }    
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 		return NO;
 	} else {
 		return YES;
 	}
-}
-
-#pragma mark -
-#pragma mark ReadmillFinishReadUIDelegate
-
--(void)readmillReadDidUpdateMetadataSuccessfully:(ReadmillRead *)read {
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [[self delegate] finishReadUI:self didFinishRead:[self read]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
-                                                        object:self];
-}
-
--(void)readmillRead:(ReadmillRead *)read didFailToUpdateMetadataWithError:(NSError *)error {
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
-    [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
-                                                        object:self];
 }
 
 @end

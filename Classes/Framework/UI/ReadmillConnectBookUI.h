@@ -54,7 +54,7 @@
 
 @end
 
-@interface ReadmillConnectBookUI : UIViewController <UIWebViewDelegate, ReadmillReadFindingDelegate> {
+@interface ReadmillConnectBookUI : UIViewController <UIWebViewDelegate> {
 @private
     
     ReadmillUser *user;

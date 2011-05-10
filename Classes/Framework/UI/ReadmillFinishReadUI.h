@@ -50,7 +50,7 @@
 
 @end
 
-@interface ReadmillFinishReadUI : UIViewController <UIWebViewDelegate, ReadmillReadUpdatingDelegate> {
+@interface ReadmillFinishReadUI : UIViewController <UIWebViewDelegate> {
 @private
     
     ReadmillRead *read;
