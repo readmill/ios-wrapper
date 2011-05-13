@@ -412,12 +412,12 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 -(NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithName:(NSString *)userName error:(NSError **)error;
 
 /*!
- @param url The URL of the read you'd like to get details for.
+ @param url The URL as a string of the read you'd like to get details for.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @result A specific read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
  @brief   Get a specific read by its URL.
  */
-- (NSDictionary *)readWithURL:(NSURL *)url error:(NSError **)error;
+- (NSDictionary *)readWithURLString:(NSString *)urlString error:(NSError **)error;
 #pragma mark -
 #pragma mark Pings
   

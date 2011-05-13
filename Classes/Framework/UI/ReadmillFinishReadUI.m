@@ -161,15 +161,18 @@
         if ([action isEqualToString:@"change"]) {
                             
             NSError *error = nil;
-            NSDictionary *readDictionary = [[[self read] apiWrapper] readWithURL:[parameters valueForKey:@"uri"] 
-                                                                           error:&error];
-            
-            if (nil == error) {
-                [[self read] updateWithAPIDictionary:readDictionary];
-                [[self delegate] finishReadUI:self 
-                                didFinishRead:[self read]];
+            NSString *uri = @"uri";
+            if ((uri = [parameters valueForKey:uri])) { 
+                NSDictionary *readDictionary = [[[self read] apiWrapper] readWithURLString:uri 
+                                                                                 error:&error];
+                
+                if (nil == error) {
+                    [[self read] updateWithAPIDictionary:readDictionary];
+                    [[self delegate] finishReadUI:self 
+                                    didFinishRead:[self read]];
+                }
             }
-            
+                
         } else if ([action isEqualToString:@"error"]) {
             
             NSError *error = [NSError errorWithDomain:kReadmillDomain 

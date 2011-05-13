@@ -185,8 +185,8 @@
                 
                 // The uri parameter is the full URL to the read we want to connect to. 
                 NSError *error = nil;
-                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithURL:[NSURL URLWithString:uri]
-                                                                            error:&error];
+                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithURLString:uri
+                                                                                  error:&error];
                 if (nil == error) {
                     
                     ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse 

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		502698D2130C87D400E67974 /* README.asciidoc in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.asciidoc */; };
+		7318A46B137D294800CBC7A4 /* ReadmillErrorExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318A469137D294800CBC7A4 /* ReadmillErrorExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		7318A46C137D294800CBC7A4 /* ReadmillErrorExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318A46A137D294800CBC7A4 /* ReadmillErrorExtensions.m */; };
 		73370F831341183400880F5B /* 001c.png in Resources */ = {isa = PBXBuildFile; fileRef = 73370F291341183400880F5B /* 001c.png */; };
 		73370F841341183400880F5B /* 002c.png in Resources */ = {isa = PBXBuildFile; fileRef = 73370F2A1341183400880F5B /* 002c.png */; };
 		73370F851341183400880F5B /* 003c.png in Resources */ = {isa = PBXBuildFile; fileRef = 73370F2B1341183400880F5B /* 003c.png */; };
@@ -132,6 +134,8 @@
 		731471C8135304F900A41B49 /* ReadmillURLExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillURLExtensions.m; path = Classes/Framework/ReadmillURLExtensions.m; sourceTree = SOURCE_ROOT; };
 		731471EB1353601200A41B49 /* ReadmillArchiverExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillArchiverExtensions.h; path = ../ReadmillArchiverExtensions.h; sourceTree = "<group>"; };
 		731471EC1353601200A41B49 /* ReadmillArchiverExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillArchiverExtensions.m; path = ../ReadmillArchiverExtensions.m; sourceTree = "<group>"; };
+		7318A469137D294800CBC7A4 /* ReadmillErrorExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillErrorExtensions.h; path = ../ReadmillErrorExtensions.h; sourceTree = "<group>"; };
+		7318A46A137D294800CBC7A4 /* ReadmillErrorExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillErrorExtensions.m; path = ../ReadmillErrorExtensions.m; sourceTree = "<group>"; };
 		733291061356FC0B0063FBF4 /* ReadmillFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReadmillFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73370EE71341172C00880F5B /* DismissingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DismissingView.h; path = ../UI/DismissingView.h; sourceTree = "<group>"; };
 		73370EE81341172C00880F5B /* DismissingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DismissingView.m; path = ../UI/DismissingView.m; sourceTree = "<group>"; };
@@ -524,6 +528,8 @@
 				96BEAF0112F06360006028D0 /* ReadmillDictionaryExtensions.m */,
 				96BEAF0212F06360006028D0 /* ReadmillStringExtensions.h */,
 				96BEAF0312F06360006028D0 /* ReadmillStringExtensions.m */,
+				7318A469137D294800CBC7A4 /* ReadmillErrorExtensions.h */,
+				7318A46A137D294800CBC7A4 /* ReadmillErrorExtensions.m */,
 			);
 			name = Extensions;
 			path = "Object Model";
@@ -601,6 +607,7 @@
 				734A51EB135A1E31009F9794 /* CJSONScanner.h in Headers */,
 				734A51ED135A1E31009F9794 /* CJSONSerializer.h in Headers */,
 				734A51EF135A1E31009F9794 /* JSONRepresentation.h in Headers */,
+				7318A46B137D294800CBC7A4 /* ReadmillErrorExtensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,6 +810,7 @@
 				734A5206135A1E41009F9794 /* ReadmillAPIWrapper.m in Sources */,
 				735E41C6135A601C00855884 /* ReadmillSpinner.m in Sources */,
 				735E41DB135A666D00855884 /* ReadmillPing.m in Sources */,
+				7318A46C137D294800CBC7A4 /* ReadmillErrorExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,6 +23,7 @@
 #import "ReadmillAPIWrapper.h"
 #import "ReadmillStringExtensions.h"
 #import "ReadmillURLExtensions.h"
+#import "ReadmillErrorExtensions.h"
 #import "ReadmillAPIConstants.h"
 #import "CJSONDeserializer.h"
 
@@ -322,8 +323,7 @@
     }
 }
 
-- (NSDictionary *)readWithURL:(NSURL *)url error:(NSError **)error {
-    NSString *urlString = [url absoluteString];
+- (NSDictionary *)readWithURLString:(NSString *)urlString error:(NSError **)error {
     NSRange range = [urlString rangeOfString:@".json"];
     if (range.location == NSNotFound) {
         urlString = [urlString stringByAppendingString:@".json"];
