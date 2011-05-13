@@ -164,10 +164,12 @@
             NSString *uri = @"uri";
             if ((uri = [parameters valueForKey:uri])) { 
                 NSDictionary *readDictionary = [[[self read] apiWrapper] readWithURLString:uri 
-                                                                                 error:&error];
+                                                                                     error:&error];
                 
                 if (nil == error) {
+                    // Update the read with new data (closing remark, progress, state etc)
                     [[self read] updateWithAPIDictionary:readDictionary];
+                    // Notify the delegate that the read was finished/abandoned
                     [[self delegate] finishReadUI:self 
                                     didFinishRead:[self read]];
                 }
