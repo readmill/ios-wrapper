@@ -23,6 +23,7 @@
 #import "ReadmillReadSession.h"
 #import "ReadmillArchiverExtensions.h"
 #import "ReadmillPing.h"
+#import "ReadmillErrorExtensions.h"
 
 @implementation ReadmillReadSessionArchive
 
@@ -121,16 +122,12 @@
     NSLog(@"Failed ping: %@\n All pings: %@", ping, failedPings);
     [failedPings release];
 }
-+ (BOOL)pingErrorWasUnprocessable:(NSError *)pingError {
-    if ([[pingError domain] isEqualToString:kReadmillDomain] && [pingError code] == 422) 
-        return YES;
-    return NO;
-}
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"Ping archived pings.");
-    NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
-    if (nil != unarchivedPings) {
+    NSArray *unarchivedPings = nil;
+    unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
+    if (nil != unarchivedPings && 0 < [unarchivedPings count]) {
         NSMutableArray *failedPings = [[NSMutableArray alloc] init];
         for (ReadmillPing *ping in unarchivedPings) {
             NSError *error = nil;
@@ -145,13 +142,12 @@
             if (!error) {
                 NSLog(@"Sent archived ping: %@", ping);
             } else {
-                if ([self pingErrorWasUnprocessable:error]) {
-                    NSLog(@"Error 422 (book is probably finished");
-                    // The request was well-formed but was unable to be followed due to semantic errors.
-                    // E.g book is finished 
+                if (![error isReadmillClientError]) {
+                    // No client error so ping could not be delivered correctly
+                    [failedPings addObject:ping];
                 } else {
                     NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
-                    [failedPings addObject:ping];
+                
                 }
             }
         }
@@ -223,7 +219,6 @@
     // Should always be 0.0 if not specified
     CLLocationDegrees latitude = [[properties valueForKey:@"latitude"] doubleValue];
     CLLocationDegrees longitude = [[properties valueForKey:@"longitude"] doubleValue];
-    NSLog(@"ping with prop in session, lat, long, %f, %f", latitude, longitude);
     
     // Create the ping so we can archive it if the ping fails
     ReadmillPing *ping = [[ReadmillPing alloc] initWithReadId:[self readId] 
@@ -270,7 +265,7 @@
                                withObject:pingDelegate
                             waitUntilDone:YES]; 
         
-        if (![ReadmillReadSession pingErrorWasUnprocessable:error]) {
+        if (![error isReadmillClientError]) {
             [self archiveFailedPing:ping];
         }
     }
