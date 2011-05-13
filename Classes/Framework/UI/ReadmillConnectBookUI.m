@@ -101,7 +101,6 @@
     NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[self ISBN] 
                                                                   title:[self bookTitle] 
                                                                  author:[self author]];
-    
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
@@ -177,8 +176,10 @@
         
         NSString *action = [URL host];
         NSDictionary *parameters = [URL queryAsDictionary];
-        
-        if ([action isEqualToString:@"change"]) {
+        if ([action isEqualToString:@"dismiss"]) {
+            [[self delegate] connect:self didSkipLinkingToBook:[self book]];
+        }
+        else if ([action isEqualToString:@"change"]) {
             
             NSString *uri = @"uri";
             if ((uri = [parameters valueForKey:uri])) {
