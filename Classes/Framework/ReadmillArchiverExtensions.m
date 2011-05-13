@@ -14,12 +14,12 @@
 + (NSString *)readmillReadSessionArchivePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *libraryDirectory = [paths objectAtIndex:0];
-    return [libraryDirectory stringByAppendingPathComponent:@"ReadmillReadSession.arch"];       
+    return [libraryDirectory stringByAppendingPathComponent:@"ReadmillReadSession.archive"];       
 }
 + (NSString *)readmillPingArchivePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *libraryDirectory = [paths objectAtIndex:0];
-    return [libraryDirectory stringByAppendingPathComponent:@"ReadmillFailedPings.arch"];       
+    return [libraryDirectory stringByAppendingPathComponent:@"ReadmillFailedPings.archive"];       
 }
 + (BOOL)archiveReadmillReadSession:(ReadmillReadSessionArchive *)archive {
     BOOL result = [self archiveRootObject:archive toFile:[NSKeyedArchiver readmillReadSessionArchivePath]];
