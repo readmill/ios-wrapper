@@ -94,9 +94,6 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     [self setView:nil];
-    //[activityIndicator release];
-    //activityIndicator = nil;
-    
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -167,8 +164,10 @@
                                                                                      error:&error];
                 
                 if (nil == error) {
+                    
                     // Update the read with new data (closing remark, progress, state etc)
                     [[self read] updateWithAPIDictionary:readDictionary];
+                    
                     // Notify the delegate that the read was finished/abandoned
                     [[self delegate] finishReadUI:self 
                                     didFinishRead:[self read]];

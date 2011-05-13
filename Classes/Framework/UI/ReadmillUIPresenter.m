@@ -71,15 +71,53 @@
 
 #define kAnimationDuration 0.2
 #define kBackgroundOpacity 0.3 
-
+- (void)willShowKeyboard:(NSNotification *)note {
+    
+    NSLog(@"adjustPositionForKeyboard");
+    CGFloat offset = 30.0;
+    CGPoint position = [contentContainerView center];
+    position.y -= offset;
+    [UIView animateWithDuration:0.3
+                          delay:0.0 
+                        options:UIViewAnimationOptionCurveEaseInOut 
+                     animations:^{
+                        [contentContainerView setCenter:position];                        
+                     }
+                     completion:nil];
+}
+- (void)willHideKeyboard:(NSNotification *)note {
+    
+    NSLog(@"adjustPositionForKeyboard");
+    CGFloat offset = 30.0;
+    CGPoint position = [contentContainerView center];
+    position.y += offset;
+    [UIView animateWithDuration:0.3
+                          delay:0.0 
+                        options:UIViewAnimationOptionCurveEaseOut 
+                     animations:^{
+                         [contentContainerView setCenter:position];                        
+                     }
+                     completion:nil];
+}
 -(void)presentInViewController:(UIViewController *)theParentViewController animated:(BOOL)animated {
 
     [self retain];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(contentViewControllerShouldBeDismissed:)
-                                                 name:ReadmillUIPresenterShouldDismissViewNotification
-                                               object:[self contentViewController]];
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self
+           selector:@selector(contentViewControllerShouldBeDismissed:)
+               name:ReadmillUIPresenterShouldDismissViewNotification
+             object:[self contentViewController]];
+    
+    [nc addObserver:self
+           selector:@selector(willShowKeyboard:) 
+               name:UIKeyboardWillShowNotification
+             object:nil];
+    
+    [nc addObserver:self
+           selector:@selector(willHideKeyboard:) 
+               name:UIKeyboardWillHideNotification
+             object:nil];
     
     UIView *parentView = [theParentViewController view];
     
@@ -92,14 +130,13 @@
         // Set up animation!
         [UIView beginAnimations:ReadmillUIPresenterDidAnimateIn context:nil];
         [UIView setAnimationDuration:kAnimationDuration];
-        //[UIView setAnimationBeginsFromCurrentState:YES];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
         [UIView setAnimationDelegate:self];
         [UIView setAnimationDidStopSelector:@selector(animation:finished:context:)];
     }
     
     [[self view] setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:kBackgroundOpacity]];
-    
+   
     [contentContainerView setCenter:[[self view] center]];
     
     if (animated) {
@@ -122,10 +159,18 @@
 
 - (void)dismissPresenterAnimated:(BOOL)animated {
 
-    NSLog(@"dismissPresenterAnimated");
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:ReadmillUIPresenterShouldDismissViewNotification
-                                                  object:[self contentViewController]];
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self
+                  name:ReadmillUIPresenterShouldDismissViewNotification
+                object:[self contentViewController]];
+    
+    [nc removeObserver:self 
+                  name:UIKeyboardWillShowNotification 
+                object:nil];
+    
+    [nc removeObserver:self 
+                  name:UIKeyboardWillHideNotification
+                object:nil];
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     
@@ -159,7 +204,6 @@
         [self release];
     }
     else if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateIn]) {
-        NSLog(@"posting ReadmillUIPresenterDidAnimateIn");
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterDidAnimateIn object:nil]; 
     }
 }
