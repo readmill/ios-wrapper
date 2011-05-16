@@ -93,7 +93,7 @@
     [self setEstimatedTimeLeft:[cleanedDict valueForKey:kReadmillAPIReadEstimatedTimeLeft]];
     [self setTimeSpent:[cleanedDict valueForKey:kReadmillAPIReadDuration]];
  
-    [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadProgress] unsignedIntegerValue]];
+    [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadProgress] floatValue]];
 }
 
 -(NSString *)description {
