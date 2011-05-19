@@ -165,7 +165,7 @@ static NSString * const kReadmillAPIClientIdKey = @"client";
  as obtained through -propertyListRepresentation in a previous session.
  
  IMPORTANT: The saved details will IMMEDIATELY become invalid for use in the future. 
- Best practice would be to remove them from NSUserDefaults (or wherever they same from)
+ Best practice would be to remove them from NSUserDefaults (or wherever they came from)
  as soon as you start using the Readmill API, as creating a Readmill API object with invalid 
  credentials will break the authentication and starting the authentication process (sending the 
  user to the Readmill site) will be required.
@@ -393,6 +393,13 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 - (NSDictionary *)readWithRelativePath:(NSString *)pathToRead error:(NSError **)error;
 
+/*!
+ @param readId The Id of the read you'd like to get details for.
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @result A specific read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
+ @brief   Get a specific read by its id.
+ */
+-(NSDictionary *)readWithId:(ReadmillReadId)readId error:(NSError **)error;
 /*!
  @param readId The Id of the read you'd like to get details for.
  @param userId The user Id of the user the requested read belongs to.

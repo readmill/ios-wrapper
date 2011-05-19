@@ -133,8 +133,8 @@
                                           withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
                               shouldBeCalledUnauthorized:YES
                                                    error:error];
-        return apiResponse;
         
+        return apiResponse;
     }
 }
 
@@ -207,8 +207,6 @@
                                    canBeCalledUnauthorized:NO
                                                      error:error];
     
-    //NSDictionary *apiResponse = [self bookWithRelativePath:pathToBook error:error];
-    //NSDictionary *apiResponse = [self bookWithURL:[NSURL URLWithString:pathToBook] error:error];
     return apiResponse;
 }
 
@@ -289,6 +287,19 @@
                                shouldBeCalledUnauthorized:NO
                                                     error:error];
     return apiResponse;
+}
+
+-(NSDictionary *)readWithId:(ReadmillReadId)readId error:(NSError **)error {
+    
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
+                                                           [NSString stringWithFormat:@"%@reads/%d.json", 
+                                                            [self apiEndPoint], 
+                                                            readId]] 
+                                           withParameters:nil
+                               shouldBeCalledUnauthorized:NO
+                                                    error:error];
+    return apiResponse;
+    
 }
 
 -(NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
@@ -480,6 +491,7 @@
                                  [[self refreshToken] urlEncodedString],
                                  [[self authorizedRedirectURL] urlEncodedString]];
     
+    NSLog(@"refresh parameterString: %@", parameterString);
     [request setHTTPMethod:@"POST"];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
@@ -586,7 +598,6 @@
 -(BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
     NSLog(@"now: %@, accessExpiry: %@", [NSDate date], [self accessTokenExpiryDate]);
     if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
-        NSLog(@"try to refresh");
         return [self refreshAccessToken:error];
     } else {
         return YES;
@@ -624,9 +635,14 @@
 			first = NO;
 		}		
 	}
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",
-																								  [url absoluteString], 
-																								  parameterString]]];
+    NSURL *finalURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",
+                                       [url absoluteString], 
+                                       parameterString]];
+    
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:finalURL];
+    
+    NSLog(@"url: %@, params: %@", url, parameterString);
+
 	[request setHTTPMethod:@"GET"];
 	[request autorelease];
 	
