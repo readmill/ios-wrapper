@@ -30,15 +30,15 @@
 
 @interface ReadmillAPIWrapper ()
 
--(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error;
--(id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
--(id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
--(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error;
--(id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+- (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error;
+- (id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+- (id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+- (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error;
+- (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 
--(BOOL)refreshAccessToken:(NSError **)error;
+- (BOOL)refreshAccessToken:(NSError **)error;
 
--(NSString *)oAuthBaseURL;
+- (NSString *)oAuthBaseURL;
 
 @property (readwrite, copy) NSString *refreshToken;
 @property (readwrite, copy) NSString *accessToken;
@@ -59,14 +59,14 @@
     return self;
 }
 
--(id)initWithStagingEndPoint {
+- (id)initWithStagingEndPoint {
     if ((self = [self init])) {
         [self setApiEndPoint:kStagingAPIEndPoint];
     }
     return self;
 }
 
--(id)initWithPropertyListRepresentation:(NSDictionary *)plist {
+- (id)initWithPropertyListRepresentation:(NSDictionary *)plist {
     
     if ((self = [self init])) {
         
@@ -78,7 +78,7 @@
     return self;
 }
 
--(NSDictionary *)propertyListRepresentation {
+- (NSDictionary *)propertyListRepresentation {
     return [NSDictionary dictionaryWithObjectsAndKeys:
             
             [self authorizedRedirectURL], @"authorizedRedirectURL",
@@ -97,7 +97,7 @@
 @synthesize accessTokenExpiryDate;
 @synthesize apiEndPoint;
 
--(void)dealloc {
+- (void)dealloc {
     [self setRefreshToken:nil];
     [self setAccessToken:nil];
     [self setAuthorizedRedirectURL:nil];
@@ -112,7 +112,7 @@
 
 // Books
 
--(NSArray *)allBooks:(NSError **)error {
+- (NSArray *)allBooks:(NSError **)error {
     
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
                                       withParameters:nil
@@ -123,7 +123,7 @@
 }
 
 
--(NSArray *)booksMatchingTitle:(NSString *)searchString error:(NSError **)error {
+- (NSArray *)booksMatchingTitle:(NSString *)searchString error:(NSError **)error {
     
     if ([searchString length] == 0) {
         return [self allBooks:error];
@@ -212,7 +212,7 @@
 
 // Reads
 
--(NSDictionary *)createReadWithBookId:(ReadmillBookId)bookId 
+- (NSDictionary *)createReadWithBookId:(ReadmillBookId)bookId 
                                 state:(ReadmillReadState)readState
                               private:(BOOL)isPrivate 
                                 error:(NSError **)error {
@@ -234,7 +234,7 @@
     return apiResponse;
     
 }
--(void)updateReadWithId:(ReadmillReadId)readId 
+- (void)updateReadWithId:(ReadmillReadId)readId 
               withState:(ReadmillReadState)readState
                 private:(BOOL)isPrivate 
           closingRemark:(NSString *)remark 
@@ -258,7 +258,7 @@
 }
 
 
--(NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error {
+- (NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error {
     
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d/reads.json", [self apiEndPoint], userId]] 
                                            withParameters:nil
@@ -267,7 +267,7 @@
     return apiResponse;
 }
 
--(NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error {
+- (NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error {
     
     if ([userName length] == 0) {
         return nil;
@@ -289,7 +289,7 @@
     return apiResponse;
 }
 
--(NSDictionary *)readWithId:(ReadmillReadId)readId error:(NSError **)error {
+- (NSDictionary *)readWithId:(ReadmillReadId)readId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
                                                            [NSString stringWithFormat:@"%@reads/%d.json", 
@@ -298,11 +298,10 @@
                                            withParameters:nil
                                shouldBeCalledUnauthorized:NO
                                                     error:error];
-    return apiResponse;
-    
+    return apiResponse;    
 }
 
--(NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
+- (NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
                                                            [NSString stringWithFormat:@"%@users/%d/reads/%d.json", 
@@ -313,10 +312,9 @@
                                shouldBeCalledUnauthorized:NO
                                                     error:error];
     return apiResponse;
-    
 }
 
--(NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithName:(NSString *)userName error:(NSError **)error {
+- (NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithName:(NSString *)userName error:(NSError **)error {
     
     if ([userName length] == 0) {
         return nil;
@@ -348,7 +346,7 @@
 
 //Pings     
 
--(void)pingReadWithId:(ReadmillReadId)readId 
+- (void)pingReadWithId:(ReadmillReadId)readId 
          withProgress:(ReadmillReadProgress)progress 
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
@@ -386,7 +384,7 @@
                          error:error];
     
 }
--(void)pingReadWithId:(ReadmillReadId)readId 
+- (void)pingReadWithId:(ReadmillReadId)readId 
          withProgress:(ReadmillReadProgress)progress 
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
@@ -405,7 +403,7 @@
 }
 // Users
 
--(NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error {
+- (NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d.json", [self apiEndPoint], userId]] 
                                            withParameters:nil
@@ -415,7 +413,7 @@
     
 }
 
--(NSDictionary *)userWithName:(NSString *)userName error:(NSError **)error {
+- (NSDictionary *)userWithName:(NSString *)userName error:(NSError **)error {
     
     if ([userName length] == 0) {
         return nil;
@@ -429,7 +427,7 @@
     }
 }
 
--(NSDictionary *)currentUser:(NSError **)error {
+- (NSDictionary *)currentUser:(NSError **)error {
     
 	if (![self ensureAccessTokenIsCurrent:error]) {
 			return nil;
@@ -448,7 +446,7 @@
 #pragma mark -
 #pragma mark OAuth
 
--(void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error {
+- (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error {
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
@@ -479,7 +477,7 @@
     }
 }
 
--(BOOL)refreshAccessToken:(NSError **)error {
+- (BOOL)refreshAccessToken:(NSError **)error {
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
@@ -515,7 +513,7 @@
 }
 
 
--(NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect {
+- (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect {
     
     NSString *baseURL = [self oAuthBaseURL];
     
@@ -528,7 +526,7 @@
     return [NSURL URLWithString:urlString];
 }
 
--(NSString *)oAuthBaseURL {
+- (NSString *)oAuthBaseURL {
     
     if ([[self apiEndPoint] isEqualToString:kLiveAPIEndPoint]) {
         return kLiveAuthorizationUri;
@@ -541,7 +539,7 @@
 #pragma mark -
 #pragma mark UI URLs
 
--(NSURL *)connectBookUIURLForBookWithId:(ReadmillBookId)bookId {
+- (NSURL *)connectBookUIURLForBookWithId:(ReadmillBookId)bookId {
     
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
@@ -582,7 +580,7 @@
     return URL;
 
 }
--(NSURL *)editReadUIURLForReadWithId:(ReadmillReadId)readId {
+- (NSURL *)editReadUIURLForReadWithId:(ReadmillReadId)readId {
     
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
@@ -595,7 +593,7 @@
 #pragma mark -
 #pragma mark Sending Requests
 
--(BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
+- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
     NSLog(@"now: %@, accessExpiry: %@", [NSDate date], [self accessTokenExpiryDate]);
     if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
         return [self refreshAccessToken:error];
@@ -604,7 +602,7 @@
     }
 }
 
--(id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error {
+- (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error {
     
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!stripAuth) {
@@ -649,15 +647,15 @@
 	return [self sendPreparedRequest:request error:error];
 }
 
--(id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+- (id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
     return [self sendBodyRequestToURL:url httpMethod:@"PUT" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
 }
 
--(id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+- (id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
 	return [self sendBodyRequestToURL:url httpMethod:@"POST" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
 }
 
--(id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+- (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
     
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!allowUnauthed) {
@@ -698,7 +696,7 @@
 	return [self sendPreparedRequest:request error:error];	
 }
 
--(id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {
+- (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {
     NSLog(@"request: %@", request);
 	NSHTTPURLResponse *response = nil;
 	NSError *connectionError = nil;
