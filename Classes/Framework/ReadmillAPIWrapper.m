@@ -238,7 +238,7 @@
     return apiResponse;
     
 }
-- (void)updateReadWithId:(ReadmillReadId)readId 
+- (void)updateReadWithId:(ReadmillReadingId)readId 
               withState:(ReadmillReadState)readState
                 private:(BOOL)isPrivate 
           closingRemark:(NSString *)remark 
@@ -285,7 +285,7 @@
     }
 }
 
-- (NSDictionary *)readWithId:(ReadmillReadId)readId error:(NSError **)error {
+- (NSDictionary *)readWithId:(ReadmillReadingId)readId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
                                                            [NSString stringWithFormat:@"%@/%d.json", 
@@ -297,7 +297,7 @@
     return apiResponse;    
 }
 
-- (NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
+- (NSDictionary *)readWithId:(ReadmillReadingId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
                                                            [NSString stringWithFormat:@"%@/%d/readings/%d.json", 
@@ -310,7 +310,7 @@
     return apiResponse;
 }
 
-- (NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithName:(NSString *)userName error:(NSError **)error {
+- (NSDictionary *)readWithId:(ReadmillReadingId)readId forUserWithName:(NSString *)userName error:(NSError **)error {
     
     if ([userName length] == 0) {
         return nil;
@@ -342,8 +342,8 @@
 
 //Pings     
 
-- (void)pingReadWithId:(ReadmillReadId)readId 
-         withProgress:(ReadmillReadProgress)progress 
+- (void)pingReadWithId:(ReadmillReadingId)readId 
+         withProgress:(ReadmillReadingProgress)progress 
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
        occurrenceTime:(NSDate *)occurrenceTime
@@ -380,8 +380,8 @@
                          error:error];
     
 }
-- (void)pingReadWithId:(ReadmillReadId)readId 
-         withProgress:(ReadmillReadProgress)progress 
+- (void)pingReadWithId:(ReadmillReadingId)readId 
+         withProgress:(ReadmillReadingProgress)progress 
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
        occurrenceTime:(NSDate *)occurrenceTime
@@ -553,7 +553,7 @@
 
     return URL;
 }
-- (NSURL *)URLForViewingReadWithReadId:(ReadmillReadId)readId {
+- (NSURL *)URLForViewingReadWithReadId:(ReadmillReadingId)readId {
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
     }

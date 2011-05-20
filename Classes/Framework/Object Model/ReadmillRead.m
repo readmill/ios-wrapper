@@ -42,9 +42,9 @@
 
 @property (readwrite) ReadmillBookId bookId;
 @property (readwrite) ReadmillUserId userId;
-@property (readwrite) ReadmillReadId readId;
+@property (readwrite) ReadmillReadingId readId;
 
-@property (readwrite) ReadmillReadProgress progress;
+@property (readwrite) ReadmillReadingProgress progress;
 
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 

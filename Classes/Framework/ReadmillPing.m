@@ -17,8 +17,8 @@
 @synthesize occurrenceTime;
 @synthesize readId, progress, duration, latitude, longitude;
 
-- (id)initWithReadId:(ReadmillReadId)aReadId 
-        readProgress:(ReadmillReadProgress)aProgress 
+- (id)initWithReadId:(ReadmillReadingId)aReadId 
+        readProgress:(ReadmillReadingProgress)aProgress 
    sessionIdentifier:(NSString *)aSessionIdentifier 
             duration:(ReadmillPingDuration)aDuration 
       occurrenceTime:(NSDate *)anOccurrenceTime

@@ -11,8 +11,8 @@
 
 @interface ReadmillPing : NSObject <NSCoding> {
     NSString *sessionIdentifier;
-    ReadmillReadId readId;
-    ReadmillReadProgress progress;
+    ReadmillReadingId readId;
+    ReadmillReadingProgress progress;
     ReadmillPingDuration duration;
     CLLocationDegrees latitude, longitude;
     NSDate *occurrenceTime;
@@ -21,14 +21,14 @@
 @property (nonatomic, retain, readonly) NSString *sessionIdentifier;
 @property (nonatomic, retain, readonly) NSDate *occurrenceTime;
 
-@property (nonatomic, readonly) ReadmillReadId readId;
-@property (nonatomic, readonly) ReadmillReadProgress progress;
+@property (nonatomic, readonly) ReadmillReadingId readId;
+@property (nonatomic, readonly) ReadmillReadingProgress progress;
 @property (nonatomic, readonly) ReadmillPingDuration duration;
 @property (nonatomic, readonly) CLLocationDegrees latitude;
 @property (nonatomic, readonly) CLLocationDegrees longitude;
 
-- (id)initWithReadId:(ReadmillReadId)aReadId 
-        readProgress:(ReadmillReadProgress)aProgress 
+- (id)initWithReadId:(ReadmillReadingId)aReadId 
+        readProgress:(ReadmillReadingProgress)aProgress 
    sessionIdentifier:(NSString *)aSessionIdentifier 
             duration:(ReadmillPingDuration)aDuration 
       occurrenceTime:(NSDate *)anOccurrenceTime

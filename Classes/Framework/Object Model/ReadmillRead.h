@@ -61,11 +61,11 @@
     
     ReadmillBookId bookId;
     ReadmillUserId userId;
-    ReadmillReadId readId;
+    ReadmillReadingId readId;
     
     ReadmillAPIWrapper *apiWrapper;
     
-    ReadmillReadProgress progress;
+    ReadmillReadingProgress progress;
 }
 
 /*!
@@ -212,13 +212,13 @@
  @property  readId
  @brief The id of this read in Readmill.
  */
-@property (readonly) ReadmillReadId readId;
+@property (readonly) ReadmillReadingId readId;
 
 /*!
  @property  progress
  @brief The progress of this read in Readmill.
  */
-@property (readonly) ReadmillReadProgress progress;
+@property (readonly) ReadmillReadingProgress progress;
 
 /*!
  @property  apiWrapper

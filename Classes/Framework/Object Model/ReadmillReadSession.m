@@ -60,7 +60,7 @@
 
 @interface ReadmillReadSession ()
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
-@property (readwrite) ReadmillReadId readId;
+@property (readwrite) ReadmillReadingId readId;
 @end
 
 @implementation ReadmillReadSession
@@ -69,7 +69,7 @@
     return [self initWithAPIWrapper:nil readId:0];
 }
 
--(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadId)sessionReadId {
+-(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadingId)sessionReadId {
     
     if ((self = [super init])) {
         // Initialization code here.
@@ -161,7 +161,7 @@
 #pragma mark -
 #pragma mark Threaded Messages
 
--(void)pingWithProgress:(ReadmillReadProgress)progress 
+-(void)pingWithProgress:(ReadmillReadingProgress)progress 
            pingDuration:(ReadmillPingDuration)pingDuration 
                delegate:(id <ReadmillPingDelegate>)delegate {
     
@@ -179,7 +179,7 @@
     
 }
 
--(void)pingWithProgress:(ReadmillReadProgress)progress
+-(void)pingWithProgress:(ReadmillReadingProgress)progress
            pingDuration:(ReadmillPingDuration)pingDuration 
                latitude:(CLLocationDegrees)latitude 
               longitude:(CLLocationDegrees)longitude 
@@ -211,7 +211,7 @@
     id <ReadmillPingDelegate> pingDelegate = [properties valueForKey:@"delegate"];
     
     
-    ReadmillReadProgress progress = [[properties valueForKey:@"progress"] floatValue];
+    ReadmillReadingProgress progress = [[properties valueForKey:@"progress"] floatValue];
     ReadmillPingDuration pingDuration = [[properties valueForKey:@"pingDuration"] unsignedIntegerValue];
     
     NSString *sessionIdentifier = [self generateSessionIdentifier];

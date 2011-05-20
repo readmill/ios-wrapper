@@ -46,7 +46,7 @@
 @private
     
     ReadmillAPIWrapper *apiWrapper;
-    ReadmillReadId readId;
+    ReadmillReadingId readId;
     
 }
 
@@ -61,7 +61,7 @@
  Note: The typical way to obtain a ReadmillReadSession is to use the -createReadSession 
        convenience method in the ReadmillRead class.
  */
--(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadId)sessionReadId;
+-(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadingId)sessionReadId;
 
 /*!
  @property  apiWrapper
@@ -73,7 +73,7 @@
  @property  readId
  @brief The id of the read this session is attached to.  
  */
-@property (readonly) ReadmillReadId readId;
+@property (readonly) ReadmillReadingId readId;
 
 /*!
  @param progress The user's progress through the book, as in float percentage. 
@@ -83,7 +83,7 @@
  
  This should be called periodically while the user is reading, every few minutes or so.
  */
--(void)pingWithProgress:(ReadmillReadProgress)progress 
+-(void)pingWithProgress:(ReadmillReadingProgress)progress 
            pingDuration:(ReadmillPingDuration)duration 
                delegate:(id <ReadmillPingDelegate>)delegate;
 
@@ -97,7 +97,7 @@
  
  This should be called periodically while the user is reading, every few minutes or so.
  */
--(void)pingWithProgress:(ReadmillReadProgress)progress 
+-(void)pingWithProgress:(ReadmillReadingProgress)progress 
            pingDuration:(ReadmillPingDuration)duration 
                latitude:(CLLocationDegrees)latitude 
               longitude:(CLLocationDegrees)longitude 
