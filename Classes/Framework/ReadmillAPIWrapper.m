@@ -89,8 +89,6 @@
 	 
 }
 
-
-
 @synthesize refreshToken;
 @synthesize accessToken;
 @synthesize authorizedRedirectURL;
@@ -108,13 +106,28 @@
 }
 
 #pragma mark -
+#pragma mark API endpoints
+
+- (NSString *)booksEndpoint {
+    return [NSString stringWithFormat:@"%@books", [self apiEndPoint]];
+}
+- (NSString *)readingsEndpoint {
+    return [NSString stringWithFormat:@"%@readings", [self apiEndPoint]];
+}
+- (NSString *)usersEndpoint {
+    return [NSString stringWithFormat:@"%@users", [self apiEndPoint]];
+}
+
+
+#pragma mark -
 #pragma mark API Methods
+
 
 // Books
 
 - (NSArray *)allBooks:(NSError **)error {
     
-    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
+    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
                                       withParameters:nil
                           shouldBeCalledUnauthorized:YES
                                                error:error];
@@ -129,7 +142,7 @@
         return [self allBooks:error];
     } else {
         
-        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
+        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
                                           withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
                               shouldBeCalledUnauthorized:YES
                                                    error:error];
@@ -138,17 +151,7 @@
     }
 }
 
-- (NSDictionary *)bookWithRelativePath:(NSString *)pathToBook error:(NSError **)error {
-    
-    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@.json", [self apiEndPoint], pathToBook]] 
-                                           withParameters:nil
-                               shouldBeCalledUnauthorized:YES
-                                                    error:error];
-    return apiResponse;
-    
-}
-- (NSDictionary *)bookWithURL:(NSURL *)url error:(NSError **)error {
-    NSString *urlString = [url absoluteString];
+- (NSDictionary *)bookWithURLString:(NSString *)urlString error:(NSError **)error {
     NSRange range = [urlString rangeOfString:@".json"];
     if (range.location == NSNotFound) {
         urlString = [urlString stringByAppendingString:@".json"];
@@ -159,9 +162,10 @@
                                                     error:error];
     return apiResponse;
 }
+
 - (NSDictionary *)bookWithId:(ReadmillBookId)bookId error:(NSError **)error {
     
-    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books/%d.json", [self apiEndPoint], bookId]] 
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d.json", [self booksEndpoint], bookId]] 
                                            withParameters:nil
                                shouldBeCalledUnauthorized:YES
                                                     error:error];
@@ -175,7 +179,7 @@
         return [self allBooks:error];
     } else {
         
-        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]] 
+        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
                                           withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
                               shouldBeCalledUnauthorized:YES
                                                    error:error];
@@ -202,7 +206,7 @@
         [parameters setValue:bookIsbn forKey:[NSString stringWithFormat:bookScope, kReadmillAPIBookISBNKey]];
     }
     
-    NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books.json", [self apiEndPoint]]]
+    NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]]
                                             withParameters:parameters
                                    canBeCalledUnauthorized:NO
                                                      error:error];
@@ -220,13 +224,13 @@
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
-    NSString *readScope = @"read[%@]";
+    NSString *readScope = @"reading[%@]";
     [parameters setValue:[NSNumber numberWithInteger:readState] forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadStateKey]];
     [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadIsPrivateKey]];
     [parameters setValue:kReadmillClientId forKey:[NSString stringWithFormat:readScope, kReadmillAPIClientIdKey]];
     
     
-    NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@books/%d/reads.json", [self apiEndPoint], bookId]]
+    NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings.json", [self booksEndpoint], bookId]]
                                             withParameters:parameters
                                    canBeCalledUnauthorized:NO
                                                      error:error];
@@ -241,7 +245,7 @@
                   error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    NSString *readScope = @"read[%@]";
+    NSString *readScope = @"reading[%@]";
 
     [parameters setValue:[NSNumber numberWithInteger:readState] forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadStateKey]];
     [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadIsPrivateKey]];
@@ -251,7 +255,7 @@
         [parameters setValue:remark forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadClosingRemarkKey]];
     }
     
-    [self sendPutRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d.json", [self apiEndPoint], readId]]
+    [self sendPutRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d.json", [self readingsEndpoint], readId]]
                withParameters:parameters
       canBeCalledUnauthorized:NO
                         error:error];
@@ -260,7 +264,7 @@
 
 - (NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error {
     
-    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d/reads.json", [self apiEndPoint], userId]] 
+    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings.json", [self usersEndpoint], userId]] 
                                            withParameters:nil
                                shouldBeCalledUnauthorized:NO
                                                     error:error];
@@ -273,27 +277,19 @@
         return nil;
     } else {
         
-        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@/reads.json", [self apiEndPoint], userName]] 
+        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/readings.json", [self usersEndpoint], userName]] 
                                                withParameters:nil
                                    shouldBeCalledUnauthorized:NO
                                                         error:error];
         return apiResponse;
     }
 }
- 
-- (NSDictionary *)readWithRelativePath:(NSString *)pathToRead error:(NSError **)error {
-    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@.json", [self apiEndPoint], pathToRead]]
-                                           withParameters:nil
-                               shouldBeCalledUnauthorized:NO
-                                                    error:error];
-    return apiResponse;
-}
 
 - (NSDictionary *)readWithId:(ReadmillReadId)readId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
-                                                           [NSString stringWithFormat:@"%@reads/%d.json", 
-                                                            [self apiEndPoint], 
+                                                           [NSString stringWithFormat:@"%@/%d.json", 
+                                                            [self readingsEndpoint], 
                                                             readId]] 
                                            withParameters:nil
                                shouldBeCalledUnauthorized:NO
@@ -304,8 +300,8 @@
 - (NSDictionary *)readWithId:(ReadmillReadId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
-                                                           [NSString stringWithFormat:@"%@users/%d/reads/%d.json", 
-                                                            [self apiEndPoint], 
+                                                           [NSString stringWithFormat:@"%@/%d/readings/%d.json", 
+                                                            [self usersEndpoint], 
                                                             userId,
                                                             readId]] 
                                            withParameters:nil
@@ -321,8 +317,8 @@
     } else {
         
         NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
-                                                               [NSString stringWithFormat:@"%@users/%@/reads/%d.json", 
-                                                                [self apiEndPoint], 
+                                                               [NSString stringWithFormat:@"%@/%@/readings/%d.json", 
+                                                                [self usersEndpoint], 
                                                                 userName,
                                                                 readId]] 
                                                withParameters:nil
@@ -378,7 +374,7 @@
         [parameters setValue:[NSNumber numberWithDouble:latitude] forKey:[NSString stringWithFormat:pingScope, @"lat"]];
         [parameters setValue:[NSNumber numberWithDouble:longitude] forKey:[NSString stringWithFormat:pingScope, @"lng"]];
     }
-    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@reads/%d/pings.json", [self apiEndPoint], readId]] 
+    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/pings.json", [self readingsEndpoint], readId]] 
                 withParameters:parameters
        canBeCalledUnauthorized:NO
                          error:error];
@@ -539,15 +535,6 @@
 #pragma mark -
 #pragma mark UI URLs
 
-- (NSURL *)connectBookUIURLForBookWithId:(ReadmillBookId)bookId {
-    
-    if (![self ensureAccessTokenIsCurrent:nil]) {
-        return nil;
-    }
-    
-    NSString *urlString = [NSString stringWithFormat:@"%@books/%d/reads/new?access_token=%@", [self apiEndPoint], bookId, [self accessToken]];
-    return [NSURL URLWithString:urlString];
-}
 - (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author {
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
@@ -562,7 +549,8 @@
     
     NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/connect/book", [self apiEndPoint]]];
     NSURL *URL = [baseURL URLByAddingParameters:parameters];
-    
+    NSLog(@"URL: %@", URL);
+
     return URL;
 }
 - (NSURL *)URLForViewingReadWithReadId:(ReadmillReadId)readId {
@@ -574,20 +562,10 @@
     [parameters setValue:kReadmillClientId forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
-    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/read/%d", [self apiEndPoint], readId]];
+    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/readings/%d", [self apiEndPoint], readId]];
     NSURL *URL = [baseURL URLByAddingParameters:parameters];
     
     return URL;
-
-}
-- (NSURL *)editReadUIURLForReadWithId:(ReadmillReadId)readId {
-    
-    if (![self ensureAccessTokenIsCurrent:nil]) {
-        return nil;
-    }
-
-    NSString *urlString = [NSString stringWithFormat:@"%@reads/%d/edit?access_token=%@", [self apiEndPoint], readId, [self accessToken]];
-    return [NSURL URLWithString:urlString];
 }
 
 #pragma mark -

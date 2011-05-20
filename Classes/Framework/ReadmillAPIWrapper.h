@@ -253,17 +253,9 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 -(NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect;
 
 /*!
- @param bookId The Readmill id of the book to link to. 
- @result An NSURL pointing to the Readmill book link page with the appropriate parameters.  
- @brief   Obtain a book link URL containing the parameters to have Readmill present a UI to the user 
- for linking the book to their Readmill account.
- */
--(NSURL *)connectBookUIURLForBookWithId:(ReadmillBookId)bookId;
-
-/*!
  @param ISBN The ISBN number of the book to link to. 
  @param title The title of the book to link to. 
- @param author The author of the book to link to. 
+ @param author The author of the book to link to, or a comma-separated list of authors.
  @result An NSURL pointing to the Readmill book link page with the appropriate parameters.  
  @brief   Obtain a book link URL containing the parameters to have Readmill present a UI to the user 
  for linking the book to their Readmill account.
@@ -278,13 +270,6 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 - (NSURL *)URLForViewingReadWithReadId:(ReadmillReadId)readId;
 
-/*!
- @param readId The Readmill id of the read to edit. 
- @result An NSURL pointing to the Readmill read edit page with the appropriate parameters.  
- @brief   Obtain a read edit URL containing the parameters to have Readmill present a UI to the user 
- for editing their read of this book in their Readmill account.
- */
--(NSURL *)editReadUIURLForReadWithId:(ReadmillReadId)readId;
 
 #pragma mark -
 #pragma mark Books
@@ -315,14 +300,6 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 -(NSArray *)booksMatchingISBN:(NSString *)isbn error:(NSError **)error;
 
 /*!
- @param pathToBook The relative path of the book to retrieve.
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
- @brief   Get a specific book in the Readmill system. 
- */
-- (NSDictionary *)bookWithRelativePath:(NSString *)pathToBook error:(NSError **)error;
-
-/*!
  @param bookId The Readmill id of the book to retrieve.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
@@ -332,7 +309,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 
 /*!
  @param bookTitle The new book's title.
- @param bookAuthor The new book's author.
+ @param bookAuthor The new book's author, or comma-separated list of authors.
  @param bookIsbn The new book's ISBN.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @result The created book in the Readmill system as an NSDictionary object. See the API Keys - Book section of this header for keys. 
@@ -383,15 +360,6 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Get a list of reads for a given user name. 
  */
 -(NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error;
-
-/*!
- @param pathToRead The relative path of the read you'd like to get details for.
- @param userId The user Id of the user the requested read belongs to.
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A specific read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
- @brief   Get a specific read by its id and user id. 
- */
-- (NSDictionary *)readWithRelativePath:(NSString *)pathToRead error:(NSError **)error;
 
 /*!
  @param readId The Id of the read you'd like to get details for.
@@ -452,6 +420,19 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 -(void)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillReadProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude error:(NSError **)error;
 
+#pragma mark -
+#pragma mark Highlights 
+
+/*!
+ @param readId The id of the read you'd like to ping.
+ @param progress The current progress through the book as a float percentage.
+ @param sessionId A session id. The specific value of this is not important, but it should persist through a user's "session" of reading a book. 
+ @param duration The forward-pointing duration of the ping. Aim to ping again after this duration has elapsed if the user is still reading. 
+ @param occurrenceTime The time of the ping. Pass nil for "now". 
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time.
+ */
+//- (void)createHighlight
 #pragma mark -
 #pragma mark Users
 
