@@ -393,6 +393,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Get a specific read by its URL.
  */
 - (NSDictionary *)readWithURLString:(NSString *)urlString error:(NSError **)error;
+
 #pragma mark -
 #pragma mark Pings
   
@@ -420,19 +421,6 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 -(void)pingReadWithId:(ReadmillReadId)readId withProgress:(ReadmillReadProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude error:(NSError **)error;
 
-#pragma mark -
-#pragma mark Highlights 
-
-/*!
- @param readId The id of the read you'd like to ping.
- @param progress The current progress through the book as a float percentage.
- @param sessionId A session id. The specific value of this is not important, but it should persist through a user's "session" of reading a book. 
- @param duration The forward-pointing duration of the ping. Aim to ping again after this duration has elapsed if the user is still reading. 
- @param occurrenceTime The time of the ping. Pass nil for "now". 
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time.
- */
-//- (void)createHighlight
 #pragma mark -
 #pragma mark Users
 
