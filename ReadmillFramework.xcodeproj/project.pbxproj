@@ -591,9 +591,9 @@
 				734A5204135A1E41009F9794 /* ReadmillAPIConstants.h in Headers */,
 				734A5205135A1E41009F9794 /* ReadmillAPIWrapper.h in Headers */,
 				734A5207135A1E46009F9794 /* ReadmillSpinner.h in Headers */,
-				734A51D3135A1E10009F9794 /* ReadmillURLExtensions.h in Headers */,
-				734A51D5135A1E10009F9794 /* ReadmillDictionaryExtensions.h in Headers */,
 				734A51D7135A1E10009F9794 /* ReadmillStringExtensions.h in Headers */,
+				734A51D5135A1E10009F9794 /* ReadmillDictionaryExtensions.h in Headers */,
+				734A51D3135A1E10009F9794 /* ReadmillURLExtensions.h in Headers */,
 				735E41DA135A666D00855884 /* ReadmillPing.h in Headers */,
 				734A51D9135A1E22009F9794 /* CDataScanner.h in Headers */,
 				734A51DB135A1E25009F9794 /* CFilteringJSONSerializer.h in Headers */,
@@ -949,6 +949,8 @@
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
+					"-all_load",
+					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
@@ -972,6 +974,8 @@
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
+					"-all_load",
+					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
@@ -995,6 +999,8 @@
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
+					"-all_load",
+					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;

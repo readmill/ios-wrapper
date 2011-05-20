@@ -7,11 +7,11 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-
+#import "ReadmillAPI/ReadmillAPIWrapper.h"
 
 @interface ReadmillAPITests : SenTestCase {
 @private
-    
+    ReadmillAPIWrapper *wrapper;
 }
 
 @end
