@@ -22,8 +22,8 @@
 
 #import <UIKit/UIKit.h>
 #import <ReadmillAPI/ReadmillUser.h>
-#import <ReadmillAPI/ReadmillRead.h>
-#import <ReadmillAPI/ReadmillReadSession.h>
+#import <ReadmillAPI/ReadmillReading.h>
+#import <ReadmillAPI/ReadmillReadingSession.h>
 #import "Readmill_SigningInViewController.h"
 
 @class Readmill_SignedInViewController;

@@ -15,19 +15,19 @@
 @implementation ReadmillPing
 @synthesize sessionIdentifier;
 @synthesize occurrenceTime;
-@synthesize readId, progress, duration, latitude, longitude;
+@synthesize readingId, progress, duration, latitude, longitude;
 
-- (id)initWithReadId:(ReadmillReadingId)aReadId 
-        readProgress:(ReadmillReadingProgress)aProgress 
-   sessionIdentifier:(NSString *)aSessionIdentifier 
-            duration:(ReadmillPingDuration)aDuration 
-      occurrenceTime:(NSDate *)anOccurrenceTime
-            latitude:(CLLocationDegrees)lat
-           longitude:(CLLocationDegrees)lng {
+- (id)initWithReadingId:(ReadmillReadingId)aReadingId 
+        readingProgress:(ReadmillReadingProgress)aProgress 
+      sessionIdentifier:(NSString *)aSessionIdentifier 
+               duration:(ReadmillPingDuration)aDuration 
+         occurrenceTime:(NSDate *)anOccurrenceTime
+               latitude:(CLLocationDegrees)lat
+              longitude:(CLLocationDegrees)lng {
     
     self = [super init];
     if (self) {
-        readId = aReadId;
+        readingId = aReadingId;
         progress = aProgress;
         duration = aDuration;
         latitude = lat;
@@ -41,7 +41,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder 
 { 
-    [coder encodeInteger:readId forKey:@"readId"];
+    [coder encodeInteger:readingId forKey:@"readingId"];
     [coder encodeFloat:progress forKey:@"progress"];
     [coder encodeObject:sessionIdentifier forKey:@"sessionIdentifier"];
     [coder encodeInteger:duration forKey:@"duration"];
@@ -53,7 +53,7 @@
 - (id)initWithCoder:(NSCoder *)coder 
 { 
     if ((self == [super init])) {
-        readId = [coder decodeIntegerForKey:@"readId"];
+        readingId = [coder decodeIntegerForKey:@"readingId"];
         progress = [coder decodeFloatForKey:@"progress"];
         duration = [coder decodeIntegerForKey:@"duration"];
         latitude = [coder decodeDoubleForKey:@"latitude"];
@@ -65,8 +65,8 @@
     return self; 
 }
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ readId: %d, progress: %f, sessionIdentifier: %@, duration: %d, occurrenceTime:%@, lat: %f, lng: %f", 
-            [super description], [self readId], [self progress], [self sessionIdentifier], [self duration], [self occurrenceTime], latitude, longitude];
+    return [NSString stringWithFormat:@"%@ readingId: %d, progress: %f, sessionIdentifier: %@, duration: %d, occurrenceTime:%@, lat: %f, lng: %f", 
+            [super description], [self readingId], [self progress], [self sessionIdentifier], [self duration], [self occurrenceTime], latitude, longitude];
 
 }
 - (void)dealloc {

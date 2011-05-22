@@ -7,16 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ReadmillReadSession.h"
+#import "ReadmillReadingSession.h"
 
 @interface NSKeyedArchiver (ReadmillArchiverExtension)
-+ (NSString *)readmillReadSessionArchivePath;
++ (NSString *)readmillReadingSessionArchivePath;
 + (NSString *)readmillPingArchivePath;
-+ (BOOL)archiveReadmillReadSession:(ReadmillReadSessionArchive *)archive;
++ (BOOL)archiveReadmillReadingSession:(ReadmillReadingSessionArchive *)archive;
 + (BOOL)archiveReadmillPings:(NSArray *)readmillPings;
 @end
 
 @interface NSKeyedUnarchiver (ReadmillArchiverExtension) 
-+ (ReadmillReadSessionArchive *)unarchiveReadmillReadSession;
++ (ReadmillReadingSessionArchive *)unarchiveReadmillReadingSession;
 + (NSArray *)unarchiveReadmillPings;
 @end

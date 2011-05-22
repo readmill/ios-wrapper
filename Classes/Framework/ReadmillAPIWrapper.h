@@ -31,21 +31,21 @@ typedef double CLLocationDegrees;
 
 
 /*!
- @enum ReadmillReadState
+ @enum ReadmillReadingState
  @brief   States for a user's interest in a book.
- @constant   ReadStateInteresting The user has marked the book as interesting.
- @constant   ReadStateReading The user has started reading the book.
- @constant   ReadStateFinished The user has finished reading the book.
- @constant   ReadStateAbandoned The user has abandoned the book and will not finish it.
+ @constant   ReadingStateInteresting The user has marked the book as interesting.
+ @constant   ReadingStateReading The user has started reading the book.
+ @constant   ReadingStateFinished The user has finished reading the book.
+ @constant   ReadingStateAbandoned The user has abandoned the book and will not finish it.
  */
 typedef enum {
     
-    ReadStateInteresting = 1,
-    ReadStateReading = 2,
-    ReadStateFinished = 3,
-    ReadStateAbandoned = 4
+    ReadingStateInteresting = 1,
+    ReadingStateReading = 2,
+    ReadingStateFinished = 3,
+    ReadingStateAbandoned = 4
     
-} ReadmillReadState;
+} ReadmillReadingState;
 
 // General 
 
@@ -94,22 +94,22 @@ static NSString * const kReadmillAPIUserPermalinkURLKey = @"permalink_url";
 static NSString * const kReadmillAPIUserReadmillUserNameKey = @"username";
 static NSString * const kReadmillAPIUserWebsiteKey = @"website";
 
-#pragma mark API Keys - Read
+#pragma mark API Keys - Reading
 
-static NSString * const kReadmillAPIReadDateAbandonedKey = @"abandoned_at";
-static NSString * const kReadmillAPIReadDateCreatedKey = @"created_at";
-static NSString * const kReadmillAPIReadDateFinishedKey = @"finished_at";
-static NSString * const kReadmillAPIReadDateModifiedKey = @"touched_at";
-static NSString * const kReadmillAPIReadDateStarted = @"started_at";
-static NSString * const kReadmillAPIReadClosingRemarkKey = @"closing_remark";
-static NSString * const kReadmillAPIReadIsPrivateKey = @"is_private";
-static NSString * const kReadmillAPIReadStateKey = @"state";
-static NSString * const kReadmillAPIReadBookKey = @"book";
-static NSString * const kReadmillAPIReadUserKey = @"user";
-static NSString * const kReadmillAPIReadIdKey = @"id";
-static NSString * const kReadmillAPIReadEstimatedTimeLeft = @"estimated_time_left";
-static NSString * const kReadmillAPIReadDuration = @"duration";
-static NSString * const kReadmillAPIReadProgress = @"progress";
+static NSString * const kReadmillAPIReadingDateAbandonedKey = @"abandoned_at";
+static NSString * const kReadmillAPIReadingDateCreatedKey = @"created_at";
+static NSString * const kReadmillAPIReadingDateFinishedKey = @"finished_at";
+static NSString * const kReadmillAPIReadingDateModifiedKey = @"touched_at";
+static NSString * const kReadmillAPIReadingDateStarted = @"started_at";
+static NSString * const kReadmillAPIReadingClosingRemarkKey = @"closing_remark";
+static NSString * const kReadmillAPIReadingIsPrivateKey = @"is_private";
+static NSString * const kReadmillAPIReadingStateKey = @"state";
+static NSString * const kReadmillAPIReadingBookKey = @"book";
+static NSString * const kReadmillAPIReadingUserKey = @"user";
+static NSString * const kReadmillAPIReadingIdKey = @"id";
+static NSString * const kReadmillAPIReadingEstimatedTimeLeft = @"estimated_time_left";
+static NSString * const kReadmillAPIReadingDuration = @"duration";
+static NSString * const kReadmillAPIReadingProgress = @"progress";
 
 static NSString * const kReadmillAPIClientIdKey = @"client";
 
@@ -263,12 +263,12 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 - (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author;
 
 /*!
- @param readId The ReadmillReadingId of the read to view. 
- @result An NSURL pointing to the Readmill read.  
- @brief   Obtain a read link URL containing the parameters to have Readmill present a UI to the user 
- for editing their read of this book in their Readmill account.
+ @param readingId The ReadmillReadingId of the reading to view. 
+ @result An NSURL pointing to the Readmill reading.  
+ @brief   Obtain a reading link URL containing the parameters to have Readmill present a UI to the user 
+ for editing their reading of this book in their Readmill account.
  */
-- (NSURL *)URLForViewingReadWithReadId:(ReadmillReadingId)readId;
+- (NSURL *)URLForViewingReadingWithId:(ReadmillReadingId)readingId;
 
 
 #pragma mark -
@@ -321,84 +321,84 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 -(NSDictionary *)addBookWithTitle:(NSString* )bookTitle author:(NSString *)bookAuthor isbn:(NSString *)bookIsbn error:(NSError **)error;
 
 #pragma mark -
-#pragma mark Reads
+#pragma mark Readings
 
 /*!
- @param bookId The id of the book to create a read for.
- @param readState The initial read state.
- @param isPrivate The intial read privacy.
+ @param bookId The id of the book to create a reading for.
+ @param readingState The initial reading state.
+ @param isPrivate The intial reading privacy.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result The created read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
- @brief   Create a read for the current user for the given book Id. 
+ @result The created reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
+ @brief   Create a reading for the current user for the given book Id. 
  
- IMPORTANT: This will add a read to Readmill even if it already exists. Please search for a read before creating a new one, or use the 
- -findOrCreateReadForBook:delegate: convenience method in the ReadmillUser object, which does this for you. 
+ IMPORTANT: This will add a reading to Readmill even if it already exists. Please search for a reading before creating a new one, or use the 
+ -findOrCreateReadingForBook:delegate: convenience method in the ReadmillUser object, which does this for you. 
  */
--(NSDictionary *)createReadWithBookId:(ReadmillBookId)bookId state:(ReadmillReadState)readState private:(BOOL)isPrivate error:(NSError **)error;
+-(NSDictionary *)createReadingWithBookId:(ReadmillBookId)bookId state:(ReadmillReadingState)readingState private:(BOOL)isPrivate error:(NSError **)error;
 
 /*!
- @param readId The id of the read to update.
- @param readState The new read state.
- @param isPrivate The new read privacy.
+ @param readingId The id of the reading to update.
+ @param readingState The new reading state.
+ @param isPrivate The new reading privacy.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @brief   Update a read with the given Id with a new state, privacy and closing remark. 
+ @brief   Update a reading with the given Id with a new state, privacy and closing remark. 
  */
--(void)updateReadWithId:(ReadmillReadingId)readId withState:(ReadmillReadState)readState private:(BOOL)isPrivate closingRemark:(NSString *)remark error:(NSError **)error;
+-(void)updateReadingWithId:(ReadmillReadingId)readingId withState:(ReadmillReadingState)readingState private:(BOOL)isPrivate closingRemark:(NSString *)remark error:(NSError **)error;
 
 /*!
- @param userId The user Id of the user you'd like reads for.
+ @param userId The user Id of the user you'd like readings for.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A list of reads in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
- @brief   Get a list of reads for a given user Id. 
+ @result A list of readings in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
+ @brief   Get a list of readings for a given user Id. 
  */
--(NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error;
+-(NSArray *)publicReadingsForUserWithId:(ReadmillUserId)userId error:(NSError **)error;
 
 /*!
- @param userName The user name of the user you'd like reads for.
+ @param userName The user name of the user you'd like readings for.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A list of reads in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
- @brief   Get a list of reads for a given user name. 
+ @result A list of readings in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
+ @brief   Get a list of readings for a given user name. 
  */
--(NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error;
+-(NSArray *)publicReadingsForUserWithName:(NSString *)userName error:(NSError **)error;
 
 /*!
- @param readId The Id of the read you'd like to get details for.
+ @param readingId The Id of the reading you'd like to get details for.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A specific read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
- @brief   Get a specific read by its id.
+ @result A specific reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
+ @brief   Get a specific reading by its id.
  */
--(NSDictionary *)readWithId:(ReadmillReadingId)readId error:(NSError **)error;
+-(NSDictionary *)readingWithId:(ReadmillReadingId)readingId error:(NSError **)error;
 /*!
- @param readId The Id of the read you'd like to get details for.
- @param userId The user Id of the user the requested read belongs to.
+ @param readingId The Id of the reading you'd like to get details for.
+ @param userId The user Id of the user the requested reading belongs to.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A specific read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
- @brief   Get a specific read by its id and user id. 
+ @result A specific reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
+ @brief   Get a specific reading by its id and user id. 
  */
--(NSDictionary *)readWithId:(ReadmillReadingId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error;
+-(NSDictionary *)readingWithId:(ReadmillReadingId)readingId forUserWithId:(ReadmillUserId)userId error:(NSError **)error;
 
 /*!
- @param readId The Id of the read you'd like to get details for.
- @param userName The user name of the user the requested read belongs to.
+ @param readingId The Id of the reading you'd like to get details for.
+ @param userName The user name of the user the requested reading belongs to.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A specific read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
- @brief   Get a specific read by its id and user name. 
+ @result A specific reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
+ @brief   Get a specific reading by its id and user name. 
  */
--(NSDictionary *)readWithId:(ReadmillReadingId)readId forUserWithName:(NSString *)userName error:(NSError **)error;
+-(NSDictionary *)readingWithId:(ReadmillReadingId)readingId forUserWithName:(NSString *)userName error:(NSError **)error;
 
 /*!
- @param url The URL as a string of the read you'd like to get details for.
+ @param url The URL as a string of the reading you'd like to get details for.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A specific read in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
- @brief   Get a specific read by its URL.
+ @result A specific reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
+ @brief   Get a specific reading by its URL.
  */
-- (NSDictionary *)readWithURLString:(NSString *)urlString error:(NSError **)error;
+- (NSDictionary *)readingWithURLString:(NSString *)urlString error:(NSError **)error;
 
 #pragma mark -
 #pragma mark Pings
   
 /*!
- @param readId The id of the read you'd like to ping.
+ @param readingId The id of the reading you'd like to ping.
  @param progress The current progress through the book as a float percentage.
  @param sessionId A session id. The specific value of this is not important, but it should persist through a user's "session" of reading a book. 
  @param duration The forward-pointing duration of the ping. Aim to ping again after this duration has elapsed if the user is still reading. 
@@ -406,10 +406,10 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time.
  */
--(void)pingReadWithId:(ReadmillReadingId)readId withProgress:(ReadmillReadingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime error:(NSError **)error;
+-(void)pingReadingWithId:(ReadmillReadingId)readingId withProgress:(ReadmillReadingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime error:(NSError **)error;
 
 /*!
- @param readId The id of the read you'd like to ping.
+ @param readingId The id of the reading you'd like to ping.
  @param progress The current progress through the book as a float percentage.
  @param sessionId A session id. The specific value of this is not important, but it should persist through a user's "session" of reading a book. 
  @param duration The forward-pointing duration of the ping. Aim to ping again after this duration has elapsed if the user is still reading. 
@@ -419,7 +419,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time. 
  */
--(void)pingReadWithId:(ReadmillReadingId)readId withProgress:(ReadmillReadingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude error:(NSError **)error;
+-(void)pingReadingWithId:(ReadmillReadingId)readingId withProgress:(ReadmillReadingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude error:(NSError **)error;
 
 #pragma mark -
 #pragma mark Users

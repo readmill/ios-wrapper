@@ -22,28 +22,28 @@
 
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
-#import "ReadmillReadSession.h"
+#import "ReadmillReadingSession.h"
 
-@class ReadmillRead;
+@class ReadmillReading;
 
-@protocol ReadmillReadUpdatingDelegate <NSObject>
+@protocol ReadmillReadingUpdatingDelegate <NSObject>
 
 /*!
- @param read The read object that updated its metadata with the Readmill service successfully. 
+ @param reading The reading object that updated its metadata with the Readmill service successfully. 
  @brief   Delegate method informing the target that the given metadata update succeeded. 
  */
--(void)readmillReadDidUpdateMetadataSuccessfully:(ReadmillRead *)read;
+-(void)readmillReadingDidUpdateMetadataSuccessfully:(ReadmillReading *)reading;
 
 /*!
- @param read The read object that failed to update its metadata with the Readmill service successfully.
+ @param reading The reading object that failed to update its metadata with the Readmill service successfully.
  @param error The error that occurred.
  @brief   Delegate method informing the target that the given metadata update failed. 
  */
--(void)readmillRead:(ReadmillRead *)read didFailToUpdateMetadataWithError:(NSError *)error;
+-(void)readmillReading:(ReadmillReading *)reading didFailToUpdateMetadataWithError:(NSError *)error;
 
 @end
 
-@interface ReadmillRead : NSObject {
+@interface ReadmillReading : NSObject {
 @private
     
     NSDate *dateAbandoned;
@@ -57,11 +57,11 @@
     
     BOOL isPrivate;
     
-    ReadmillReadState state;
+    ReadmillReadingState state;
     
     ReadmillBookId bookId;
     ReadmillUserId userId;
-    ReadmillReadingId readId;
+    ReadmillReadingId readingId;
     
     ReadmillAPIWrapper *apiWrapper;
     
@@ -69,20 +69,20 @@
 }
 
 /*!
- @param apiDict An API read dictionary.
+ @param apiDict An API reading dictionary.
  @param wrapper The ReadmillAPIWrapper object to be used.
- @result The created read.
- @brief   Create a read with the given API dictionary and ReadmillAPIWrapper object. 
+ @result The created reading.
+ @brief   Create a reading with the given API dictionary and ReadmillAPIWrapper object. 
  
- Typically, you would get a ReadmillRead object using the convenience methods in ReadmillUser. 
+ Typically, you would get a ReadmillReading object using the convenience methods in ReadmillUser. 
  
  This is the designated initializer of this class.
  */
 -(id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper;
 
 /*!
- @param apiDict An API read dictionary. 
- @brief  Update this read with an NSDictionary from a ReadmillAPIWrapper object.
+ @param apiDict An API reading dictionary. 
+ @brief  Update this reading with an NSDictionary from a ReadmillAPIWrapper object.
  
  Typically, there's no need to call this method.
  */
@@ -92,45 +92,45 @@
 #pragma mark Updating
 
 /*!
- @param newState The new read state.
+ @param newState The new reading state.
  @param delegate The delegate object to be informed of success or failure. 
- @brief   Update the read state of this read. 
+ @brief   Update the reading state of this reading. 
  */
--(void)updateState:(ReadmillReadState)newState delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateState:(ReadmillReadingState)newState delegate:(id <ReadmillReadingUpdatingDelegate>)delegate;
 
 /*!
  @param isPrivate The new privacy setting.
  @param delegate The delegate object to be informed of success or failure. 
- @brief   Update the privacy of this read. 
+ @brief   Update the privacy of this reading. 
  */
--(void)updateIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingUpdatingDelegate>)delegate;
 
 /*!
  @param newRemark The new closing remark.
  @param delegate The delegate object to be informed of success or failure. 
- @brief   Update the closing remark of this read. 
+ @brief   Update the closing remark of this reading. 
  
  The closing remark is typically asked for when a user finishes reading a book.
  */
--(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate;
 
 /*!
- @param newState The new read state
+ @param newState The new reading state
  @param isPrivate The new privacy setting.
  @param newRemark The new closing remark.
  @param delegate The delegate object to be informed of success or failure. 
- @brief   Update the read state of this read. 
+ @brief   Update the reading state of this reading. 
  */
--(void)updateWithState:(ReadmillReadState)newState isPrivate:(BOOL)readIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate;
+-(void)updateWithState:(ReadmillReadingState)newState isPrivate:(BOOL)readingIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate;
 
 #pragma mark -
 #pragma mark Sessions
 
 /*!
- @result The created read session.
- @brief   Create a new reading session for this read. 
+ @result The created reading session.
+ @brief   Create a new reading session for this reading. 
  */
--(ReadmillReadSession *)createReadSession;
+-(ReadmillReadingSession *)createReadingSession;
 
 #pragma mark -
 #pragma mark Properties
@@ -143,7 +143,7 @@
 
 /*!
  @property  dateCreated
- @brief The date this read object was created, typically the date the user first interacted with the book.
+ @brief The date this reading object was created, typically the date the user first interacted with the book.
  */
 @property (readonly, copy) NSDate *dateCreated;
 
@@ -155,7 +155,7 @@
 
 /*!
  @property  dateModified
- @brief The last change date of this read.
+ @brief The last change date of this reading.
  */
 @property (readonly, copy) NSDate *dateModified;
 
@@ -167,62 +167,62 @@
 
 /*!
  @property  estimatedTimeLeft
- @brief The estimated time left for a read.
+ @brief The estimated time left for a reading.
  */
 @property (readonly, copy) NSNumber *estimatedTimeLeft;
 
 /*!
  @property  timeSpent
- @brief The time spent on a read.
+ @brief The time spent on a reading.
  */
 @property (readonly, copy) NSNumber *timeSpent;
 
 /*!
  @property  closingRemark
- @brief The closing remark for this read, if any. Typically asked for and set when 
+ @brief The closing remark for this reading, if any. Typically asked for and set when 
  the user is finished reading a book.
  */
 @property (readonly, copy) NSString *closingRemark;
 
 /*!
  @property  isPrivate
- @brief The current privacy setting of this read.
+ @brief The current privacy setting of this reading.
  */
 @property (readonly) BOOL isPrivate;
 
 /*!
  @property  state
- @brief The current state of the read.
+ @brief The current state of the reading.
  */
-@property (readonly) ReadmillReadState state;
+@property (readonly) ReadmillReadingState state;
 
 /*!
  @property  bookId
- @brief The Readmill id of the book this read is for.
+ @brief The Readmill id of the book this reading is for.
  */
 @property (readonly) ReadmillBookId bookId;
 
 /*!
  @property  userId
- @brief The id of the Readmill user this read is for.
+ @brief The id of the Readmill user this reading is for.
  */
 @property (readonly) ReadmillUserId userId;
 
 /*!
- @property  readId
- @brief The id of this read in Readmill.
+ @property  readingId
+ @brief The id of this reading in Readmill.
  */
-@property (readonly) ReadmillReadingId readId;
+@property (readonly) ReadmillReadingId readingId;
 
 /*!
  @property  progress
- @brief The progress of this read in Readmill.
+ @brief The progress of this reading in Readmill.
  */
 @property (readonly) ReadmillReadingProgress progress;
 
 /*!
  @property  apiWrapper
- @brief The ReadmillAPIWrapper object this read uses.
+ @brief The ReadmillAPIWrapper object this reading uses.
  */
 @property (readonly, retain) ReadmillAPIWrapper *apiWrapper;
 

@@ -21,7 +21,7 @@
  */
 
 #import "Readmill_SignedInViewController.h"
-#import "ReadmillReadSession.h"
+#import "ReadmillReadingSession.h"
 #import "ReadmillUIPresenter.h"
 #define kPingDuration 300
 
@@ -155,11 +155,11 @@
 
 #pragma mark STEP 5: We successfully linked a book. Create a session object and store it.
 
--(void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)aBook withRead:(ReadmillRead *)aRead {
+-(void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)aBook withReading:(ReadmillReading *)aReading {
     
-    [self setRead:aRead];
+    [self setRead:aReading];
     
-    ReadmillReadSession *session = [aRead createReadSession];
+    ReadmillReadingSession *session = [aReading createReadingSession];
     [session pingWithProgress:0 pingDuration:kPingDuration delegate:nil];
     
 }
@@ -184,7 +184,7 @@
         
         // Present the Readmill UI.
         
-        ReadmillFinishReadUI *popup = [[ReadmillFinishReadUI alloc] initWithRead:[self read]];
+        ReadmillViewReadingUI *popup = [[ReadmillViewReadingUI alloc] initWithReading:[self read]];
         [popup setDelegate:self];
         
         ReadmillUIPresenter *presenter = [[ReadmillUIPresenter alloc] initWithContentViewController:popup];
@@ -196,19 +196,19 @@
 
 #pragma mark STEP 2: Handle delegate methods.
 
--(void)finishReadUIWillCloseWithNoAction:(ReadmillFinishReadUI *)readUI {
+-(void)viewReadingUIWillCloseWithNoAction:(ReadmillViewReadingUI *)readingUI {
     
     // The user decided not to update their read status in Readmill.
 }
 
 #pragma mark STEP 3: Successfully updated read status. 
 
--(void)finishReadUI:(ReadmillFinishReadUI *)readUI didFinishRead:(ReadmillRead *)aRead {
+-(void)viewReadingUI:(ReadmillViewReadingUI *)readUI didFinishReading:(ReadmillReading *)aReading {
     
-    // The read object will now be updated with a statue of ReadStateFinished and possibly an updated closing remark. 
+    // The read object will now be updated with a statue of ReadingStateFinished and possibly an updated closing remark. 
 }
 
--(void)finishReadUI:(ReadmillFinishReadUI *)readUI didFailToFinishRead:(ReadmillRead *)aRead withError:(NSError *)error {
+-(void)viewReadingUI:(ReadmillViewReadingUI *)readUI didFailToFinishReading:(ReadmillReading *)aReading withError:(NSError *)error {
     
     // There was an error when trying to update status.
     

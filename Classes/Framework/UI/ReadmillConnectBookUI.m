@@ -168,7 +168,7 @@
 		
         // Can be...
         // com.readmill://dismiss
-        // com.readmill://change?uri="uri to read"
+        // com.readmill://change?uri="uri to reading"
         
         // Immediately remove the popover
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
@@ -184,20 +184,20 @@
             NSString *uri = @"uri";
             if ((uri = [parameters valueForKey:uri])) {
                 
-                // The uri parameter is the full URL to the read we want to connect to. 
+                // The uri parameter is the full URL to the reading we want to connect to. 
                 NSError *error = nil;
-                NSDictionary *apiResponse = [[[self user] apiWrapper] readWithURLString:uri
+                NSDictionary *apiResponse = [[[self user] apiWrapper] readingWithURLString:uri
                                                                                   error:&error];
                 if (nil == error) {
                     
-                    ReadmillRead *read = [[ReadmillRead alloc] initWithAPIDictionary:apiResponse 
+                    ReadmillReading *reading = [[ReadmillReading alloc] initWithAPIDictionary:apiResponse 
                                                                           apiWrapper:[[self user] apiWrapper]];
                     
                     [[self delegate] connect:self
                       didSucceedToLinkToBook:[self book] 
-                                    withRead:read];
+                                 withReading:reading];
                     
-                    [read release]; 
+                    [reading release]; 
                     
                 }
             }

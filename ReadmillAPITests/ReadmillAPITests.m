@@ -66,8 +66,8 @@
 - (void)testFindRead {
     
     // Alice in wonderland
-    NSArray *reads = [wrapper publicReadsForUserWithId:18 
-                                                 error:nil];
+    NSArray *reads = [wrapper publicReadingsForUserWithId:18 
+                                                    error:nil];
     
     NSLog(@"reads: %@", reads);
     STAssertTrue(0 < [reads count], @"No reads for user.");

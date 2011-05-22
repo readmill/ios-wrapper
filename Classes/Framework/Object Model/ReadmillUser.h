@@ -64,30 +64,30 @@
 -(void)readmillUser:(ReadmillUser *)user failedToFindBooksWithError:(NSError *)error;
 
 @end
-@protocol ReadmillReadFindingDelegate <NSObject>
+@protocol ReadmillReadingFindingDelegate <NSObject>
 
 /*!
  @param user The user object that was performing the request.
- @param reads An array of ReadmillRead objects that matched the given search parameters or were created. 
- @param book The book that the read(s) were found or created for.
- @brief   Delegate method informing the target that Readmill found or created the given reads. 
+ @param readings An array of ReadmillReading objects that matched the given search parameters or were created. 
+ @param book The book that the reading(s) were found or created for.
+ @brief   Delegate method informing the target that Readmill found or created the given readings. 
  */
--(void)readmillUser:(ReadmillUser *)user didFindReads:(NSArray *)reads forBook:(ReadmillBook *)book;
+-(void)readmillUser:(ReadmillUser *)user didFindReadings:(NSArray *)readings forBook:(ReadmillBook *)book;
 
 /*!
  @param user The user object that was performing the request.
- @param book The book that the read(s) were found or created for.
- @brief   Delegate method informing the target that Readmill could not find any reads matching the previously given search criteria and book. 
+ @param book The book that the reading(s) were found or created for.
+ @brief   Delegate method informing the target that Readmill could not find any readings matching the previously given search criteria and book. 
  */
--(void)readmillUser:(ReadmillUser *)user foundNoReadsForBook:(ReadmillBook *)book;
+-(void)readmillUser:(ReadmillUser *)user foundNoReadingsForBook:(ReadmillBook *)book;
 
 /*!
  @param user The user object that was performing the request
- @param book The book that the read(s) were found or created for.
+ @param book The book that the reading(s) were found or created for.
  @param error An NSError object describing the error that occurred. 
- @brief   Delegate method informing the target that and error occurred attempting to search for or create read(s). 
+ @brief   Delegate method informing the target that and error occurred attempting to search for or create reading(s). 
  */
--(void)readmillUser:(ReadmillUser *)user failedToFindReadForBook:(ReadmillBook *)book withError:(NSError *)error;
+-(void)readmillUser:(ReadmillUser *)user failedToFindReadingForBook:(ReadmillBook *)book withError:(NSError *)error;
 
 @end
 
@@ -292,37 +292,37 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
 -(void)findOrCreateBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 #pragma mark -
-#pragma mark Reads
+#pragma mark Readings
 
 /*!
- @param book The book to create a read for.
- @param readState The initial read state.
- @param isPrivate The privacy of the read.
- @param readFindingDelegate The delegate object to receive notifications of success or failure.
- @brief   Create a read for the given book in Readmill.
+ @param book The book to create a reading for.
+ @param readingState The initial reading state.
+ @param isPrivate The privacy of the reading.
+ @param readingFindingDelegate The delegate object to receive notifications of success or failure.
+ @brief   Create a reading for the given book in Readmill.
  
- IMPORTANT: The read will be created even if one exists in Readmill. Please search first, or use the convenience method
- -findOrCreateReadForBook:delegate:.
+ IMPORTANT: The reading will be created even if one exists in Readmill. Please search first, or use the convenience method
+ -findOrCreateReadingForBook:delegate:.
  */
--(void)createReadForBook:(ReadmillBook *)book state:(ReadmillReadState)readState isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
+-(void)createReadingForBook:(ReadmillBook *)book state:(ReadmillReadingState)readingState isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
 
 /*!
- @param book The book to find a read for.
- @param readFindingDelegate The delegate object to receive notifications of success or failure.
- @brief   Find a read for the given book in Readmill.
+ @param book The book to find a reading for.
+ @param readingFindingDelegate The delegate object to receive notifications of success or failure.
+ @brief   Find a reading for the given book in Readmill.
  */
--(void)findReadForBook:(ReadmillBook *)book delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
+-(void)findReadingForBook:(ReadmillBook *)book delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
 
 /*!
- @param book The book to find or create a read for.
- @param readState The initial read state.
- @param isPrivate The privacy of the read if a new one is created.
- @param readFindingDelegate The delegate object to receive notifications of success or failure.
- @brief   Find a read for the given book in Readmill, creating one if it doesn't exist.
+ @param book The book to find or create a reading for.
+ @param readingState The initial reading state.
+ @param isPrivate The privacy of the reading if a new one is created.
+ @param readingFindingDelegate The delegate object to receive notifications of success or failure.
+ @brief   Find a reading for the given book in Readmill, creating one if it doesn't exist.
 
- This is equivalent of calling -createReadForBook:delegate:, then calling findReadForBook:delegate: if none are found.
+ This is equivalent of calling -createReadingForBook:delegate:, then calling findReadingForBook:delegate: if none are found.
  */
--(void)findOrCreateReadForBook:(ReadmillBook *)book state:(ReadmillReadState)readState createdReadIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadFindingDelegate>)readFindingDelegate;
+-(void)findOrCreateReadingForBook:(ReadmillBook *)book state:(ReadmillReadingState)readingState createdReadingIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
 
 #pragma mark -
 #pragma mark Properties

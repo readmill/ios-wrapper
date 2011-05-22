@@ -79,10 +79,10 @@
 		734A51EF135A1E31009F9794 /* JSONRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF1E12F06360006028D0 /* JSONRepresentation.h */; };
 		734A51F2135A1E37009F9794 /* ReadmillBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF512F06360006028D0 /* ReadmillBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		734A51F3135A1E37009F9794 /* ReadmillBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEF612F06360006028D0 /* ReadmillBook.m */; };
-		734A51F4135A1E37009F9794 /* ReadmillRead.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF712F06360006028D0 /* ReadmillRead.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		734A51F5135A1E37009F9794 /* ReadmillRead.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEF812F06360006028D0 /* ReadmillRead.m */; };
-		734A51F6135A1E37009F9794 /* ReadmillReadSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF912F06360006028D0 /* ReadmillReadSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		734A51F7135A1E37009F9794 /* ReadmillReadSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFA12F06360006028D0 /* ReadmillReadSession.m */; };
+		734A51F4135A1E37009F9794 /* ReadmillReading.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF712F06360006028D0 /* ReadmillReading.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51F5135A1E37009F9794 /* ReadmillReading.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEF812F06360006028D0 /* ReadmillReading.m */; };
+		734A51F6135A1E37009F9794 /* ReadmillReadingSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF912F06360006028D0 /* ReadmillReadingSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51F7135A1E37009F9794 /* ReadmillReadingSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFA12F06360006028D0 /* ReadmillReadingSession.m */; };
 		734A51F8135A1E37009F9794 /* ReadmillUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFB12F06360006028D0 /* ReadmillUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		734A51F9135A1E37009F9794 /* ReadmillUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFC12F06360006028D0 /* ReadmillUser.m */; };
 		734A51FA135A1E3D009F9794 /* DismissingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370EE71341172C00880F5B /* DismissingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -91,8 +91,8 @@
 		734A51FD135A1E41009F9794 /* ReadmillUIPresenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2A90312F192EF00D7D249 /* ReadmillUIPresenter.m */; };
 		734A51FE135A1E41009F9794 /* ReadmillConnectBookUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		734A51FF135A1E41009F9794 /* ReadmillConnectBookUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */; };
-		734A5200135A1E41009F9794 /* ReadmillFinishReadUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF3D12F0951F006028D0 /* ReadmillFinishReadUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		734A5201135A1E41009F9794 /* ReadmillFinishReadUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF3E12F0951F006028D0 /* ReadmillFinishReadUI.m */; };
+		734A5200135A1E41009F9794 /* ReadmillViewReadingUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF3D12F0951F006028D0 /* ReadmillViewReadingUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A5201135A1E41009F9794 /* ReadmillViewReadingUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF3E12F0951F006028D0 /* ReadmillViewReadingUI.m */; };
 		734A5202135A1E41009F9794 /* ReadmillArchiverExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 731471EB1353601200A41B49 /* ReadmillArchiverExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		734A5203135A1E41009F9794 /* ReadmillArchiverExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471EC1353601200A41B49 /* ReadmillArchiverExtensions.m */; };
 		734A5204135A1E41009F9794 /* ReadmillAPIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFD12F06360006028D0 /* ReadmillAPIConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -132,8 +132,8 @@
 		502698D1130C87D300E67974 /* README.asciidoc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.asciidoc; sourceTree = "<group>"; };
 		731471C7135304F900A41B49 /* ReadmillURLExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillURLExtensions.h; path = Classes/Framework/ReadmillURLExtensions.h; sourceTree = SOURCE_ROOT; };
 		731471C8135304F900A41B49 /* ReadmillURLExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillURLExtensions.m; path = Classes/Framework/ReadmillURLExtensions.m; sourceTree = SOURCE_ROOT; };
-		731471EB1353601200A41B49 /* ReadmillArchiverExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillArchiverExtensions.h; path = ../ReadmillArchiverExtensions.h; sourceTree = "<group>"; };
-		731471EC1353601200A41B49 /* ReadmillArchiverExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillArchiverExtensions.m; path = ../ReadmillArchiverExtensions.m; sourceTree = "<group>"; };
+		731471EB1353601200A41B49 /* ReadmillArchiverExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ReadmillArchiverExtensions.h; path = ../ReadmillArchiverExtensions.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		731471EC1353601200A41B49 /* ReadmillArchiverExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ReadmillArchiverExtensions.m; path = ../ReadmillArchiverExtensions.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7318A469137D294800CBC7A4 /* ReadmillErrorExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillErrorExtensions.h; path = ../ReadmillErrorExtensions.h; sourceTree = "<group>"; };
 		7318A46A137D294800CBC7A4 /* ReadmillErrorExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillErrorExtensions.m; path = ../ReadmillErrorExtensions.m; sourceTree = "<group>"; };
 		733291061356FC0B0063FBF4 /* ReadmillFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReadmillFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,7 +178,7 @@
 		734A51B8135A1DF6009F9794 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		734A51BA135A1DF6009F9794 /* ReadmillAPITests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReadmillAPITests-Prefix.pch"; sourceTree = "<group>"; };
 		734A51BB135A1DF6009F9794 /* ReadmillAPITests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadmillAPITests.h; sourceTree = "<group>"; };
-		734A51BD135A1DF6009F9794 /* ReadmillAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReadmillAPITests.m; sourceTree = "<group>"; };
+		734A51BD135A1DF6009F9794 /* ReadmillAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillAPITests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		735E41D8135A666D00855884 /* ReadmillPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ReadmillPing.h; path = Classes/Framework/ReadmillPing.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		735E41D9135A666D00855884 /* ReadmillPing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ReadmillPing.m; path = Classes/Framework/ReadmillPing.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		9647F57B12F1A0140088CAA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -191,12 +191,12 @@
 		96BEAED412F05E80006028D0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		96BEAEF512F06360006028D0 /* ReadmillBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillBook.h; sourceTree = "<group>"; };
 		96BEAEF612F06360006028D0 /* ReadmillBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillBook.m; sourceTree = "<group>"; };
-		96BEAEF712F06360006028D0 /* ReadmillRead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ReadmillRead.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		96BEAEF812F06360006028D0 /* ReadmillRead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillRead.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		96BEAEF912F06360006028D0 /* ReadmillReadSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ReadmillReadSession.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		96BEAEFA12F06360006028D0 /* ReadmillReadSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillReadSession.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		96BEAEFB12F06360006028D0 /* ReadmillUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillUser.h; sourceTree = "<group>"; };
-		96BEAEFC12F06360006028D0 /* ReadmillUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillUser.m; sourceTree = "<group>"; };
+		96BEAEF712F06360006028D0 /* ReadmillReading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ReadmillReading.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		96BEAEF812F06360006028D0 /* ReadmillReading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillReading.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		96BEAEF912F06360006028D0 /* ReadmillReadingSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ReadmillReadingSession.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		96BEAEFA12F06360006028D0 /* ReadmillReadingSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillReadingSession.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		96BEAEFB12F06360006028D0 /* ReadmillUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ReadmillUser.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		96BEAEFC12F06360006028D0 /* ReadmillUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillUser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		96BEAEFD12F06360006028D0 /* ReadmillAPIConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIConstants.h; sourceTree = "<group>"; };
 		96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ReadmillAPIWrapper.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillAPIWrapper.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -227,16 +227,16 @@
 		96BEAF1C12F06360006028D0 /* CJSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONSerializer.h; sourceTree = "<group>"; };
 		96BEAF1D12F06360006028D0 /* CJSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONSerializer.m; sourceTree = "<group>"; };
 		96BEAF1E12F06360006028D0 /* JSONRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
-		96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillConnectBookUI.h; path = UI/ReadmillConnectBookUI.h; sourceTree = "<group>"; };
-		96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillConnectBookUI.m; path = UI/ReadmillConnectBookUI.m; sourceTree = "<group>"; };
-		96BEAF3D12F0951F006028D0 /* ReadmillFinishReadUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillFinishReadUI.h; path = UI/ReadmillFinishReadUI.h; sourceTree = "<group>"; };
-		96BEAF3E12F0951F006028D0 /* ReadmillFinishReadUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillFinishReadUI.m; path = UI/ReadmillFinishReadUI.m; sourceTree = "<group>"; };
+		96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ReadmillConnectBookUI.h; path = UI/ReadmillConnectBookUI.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ReadmillConnectBookUI.m; path = UI/ReadmillConnectBookUI.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		96BEAF3D12F0951F006028D0 /* ReadmillViewReadingUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ReadmillViewReadingUI.h; path = UI/ReadmillViewReadingUI.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		96BEAF3E12F0951F006028D0 /* ReadmillViewReadingUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ReadmillViewReadingUI.m; path = UI/ReadmillViewReadingUI.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		96E2A90212F192EF00D7D249 /* ReadmillUIPresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillUIPresenter.h; path = UI/ReadmillUIPresenter.h; sourceTree = "<group>"; };
 		96E2A90312F192EF00D7D249 /* ReadmillUIPresenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillUIPresenter.m; path = UI/ReadmillUIPresenter.m; sourceTree = "<group>"; };
-		96F0756B12F061C800F6369D /* Readmill_FrameworkAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Readmill_FrameworkAppDelegate.h; path = Classes/Readmill_FrameworkAppDelegate.h; sourceTree = "<group>"; };
+		96F0756B12F061C800F6369D /* Readmill_FrameworkAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Readmill_FrameworkAppDelegate.h; path = Classes/Readmill_FrameworkAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		96F0756C12F061C800F6369D /* Readmill_FrameworkAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Readmill_FrameworkAppDelegate.m; path = Classes/Readmill_FrameworkAppDelegate.m; sourceTree = "<group>"; };
-		96F0757712F0620600F6369D /* Readmill_SignedInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Readmill_SignedInViewController.h; path = Classes/Readmill_SignedInViewController.h; sourceTree = "<group>"; };
-		96F0757812F0620600F6369D /* Readmill_SignedInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Readmill_SignedInViewController.m; path = Classes/Readmill_SignedInViewController.m; sourceTree = "<group>"; };
+		96F0757712F0620600F6369D /* Readmill_SignedInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Readmill_SignedInViewController.h; path = Classes/Readmill_SignedInViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		96F0757812F0620600F6369D /* Readmill_SignedInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = Readmill_SignedInViewController.m; path = Classes/Readmill_SignedInViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		96F0757F12F0623400F6369D /* Readmill_Framework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Readmill_Framework-Info.plist"; sourceTree = "<group>"; };
 		96F0758012F0623400F6369D /* Readmill_Framework-main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Readmill_Framework-main.m"; sourceTree = "<group>"; };
 		96F0758112F0623400F6369D /* Readmill_Framework-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Readmill_Framework-Prefix.pch"; sourceTree = "<group>"; };
@@ -453,10 +453,10 @@
 			children = (
 				96BEAEF512F06360006028D0 /* ReadmillBook.h */,
 				96BEAEF612F06360006028D0 /* ReadmillBook.m */,
-				96BEAEF712F06360006028D0 /* ReadmillRead.h */,
-				96BEAEF812F06360006028D0 /* ReadmillRead.m */,
-				96BEAEF912F06360006028D0 /* ReadmillReadSession.h */,
-				96BEAEFA12F06360006028D0 /* ReadmillReadSession.m */,
+				96BEAEF712F06360006028D0 /* ReadmillReading.h */,
+				96BEAEF812F06360006028D0 /* ReadmillReading.m */,
+				96BEAEF912F06360006028D0 /* ReadmillReadingSession.h */,
+				96BEAEFA12F06360006028D0 /* ReadmillReadingSession.m */,
 				96BEAEFB12F06360006028D0 /* ReadmillUser.h */,
 				96BEAEFC12F06360006028D0 /* ReadmillUser.m */,
 			);
@@ -543,8 +543,8 @@
 				96E2A90312F192EF00D7D249 /* ReadmillUIPresenter.m */,
 				96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */,
 				96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */,
-				96BEAF3D12F0951F006028D0 /* ReadmillFinishReadUI.h */,
-				96BEAF3E12F0951F006028D0 /* ReadmillFinishReadUI.m */,
+				96BEAF3D12F0951F006028D0 /* ReadmillViewReadingUI.h */,
+				96BEAF3E12F0951F006028D0 /* ReadmillViewReadingUI.m */,
 			);
 			name = "iPad UI";
 			sourceTree = "<group>";
@@ -580,13 +580,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				734A51F2135A1E37009F9794 /* ReadmillBook.h in Headers */,
-				734A51F4135A1E37009F9794 /* ReadmillRead.h in Headers */,
-				734A51F6135A1E37009F9794 /* ReadmillReadSession.h in Headers */,
+				734A51F4135A1E37009F9794 /* ReadmillReading.h in Headers */,
+				734A51F6135A1E37009F9794 /* ReadmillReadingSession.h in Headers */,
 				734A51F8135A1E37009F9794 /* ReadmillUser.h in Headers */,
 				734A51FA135A1E3D009F9794 /* DismissingView.h in Headers */,
 				734A51FC135A1E41009F9794 /* ReadmillUIPresenter.h in Headers */,
 				734A51FE135A1E41009F9794 /* ReadmillConnectBookUI.h in Headers */,
-				734A5200135A1E41009F9794 /* ReadmillFinishReadUI.h in Headers */,
+				734A5200135A1E41009F9794 /* ReadmillViewReadingUI.h in Headers */,
 				734A5202135A1E41009F9794 /* ReadmillArchiverExtensions.h in Headers */,
 				734A5204135A1E41009F9794 /* ReadmillAPIConstants.h in Headers */,
 				734A5205135A1E41009F9794 /* ReadmillAPIWrapper.h in Headers */,
@@ -799,13 +799,13 @@
 				734A51EC135A1E31009F9794 /* CJSONScanner.m in Sources */,
 				734A51EE135A1E31009F9794 /* CJSONSerializer.m in Sources */,
 				734A51F3135A1E37009F9794 /* ReadmillBook.m in Sources */,
-				734A51F5135A1E37009F9794 /* ReadmillRead.m in Sources */,
-				734A51F7135A1E37009F9794 /* ReadmillReadSession.m in Sources */,
+				734A51F5135A1E37009F9794 /* ReadmillReading.m in Sources */,
+				734A51F7135A1E37009F9794 /* ReadmillReadingSession.m in Sources */,
 				734A51F9135A1E37009F9794 /* ReadmillUser.m in Sources */,
 				734A51FB135A1E3D009F9794 /* DismissingView.m in Sources */,
 				734A51FD135A1E41009F9794 /* ReadmillUIPresenter.m in Sources */,
 				734A51FF135A1E41009F9794 /* ReadmillConnectBookUI.m in Sources */,
-				734A5201135A1E41009F9794 /* ReadmillFinishReadUI.m in Sources */,
+				734A5201135A1E41009F9794 /* ReadmillViewReadingUI.m in Sources */,
 				734A5203135A1E41009F9794 /* ReadmillArchiverExtensions.m in Sources */,
 				734A5206135A1E41009F9794 /* ReadmillAPIWrapper.m in Sources */,
 				735E41C6135A601C00855884 /* ReadmillSpinner.m in Sources */,

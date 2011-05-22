@@ -20,24 +20,24 @@
  THE SOFTWARE.
  */
 
-#import "ReadmillFinishReadUI.h"
+#import "ReadmillViewReadingUI.h"
 #import "ReadmillUser.h"
 #import "ReadmillStringExtensions.h"
 #import "ReadmillURLExtensions.h"
 #import "ReadmillUIPresenter.h"
 
-@interface ReadmillFinishReadUI ()
+@interface ReadmillViewReadingUI ()
 
-@property (nonatomic, readwrite, retain) ReadmillRead *read;
+@property (nonatomic, readwrite, retain) ReadmillReading *reading;
 
 @end
 
-@implementation ReadmillFinishReadUI
+@implementation ReadmillViewReadingUI
 
--(id)initWithRead:(ReadmillRead *)aRead {
+-(id)initWithReading:(ReadmillReading *)aReading {
     
     if ((self = [super init])) {
-        [self setRead:aRead];
+        [self setReading:aReading];
     }
     return self;
 }
@@ -46,12 +46,12 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [self setRead:nil];
+    [self setReading:nil];
     [self setDelegate:nil];
     [super dealloc];
 }
 
-@synthesize read;
+@synthesize reading;
 @synthesize delegate;
 
 -(void)didReceiveMemoryWarning {
@@ -62,7 +62,7 @@
 }
 
 -(void)willBeDismissed:(NSNotification *)notification {
-    [[self delegate] finishReadUIWillCloseWithNoAction:self];
+    [[self delegate] viewReadingUIWillCloseWithNoAction:self];
 }
 
 #pragma mark - View lifecycle
@@ -81,7 +81,7 @@
     
     [self setView:containerView];
     
-    NSURL *url = [[[self read] apiWrapper] URLForViewingReadWithReadId:[[self read] readId]];
+    NSURL *url = [[[self reading] apiWrapper] URLForViewingReadingWithId:[[self reading] readingId]];
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
@@ -133,7 +133,7 @@
 	if ([error code] != -999) {
         // ^ Load failed because the user clicked a new link to load
         
-        [[self delegate] finishReadUI:self didFailToFinishRead:[self read] withError:error];
+        [[self delegate] viewReadingUI:self didFailToFinishReading:[self reading] withError:error];
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
                                                             object:self];
 	}
@@ -145,7 +145,7 @@
     if ([[URL scheme] isEqualToString:kReadmillDomain]) {
 		
         // Can be...
-        // com.readmill://change?uri="uri to read"
+        // com.readmill://change?uri="uri to reading"
         
         // Dismiss the presenter immediately
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
@@ -160,17 +160,17 @@
             NSError *error = nil;
             NSString *uri = @"uri";
             if ((uri = [parameters valueForKey:uri])) { 
-                NSDictionary *readDictionary = [[[self read] apiWrapper] readWithURLString:uri 
+                NSDictionary *readingDictionary = [[[self reading] apiWrapper] readingWithURLString:uri 
                                                                                      error:&error];
                 
                 if (nil == error) {
                     
-                    // Update the read with new data (closing remark, progress, state etc)
-                    [[self read] updateWithAPIDictionary:readDictionary];
+                    // Update the reading with new data (closing remark, progress, state etc)
+                    [[self reading] updateWithAPIDictionary:readingDictionary];
                     
-                    // Notify the delegate that the read was finished/abandoned
-                    [[self delegate] finishReadUI:self 
-                                    didFinishRead:[self read]];
+                    // Notify the delegate that the reading was finished/abandoned
+                    [[self delegate] viewReadingUI:self 
+                                  didFinishReading:[self reading]];
                 }
             }
                 
@@ -180,9 +180,9 @@
                                                  code:0 
                                              userInfo:parameters];
             
-            [[self delegate] finishReadUI:self 
-                      didFailToFinishRead:[self read] 
-                                withError:error];
+            [[self delegate] viewReadingUI:self 
+                    didFailToFinishReading:[self reading] 
+                                 withError:error];
         }    
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 		return NO;

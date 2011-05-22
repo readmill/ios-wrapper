@@ -11,18 +11,18 @@
 
 @implementation NSKeyedArchiver (ReadmillArchiverExtension)
 
-+ (NSString *)readmillReadSessionArchivePath {
++ (NSString *)readmillReadingSessionArchivePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *libraryDirectory = [paths objectAtIndex:0];
-    return [libraryDirectory stringByAppendingPathComponent:@"ReadmillReadSession.archive"];       
+    return [libraryDirectory stringByAppendingPathComponent:@"ReadmillReadingSession.archive"];       
 }
 + (NSString *)readmillPingArchivePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *libraryDirectory = [paths objectAtIndex:0];
     return [libraryDirectory stringByAppendingPathComponent:@"ReadmillFailedPings.archive"];       
 }
-+ (BOOL)archiveReadmillReadSession:(ReadmillReadSessionArchive *)archive {
-    BOOL result = [self archiveRootObject:archive toFile:[NSKeyedArchiver readmillReadSessionArchivePath]];
++ (BOOL)archiveReadmillReadingSession:(ReadmillReadingSessionArchive *)archive {
+    BOOL result = [self archiveRootObject:archive toFile:[NSKeyedArchiver readmillReadingSessionArchivePath]];
     return result;
 }
 + (BOOL)archiveReadmillPings:(NSArray *)readmillPings {
@@ -33,9 +33,9 @@
 @end
 @implementation NSKeyedUnarchiver (ReadmillArchiverExtension)
 
-+ (ReadmillReadSessionArchive *)unarchiveReadmillReadSession {
-    ReadmillReadSessionArchive *archive = nil;
-    archive = [self unarchiveObjectWithFile:[NSKeyedArchiver readmillReadSessionArchivePath]];
++ (ReadmillReadingSessionArchive *)unarchiveReadmillReadingSession {
+    ReadmillReadingSessionArchive *archive = nil;
+    archive = [self unarchiveObjectWithFile:[NSKeyedArchiver readmillReadingSessionArchivePath]];
     return archive;
 }
 + (NSArray *)unarchiveReadmillPings {

@@ -22,7 +22,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ReadmillUser.h"
-#import "ReadmillRead.h"
+#import "ReadmillReading.h"
 #import "ReadmillBook.h"
 
 @class ReadmillConnectBookUI;
@@ -32,10 +32,10 @@
 /*!
  @param connectionUI The ReadmillConnectBookUI object sending the message.
  @param aBook The book that was linked to.
- @param aRead The created ReadmillRead object.
+ @param aReading The created ReadmillReading object.
  @brief   Called when a user successfully linked to a Readmill book.
  */
--(void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)aBook withRead:(ReadmillRead *)aRead;
+-(void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)aBook withReading:(ReadmillReading *)aReading;
 
 /*!
  @param connectionUI The ReadmillConnectBookUI object sending the message.

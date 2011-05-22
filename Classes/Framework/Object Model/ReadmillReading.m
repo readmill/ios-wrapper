@@ -20,10 +20,10 @@
  THE SOFTWARE.
  */
 
-#import "ReadmillRead.h"
+#import "ReadmillReading.h"
 #import "ReadmillDictionaryExtensions.h"
 
-@interface ReadmillRead ()
+@interface ReadmillReading ()
 
 @property (readwrite, copy) NSDate *dateAbandoned;
 @property (readwrite, copy) NSDate *dateCreated;
@@ -38,11 +38,11 @@
 
 @property (readwrite) BOOL isPrivate;
 
-@property (readwrite) ReadmillReadState state;
+@property (readwrite) ReadmillReadingState state;
 
 @property (readwrite) ReadmillBookId bookId;
 @property (readwrite) ReadmillUserId userId;
-@property (readwrite) ReadmillReadingId readId;
+@property (readwrite) ReadmillReadingId readingId;
 
 @property (readwrite) ReadmillReadingProgress progress;
 
@@ -50,7 +50,7 @@
 
 @end
 
-@implementation ReadmillRead
+@implementation ReadmillReading
 
 - (id)init {
     return [self initWithAPIDictionary:nil apiWrapper:nil];
@@ -74,34 +74,34 @@
     NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
     [formatter setDateFormat:@"%Y-%m-%dT%H:%M:%SZ"];
     
-    [self setDateAbandoned:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateAbandonedKey]]];
-    [self setDateCreated:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateCreatedKey]]];
-    [self setDateFinished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateFinishedKey]]];
-    [self setDateModified:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateModifiedKey]]];
-    [self setDateStarted:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadDateStarted]]];
+    [self setDateAbandoned:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateAbandonedKey]]];
+    [self setDateCreated:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateCreatedKey]]];
+    [self setDateFinished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateFinishedKey]]];
+    [self setDateModified:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateModifiedKey]]];
+    [self setDateStarted:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateStarted]]];
     
-    [self setClosingRemark:[cleanedDict valueForKey:kReadmillAPIReadClosingRemarkKey]];
+    [self setClosingRemark:[cleanedDict valueForKey:kReadmillAPIReadingClosingRemarkKey]];
     
-    [self setIsPrivate:([[cleanedDict valueForKey:kReadmillAPIReadIsPrivateKey] unsignedIntegerValue] == 1)];
+    [self setIsPrivate:([[cleanedDict valueForKey:kReadmillAPIReadingIsPrivateKey] unsignedIntegerValue] == 1)];
     
-    [self setState:[[cleanedDict valueForKey:kReadmillAPIReadStateKey] unsignedIntegerValue]];
+    [self setState:[[cleanedDict valueForKey:kReadmillAPIReadingStateKey] unsignedIntegerValue]];
     
-    [self setUserId:[[[cleanedDict valueForKey:kReadmillAPIReadUserKey] valueForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
-    [self setBookId:[[[cleanedDict valueForKey:kReadmillAPIReadBookKey] valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
-    [self setReadId:[[cleanedDict valueForKey:kReadmillAPIReadIdKey] unsignedIntegerValue]];
+    [self setUserId:[[[cleanedDict valueForKey:kReadmillAPIReadingUserKey] valueForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
+    [self setBookId:[[[cleanedDict valueForKey:kReadmillAPIReadingBookKey] valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
+    [self setReadingId:[[cleanedDict valueForKey:kReadmillAPIReadingIdKey] unsignedIntegerValue]];
     
-    [self setEstimatedTimeLeft:[cleanedDict valueForKey:kReadmillAPIReadEstimatedTimeLeft]];
-    [self setTimeSpent:[cleanedDict valueForKey:kReadmillAPIReadDuration]];
+    [self setEstimatedTimeLeft:[cleanedDict valueForKey:kReadmillAPIReadingEstimatedTimeLeft]];
+    [self setTimeSpent:[cleanedDict valueForKey:kReadmillAPIReadingDuration]];
  
-    [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadProgress] floatValue]];
+    [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadingProgress] floatValue]];
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"%@ id %d: Read of book %d by %d, read state: %d", [super description], [self readId], [self bookId], [self userId], [self state]];
+    return [NSString stringWithFormat:@"%@ id %d: Reading of book %d by %d, reading state: %d", [super description], [self readingId], [self bookId], [self userId], [self state]];
 }
 
--(ReadmillReadSession *)createReadSession {
-    return [[[ReadmillReadSession alloc] initWithAPIWrapper:[self apiWrapper] readId:[self readId]] autorelease];
+-(ReadmillReadingSession *)createReadingSession {
+    return [[[ReadmillReadingSession alloc] initWithAPIWrapper:[self apiWrapper] readingId:[self readingId]] autorelease];
 }
 
 @synthesize dateAbandoned;
@@ -118,7 +118,7 @@
 
 @synthesize bookId;
 @synthesize userId;
-@synthesize readId;
+@synthesize readingId;
 
 @synthesize progress;
 
@@ -144,25 +144,25 @@
 #pragma mark -
 #pragma mark Threaded Methods
 
--(void)updateState:(ReadmillReadState)newState delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
+-(void)updateState:(ReadmillReadingState)newState delegate:(id <ReadmillReadingUpdatingDelegate>)delegate {
     [self updateWithState:newState isPrivate:[self isPrivate] closingRemark:[self closingRemark] delegate:delegate];
 }
 
--(void)updateIsPrivate:(BOOL)readIsPrivate delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
-    [self updateWithState:[self state] isPrivate:readIsPrivate closingRemark:[self closingRemark] delegate:delegate];
+-(void)updateIsPrivate:(BOOL)readingIsPrivate delegate:(id <ReadmillReadingUpdatingDelegate>)delegate {
+    [self updateWithState:[self state] isPrivate:readingIsPrivate closingRemark:[self closingRemark] delegate:delegate];
 }
 
--(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
+-(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate {
     [self updateWithState:[self state] isPrivate:[self isPrivate] closingRemark:newRemark delegate:delegate];
 }
 
--(void)updateWithState:(ReadmillReadState)newState isPrivate:(BOOL)readIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadUpdatingDelegate>)delegate {
+-(void)updateWithState:(ReadmillReadingState)newState isPrivate:(BOOL)readingIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate {
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 delegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
                                 [NSNumber numberWithUnsignedInteger:newState], @"state",
-                                [NSNumber numberWithBool:readIsPrivate], @"privacy",
+                                [NSNumber numberWithBool:readingIsPrivate], @"privacy",
                                 newRemark, @"remark",
                                 nil];
     
@@ -179,20 +179,20 @@
     pool = [[NSAutoreleasePool alloc] init];
     
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
-    id <ReadmillReadUpdatingDelegate> readUpdatingDelegate = [properties valueForKey:@"delegate"];
+    id <ReadmillReadingUpdatingDelegate> readingUpdatingDelegate = [properties valueForKey:@"delegate"];
     BOOL privacy = [[properties valueForKey:@"privacy"] boolValue];
-    ReadmillReadState newState = [[properties valueForKey:@"state"] unsignedIntegerValue];
+    ReadmillReadingState newState = [[properties valueForKey:@"state"] unsignedIntegerValue];
     NSString *remark = [properties valueForKey:@"remark"];    
     
     NSError *error = nil;
-    [[self apiWrapper] updateReadWithId:[self readId]
+    [[self apiWrapper] updateReadingWithId:[self readingId]
                               withState:newState
                                 private:privacy
                           closingRemark:remark
                                   error:&error];
     
     if (error == nil) {
-        NSDictionary *newDetails = [[self apiWrapper] readWithId:[self readId]
+        NSDictionary *newDetails = [[self apiWrapper] readingWithId:[self readingId]
                                                    forUserWithId:[self userId]
                                                            error:&error];
         if (newDetails != nil && error == nil) {
@@ -200,27 +200,27 @@
         }
     }
     
-    if (error == nil && readUpdatingDelegate != nil) {
+    if (error == nil && readingUpdatingDelegate != nil) {
         
-       [(NSObject *)readUpdatingDelegate performSelector:@selector(readmillReadDidUpdateMetadataSuccessfully:)
+       [(NSObject *)readingUpdatingDelegate performSelector:@selector(readmillReadingDidUpdateMetadataSuccessfully:)
                                                 onThread:callbackThread
                                               withObject:self
                                            waitUntilDone:YES];
         
-    } else if (error != nil && readUpdatingDelegate != nil) {
+    } else if (error != nil && readingUpdatingDelegate != nil) {
         
         NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
-                                          [(NSObject *)readUpdatingDelegate 
-                                           methodSignatureForSelector:@selector(readmillRead:didFailToUpdateMetadataWithError:)]];
+                                          [(NSObject *)readingUpdatingDelegate 
+                                           methodSignatureForSelector:@selector(readmillReading:didFailToUpdateMetadataWithError:)]];
         
-        [failedInvocation setSelector:@selector(readmillRead:didFailToUpdateMetadataWithError:)];
+        [failedInvocation setSelector:@selector(readmillReading:didFailToUpdateMetadataWithError:)];
         
         [failedInvocation setArgument:&self atIndex:2];
         [failedInvocation setArgument:&error atIndex:3];
         
         [failedInvocation performSelector:@selector(invokeWithTarget:)
                                  onThread:callbackThread
-                               withObject:readUpdatingDelegate
+                               withObject:readingUpdatingDelegate
                             waitUntilDone:YES]; 
     }
     

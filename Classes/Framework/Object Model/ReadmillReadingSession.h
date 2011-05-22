@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
 
-@class ReadmillReadSession;
+@class ReadmillReadingSession;
 
 @protocol ReadmillPingDelegate <NSObject>
 
@@ -31,37 +31,37 @@
  @param session The session object that pinged the Readmill service successfully. 
  @brief   Delegate method informing the target that the given ping was successful. 
  */
--(void)readmillReadSessionDidPingSuccessfully:(ReadmillReadSession *)session;
+-(void)readmillReadingSessionDidPingSuccessfully:(ReadmillReadingSession *)session;
 
 /*!
  @param session The session object that failed to ping the Readmill service successfully. 
  @param error The error that occurred.
  @brief   Delegate method informing the target that the given ping failed. 
  */
--(void)readmillReadSession:(ReadmillReadSession *)session didFailToPingWithError:(NSError *)error;
+-(void)readmillReadingSession:(ReadmillReadingSession *)session didFailToPingWithError:(NSError *)error;
 
 @end
 
-@interface ReadmillReadSession : NSObject {
+@interface ReadmillReadingSession : NSObject {
 @private
     
     ReadmillAPIWrapper *apiWrapper;
-    ReadmillReadingId readId;
+    ReadmillReadingId readingId;
     
 }
 
 /*!
  @param wrapper The ReadmillAPIWrapper to be used by the session. 
- @param sessionReadId The read id this session is for. 
- @result The created read session.
- @brief   Create a new reading session for the given read id. 
+ @param sessionReadingId The reading id this session is for. 
+ @result The created reading session.
+ @brief   Create a new reading session for the given reading id. 
 
  A new session identifier will be generated automatically.
  
- Note: The typical way to obtain a ReadmillReadSession is to use the -createReadSession 
-       convenience method in the ReadmillRead class.
+ Note: The typical way to obtain a ReadmillReadingSession is to use the -createReadingSession 
+       convenience method in the ReadmillReading class.
  */
--(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readId:(ReadmillReadingId)sessionReadId;
+-(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readingId:(ReadmillReadingId)sessionReadingId;
 
 /*!
  @property  apiWrapper
@@ -70,10 +70,10 @@
 @property (readonly, retain) ReadmillAPIWrapper *apiWrapper;
 
 /*!
- @property  readId
- @brief The id of the read this session is attached to.  
+ @property  readingId
+ @brief The id of the reading this session is attached to.  
  */
-@property (readonly) ReadmillReadingId readId;
+@property (readonly) ReadmillReadingId readingId;
 
 /*!
  @param progress The user's progress through the book, as in float percentage. 
@@ -107,7 +107,7 @@
  @param wrapper The ReadmillAPIWrapper to be used by the session.
  @brief Try to send all saved "Pings" that have been archived.
  
- This is a static method which a ReadmillReadSession always calls upon instantiation. 
+ This is a static method which a ReadmillReadingSession always calls upon instantiation. 
  This should be called whenever there may be archived pings and a connection to Readmill
  is possible to ensure progress data is synchronized.
  */
@@ -116,7 +116,7 @@
 @end
 
 
-@interface ReadmillReadSessionArchive : NSObject <NSCoding> {
+@interface ReadmillReadingSessionArchive : NSObject <NSCoding> {
     NSDate *lastSessionDate;
     NSString *sessionIdentifier;
 }

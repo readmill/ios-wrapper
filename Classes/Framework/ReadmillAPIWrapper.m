@@ -214,20 +214,20 @@
     return apiResponse;
 }
 
-// Reads
+// Readings
 
-- (NSDictionary *)createReadWithBookId:(ReadmillBookId)bookId 
-                                state:(ReadmillReadState)readState
-                              private:(BOOL)isPrivate 
-                                error:(NSError **)error {
+- (NSDictionary *)createReadingWithBookId:(ReadmillBookId)bookId 
+                                    state:(ReadmillReadingState)readingState
+                                  private:(BOOL)isPrivate 
+                                    error:(NSError **)error {
     
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
-    NSString *readScope = @"reading[%@]";
-    [parameters setValue:[NSNumber numberWithInteger:readState] forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadStateKey]];
-    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadIsPrivateKey]];
-    [parameters setValue:kReadmillClientId forKey:[NSString stringWithFormat:readScope, kReadmillAPIClientIdKey]];
+    NSString *readingScope = @"reading[%@]";
+    [parameters setValue:[NSNumber numberWithInteger:readingState] forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingStateKey]];
+    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingIsPrivateKey]];
+    [parameters setValue:kReadmillClientId forKey:[NSString stringWithFormat:readingScope, kReadmillAPIClientIdKey]];
     
     
     NSDictionary *apiResponse = [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings.json", [self booksEndpoint], bookId]]
@@ -238,31 +238,31 @@
     return apiResponse;
     
 }
-- (void)updateReadWithId:(ReadmillReadingId)readId 
-              withState:(ReadmillReadState)readState
+- (void)updateReadingWithId:(ReadmillReadingId)readingId 
+              withState:(ReadmillReadingState)readingState
                 private:(BOOL)isPrivate 
           closingRemark:(NSString *)remark 
                   error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    NSString *readScope = @"reading[%@]";
+    NSString *readingScope = @"reading[%@]";
 
-    [parameters setValue:[NSNumber numberWithInteger:readState] forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadStateKey]];
-    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadIsPrivateKey]];
-    [parameters setValue:kReadmillClientId forKey:[NSString stringWithFormat:readScope, kReadmillAPIClientIdKey]];
+    [parameters setValue:[NSNumber numberWithInteger:readingState] forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingStateKey]];
+    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingIsPrivateKey]];
+    [parameters setValue:kReadmillClientId forKey:[NSString stringWithFormat:readingScope, kReadmillAPIClientIdKey]];
     
     if ([remark length] > 0) {
-        [parameters setValue:remark forKey:[NSString stringWithFormat:readScope, kReadmillAPIReadClosingRemarkKey]];
+        [parameters setValue:remark forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingClosingRemarkKey]];
     }
     
-    [self sendPutRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d.json", [self readingsEndpoint], readId]]
+    [self sendPutRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d.json", [self readingsEndpoint], readingId]]
                withParameters:parameters
       canBeCalledUnauthorized:NO
                         error:error];
 }
 
 
-- (NSArray *)publicReadsForUserWithId:(ReadmillUserId)userId error:(NSError **)error {
+- (NSArray *)publicReadingsForUserWithId:(ReadmillUserId)userId error:(NSError **)error {
     
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings.json", [self usersEndpoint], userId]] 
                                            withParameters:nil
@@ -271,7 +271,7 @@
     return apiResponse;
 }
 
-- (NSArray *)publicReadsForUserWithName:(NSString *)userName error:(NSError **)error {
+- (NSArray *)publicReadingsForUserWithName:(NSString *)userName error:(NSError **)error {
     
     if ([userName length] == 0) {
         return nil;
@@ -285,32 +285,32 @@
     }
 }
 
-- (NSDictionary *)readWithId:(ReadmillReadingId)readId error:(NSError **)error {
+- (NSDictionary *)readingWithId:(ReadmillReadingId)readingId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
                                                            [NSString stringWithFormat:@"%@/%d.json", 
                                                             [self readingsEndpoint], 
-                                                            readId]] 
+                                                            readingId]] 
                                            withParameters:nil
                                shouldBeCalledUnauthorized:NO
                                                     error:error];
     return apiResponse;    
 }
 
-- (NSDictionary *)readWithId:(ReadmillReadingId)readId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
+- (NSDictionary *)readingWithId:(ReadmillReadingId)readingId forUserWithId:(ReadmillUserId)userId error:(NSError **)error {
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
                                                            [NSString stringWithFormat:@"%@/%d/readings/%d.json", 
                                                             [self usersEndpoint], 
                                                             userId,
-                                                            readId]] 
+                                                            readingId]] 
                                            withParameters:nil
                                shouldBeCalledUnauthorized:NO
                                                     error:error];
     return apiResponse;
 }
 
-- (NSDictionary *)readWithId:(ReadmillReadingId)readId forUserWithName:(NSString *)userName error:(NSError **)error {
+- (NSDictionary *)readingWithId:(ReadmillReadingId)readingId forUserWithName:(NSString *)userName error:(NSError **)error {
     
     if ([userName length] == 0) {
         return nil;
@@ -320,7 +320,7 @@
                                                                [NSString stringWithFormat:@"%@/%@/readings/%d.json", 
                                                                 [self usersEndpoint], 
                                                                 userName,
-                                                                readId]] 
+                                                                readingId]] 
                                                withParameters:nil
                                    shouldBeCalledUnauthorized:NO
                                                         error:error];
@@ -328,7 +328,7 @@
     }
 }
 
-- (NSDictionary *)readWithURLString:(NSString *)urlString error:(NSError **)error {
+- (NSDictionary *)readingWithURLString:(NSString *)urlString error:(NSError **)error {
     NSRange range = [urlString rangeOfString:@".json"];
     if (range.location == NSNotFound) {
         urlString = [urlString stringByAppendingString:@".json"];
@@ -342,7 +342,7 @@
 
 //Pings     
 
-- (void)pingReadWithId:(ReadmillReadingId)readId 
+- (void)pingReadingWithId:(ReadmillReadingId)readingId 
          withProgress:(ReadmillReadingProgress)progress 
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
@@ -374,13 +374,13 @@
         [parameters setValue:[NSNumber numberWithDouble:latitude] forKey:[NSString stringWithFormat:pingScope, @"lat"]];
         [parameters setValue:[NSNumber numberWithDouble:longitude] forKey:[NSString stringWithFormat:pingScope, @"lng"]];
     }
-    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/pings.json", [self readingsEndpoint], readId]] 
+    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/pings.json", [self readingsEndpoint], readingId]] 
                 withParameters:parameters
        canBeCalledUnauthorized:NO
                          error:error];
     
 }
-- (void)pingReadWithId:(ReadmillReadingId)readId 
+- (void)pingReadingWithId:(ReadmillReadingId)readingId 
          withProgress:(ReadmillReadingProgress)progress 
     sessionIdentifier:(NSString *)sessionId
              duration:(ReadmillPingDuration)duration
@@ -388,7 +388,7 @@
                 error:(NSError **)error {
     
     
-    [self pingReadWithId:readId 
+    [self pingReadingWithId:readingId 
             withProgress:progress 
        sessionIdentifier:sessionId 
                 duration:duration 
@@ -553,7 +553,7 @@
 
     return URL;
 }
-- (NSURL *)URLForViewingReadWithReadId:(ReadmillReadingId)readId {
+- (NSURL *)URLForViewingReadingWithId:(ReadmillReadingId)readingId {
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
     }
@@ -562,7 +562,7 @@
     [parameters setValue:kReadmillClientId forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
-    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/readings/%d", [self apiEndPoint], readId]];
+    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/readings/%d", [self apiEndPoint], readingId]];
     NSURL *URL = [baseURL URLByAddingParameters:parameters];
     
     return URL;
@@ -710,7 +710,7 @@
         // Do we have an empty response?
         NSString *jsonString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
 
-		// If we created something (book, read etc) we receive a 201 Created response.
+		// If we created something (book, reading etc) we receive a 201 Created response.
         // The location of the created object is in the "location" header.
         
         if ([[response allHeaderFields] valueForKey:@"Location"] != nil) {
