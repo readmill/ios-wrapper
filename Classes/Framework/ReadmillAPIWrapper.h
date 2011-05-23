@@ -102,7 +102,7 @@ static NSString * const kReadmillAPIReadingDateFinishedKey = @"finished_at";
 static NSString * const kReadmillAPIReadingDateModifiedKey = @"touched_at";
 static NSString * const kReadmillAPIReadingDateStarted = @"started_at";
 static NSString * const kReadmillAPIReadingClosingRemarkKey = @"closing_remark";
-static NSString * const kReadmillAPIReadingIsPrivateKey = @"is_private";
+static NSString * const kReadmillAPIReadingIsPrivateKey = @"private";
 static NSString * const kReadmillAPIReadingStateKey = @"state";
 static NSString * const kReadmillAPIReadingBookKey = @"book";
 static NSString * const kReadmillAPIReadingUserKey = @"user";
@@ -284,20 +284,28 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 -(NSArray *)allBooks:(NSError **)error;
 
 /*!
- @param searchString A title to search for. Only full matches will be returned (i.e., searching for "the" will only return a book called "the", not one called "the killer").
+ @param searchString The string to use when searching for a book.
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @result An NSArray containing the matching books in the Readmill system as NSDictionary objects. See the API Keys - Book section of this header for keys. 
- @brief   Get a list of the books with the given title in the Readmill system. 
+ @brief   Get a list of books matching the search string in the Readmill system. 
  */
--(NSArray *)booksMatchingTitle:(NSString *)searchString error:(NSError **)error;
+- (NSArray *)booksFromSearch:(NSString *)searchString error:(NSError **)error;
+
+/*!
+ @param searchString A title to search for. Only full matches will be returned (i.e., searching for "the" will only return a book called "the", not one called "the killer").
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
+ @brief   Get a specific book in the Readmill system. 
+ */
+-(NSDictionary *)bookMatchingTitle:(NSString *)searchString error:(NSError **)error;
 
 /*!
  @param isbn An ISBN to search for. Only full matches will be returned (i.e., searching for "123" will only return a book with the ISBN "123", not one with "123456").
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result An NSArray containing the matching books in the Readmill system as NSDictionary objects. See the API Keys - Book section of this header for keys. 
- @brief   Get a list of the books with the given ISBN in the Readmill system. 
+ @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
+ @brief   Get a specific book in the Readmill system. 
  */
--(NSArray *)booksMatchingISBN:(NSString *)isbn error:(NSError **)error;
+-(NSDictionary *)bookMatchingISBN:(NSString *)isbn error:(NSError **)error;
 
 /*!
  @param bookId The Readmill id of the book to retrieve.
@@ -420,6 +428,20 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time. 
  */
 -(void)pingReadingWithId:(ReadmillReadingId)readingId withProgress:(ReadmillReadingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude error:(NSError **)error;
+
+#pragma mark -
+#pragma mark Highlights
+
+/*!
+ @param readingId The id of the reading you'd like to ping.
+ @param highlightedText The highlighted text
+ @param post (optional) The text before the highlightText (needed in case the highlightedText is very short)
+ @param post (optional) The text after the highlightedText (needed in case the highlightedText is very short)
+ @param position The approximate position of the highlighted text in the book as float percentage.
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @brief  Send a highlighted text snippet to Readmill.
+ */
+-(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)progress error:(NSError **)error;
 
 #pragma mark -
 #pragma mark Users

@@ -135,23 +135,17 @@
     
 }
 
-
-- (NSArray *)booksMatchingTitle:(NSString *)searchString error:(NSError **)error {
+- (NSArray *)booksFromSearch:(NSString *)searchString error:(NSError **)error {
     
-    if ([searchString length] == 0) {
-        return [self allBooks:error];
-    } else {
-        
-        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
-                                          withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
-                              shouldBeCalledUnauthorized:YES
-                                                   error:error];
-        
-        return apiResponse;
-    }
-}
+    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
+                                           withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q"]
+                               shouldBeCalledUnauthorized:NO 
+                                                    error:error];
+    return apiResponse;
 
+}
 - (NSDictionary *)bookWithURLString:(NSString *)urlString error:(NSError **)error {
+    
     NSRange range = [urlString rangeOfString:@".json"];
     if (range.location == NSNotFound) {
         urlString = [urlString stringByAppendingString:@".json"];
@@ -173,19 +167,22 @@
     
 }
 
-- (NSArray *)booksMatchingISBN:(NSString *)isbn error:(NSError **)error {
+- (NSDictionary *)bookMatchingTitle:(NSString *)searchString error:(NSError **)error {
     
-    if ([isbn length] == 0) {
-        return [self allBooks:error];
-    } else {
-        
-        NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
-                                          withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
-                              shouldBeCalledUnauthorized:YES
-                                                   error:error];
-        return apiResponse;
-        
-    }
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/match.json", [self booksEndpoint]]] 
+                                      withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
+                          shouldBeCalledUnauthorized:YES
+                                               error:error];
+    
+    return apiResponse;
+}
+- (NSDictionary *)bookMatchingISBN:(NSString *)isbn error:(NSError **)error {
+    
+    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/match.json", [self booksEndpoint]]] 
+                                           withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
+                               shouldBeCalledUnauthorized:YES
+                                                    error:error];
+    return apiResponse;
 }
 
 
@@ -381,12 +378,11 @@
     
 }
 - (void)pingReadingWithId:(ReadmillReadingId)readingId 
-         withProgress:(ReadmillReadingProgress)progress 
-    sessionIdentifier:(NSString *)sessionId
-             duration:(ReadmillPingDuration)duration
-       occurrenceTime:(NSDate *)occurrenceTime
-                error:(NSError **)error {
-    
+             withProgress:(ReadmillReadingProgress)progress 
+        sessionIdentifier:(NSString *)sessionId
+                 duration:(ReadmillPingDuration)duration
+           occurrenceTime:(NSDate *)occurrenceTime
+                    error:(NSError **)error {
     
     [self pingReadingWithId:readingId 
             withProgress:progress 
@@ -397,6 +393,25 @@
                longitude:0.0 
                    error:error];
 }
+
+// Highlights
+
+-(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position error:(NSError **)error {
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    NSString *scope = @"highlight[%@]";
+    [parameters setValue:highlightedText forKey:[NSString stringWithFormat:scope, @"content"]];
+    [parameters setValue:[NSNumber numberWithFloat:position] forKey:[NSString stringWithFormat:scope, @"position"]];
+    [parameters setValue:pre forKey:[NSString stringWithFormat:scope, @"pre"]];
+    [parameters setValue:post forKey:[NSString stringWithFormat:scope, @"post"]];
+    [parameters setValue:[NSDate date] forKey:[NSString stringWithFormat:scope, @"highlighted_at"]];
+
+    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights.json", [self readingsEndpoint], readingId]] 
+                withParameters:parameters
+       canBeCalledUnauthorized:NO
+                         error:error];
+}
+
 // Users
 
 - (NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error {

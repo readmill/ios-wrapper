@@ -48,20 +48,20 @@
  @param books An array of ReadmillBook objects that matched the given search parameters or were created. 
  @brief   Delegate method informing the target that Readmill found or created the given books. 
  */
--(void)readmillUser:(ReadmillUser *)user didFindBooks:(NSArray *)books;
+-(void)readmillUser:(ReadmillUser *)user didFindBook:(ReadmillBook *)book;
 
 /*!
  @param user The user object that was performing the request.
  @brief   Delegate method informing the target that Readmill could not find any books matching the previously given search criteria. 
  */
--(void)readmillUserFoundNoBooks:(ReadmillUser *)user;
+-(void)readmillUserFoundNoBook:(ReadmillUser *)user;
 
 /*!
  @param user The user object that was performing the request
  @param error An NSError object describing the error that occurred. 
  @brief   Delegate method informing the target that and error occurred attempting to search for or create book(s). 
  */
--(void)readmillUser:(ReadmillUser *)user failedToFindBooksWithError:(NSError *)error;
+-(void)readmillUser:(ReadmillUser *)user failedToFindBookWithError:(NSError *)error;
 
 @end
 @protocol ReadmillReadingFindingDelegate <NSObject>
@@ -256,13 +256,13 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:onSt
  @param isbn The full ISBN of the book to search for. Can be nil if a title is given.
  @param title The full title of the book to search for. Can be nil if an ISBN is given.
  @param bookfindingDelegate The delegate object to receive notifications of success or failure.
- @brief   Search for books in Readmill by ISBN and title.
+ @brief   Search for a book in Readmill by ISBN and title.
  
  Note: Books are searched for first by ISBN, then by title - not both at the same time. If the ISBN matches a book
  with a title different to that passed in, it will still be returned. This also applies if no books with the passed ISBN 
  are found but match the passed title. 
  */
--(void)findBooksWithISBN:(NSString *)isbn title:(NSString *)title delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+-(void)findBookWithISBN:(NSString *)isbn title:(NSString *)title delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 /*!
  @param isbn The full ISBN of the book to create.
