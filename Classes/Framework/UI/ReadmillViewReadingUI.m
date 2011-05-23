@@ -142,10 +142,10 @@
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
 	
     NSURL *URL = [request URL];
-    if ([[URL scheme] isEqualToString:kReadmillDomain]) {
+    if ([[URL scheme] isEqualToString:@"readmill"]) {
 		
         // Can be...
-        // com.readmill://change?uri="uri to reading"
+        // readmill://change?uri="uri to reading"
         
         // Dismiss the presenter immediately
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification
