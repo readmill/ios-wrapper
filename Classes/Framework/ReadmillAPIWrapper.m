@@ -371,6 +371,7 @@
         [parameters setValue:[NSNumber numberWithDouble:latitude] forKey:[NSString stringWithFormat:pingScope, @"lat"]];
         [parameters setValue:[NSNumber numberWithDouble:longitude] forKey:[NSString stringWithFormat:pingScope, @"lng"]];
     }
+
     [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/pings.json", [self readingsEndpoint], readingId]] 
                 withParameters:parameters
        canBeCalledUnauthorized:NO
@@ -577,7 +578,7 @@
     [parameters setValue:kReadmillClientId forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
-    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/readings/%d", [self apiEndPoint], readingId]];
+    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/reading/%d", [self apiEndPoint], readingId]];
     NSURL *URL = [baseURL URLByAddingParameters:parameters];
     
     return URL;

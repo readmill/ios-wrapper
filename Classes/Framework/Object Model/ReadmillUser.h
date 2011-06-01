@@ -122,7 +122,7 @@
 #pragma mark Static Methods
 
 /*!
- @param redirect The URL that Readmill should call upon successful authorization.
+ @param redirect The URL that Readmill should call upon successful authorization, pass in nil if you want to use the default client redirect URL.
  @param onStaging If true, the generated URL will point to the Readmill staging server. Normally you'd pass NO. 
  @result A URL, appropriate for passing to a web browser, to Readmill to allow authentication.
  @brief   Create a URL for authenticating your application with Readmill.
@@ -131,7 +131,7 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  you to handle this, but once you've handled the redirect URL you can just pass the whole thing into
  +authenticateCallbackURL:baseCallbackURL:delegate:onStagingServer: to authenticate. 
  */
-+(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirect onStagingServer:(BOOL)onStaging;
++(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil onStagingServer:(BOOL)onStaging;
 
 /*!
  @param callbackURL The URL that was called by Readmill.
@@ -145,12 +145,13 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  
  For example, let's say your application is set to handle readmillAuth:// URLs and you want to use this as a callback:
  
-NSURL *readmillAuthURL = [ReadmillUser clientAuthorizationURLWithRedirectURL:[NSURL URLWithString:@"readmillAuth://auth"] onStagingServer:NO];
+ NSURL *readmillAuthURL = [ReadmillUser clientAuthorizationURLWithRedirectURL:[NSURL URLWithString:@"readmillAuth://auth"] 
+                                                             onStagingServer:NO];
  [[UIApplication sharedApplication] openURL:readmillAuthURL];
  
  This will send the user off to Readmill to authenticate your application. If successful, Readmill will redirect to something like:
  
- readmillAuth://auth?auth_code=xxxxxxxxxxxxx
+ readmillAuth://auth?code=xxxxxxxxxxxxx
  
  When you handle this in your application, you need to pass this *and* the original, bare, redirect URL to this method, like this:
  

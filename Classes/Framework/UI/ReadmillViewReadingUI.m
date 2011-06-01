@@ -82,6 +82,7 @@
     [self setView:containerView];
     
     NSURL *url = [[[self reading] apiWrapper] URLForViewingReadingWithId:[[self reading] readingId]];
+    NSLog(@"URL: %@", url);
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 

@@ -72,7 +72,6 @@
 
 -(void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError {
     
-	NSLog(@"fail");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Authentication Failed!"
                                                     message:[authenticationError localizedDescription]
                                                    delegate:nil
@@ -87,7 +86,6 @@
 }
 
 -(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser {
-     	NSLog(@"success");
     // Authentication was successful. 
     
     [[self signedInViewController] setUser:loggedInUser];    
@@ -98,7 +96,6 @@
 
 -(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
 	
-	NSLog(@"handleOpenURL");		
     [ReadmillUser authenticateCallbackURL:url
                           baseCallbackURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]
                                  delegate:self

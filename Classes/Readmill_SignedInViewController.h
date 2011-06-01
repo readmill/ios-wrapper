@@ -26,7 +26,7 @@
 #import <ReadmillAPI/ReadmillBook.h>
 #import <ReadmillAPI/ReadmillReading.h>
 
-@interface Readmill_SignedInViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillViewReadingUIDelegate> {
+@interface Readmill_SignedInViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillViewReadingUIDelegate, ReadmillBookFindingDelegate> {
 @private
     ReadmillReading *read;
     ReadmillUser *user;

@@ -73,7 +73,6 @@
 #define kBackgroundOpacity 0.3 
 - (void)willShowKeyboard:(NSNotification *)note {
     
-    NSLog(@"adjustPositionForKeyboard");
     CGFloat offset = 30.0;
     CGPoint position = [contentContainerView center];
     position.y -= offset;
@@ -87,7 +86,6 @@
 }
 - (void)willHideKeyboard:(NSNotification *)note {
     
-    NSLog(@"adjustPositionForKeyboard");
     CGFloat offset = 30.0;
     CGPoint position = [contentContainerView center];
     position.y += offset;

@@ -66,6 +66,9 @@
               options:NSKeyValueObservingOptionInitial
               context:nil];
     
+    [[self user] findBookWithISBN:nil
+                            title:@"New York Trilogy, The"
+                         delegate:self];
 }
 
 
@@ -219,6 +222,29 @@
                                           otherButtonTitles:nil];
     
     [[alert autorelease] show];
+}
+
+#pragma mark ReadmillBookFindingDelegate
+
+-(void)readmillUser:(ReadmillUser *)user didFindBook:(ReadmillBook *)book {
+    NSLog(@"book: %@", [book description]);
+}
+
+/*!
+ @param user The user object that was performing the request.
+ @brief   Delegate method informing the target that Readmill could not find any books matching the previously given search criteria. 
+ */
+-(void)readmillUserFoundNoBook:(ReadmillUser *)user {
+    NSLog(@"found no books");
+}
+
+/*!
+ @param user The user object that was performing the request
+ @param error An NSError object describing the error that occurred. 
+ @brief   Delegate method informing the target that and error occurred attempting to search for or create book(s). 
+ */
+-(void)readmillUser:(ReadmillUser *)user failedToFindBookWithError:(NSError *)error {
+    NSLog(@"error: %@", error);
 }
 
 @end
