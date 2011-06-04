@@ -405,9 +405,20 @@
     [parameters setValue:[NSNumber numberWithFloat:position] forKey:[NSString stringWithFormat:scope, @"position"]];
     [parameters setValue:pre forKey:[NSString stringWithFormat:scope, @"pre"]];
     [parameters setValue:post forKey:[NSString stringWithFormat:scope, @"post"]];
-    [parameters setValue:[NSDate date] forKey:[NSString stringWithFormat:scope, @"highlighted_at"]];
+    
+    // 2011-01-06T11:47:14Z
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ssZ'"];
+    [parameters setValue:[formatter stringFromDate:[NSDate date]] forKey:[NSString stringWithFormat:scope, @"highlighted_at"]];
+    [formatter release];
+    
+    NSLog(@"params: %@", parameters);
+    
+    NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights.json", 
+                                                 [self readingsEndpoint], readingId]];
 
-    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights.json", [self readingsEndpoint], readingId]] 
+    
+    [self sendPostRequestToURL:highlightsURL
                 withParameters:parameters
        canBeCalledUnauthorized:NO
                          error:error];
@@ -633,9 +644,8 @@
     
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:finalURL];
     
-    NSLog(@"url: %@, params: %@", url, parameterString);
-
 	[request setHTTPMethod:@"GET"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
 	[request autorelease];
 	
 	return [self sendPreparedRequest:request error:error];
@@ -685,13 +695,14 @@
 	[request setHTTPMethod:httpMethod];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
-    
+    [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
 	[request autorelease];
 	return [self sendPreparedRequest:request error:error];	
 }
 
 - (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {
     NSLog(@"request: %@", request);
+    
 	NSHTTPURLResponse *response = nil;
 	NSError *connectionError = nil;
 	
@@ -735,8 +746,10 @@
                 NSString *location = [[response allHeaderFields] valueForKey:@"Location"];
                 NSLog(@"location: %@", location);
                 // Strip the beginning '/'
-                return [self sendGetRequestToURL:[NSURL URLWithString:location] withParameters:nil shouldBeCalledUnauthorized:NO error:error];
-                //return [location substringFromIndex:1];
+                return [self sendGetRequestToURL:[NSURL URLWithString:location] 
+                                  withParameters:nil 
+                      shouldBeCalledUnauthorized:NO 
+                                           error:error];
             }
         }
         
