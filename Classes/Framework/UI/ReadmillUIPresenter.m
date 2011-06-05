@@ -41,15 +41,14 @@
 -(void)dealloc {
     
     [backgroundView release];
-    backgroundView = nil;
     
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
     [contentContainerView release];
-    contentContainerView = nil;
 
-    contentViewController = nil;
+    [contentViewController release];
     
     [self setView:nil];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
@@ -245,7 +244,6 @@
     [spinner release];
     [backgroundView addSubview:contentContainerView];
     
-     //[self setView:contentContainerView];
 }
 - (void)displayContentViewController {
     if ([self contentViewController] != nil) {
@@ -257,7 +255,6 @@
 - (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController {
     [self setContentViewController:aContentViewController];
     [self displayContentViewController];
-    //[spinner stopAnimating];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -272,8 +269,6 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    //[spinner release];
-    //spinner = nil;
     
     [backgroundView release];
     backgroundView = nil;
@@ -281,6 +276,9 @@
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
     [contentContainerView release];
     contentContainerView = nil;
+    
+    [contentViewController release];
+    contentViewController = nil;
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

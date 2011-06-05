@@ -51,14 +51,15 @@
 
 -(void)dealloc {
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //[[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self setUser:nil];
     [self setISBN:nil];
     [self setBookTitle:nil];
     [self setAuthor:nil];
     [self setBook:nil];
-    //[self setDelegate:nil];
+    [self setDelegate:nil];
+    [self setView:nil];
     [super dealloc];
 }
 
@@ -88,7 +89,6 @@
     
     UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)] autorelease];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
-    //[[[webView subviews] lastObject] setBackgroundColor:[UIColor clearColor]];
     [webView setDelegate:self];
     [webView setHidden:YES];
     
@@ -102,10 +102,6 @@
                                                                   title:[self bookTitle] 
                                                                  author:[self author]];
     [webView loadRequest:[NSURLRequest requestWithURL:url]];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    //[[self view] setFrame:CGRectMake(0.0, 0.0, 600.0, 400.0)];
 }
 
 -(void)viewDidUnload {

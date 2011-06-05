@@ -43,9 +43,10 @@
 } 
 
 - (id)initWithCoder:(NSCoder *)coder {
-
-    self.lastSessionDate = [coder decodeObjectForKey:@"lastSessionDate"];
-    self.sessionIdentifier = [coder decodeObjectForKey:@"sessionIdentifier"];
+    if ((self = [super init])) {
+        self.lastSessionDate = [coder decodeObjectForKey:@"lastSessionDate"];
+        self.sessionIdentifier = [coder decodeObjectForKey:@"sessionIdentifier"];
+    }
     return self; 
 }
 -(NSString *)description {
