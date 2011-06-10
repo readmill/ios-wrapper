@@ -438,10 +438,11 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param post (optional) The text before the highlightText (needed in case the highlightedText is very short)
  @param post (optional) The text after the highlightedText (needed in case the highlightedText is very short)
  @param position The approximate position of the highlighted text in the book as float percentage.
+ @param comment (optional) A comment on the highlight
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @brief  Send a highlighted text snippet to Readmill.
  */
--(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)progress error:(NSError **)error;
+-(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)progress comment:(NSString *)comment error:(NSError **)error;
 
 #pragma mark -
 #pragma mark Users

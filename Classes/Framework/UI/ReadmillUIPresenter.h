@@ -35,6 +35,7 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
     UIView *contentContainerView;
     UIView *backgroundView;
     UIViewController *contentViewController;    
+    ReadmillSpinner *spinner;
 }
 
 /*!
@@ -49,6 +50,12 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
  @brief   The view controller being presented.
 */
 @property (nonatomic, readonly, retain) UIViewController *contentViewController;
+
+/*!
+ @property spinner
+ @brief   An activity indicator.
+ */
+@property (nonatomic, readonly, retain) ReadmillSpinner *spinner;
 
 /*!
  @param theParentViewController The view controller that this presenter should be displayed in.

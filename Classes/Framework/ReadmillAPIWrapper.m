@@ -397,7 +397,7 @@
 
 // Highlights
 
--(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position error:(NSError **)error {
+-(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position comment:(NSString *)comment error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *scope = @"highlight[%@]";
@@ -406,6 +406,11 @@
     [parameters setValue:pre forKey:[NSString stringWithFormat:scope, @"pre"]];
     [parameters setValue:post forKey:[NSString stringWithFormat:scope, @"post"]];
     
+    if (nil == comment) {
+        comment = @"";
+    }
+    [parameters setValue:comment forKey:@"comment"];
+
     // 2011-01-06T11:47:14Z
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ssZ'"];

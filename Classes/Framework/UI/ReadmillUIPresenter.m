@@ -26,6 +26,7 @@
 @interface ReadmillUIPresenter ()
 
 @property (nonatomic, readwrite, retain) UIViewController *contentViewController;
+@property (nonatomic, readwrite, retain) ReadmillSpinner *spinner;
 
 @end
 
@@ -40,6 +41,8 @@
 
 -(void)dealloc {
     
+    [spinner release];
+    
     [backgroundView release];
     
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
@@ -50,10 +53,12 @@
     [self setView:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    NSLog(@"presenter dealloc");
     [super dealloc];
 }
 
 @synthesize contentViewController;
+@synthesize spinner;
 
 -(void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -176,7 +181,6 @@
         [UIView beginAnimations:ReadmillUIPresenterDidAnimateOut context:nil];
         [UIView setAnimationDuration:kAnimationDuration];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-        //[UIView setAnimationBeginsFromCurrentState:YES];
         [UIView setAnimationDelegate:self];
         [UIView setAnimationDidStopSelector:@selector(animation:finished:context:)];
         
@@ -211,6 +215,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"frame"]) {
         [[contentContainerView layer] setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];  
+        [spinner setCenter:[contentContainerView center]];
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -237,11 +242,11 @@
     
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
     
-    ReadmillSpinner *spinner = [[ReadmillSpinner alloc] init];
+    spinner = [[ReadmillSpinner alloc] init];
     [spinner setCenter:[contentContainerView center]];
     [spinner startAnimating];
     [contentContainerView addSubview:spinner];
-    [spinner release];
+
     [backgroundView addSubview:contentContainerView];
     
 }
@@ -270,12 +275,14 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     
-    [backgroundView release];
-    backgroundView = nil;
-    
+    [self setSpinner:nil];
+
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
     [contentContainerView release];
     contentContainerView = nil;
+    
+    [backgroundView release];
+    backgroundView = nil;
     
     [contentViewController release];
     contentViewController = nil;
