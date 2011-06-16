@@ -352,7 +352,7 @@
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *pingScope = @"ping[%@]";
     [parameters setValue:[NSNumber numberWithFloat:progress] forKey:[NSString stringWithFormat:pingScope, @"progress"]];
-    [parameters setValue:[NSNumber numberWithInteger:duration] forKey:[NSString stringWithFormat:pingScope, @"duration"]];
+    [parameters setValue:[NSNumber numberWithUnsignedInteger:duration] forKey:[NSString stringWithFormat:pingScope, @"duration"]];
     
     if ([sessionId length] > 0) {
         [parameters setValue:sessionId forKey:[NSString stringWithFormat:pingScope, @"identifier"]];
