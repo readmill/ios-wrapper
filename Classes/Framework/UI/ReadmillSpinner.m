@@ -49,12 +49,17 @@
                                               [UIImage imageNamed:@"030c.png"],
                                               nil]];
         
-        //Set the duration of the animation (play with it
-        //until it looks nice for you)
         [self setAnimationDuration:1.0];
         [self setAnimationRepeatCount:0];
         [self setHidden:YES];
 
+    }
+    return self;
+}
+- (id)initAndStartSpinning {
+    self = [self init];
+    if (self) {
+        [self startAnimating];
     }
     return self;
 }
@@ -76,6 +81,7 @@
 }
 - (void)dealloc
 {
+    [self setAnimationImages:nil];
     [super dealloc];
 }
 

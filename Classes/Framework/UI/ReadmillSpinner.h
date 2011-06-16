@@ -12,5 +12,5 @@
 @interface ReadmillSpinner : UIImageView {
 }
 
-
+- (id)initAndStartSpinning;
 @end
