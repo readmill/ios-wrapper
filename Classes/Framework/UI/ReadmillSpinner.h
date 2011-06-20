@@ -8,9 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    ReadmillSpinnerTypeDefault = 1,
+    ReadmillSpinnerTypeSmallGray = 2
+} ReadmillSpinnerType;
 
 @interface ReadmillSpinner : UIImageView {
+    NSArray *greenImages, *smallGrayImages;
 }
-
+- (id)initWithSpinnerType:(ReadmillSpinnerType)type;
 - (id)initAndStartSpinning;
+- (id)initAndStartSpinning:(ReadmillSpinnerType)type;
+
+@property (nonatomic, retain) NSArray *greenImages, *smallGrayImages;
 @end

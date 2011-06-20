@@ -30,8 +30,8 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self removeFromSuperview];
     [delegate dismissView];
+    [self removeFromSuperview];
 }
 - (void)dealloc {
     [self removeFromSuperview];
