@@ -14,11 +14,9 @@ typedef enum {
 } ReadmillSpinnerType;
 
 @interface ReadmillSpinner : UIImageView {
-    NSArray *greenImages, *smallGrayImages;
 }
 - (id)initWithSpinnerType:(ReadmillSpinnerType)type;
 - (id)initAndStartSpinning;
 - (id)initAndStartSpinning:(ReadmillSpinnerType)type;
 
-@property (nonatomic, retain) NSArray *greenImages, *smallGrayImages;
 @end

@@ -10,7 +10,6 @@
 
 
 @implementation ReadmillSpinner
-@synthesize greenImages, smallGrayImages;
 
 - (id)initWithSpinnerType:(ReadmillSpinnerType)type {
     if (type == ReadmillSpinnerTypeDefault) {
@@ -82,8 +81,6 @@
 - (void)dealloc
 {
     [self setAnimationImages:nil];
-    [greenImages release];
-    [smallGrayImages release];
     [super dealloc];
 }
 
