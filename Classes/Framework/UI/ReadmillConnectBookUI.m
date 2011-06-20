@@ -26,7 +26,7 @@
 #import "ReadmillURLExtensions.h"
 
 @interface ReadmillConnectBookUI ()
-
+@property (nonatomic, readwrite, retain) UIWebView *webView;
 @property (nonatomic, readwrite, retain) ReadmillUser *user;
 @property (nonatomic, readwrite, retain) ReadmillBook *book;
 
@@ -37,8 +37,16 @@
 
 @implementation ReadmillConnectBookUI
 
+@synthesize user;
+@synthesize delegate;
+@synthesize book;
+
+@synthesize ISBN;
+@synthesize bookTitle;
+@synthesize author;
+
+@synthesize webView;
 -(id)initWithUser:(ReadmillUser *)aUser ISBN:(NSString *)anISBN title:(NSString *)aTitle author:(NSString *)anAuthor {
-    
     if ((self = [super init])) {
         [self setUser:aUser];
         [self setISBN:anISBN];
@@ -50,26 +58,19 @@
 }
 
 -(void)dealloc {
-    
-    //[[NSNotificationCenter defaultCenter] removeObserver:self];
-    
     [self setUser:nil];
     [self setISBN:nil];
     [self setBookTitle:nil];
     [self setAuthor:nil];
     [self setBook:nil];
     [self setDelegate:nil];
+    [webView stopLoading];
+    [webView setDelegate:nil];
     [self setView:nil];
+    [self setWebView:nil];
     [super dealloc];
 }
 
-@synthesize user;
-@synthesize delegate;
-@synthesize book;
-
-@synthesize ISBN;
-@synthesize bookTitle;
-@synthesize author;
 
 -(void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -87,28 +88,37 @@
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 -(void)loadView {
     
-    UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)] autorelease];
+    UIWebView *aWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)];
+    [self setWebView:aWebView];
+    [aWebView release];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
     [webView setHidden:YES];
     
-    UIView *containerView = [[[UIView alloc] initWithFrame:[webView frame]] autorelease];
+    UIView *containerView = [[UIView alloc] initWithFrame:[webView frame]];
 
     [containerView addSubview:webView];
     [containerView setHidden:YES];
     [self setView:containerView];
+    [containerView release];
     
     NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[self ISBN] 
                                                                   title:[self bookTitle] 
                                                                  author:[self author]];
-    [webView loadRequest:[NSURLRequest requestWithURL:url]];
+    
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:10];
+    [webView loadRequest:request];
+    [request release];
 }
 
 -(void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    [self setView:nil];
+    [webView stopLoading];
+    [webView setDelegate:nil];
+    [self setWebView:nil];
+    //[self setView:nil];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -124,18 +134,18 @@
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
--(void)webViewDidFinishLoad:(UIWebView *)webView {
+-(void)webViewDidFinishLoad:(UIWebView *)aWebView {
 	
-    [webView sizeToFit];
+    [aWebView sizeToFit];
 
-    [webView setAlpha:0.0];
-    [webView setHidden:NO];
+    [aWebView setAlpha:0.0];
+    [aWebView setHidden:NO];
     [self.view setHidden:NO];
-    [webView setBackgroundColor:[UIColor clearColor]];
+    [aWebView setBackgroundColor:[UIColor clearColor]];
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
     [UIView setAnimationDuration:0.2];
-    [webView setAlpha:1.0];
+    [aWebView setAlpha:1.0];
     [UIView commitAnimations];
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }

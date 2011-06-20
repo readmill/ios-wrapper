@@ -510,14 +510,13 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:10.0];
-    
+        
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
                                  [kReadmillClientId urlEncodedString],
                                  [kReadmillClientSecret urlEncodedString],
                                  [[self refreshToken] urlEncodedString],
                                  [[self authorizedRedirectURL] urlEncodedString]];
     
-    NSLog(@"refresh parameterString: %@", parameterString);
     [request setHTTPMethod:@"POST"];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
@@ -579,9 +578,9 @@
     [parameters setValue:kReadmillClientId forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
-    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/connect/book", [self apiEndPoint]]];
+    NSURL *baseURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@ui/#!/connect/book", [self apiEndPoint]]];
     NSURL *URL = [baseURL URLByAddingParameters:parameters];
-    NSLog(@"URL: %@", URL);
+    [baseURL release];
 
     return URL;
 }

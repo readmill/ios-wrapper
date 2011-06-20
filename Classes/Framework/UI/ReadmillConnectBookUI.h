@@ -62,7 +62,7 @@
     
     NSString *ISBN, *bookTitle, *author;
     id <ReadmillConnectBookUIDelegate> delegate;
-    
+        
 }
 /*!
  @param aUser The Readmill user to connect.
@@ -91,5 +91,6 @@
  @brief The delegate object to be informed of success or failure.
  */
 @property (nonatomic, readwrite, assign) id <ReadmillConnectBookUIDelegate> delegate;
+
 
 @end

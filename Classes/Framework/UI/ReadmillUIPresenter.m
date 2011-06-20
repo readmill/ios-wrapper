@@ -40,7 +40,6 @@
 }
 
 -(void)dealloc {
-    
     [spinner release];
     
     [backgroundView release];
@@ -144,7 +143,6 @@
     if (animated) {
         // Commit animation
         [UIView commitAnimations];
-        //[UIView setAnimationsEnabled:NO];
     }
     DismissingView *dismiss = [[DismissingView alloc] initWithFrame:[[UIScreen mainScreen] bounds]
                                                            delegate:self];
