@@ -26,7 +26,7 @@
         [images release];
         
     } else if (type == ReadmillSpinnerTypeSmallGray) {
-        self = [super initWithImage:[UIImage imageNamed:@"spinnersmallgray1.png"]];
+        self = [super initWithImage:[UIImage imageNamed:@"spinner_1616_grey_1.png"]];
         NSMutableArray *images = [[NSMutableArray alloc] init];
         for (NSInteger i = 1; i <= 30; i++) {
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
