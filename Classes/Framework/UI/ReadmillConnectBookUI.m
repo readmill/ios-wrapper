@@ -66,8 +66,8 @@
     [self setDelegate:nil];
     [webView stopLoading];
     [webView setDelegate:nil];
-    [self setView:nil];
     [self setWebView:nil];
+    [self setView:nil];
     [super dealloc];
 }
 
