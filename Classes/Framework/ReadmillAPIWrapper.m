@@ -429,6 +429,19 @@
                          error:error];
 }
 
+- (NSArray *)highlightsForReadingWithId:(ReadmillReadingId)readingId error:(NSError **)error {
+    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
+                                                           [NSString stringWithFormat:@"%@/%d/highlights.json", 
+                                                            [self readingsEndpoint], 
+                                                            readingId]] 
+                                           withParameters:nil
+                               shouldBeCalledUnauthorized:NO
+                                                    error:error];
+    NSLog(@"api: %@", apiResponse);
+    return apiResponse;    
+
+}
+
 // Users
 
 - (NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error {

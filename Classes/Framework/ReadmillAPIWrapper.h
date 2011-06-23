@@ -433,7 +433,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 #pragma mark Highlights
 
 /*!
- @param readingId The id of the reading you'd like to ping.
+ @param readingId The id of the reading you want to create a highlight in.
  @param highlightedText The highlighted text
  @param post (optional) The text before the highlightText (needed in case the highlightedText is very short)
  @param post (optional) The text after the highlightedText (needed in case the highlightedText is very short)
@@ -444,6 +444,14 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 -(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)progress comment:(NSString *)comment error:(NSError **)error;
 
+/*!
+ @param readingId The id of the reading.
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @brief  Get all highlights for a particular reading in Readmill.
+ */
+- (NSArray *)highlightsForReadingWithId:(ReadmillReadingId)readingId error:(NSError **)error;
+
+    
 #pragma mark -
 #pragma mark Users
 
