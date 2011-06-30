@@ -73,7 +73,8 @@
 #pragma mark -
 
 #define kAnimationDuration 0.2
-#define kBackgroundOpacity 0.3 
+#define kBackgroundOpacity 0.5
+
 - (void)willShowKeyboard:(NSNotification *)note {
     
     CGFloat offset = 30.0;
