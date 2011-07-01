@@ -200,6 +200,7 @@
 -(void)animation:(NSString*)animationID finished:(BOOL)didFinish context:(void *)context {
     //[UIView setAnimationsEnabled:YES];
     if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateOut]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterDidAnimateOut object:nil]; 
         [[self view] removeFromSuperview];
         [self release];
     }
