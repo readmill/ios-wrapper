@@ -27,6 +27,7 @@
 #import "ReadmillAPIConstants.h"
 #import "CJSONDeserializer.h"
 
+#define kTimeoutInterval 3.0
 
 @interface ReadmillAPIWrapper ()
 
@@ -478,7 +479,7 @@
                                                                                              [self accessToken],
                                                                                              [kReadmillClientId urlEncodedString]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                       timeoutInterval:10.0];
+                                                       timeoutInterval:kTimeoutInterval];
     [request setHTTPMethod:@"GET"];
     
     return [self sendPreparedRequest:request error:error];
@@ -491,7 +492,7 @@
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                       timeoutInterval:10.0];
+                                                       timeoutInterval:kTimeoutInterval];
     
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&code=%@&redirect_uri=%@",
                                  [kReadmillClientId urlEncodedString],
@@ -522,7 +523,7 @@
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                       timeoutInterval:10.0];
+                                                       timeoutInterval:kTimeoutInterval];
         
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
                                  [kReadmillClientId urlEncodedString],
