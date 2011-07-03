@@ -65,6 +65,7 @@
     [self setBook:nil];
     [self setDelegate:nil];
     [webView stopLoading];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [webView setDelegate:nil];
     [self setWebView:nil];
     [self setView:nil];

@@ -45,7 +45,8 @@
 -(void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
     [self setReading:nil];
     [self setDelegate:nil];
     [super dealloc];
