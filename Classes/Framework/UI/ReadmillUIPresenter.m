@@ -144,11 +144,12 @@
     if (animated) {
         // Commit animation
         [UIView commitAnimations];
+    } else {
+        DismissingView *dismiss = [[DismissingView alloc] initWithFrame:[[UIScreen mainScreen] bounds]
+                                                               delegate:self];
+        [dismiss addToView:self.view];
+        [dismiss release];
     }
-    DismissingView *dismiss = [[DismissingView alloc] initWithFrame:[[UIScreen mainScreen] bounds]
-                                                           delegate:self];
-    [dismiss addToView:self.view];
-    [dismiss release];
 }
 - (void)dismissView {
     [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification 
@@ -205,6 +206,10 @@
         [self release];
     }
     else if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateIn]) {
+        DismissingView *dismiss = [[DismissingView alloc] initWithFrame:[[UIScreen mainScreen] bounds]
+                                                               delegate:self];
+        [dismiss addToView:self.view];
+        [dismiss release];
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterDidAnimateIn object:nil]; 
     }
 }
