@@ -503,6 +503,7 @@
     [request setHTTPMethod:@"POST"];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
+    [request setTimeoutInterval:kTimeoutInterval];
 	
     NSDictionary *response = [self sendPreparedRequest:request error:error];
 
@@ -534,7 +535,8 @@
     [request setHTTPMethod:@"POST"];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
-	
+    [request setTimeoutInterval:kTimeoutInterval];
+    
     NSDictionary *response = [self sendPreparedRequest:request error:error];
     NSLog(@"refresh access token response: %@", response);
 	if (response != nil) {
@@ -665,6 +667,7 @@
 	[request setHTTPMethod:@"GET"];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
 	[request autorelease];
+    [request setTimeoutInterval:kTimeoutInterval];
 	
 	return [self sendPreparedRequest:request error:error];
 }
@@ -714,6 +717,7 @@
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
+    [request setTimeoutInterval:kTimeoutInterval];
 	[request autorelease];
 	return [self sendPreparedRequest:request error:error];	
 }

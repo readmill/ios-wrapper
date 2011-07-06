@@ -107,7 +107,9 @@
                                                                   title:[self bookTitle] 
                                                                  author:[self author]];
     
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:10];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
+                                                  cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                              timeoutInterval:5];
     [webView loadRequest:request];
     [request release];
 }

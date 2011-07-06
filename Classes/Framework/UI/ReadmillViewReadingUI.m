@@ -84,7 +84,12 @@
     
     NSURL *url = [[[self reading] apiWrapper] URLForViewingReadingWithId:[[self reading] readingId]];
     NSLog(@"URL: %@", url);
-    [webView loadRequest:[NSURLRequest requestWithURL:url]];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url 
+                                                  cachePolicy:NSURLRequestReloadIgnoringCacheData 
+                                              timeoutInterval:5.0];
+    
+    [webView loadRequest:request];
+    [request release];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
