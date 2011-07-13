@@ -98,14 +98,23 @@
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
-    if (archive == nil || [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]] > 30 * 60) {
+    if (![ReadmillReadingSession isReadingSessionIdentifierValid]) {
         archive = [[[ReadmillReadingSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
         [NSKeyedArchiver archiveReadmillReadingSession:archive];
         NSLog(@"archive nil or date generated more than 30 minutes ago, generated one: %@", archive);
-    } else {
-        NSLog(@"had an archive, with time since last ping: %f", [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]]);
     }
     return [archive sessionIdentifier];
+}
++ (BOOL)isReadingSessionIdentifierValid {
+    ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
+    
+    // Do we have a saved archive that was generated less than 30 minutes ago?
+    if (archive == nil || [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]] > 30 * 60) {
+        NSLog(@"ReadingSessionIdentifier not valid");
+        return NO;
+    } 
+    NSLog(@"ReadingSessionIdentifier is valid");
+    return YES;
 }
 - (void)archiveFailedPing:(ReadmillPing *)ping {    
     // Grab all archived pings
@@ -248,6 +257,7 @@
                                                withObject:self
                                             waitUntilDone:YES];
         
+        // Since we succeeded to ping, try to send any archived pings
         [ReadmillReadingSession pingArchived:[self apiWrapper]];
         
     } else if (error != nil && pingDelegate != nil) {
@@ -267,6 +277,7 @@
                             waitUntilDone:YES]; 
         
         if (![error isReadmillClientError]) {
+            // Ping was not sent successfully
             [self archiveFailedPing:ping];
         }
     }

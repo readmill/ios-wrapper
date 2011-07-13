@@ -113,6 +113,8 @@
  */
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper;
 
++ (BOOL)isReadingSessionIdentifierValid;
+
 @end
 
 
