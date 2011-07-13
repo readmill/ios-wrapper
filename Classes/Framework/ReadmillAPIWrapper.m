@@ -27,7 +27,7 @@
 #import "ReadmillAPIConstants.h"
 #import "CJSONDeserializer.h"
 
-#define kTimeoutInterval 3.0
+#define kTimeoutInterval 10.0
 
 @interface ReadmillAPIWrapper ()
 
