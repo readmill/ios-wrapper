@@ -34,6 +34,7 @@
 @property (readwrite, copy) NSString *lastName;
 @property (readwrite, copy) NSString *fullName;
 @property (readwrite, copy) NSString *userName;
+@property (readwrite, copy) NSString *authenticationToken;
 
 @property (readwrite, copy) NSURL *avatarURL;
 @property (readwrite, copy) NSURL *permalinkURL;
@@ -158,6 +159,8 @@
     [self setFinishedBookCount:[[cleanedDict valueForKey:kReadmillAPIUserFinishedBooksKey] unsignedIntegerValue]];
     [self setInterestingBookCount:[[cleanedDict valueForKey:kReadmillAPIUserInterestingBooksKey] unsignedIntegerValue]];
     [self setOpenBookCount:[[cleanedDict valueForKey:kReadmillAPIUserOpenBooksKey] unsignedIntegerValue]];
+    
+    [self setAuthenticationToken:[cleanedDict valueForKey:kReadmillAPIUserAuthenticationToken]];
 }
 
 @synthesize city;
@@ -167,7 +170,7 @@
 @synthesize lastName;
 @synthesize fullName;
 @synthesize userName;
-
+@synthesize authenticationToken;
 @synthesize avatarURL;
 @synthesize permalinkURL;
 @synthesize websiteURL;
@@ -195,6 +198,7 @@
     [self setLastName:nil];
     [self setFullName:nil];
     [self setUserName:nil];
+    [self setAuthenticationToken:nil];
     [self setAvatarURL:nil];
     [self setPermalinkURL:nil];
     [self setWebsiteURL:nil];

@@ -93,6 +93,7 @@ static NSString * const kReadmillAPIUserLastNameKey = @"lastname";
 static NSString * const kReadmillAPIUserPermalinkURLKey = @"permalink_url";
 static NSString * const kReadmillAPIUserReadmillUserNameKey = @"username";
 static NSString * const kReadmillAPIUserWebsiteKey = @"website";
+static NSString * const kReadmillAPIUserAuthenticationToken = @"authentication_token";
 
 #pragma mark API Keys - Reading
 

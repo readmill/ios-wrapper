@@ -101,6 +101,7 @@
     NSString *lastName;
     NSString *fullName;
     NSString *userName;
+    NSString *authenticationToken;
     
     NSURL *avatarURL;
     NSURL *permalinkURL;
@@ -363,6 +364,12 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
  @brief The full name entered into the user's Readmill profile.
  */
 @property (readonly, copy) NSString *fullName;
+
+/*!
+ @property  authenticationToken
+ @brief The token to be used for direct sign in on the Readmill website
+ */
+@property (readonly, copy) NSString *authenticationToken;
 
 /*!
  @property  userName
