@@ -75,6 +75,7 @@
         [self setRefreshToken:[plist valueForKey:@"refreshToken"]];
         [self setApiEndPoint:[plist valueForKey:@"apiEndPoint"]];
 		[self setAccessToken:[plist valueForKey:@"accessToken"]];
+        [self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
     }
     return self;
 }
@@ -86,6 +87,7 @@
             [self refreshToken], @"refreshToken", 
             [self apiEndPoint], @"apiEndPoint",
 			[self accessToken], @"accessToken",
+            [self accessTokenExpiryDate], @"accessTokenExpiryDate",
 			nil];
 	 
 }
@@ -488,71 +490,62 @@
 #pragma mark -
 #pragma mark OAuth
 
+- (BOOL)authenticateWithParameters:(NSString *)parameterString error:(NSError **)error {
+    @synchronized (self) {
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
+                                                               cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                           timeoutInterval:kTimeoutInterval];
+    
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
+        [request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
+        [request setTimeoutInterval:kTimeoutInterval];
+        
+        NSDictionary *response = [self sendPreparedRequest:request 
+                                                     error:error];
+        
+        if (response != nil) {
+            NSLog(@"response: %@", response);
+            NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];        
+            [self willChangeValueForKey:@"propertyListRepresentation"];
+            [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
+            [self setRefreshToken:[response valueForKey:@"refresh_token"]];
+            [self setAccessToken:[response valueForKey:@"access_token"]];
+            [self didChangeValueForKey:@"propertyListRepresentation"];
+            
+            return YES;
+        } else {
+            NSLog(@"oauth response: %@", response);
+            if (nil != error) {
+                NSLog(@"error: %@", *error);
+            }
+            return NO;
+        }
+    }
+}
 - (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error {
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
-                                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                       timeoutInterval:kTimeoutInterval];
-    
+
+    [self setAuthorizedRedirectURL:redirectURLString];
+
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&code=%@&redirect_uri=%@",
                                  [kReadmillClientId urlEncodedString],
                                  [kReadmillClientSecret urlEncodedString],
                                  [authCode urlEncodedString],
                                  [redirectURLString urlEncodedString]];
     
-    [request setHTTPMethod:@"POST"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
-	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
-    [request setTimeoutInterval:kTimeoutInterval];
-	
-    NSDictionary *response = [self sendPreparedRequest:request error:error];
-
-	if (response != nil) {
-        NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
-    
-        [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
-
-        [self willChangeValueForKey:@"propertyListRepresentation"];		
-        [self setRefreshToken:[response valueForKey:@"refresh_token"]];
-        [self setAccessToken:[response valueForKey:@"access_token"]];
-        [self setAuthorizedRedirectURL:redirectURLString];
-        [self didChangeValueForKey:@"propertyListRepresentation"];
-    }
+    [self authenticateWithParameters:parameterString error:error];
 }
 
 - (BOOL)refreshAccessToken:(NSError **)error {
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
-                                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                       timeoutInterval:kTimeoutInterval];
-        
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
                                  [kReadmillClientId urlEncodedString],
                                  [kReadmillClientSecret urlEncodedString],
                                  [[self refreshToken] urlEncodedString],
                                  [[self authorizedRedirectURL] urlEncodedString]];
     
-    [request setHTTPMethod:@"POST"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
-	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
-    [request setTimeoutInterval:kTimeoutInterval];
-    
-    NSDictionary *response = [self sendPreparedRequest:request error:error];
-    NSLog(@"refresh access token response: %@", response);
-	if (response != nil) {
-        
-        NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
-		[self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
-        
-        [self willChangeValueForKey:@"propertyListRepresentation"];
-        [self setRefreshToken:[response valueForKey:@"refresh_token"]];
-        [self setAccessToken:[response valueForKey:@"access_token"]];
-        [self didChangeValueForKey:@"propertyListRepresentation"];
-        
-        return YES;
-    } else {
-        return NO;
-    }
+    return [self authenticateWithParameters:parameterString error:error];
 }
 
 
@@ -598,6 +591,7 @@
     NSURL *URL = [baseURL URLByAddingParameters:parameters];
     [baseURL release];
 
+    NSLog(@"url: %@", URL);
     return URL;
 }
 - (NSURL *)URLForViewingReadingWithId:(ReadmillReadingId)readingId {
