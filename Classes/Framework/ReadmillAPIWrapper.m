@@ -400,7 +400,7 @@
 
 // Highlights
 
--(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position comment:(NSString *)comment error:(NSError **)error {
+-(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *scope = @"highlight[%@]";
@@ -413,6 +413,15 @@
         comment = @"";
     }
     [parameters setValue:comment forKey:@"comment"];
+
+    NSInteger connectionsCount = [connections count];
+    if (connectionsCount) {
+        NSMutableDictionary *connectionsDictionary = [NSMutableDictionary dictionary];
+        for (NSString *connectionID in connections) {
+            [connectionsDictionary setValue:connectionID forKey:@"id"];
+        }        
+        [parameters setValue:connectionsDictionary forKey:@"post_to"];
+    }
 
     // 2011-01-06T11:47:14Z
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
@@ -445,6 +454,16 @@
 
 }
 
+#pragma mark
+#pragma Connections
+
+- (NSArray *)connectionsForCurrentUser:(NSError **)error {
+    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@me/connections.json", [self apiEndPoint]]] 
+                                      withParameters:nil
+                          shouldBeCalledUnauthorized:NO
+                                               error:error];
+    return apiResponse;
+}
 // Users
 
 - (NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error {

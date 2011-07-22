@@ -436,14 +436,15 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 /*!
  @param readingId The id of the reading you want to create a highlight in.
  @param highlightedText The highlighted text
- @param post (optional) The text before the highlightText (needed in case the highlightedText is very short)
+ @param pre (optional) The text before the highlightText (needed in case the highlightedText is very short)
  @param post (optional) The text after the highlightedText (needed in case the highlightedText is very short)
  @param position The approximate position of the highlighted text in the book as float percentage.
  @param comment (optional) A comment on the highlight
+ @param connections (optional) An array consisting of connection IDs (NSStrings) to post to (unique for user /me/connections/)
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @brief  Send a highlighted text snippet to Readmill.
  */
--(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)progress comment:(NSString *)comment error:(NSError **)error;
+-(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)progress comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error;
 
 /*!
  @param readingId The id of the reading.
@@ -453,6 +454,15 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 - (NSArray *)highlightsForReadingWithId:(ReadmillReadingId)readingId error:(NSError **)error;
 
     
+#pragma mark -
+#pragma mark Service connections (Facebook / Twitter etc)
+
+/*!
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @brief  Get the service connections (Facebook/Twitter etc) for the current user in Readmill.
+ */
+- (NSArray *)connectionsForCurrentUser:(NSError **)error;
+
 #pragma mark -
 #pragma mark Users
 
