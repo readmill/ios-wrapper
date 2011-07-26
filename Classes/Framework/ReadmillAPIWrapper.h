@@ -442,9 +442,10 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param comment (optional) A comment on the highlight
  @param connections (optional) An array consisting of connection IDs (NSStrings) to post to (unique for user /me/connections/)
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @result Returns the created highlight.
  @brief  Send a highlighted text snippet to Readmill.
  */
--(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)progress comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error;
+-(NSDictionary *)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)progress comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error;
 
 /*!
  @param readingId The id of the reading.

@@ -400,7 +400,7 @@
 
 // Highlights
 
--(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error {
+-(NSDictionary *)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *scope = @"highlight[%@]";
@@ -435,10 +435,10 @@
                                                  [self readingsEndpoint], readingId]];
 
     
-    [self sendPostRequestToURL:highlightsURL
-                withParameters:parameters
-       canBeCalledUnauthorized:NO
-                         error:error];
+    return [self sendPostRequestToURL:highlightsURL
+                       withParameters:parameters
+              canBeCalledUnauthorized:NO
+                                error:error];
 }
 
 - (NSArray *)highlightsForReadingWithId:(ReadmillReadingId)readingId error:(NSError **)error {
