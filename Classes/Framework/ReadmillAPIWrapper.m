@@ -449,7 +449,7 @@
                                            withParameters:nil
                                shouldBeCalledUnauthorized:NO
                                                     error:error];
-    NSLog(@"api: %@", apiResponse);
+
     return apiResponse;    
 
 }
