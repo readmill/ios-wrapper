@@ -25,7 +25,7 @@
 #import "ReadmillURLExtensions.h"
 #import "ReadmillErrorExtensions.h"
 #import "ReadmillAPIConstants.h"
-#import "CJSONDeserializer.h"
+#import "JSONKit.h"
 
 #define kTimeoutInterval 10.0
 
@@ -36,6 +36,8 @@
 - (id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 - (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error;
 - (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+
+- (id)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 
 - (BOOL)refreshAccessToken:(NSError **)error;
 
@@ -403,11 +405,10 @@
 -(NSDictionary *)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    NSString *scope = @"highlight[%@]";
-    [parameters setValue:highlightedText forKey:[NSString stringWithFormat:scope, @"content"]];
-    [parameters setValue:[NSNumber numberWithFloat:position] forKey:[NSString stringWithFormat:scope, @"position"]];
-    [parameters setValue:pre forKey:[NSString stringWithFormat:scope, @"pre"]];
-    [parameters setValue:post forKey:[NSString stringWithFormat:scope, @"post"]];
+    [parameters setValue:highlightedText forKey:@"content"];
+    [parameters setValue:[NSNumber numberWithFloat:position] forKey:@"position"];
+    [parameters setValue:pre forKey:@"pre"];
+    [parameters setValue:post forKey:@"post"];
     
     if (nil == comment) {
         comment = @"";
@@ -422,23 +423,28 @@
         }        
         [parameters setValue:connectionsDictionary forKey:@"post_to"];
     }
+    
 
     // 2011-01-06T11:47:14Z
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ssZ'"];
-    [parameters setValue:[formatter stringFromDate:[NSDate date]] forKey:[NSString stringWithFormat:scope, @"highlighted_at"]];
+    [parameters setValue:[formatter stringFromDate:[NSDate date]] forKey:@"highlighted_at"];
     [formatter release];
     
     NSLog(@"params: %@", parameters);
+    NSDictionary *highlightParameters = [NSDictionary dictionaryWithObjectsAndKeys:parameters, @"highlight", nil];
+    NSLog(@"highlightParams: %@", highlightParameters);
     
     NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights.json", 
                                                  [self readingsEndpoint], readingId]];
 
+    return [self sendJSONPostRequestToURL:highlightsURL withParameters:highlightParameters canBeCalledUnauthorized:NO error:error];
     
+    /*
     return [self sendPostRequestToURL:highlightsURL
                        withParameters:parameters
               canBeCalledUnauthorized:NO
-                                error:error];
+                                error:error];*/
 }
 
 - (NSArray *)highlightsForReadingWithId:(ReadmillReadingId)readingId error:(NSError **)error {
@@ -734,7 +740,33 @@
 	[request autorelease];
 	return [self sendPreparedRequest:request error:error];	
 }
-
+- (id)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+    
+    if (![self ensureAccessTokenIsCurrent:error]) {
+        if (!allowUnauthed) {
+            return nil;
+        }
+    }
+	
+    NSMutableDictionary *allParameters = [NSMutableDictionary dictionaryWithObject:kReadmillClientId 
+                                                                            forKey:@"client_id"];
+    
+    if ([[self accessToken] length] > 0) {
+        [allParameters setValue:[self accessToken] forKey:@"access_token"];
+    }
+    
+    [allParameters addEntriesFromDictionary:parameters];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-type"];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[allParameters JSONData]];
+    [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
+    [request setTimeoutInterval:kTimeoutInterval];
+    [request autorelease];
+    
+    return [self sendPreparedRequest:request error:error];
+}
 - (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {
     NSLog(@"request: %@", request);
     
@@ -748,9 +780,9 @@
 	if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
 
 		if (connectionError == nil) {
-			
-			id errorResponse = [[CJSONDeserializer deserializer] deserialize:responseData error:nil]; 
-			
+						
+            id errorResponse = [[JSONDecoder decoder] objectWithData:responseData];
+            
 			if (error != NULL) {
 				*error = [NSError errorWithDomain:kReadmillDomain
 											 code:[response statusCode]
@@ -790,7 +822,7 @@
         
         // Return the parsed JSON
         if ([[jsonString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
-            id parsedJsonValue = [[CJSONDeserializer deserializer] deserialize:responseData error:&parseError];
+            id parsedJsonValue = [[JSONDecoder decoder] objectWithData:responseData];
 		
             if (parseError != nil) {
                 if (error != NULL) {
