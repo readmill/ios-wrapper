@@ -76,7 +76,6 @@
         // Initialization code here.
         [self setApiWrapper:wrapper];
         [self setReadingId:sessionReadingId];
-        [ReadmillReadingSession pingArchived:wrapper];
     }
     return self;
 }
