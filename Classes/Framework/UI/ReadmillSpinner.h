@@ -14,6 +14,8 @@ typedef enum {
 } ReadmillSpinnerType;
 
 @interface ReadmillSpinner : UIImageView {
+    
+    NSBundle *resourceBundle;
 }
 - (id)initWithSpinnerType:(ReadmillSpinnerType)type;
 - (id)initAndStartSpinning;

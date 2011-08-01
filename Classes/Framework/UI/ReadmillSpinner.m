@@ -12,34 +12,41 @@
 @implementation ReadmillSpinner
 
 - (id)initWithSpinnerType:(ReadmillSpinnerType)type {
+    
+    resourceBundle = [[NSBundle alloc] initWithPath:[[NSBundle mainBundle] pathForResource:@"Readmill" ofType:@"bundle"]];
+    NSAssert(resourceBundle, @"Please move the Readmill.bundle into the Resource Directory of your Application!");
+
+    NSInteger numberOfImages = 0;
+    NSString *filenameFormat = nil;
+    
     if (type == ReadmillSpinnerTypeDefault) {
-        self = [super initWithImage:[UIImage imageNamed:@"spinnergreen1.png"]];
-        
-        NSMutableArray *images = [[NSMutableArray alloc] init];
-        for (NSInteger i = 1; i <= 30; i++) {
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-            NSString *filename = [NSString stringWithFormat:@"spinnergreen%d.png", i];
-            [images addObject:[UIImage imageNamed:filename]];
-            [pool drain];
-        }
-        [self setAnimationImages:images];
-        [images release];
+
+        numberOfImages = 30;
+        filenameFormat = @"green/spinnergreen%d";
         
     } else if (type == ReadmillSpinnerTypeSmallGray) {
-        self = [super initWithImage:[UIImage imageNamed:@"spinner_1616_grey_1.png"]];
-        NSMutableArray *images = [[NSMutableArray alloc] init];
-        for (NSInteger i = 1; i <= 30; i++) {
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-            NSString *filename = [NSString stringWithFormat:@"spinner_1616_grey_%d.png", i];
-            [images addObject:[UIImage imageNamed:filename]];
-            [pool drain];
-        }
-        [self setAnimationImages:images];
-        [images release];
+        
+        numberOfImages = 30;
+
+        filenameFormat = @"gray/spinner_1616_gray_%d";
 
     }
+    self = [super initWithImage:[UIImage imageWithContentsOfFile:[resourceBundle pathForResource:[NSString stringWithFormat:filenameFormat, 1] ofType:@"png"]]];
+
     if (self) {
         
+        NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfImages];
+        
+        for (NSInteger i = 1; i <= numberOfImages; i++) {
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+            NSString *filename = [NSString stringWithFormat:filenameFormat, i];
+            NSString *filePath = [resourceBundle pathForResource:filename ofType:@"png"];
+            [images addObject:[UIImage imageWithContentsOfFile:filePath]];
+            [pool drain];
+        }
+
+        [self setAnimationImages:images];
+        [images release];
         //Add more images which will be used for the animation
         [self setAnimationDuration:1.0];            
 
@@ -81,6 +88,7 @@
 - (void)dealloc
 {
     [self setAnimationImages:nil];
+    [resourceBundle release];
     [super dealloc];
 }
 
