@@ -405,46 +405,39 @@
 -(NSDictionary *)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error {
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    [parameters setValue:highlightedText forKey:@"content"];
-    [parameters setValue:[NSNumber numberWithFloat:position] forKey:@"position"];
-    [parameters setValue:pre forKey:@"pre"];
-    [parameters setValue:post forKey:@"post"];
+    
+    NSMutableDictionary *highlightParameters = [NSMutableDictionary dictionary];
+    [highlightParameters setValue:highlightedText forKey:@"content"];
+    [highlightParameters setValue:[NSNumber numberWithFloat:position] forKey:@"position"];
+    [highlightParameters setValue:pre forKey:@"pre"];
+    [highlightParameters setValue:post forKey:@"post"];
     
     if (nil == comment) {
         comment = @"";
     }
-    [parameters setValue:comment forKey:@"comment"];
+    [highlightParameters setValue:comment forKey:@"comment"];
 
-    NSInteger connectionsCount = [connections count];
-    if (connectionsCount) {
+    if ([connections count] != 0) {
         // Create a list of JSON objects (i.e array of NSDicionaries
         NSMutableArray *connectionsArray = [NSMutableArray array];
-
         for (id connection in connections) {
             [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection forKey:@"id"]];
         }
-        
        [parameters setValue:connectionsArray forKey:@"post_to"];
     }
     // 2011-01-06T11:47:14Z
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ssZ'"];
-    [parameters setValue:[formatter stringFromDate:[NSDate date]] forKey:@"highlighted_at"];
+    [highlightParameters setValue:[formatter stringFromDate:[NSDate date]] forKey:@"highlighted_at"];
     [formatter release];
     
-    NSDictionary *highlightParameters = [NSDictionary dictionaryWithObjectsAndKeys:parameters, @"highlight", nil];
-    NSLog(@"highlightParams: %@", highlightParameters);
+    [parameters setObject:highlightParameters forKey:@"highlight"];
+    NSLog(@"all parameters: %@", parameters);
     
     NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights.json", 
                                                  [self readingsEndpoint], readingId]];
 
-    return [self sendJSONPostRequestToURL:highlightsURL withParameters:highlightParameters canBeCalledUnauthorized:NO error:error];
-    
-    /*
-    return [self sendPostRequestToURL:highlightsURL
-                       withParameters:parameters
-              canBeCalledUnauthorized:NO
-                                error:error];*/
+    return [self sendJSONPostRequestToURL:highlightsURL withParameters:parameters canBeCalledUnauthorized:NO error:error];
 }
 
 - (NSArray *)highlightsForReadingWithId:(ReadmillReadingId)readingId error:(NSError **)error {
