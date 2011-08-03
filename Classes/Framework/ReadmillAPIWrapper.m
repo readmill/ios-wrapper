@@ -417,21 +417,21 @@
 
     NSInteger connectionsCount = [connections count];
     if (connectionsCount) {
-        NSMutableDictionary *connectionsDictionary = [NSMutableDictionary dictionary];
-        for (NSString *connectionID in connections) {
-            [connectionsDictionary setValue:connectionID forKey:@"id"];
-        }        
-        [parameters setValue:connectionsDictionary forKey:@"post_to"];
-    }
-    
+        // Create a list of JSON objects (i.e array of NSDicionaries
+        NSMutableArray *connectionsArray = [NSMutableArray array];
 
+        for (id connection in connections) {
+            [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection forKey:@"id"]];
+        }
+        
+       [parameters setValue:connectionsArray forKey:@"post_to"];
+    }
     // 2011-01-06T11:47:14Z
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ssZ'"];
     [parameters setValue:[formatter stringFromDate:[NSDate date]] forKey:@"highlighted_at"];
     [formatter release];
     
-    NSLog(@"params: %@", parameters);
     NSDictionary *highlightParameters = [NSDictionary dictionaryWithObjectsAndKeys:parameters, @"highlight", nil];
     NSLog(@"highlightParams: %@", highlightParameters);
     
