@@ -412,10 +412,9 @@
     [highlightParameters setValue:pre forKey:@"pre"];
     [highlightParameters setValue:post forKey:@"post"];
     
-    if (nil == comment) {
-        comment = @"";
+    if (comment != nil && [comment length] > 0) {
+        [parameters setValue:comment forKey:@"comment"];
     }
-    [highlightParameters setValue:comment forKey:@"comment"];
 
     if ([connections count] != 0) {
         // Create a list of JSON objects (i.e array of NSDicionaries
