@@ -416,7 +416,7 @@
         [parameters setValue:comment forKey:@"comment"];
     }
 
-    if ([connections count] != 0) {
+    if (connections != nil) {
         // Create a list of JSON objects (i.e array of NSDicionaries
         NSMutableArray *connectionsArray = [NSMutableArray array];
         for (id connection in connections) {
