@@ -477,6 +477,7 @@
 		96BEAEC312F05E80006028D0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "KennettNet Software Limited";
 			};
 			buildConfigurationList = 96BEAEC612F05E80006028D0 /* Build configuration list for PBXProject "ReadmillFramework" */;
