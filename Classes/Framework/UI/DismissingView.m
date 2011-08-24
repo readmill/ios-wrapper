@@ -19,6 +19,7 @@
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
         self.delegate = dismissingViewDelegate;
+        self.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     }
     return self;
 }

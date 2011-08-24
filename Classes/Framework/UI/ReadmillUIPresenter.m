@@ -52,7 +52,6 @@
     [self setView:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    NSLog(@"presenter dealloc");
     [super dealloc];
 }
 
@@ -145,7 +144,7 @@
         // Commit animation
         [UIView commitAnimations];
     } else {
-        DismissingView *dismiss = [[DismissingView alloc] initWithFrame:[[UIScreen mainScreen] bounds]
+        DismissingView *dismiss = [[DismissingView alloc] initWithFrame:self.view.bounds
                                                                delegate:self];
         [dismiss addToView:self.view];
         [dismiss release];
@@ -199,7 +198,7 @@
 }
 
 -(void)animation:(NSString*)animationID finished:(BOOL)didFinish context:(void *)context {
-    //[UIView setAnimationsEnabled:YES];
+
     if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateOut]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterDidAnimateOut object:nil]; 
         [[self view] removeFromSuperview];
@@ -220,7 +219,6 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"frame"]) {
         [[contentContainerView layer] setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];  
-        [spinner setCenter:[contentContainerView center]];
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -243,11 +241,12 @@
     [[contentContainerView layer] setShadowRadius:8.0];
     [[contentContainerView layer] setShadowOpacity:0.5];
     [[contentContainerView layer] setShadowOffset:CGSizeMake(0.0, 5.0)];
-    [contentContainerView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin];
+    [contentContainerView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin];
     
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
     
     spinner = [[ReadmillSpinner alloc] init];
+    //[spinner setAutoresizingMask:UIViewAutoresizingNone];
     [spinner setCenter:[contentContainerView center]];
     [spinner startAnimating];
     [contentContainerView addSubview:spinner];
@@ -295,7 +294,8 @@
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
-	return YES;
+
+	return NO;
 }
 
 @end
