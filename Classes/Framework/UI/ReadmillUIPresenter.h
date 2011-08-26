@@ -73,5 +73,10 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
  @brief   Remove a presented view controller.
  */
 -(void)dismissPresenterAnimated:(BOOL)animated;
+
+/*!
+ @param aContentViewController Sets the contentViewController.
+ @brief   Sets and displays the view of the contentViewController. To use when the view of the contentViewController needs loading time.
+ */
 - (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController;
 @end

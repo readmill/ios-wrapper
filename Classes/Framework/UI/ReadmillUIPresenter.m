@@ -123,9 +123,10 @@
     UIView *parentView = [theParentViewController view];
     
     [[self view] setFrame:[parentView bounds]];
-    [parentView addSubview:[self view]];
+    [contentContainerView setCenter:CGPointMake(CGRectGetMidX(self.view.bounds), 
+                                                CGRectGetMaxY(self.view.bounds) + CGRectGetMidY(contentContainerView.frame))];
     
-    [self viewDidAppear:animated];
+    [parentView addSubview:[self view]];    
     
     if (animated) {
         // Set up animation!
@@ -136,9 +137,8 @@
         [UIView setAnimationDidStopSelector:@selector(animation:finished:context:)];
     }
     
-    [[self view] setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:kBackgroundOpacity]];
-   
-    [contentContainerView setCenter:[[self view] center]];
+    [contentContainerView setCenter:[self.view center]];
+    [[self view] setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:kBackgroundOpacity]];                         
     
     if (animated) {
         // Commit animation
@@ -187,7 +187,7 @@
         
         [contentContainerView setCenter:CGPointMake(CGRectGetMidX([[self view] bounds]),
                                                     CGRectGetMaxY([[self view] bounds]) + 
-                                                        (CGRectGetHeight([contentContainerView frame]) / 2))];
+                                                        CGRectGetMidY([contentContainerView frame]))];
         
         [UIView commitAnimations];
         
@@ -227,9 +227,9 @@
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 -(void)loadView {
 
-    backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 0.0, 0.0)];
+    backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
     [backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
-    [backgroundView setOpaque:YES];
+    [backgroundView setOpaque:NO];
     [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
     [self setView:backgroundView];
@@ -246,32 +246,23 @@
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
     
     spinner = [[ReadmillSpinner alloc] init];
-    //[spinner setAutoresizingMask:UIViewAutoresizingNone];
     [spinner setCenter:[contentContainerView center]];
     [spinner startAnimating];
     [contentContainerView addSubview:spinner];
 
-    [backgroundView addSubview:contentContainerView];
+    [self.view addSubview:contentContainerView];
     
 }
 - (void)displayContentViewController {
-    if ([self contentViewController] != nil) {
-        [contentContainerView setFrame:[[[self contentViewController] view] bounds]];
-        [contentContainerView setCenter:[[self view] center]];
-        [contentContainerView addSubview:[[self contentViewController] view]];
+    if (self.contentViewController) {
+        [contentContainerView setFrame:self.contentViewController.view.bounds];
+        [contentContainerView setCenter:self.view.center];
+        [contentContainerView addSubview:self.contentViewController.view];
     }
 }
 - (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController {
     [self setContentViewController:aContentViewController];
     [self displayContentViewController];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-
-    [self displayContentViewController];
-            
-    [contentContainerView setCenter:CGPointMake(CGRectGetMidX([[self view] bounds]),
-                                                CGRectGetMaxY([[self view] bounds]) + (CGRectGetHeight([contentContainerView frame]) / 2))];
 }
 
 -(void)viewDidUnload {
