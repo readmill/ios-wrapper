@@ -366,7 +366,7 @@
     if (occurrenceTime != nil) {
         // 2011-01-06T11:47:14Z
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-		[formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ssZ'"];
+		[formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
 		[parameters setValue:[formatter stringFromDate:occurrenceTime] forKey:[NSString stringWithFormat:pingScope, @"occurred_at"]];
         [formatter release];
         formatter = nil;
@@ -426,7 +426,7 @@
     }
     // 2011-01-06T11:47:14Z
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ssZ'"];
+    [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
     [highlightParameters setValue:[formatter stringFromDate:[NSDate date]] forKey:@"highlighted_at"];
     [formatter release];
     

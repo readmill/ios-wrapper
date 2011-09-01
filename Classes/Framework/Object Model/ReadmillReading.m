@@ -72,13 +72,15 @@
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
     NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-    [formatter setDateFormat:@"%Y-%m-%dT%H:%M:%SZ"];
+    [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
     
     [self setDateAbandoned:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateAbandonedKey]]];
     [self setDateCreated:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateCreatedKey]]];
     [self setDateFinished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateFinishedKey]]];
     [self setDateModified:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateModifiedKey]]];
     [self setDateStarted:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateStarted]]];
+    
+    NSLog(@"date created: %@", [self dateCreated]);
     
     [self setClosingRemark:[cleanedDict valueForKey:kReadmillAPIReadingClosingRemarkKey]];
     
