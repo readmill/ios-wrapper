@@ -122,7 +122,9 @@
 - (NSString *)usersEndpoint {
     return [NSString stringWithFormat:@"%@users", [self apiEndPoint]];
 }
-
+- (NSString *)highlightsEndpoint {
+    return [NSString stringWithFormat:@"%@highlights", [self apiEndPoint]];
+}
 
 #pragma mark -
 #pragma mark API Methods
@@ -452,6 +454,17 @@
 
 }
 
+- (NSArray *)commentsForHighlightWithId:(ReadmillHighlightId)highlightId error:(NSError **)error {
+    NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
+                                                      [NSString stringWithFormat:@"%@/%d/comments.json", 
+                                                       [self highlightsEndpoint], 
+                                                       highlightId]] 
+                                      withParameters:nil
+                          shouldBeCalledUnauthorized:NO
+                                               error:error];
+    
+    return apiResponse;    
+}
 #pragma mark
 #pragma Connections
 

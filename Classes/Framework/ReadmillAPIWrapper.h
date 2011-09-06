@@ -24,6 +24,7 @@
 
 typedef NSUInteger ReadmillBookId;
 typedef NSUInteger ReadmillReadingId;
+typedef NSUInteger ReadmillHighlightId;
 typedef NSUInteger ReadmillUserId;
 typedef float ReadmillReadingProgress; // float, 0-1 (%)
 typedef NSUInteger ReadmillPingDuration; // Integer, seconds
@@ -455,7 +456,13 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 - (NSArray *)highlightsForReadingWithId:(ReadmillReadingId)readingId error:(NSError **)error;
 
-    
+/*!
+ @param highlightId The id of the highlight.
+ @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @brief  Get all comments for a particular highlight in Readmill.
+ */
+- (NSArray *)commentsForHighlightWithId:(ReadmillHighlightId)highlightId error:(NSError **)error;
+
 #pragma mark -
 #pragma mark Service connections (Facebook / Twitter etc)
 
