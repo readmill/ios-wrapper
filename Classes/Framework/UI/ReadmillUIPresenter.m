@@ -34,6 +34,7 @@
 
 -(id)initWithContentViewController:(UIViewController *)aContentViewController {
     if ((self = [super init])) {
+        //[self setContentViewController:aContentViewController];
         [self setContentViewController:aContentViewController];
     }
     return self;
@@ -213,6 +214,17 @@
     }
 }
 
+- (void)displayContentViewController {
+    if (self.contentViewController) {
+        [contentContainerView setFrame:self.contentViewController.view.bounds];
+        [contentContainerView setCenter:self.view.center];
+        [contentContainerView addSubview:self.contentViewController.view];
+    }
+}
+- (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController {
+    [self setContentViewController:aContentViewController];
+    [self displayContentViewController];
+}
 
 #pragma mark - View lifecycle
 
@@ -252,16 +264,6 @@
 
     [self.view addSubview:contentContainerView];
     
-}
-- (void)displayContentViewController {
-    if (self.contentViewController) {
-        [contentContainerView setFrame:self.contentViewController.view.bounds];
-        [contentContainerView setCenter:self.view.center];
-        [contentContainerView addSubview:self.contentViewController.view];
-    }
-}
-- (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController {
-    [self setContentViewController:aContentViewController];
     [self displayContentViewController];
 }
 
