@@ -195,8 +195,7 @@
     
     if (error == nil) {
         NSDictionary *newDetails = [[self apiWrapper] readingWithId:[self readingId]
-                                                   forUserWithId:[self userId]
-                                                           error:&error];
+                                                              error:&error];
         if (newDetails != nil && error == nil) {
             [self updateWithAPIDictionary:newDetails];
         }

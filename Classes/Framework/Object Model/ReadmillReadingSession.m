@@ -139,27 +139,27 @@
     if (nil != unarchivedPings && 0 < [unarchivedPings count]) {
         NSMutableArray *failedPings = [[NSMutableArray alloc] init];
         for (ReadmillPing *ping in unarchivedPings) {
-            NSError *error = nil;
+
             [wrapper pingReadingWithId:[ping readingId] 
-                       withProgress:[ping progress] 
-                  sessionIdentifier:[ping sessionIdentifier] 
-                           duration:[ping duration]
-                     occurrenceTime:[ping occurrenceTime]
-                           latitude:[ping latitude] 
-                          longitude:[ping longitude]
-                              error:&error];
-            if (!error) {
-                NSLog(@"Sent archived ping: %@", ping);
-            } else {
-                if (![error isReadmillClientError]) {
-                    // No client error so ping could not be delivered correctly
-                    [failedPings addObject:ping];
-                } else {
-                    NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
-                
-                }
-            }
-        }
+                          withProgress:[ping progress] 
+                     sessionIdentifier:[ping sessionIdentifier] 
+                              duration:[ping duration]
+                        occurrenceTime:[ping occurrenceTime]
+                              latitude:[ping latitude] 
+                             longitude:[ping longitude]
+                     completionHandler:^(id result, NSError *error) {
+                                if (error) {
+                                    if (![error isReadmillClientError]) {
+                                        // No client error so ping could not be delivered correctly
+                                        [failedPings addObject:ping];
+                                    } else {
+                                        NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
+                                    }
+                                } else {
+                                    NSLog(@"Sent archived ping.");
+                                }
+                            }];
+                    }
         [NSKeyedArchiver archiveReadmillPings:failedPings];
         [failedPings release];
     } else {
@@ -216,7 +216,7 @@
     NSAutoreleasePool *pool;
     pool = [[NSAutoreleasePool alloc] init];
     
-    NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
+    //NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillPingDelegate> pingDelegate = [properties valueForKey:@"delegate"];
     
     
@@ -237,7 +237,8 @@
                                                   occurrenceTime:[NSDate date] 
                                                         latitude:latitude 
                                                        longitude:longitude];
-    NSError *error = nil;
+
+    
     [[self apiWrapper] pingReadingWithId:[ping readingId]
                             withProgress:[ping progress]
                        sessionIdentifier:[ping sessionIdentifier]
@@ -245,41 +246,31 @@
                           occurrenceTime:[ping occurrenceTime]
                                 latitude:[ping latitude]
                                longitude:[ping longitude]
-                                   error:&error];
+                       completionHandler:^(id result, NSError *error) {
+                                  if (error == nil && pingDelegate != nil) {
+                            
+                                      dispatch_async(dispatch_get_main_queue(), ^{
+                                          [pingDelegate readmillReadingSessionDidPingSuccessfully:self];  
+                                      });
+                                    
+                                      // Since we succeeded to ping, try to send any archived pings
+                                      [ReadmillReadingSession pingArchived:[self apiWrapper]];
+                                      
+                                  } else if (error != nil && pingDelegate != nil) {
+                                      
+                                      dispatch_async(dispatch_get_main_queue(), ^(void) {
+                                          [pingDelegate readmillReadingSession:self didFailToPingWithError:error];  
+                                      });
+                                      
+                                      if (![error isReadmillClientError]) {
+                                          // Ping was not sent successfully
+                                          [self archiveFailedPing:ping];
+                                      }
+                                  }
+                              }];
     
     [self updateReadmillReadingSession];
     
-    if (error == nil && pingDelegate != nil) {
-        
-        [(NSObject *)pingDelegate performSelector:@selector(readmillReadingSessionDidPingSuccessfully:)
-                                                 onThread:callbackThread
-                                               withObject:self
-                                            waitUntilDone:YES];
-        
-        // Since we succeeded to ping, try to send any archived pings
-        [ReadmillReadingSession pingArchived:[self apiWrapper]];
-        
-    } else if (error != nil && pingDelegate != nil) {
-        
-        NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
-                                          [(NSObject *)pingDelegate 
-                                           methodSignatureForSelector:@selector(readmillReadingSession:didFailToPingWithError:)]];
-        
-        [failedInvocation setSelector:@selector(readmillReadingSession:didFailToPingWithError:)];
-        
-        [failedInvocation setArgument:&self atIndex:2];
-        [failedInvocation setArgument:&error atIndex:3];
-        
-        [failedInvocation performSelector:@selector(invokeWithTarget:)
-                                 onThread:callbackThread
-                               withObject:pingDelegate
-                            waitUntilDone:YES]; 
-        
-        if (![error isReadmillClientError]) {
-            // Ping was not sent successfully
-            [self archiveFailedPing:ping];
-        }
-    }
     [ping release];
     [pool drain];
     

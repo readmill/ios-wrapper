@@ -86,7 +86,7 @@
     NSLog(@"URL: %@", url);
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url 
                                                   cachePolicy:NSURLRequestReloadIgnoringCacheData 
-                                              timeoutInterval:5.0];
+                                              timeoutInterval:30];
     
     [webView loadRequest:request];
     [request release];

@@ -109,7 +109,7 @@
     
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
                                                   cachePolicy:NSURLRequestReturnCacheDataElseLoad 
-                                              timeoutInterval:5];
+                                              timeoutInterval:30];
     [webView loadRequest:request];
     [request release];
 }

@@ -78,8 +78,10 @@
         [self setBookId:[[cleanedDict valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
         [self setRootEditionId:[[cleanedDict valueForKey:kReadmillAPIBookRootEditionIdKey] unsignedIntegerValue]];
         
-        [self setDatePublished:[[[NSDate alloc] initWithString:[cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey]] autorelease]];
-        
+        NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+        [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+        [self setDatePublished:[[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey]] autorelease]];
+        [formatter release];
     }
     return self;
 }
