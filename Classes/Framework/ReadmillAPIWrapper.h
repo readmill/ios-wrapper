@@ -25,6 +25,99 @@
 
 typedef void (^ReadmillAPICompletionHandler)(id result, NSError *error);
 
+typedef NSUInteger ReadmillBookId;
+typedef NSUInteger ReadmillReadingId;
+typedef NSUInteger ReadmillHighlightId;
+typedef NSUInteger ReadmillUserId;
+typedef float ReadmillReadingProgress; // float, 0-1 (%)
+typedef NSUInteger ReadmillPingDuration; // Integer, seconds
+typedef double CLLocationDegrees;
+
+
+/*!
+ @enum ReadmillReadingState
+ @brief   States for a user's interest in a book.
+ @constant   ReadingStateInteresting The user has marked the book as interesting.
+ @constant   ReadingStateReading The user has started reading the book.
+ @constant   ReadingStateFinished The user has finished reading the book.
+ @constant   ReadingStateAbandoned The user has abandoned the book and will not finish it.
+ */
+typedef enum {
+    
+    ReadingStateInteresting = 1,
+    ReadingStateReading = 2,
+    ReadingStateFinished = 3,
+    ReadingStateAbandoned = 4
+    
+} ReadmillReadingState;
+
+// General 
+
+static NSString * const kReadmillDomain = @"com.readmill";
+
+// URLs
+
+static NSString * const kLiveAPIEndPoint = @"http://api.readmill.com/";
+static NSString * const kStagingAPIEndPoint = @"http://api.stage-readmill.com/";
+static NSString * const kLiveAuthorizationUri = @"http://readmill.com/";
+static NSString * const kStagingAuthorizationUri = @"http://stage-readmill.com/";
+
+#pragma mark API Keys - Book
+
+static NSString * const kReadmillAPIBookAuthorKey = @"author";
+static NSString * const kReadmillAPIBookLanguageKey = @"language";
+static NSString * const kReadmillAPIBookSummaryKey = @"story";
+static NSString * const kReadmillAPIBookTitleKey = @"title";
+static NSString * const kReadmillAPIBookISBNKey = @"isbn";
+
+static NSString * const kReadmillAPIBookCoverImageURLKey = @"cover_url";
+static NSString * const kReadmillAPIBookMetaDataURLKey = @"metadata_uri";
+static NSString * const kReadmillAPIBookPermalinkURLKey = @"permalink_url";
+
+static NSString * const kReadmillAPIBookIdKey = @"id";
+static NSString * const kReadmillAPIBookRootEditionIdKey = @"root_edition";
+static NSString * const kReadmillAPIBookDatePublishedKey = @"published_at";
+
+#pragma mark API Keys - User
+
+static NSString * const kReadmillAPIUserAvatarURLKey = @"avatar_url";
+static NSString * const kReadmillAPIUserAbandonedBooksKey = @"books_abandoned";
+static NSString * const kReadmillAPIUserFinishedBooksKey = @"books_finished";
+static NSString * const kReadmillAPIUserInterestingBooksKey = @"books_interesting";
+static NSString * const kReadmillAPIUserOpenBooksKey = @"books_open";
+static NSString * const kReadmillAPIUserCityKey = @"city";
+static NSString * const kReadmillAPIUserCountryKey = @"country";
+static NSString * const kReadmillAPIUserDescriptionKey = @"description";
+static NSString * const kReadmillAPIUserFirstNameKey = @"firstname";
+static NSString * const kReadmillAPIUserFollowerCountKey = @"followers";
+static NSString * const kReadmillAPIUserFollowingCountKey = @"followings";
+static NSString * const kReadmillAPIUserFullNameKey = @"fullname";
+static NSString * const kReadmillAPIUserIdKey = @"id";
+static NSString * const kReadmillAPIUserLastNameKey = @"lastname";
+static NSString * const kReadmillAPIUserPermalinkURLKey = @"permalink_url";
+static NSString * const kReadmillAPIUserReadmillUserNameKey = @"username";
+static NSString * const kReadmillAPIUserWebsiteKey = @"website";
+static NSString * const kReadmillAPIUserAuthenticationToken = @"authentication_token";
+
+#pragma mark API Keys - Reading
+
+static NSString * const kReadmillAPIReadingDateAbandonedKey = @"abandoned_at";
+static NSString * const kReadmillAPIReadingDateCreatedKey = @"created_at";
+static NSString * const kReadmillAPIReadingDateFinishedKey = @"finished_at";
+static NSString * const kReadmillAPIReadingDateModifiedKey = @"touched_at";
+static NSString * const kReadmillAPIReadingDateStarted = @"started_at";
+static NSString * const kReadmillAPIReadingClosingRemarkKey = @"closing_remark";
+static NSString * const kReadmillAPIReadingIsPrivateKey = @"private";
+static NSString * const kReadmillAPIReadingStateKey = @"state";
+static NSString * const kReadmillAPIReadingBookKey = @"book";
+static NSString * const kReadmillAPIReadingUserKey = @"user";
+static NSString * const kReadmillAPIReadingIdKey = @"id";
+static NSString * const kReadmillAPIReadingEstimatedTimeLeft = @"estimated_time_left";
+static NSString * const kReadmillAPIReadingDuration = @"duration";
+static NSString * const kReadmillAPIReadingProgress = @"progress";
+
+static NSString * const kReadmillAPIClientIdKey = @"client";
+
 #pragma mark -
 
 /*!

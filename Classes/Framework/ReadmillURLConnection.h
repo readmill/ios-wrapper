@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ReadmillAPIConstants.h"
+//#import "ReadmillAPIConstants.h"
 
 typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *response, NSData *responseData, NSError *error);
 

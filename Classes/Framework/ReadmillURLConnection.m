@@ -8,7 +8,7 @@
 
 #import "ReadmillURLConnection.h"
 #import "JSONKit.h"
-#import "ReadmillAPIWrapper.h"
+//#import "ReadmillAPIWrapper.h"
 
 @interface ReadmillURLConnection ()
 - (void)finish;
