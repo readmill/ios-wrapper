@@ -34,23 +34,24 @@
 - (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error;
 - (id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 - (id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
-- (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error;
+- (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 - (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 
 //- (NSURLRequest *)putRequestWithURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed;
-- (NSURLRequest *)postRequestWithURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
-- (NSURLRequest *)getRequestWithURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error;
-- (NSURLRequest *)bodyRequestWithURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+- (NSURLRequest *)postRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+- (NSURLRequest *)getRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+- (NSURLRequest *)bodyRequestWithURL:(NSURL *)url httpMethod:(NSString *)httpMethod parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+- (NSURLRequest *)JSONPostRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 
 - (void)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler;
-- (void)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 - (void)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 - (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock;
 
 
 - (id)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 
-- (NSURLRequest *)JSONPostRequestWithURL:(NSURL *)URL parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed;
 
 - (BOOL)refreshAccessToken:(NSError **)error;
 
@@ -151,7 +152,7 @@
     
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
                                       withParameters:nil
-                          shouldBeCalledUnauthorized:YES
+                             canBeCalledUnauthorized:YES
                                                error:error];
     return apiResponse;
     
@@ -161,7 +162,7 @@
     
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
                                            withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q"]
-                               shouldBeCalledUnauthorized:NO 
+                                canBeCalledUnauthorized:NO 
                                                     error:error];
     return apiResponse;
 
@@ -174,7 +175,7 @@
     }
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:urlString]
                                            withParameters:nil 
-                               shouldBeCalledUnauthorized:NO 
+                                  canBeCalledUnauthorized:NO 
                                                     error:error];
     return apiResponse;
 }
@@ -183,7 +184,7 @@
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d.json", [self booksEndpoint], bookId]] 
                                            withParameters:nil
-                               shouldBeCalledUnauthorized:YES
+                                  canBeCalledUnauthorized:YES
                                                     error:error];
     return apiResponse;
     
@@ -193,7 +194,7 @@
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/match.json", [self booksEndpoint]]] 
                                       withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
-                          shouldBeCalledUnauthorized:YES
+                                  canBeCalledUnauthorized:YES
                                                error:error];
     
     return apiResponse;
@@ -202,7 +203,7 @@
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/match.json", [self booksEndpoint]]] 
                                            withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
-                               shouldBeCalledUnauthorized:YES
+                                  canBeCalledUnauthorized:YES
                                                     error:error];
     return apiResponse;
 }
@@ -234,6 +235,8 @@
 }
 
 // Readings
+
+#pragma mark - Readings
 
 - (NSDictionary *)createReadingWithBookId:(ReadmillBookId)bookId 
                                     state:(ReadmillReadingState)readingState
@@ -285,7 +288,7 @@
     
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings.json", [self usersEndpoint], userId]] 
                                            withParameters:nil
-                               shouldBeCalledUnauthorized:NO
+                                canBeCalledUnauthorized:NO
                                                     error:error];
     return apiResponse;
 }
@@ -298,7 +301,7 @@
         
         NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/readings.json", [self usersEndpoint], userName]] 
                                                withParameters:nil
-                                   shouldBeCalledUnauthorized:NO
+                                    canBeCalledUnauthorized:NO
                                                         error:error];
         return apiResponse;
     }
@@ -311,7 +314,7 @@
                                                             [self readingsEndpoint], 
                                                             readingId]] 
                                            withParameters:nil
-                               shouldBeCalledUnauthorized:NO
+                                  canBeCalledUnauthorized:NO
                                                     error:error];
     return apiResponse;    
 }
@@ -323,7 +326,7 @@
     
     [self sendGetRequestToURL:URL 
                withParameters:nil
-   shouldBeCalledUnauthorized:NO
+      canBeCalledUnauthorized:NO
             completionHandler:completionHandler];
 }
 
@@ -334,12 +337,13 @@
     }
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:urlString]
                                            withParameters:nil 
-                               shouldBeCalledUnauthorized:NO 
+                                  canBeCalledUnauthorized:NO 
                                                     error:error];
     return apiResponse;
 }
 
 //Pings     
+#pragma mark - Pings
 
 - (void)pingReadingWithId:(ReadmillReadingId)readingId 
              withProgress:(ReadmillReadingProgress)progress 
@@ -395,6 +399,7 @@
 }
 
 // Highlights
+#pragma mark - Highlights
 
 -(NSDictionary *)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position comment:(NSString *)comment connections:(NSArray *)connections error:(NSError **)error {
     
@@ -467,11 +472,7 @@
     NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights.json", 
                                                  [self readingsEndpoint], readingId]];
     
-    NSURLRequest *request = [self JSONPostRequestWithURL:highlightsURL 
-                                              parameters:parameters 
-                                 canBeCalledUnauthorized:NO];
-    
-    [self startPreparedRequest:request completion:completionHandler];
+    [self sendJSONPostRequestToURL:highlightsURL withParameters:parameters canBeCalledUnauthorized:NO completionHandler:completionHandler];
 }
 
 - (NSArray *)highlightsForReadingWithId:(ReadmillReadingId)readingId error:(NSError **)error {
@@ -480,7 +481,7 @@
                                                             [self readingsEndpoint], 
                                                             readingId]] 
                                            withParameters:nil
-                               shouldBeCalledUnauthorized:NO
+                                canBeCalledUnauthorized:NO
                                                     error:error];
 
     return apiResponse;    
@@ -493,43 +494,44 @@
                                        [self readingsEndpoint], 
                                        readingId]];
 
-    NSError *error = nil;
-    NSURLRequest *request = [self getRequestWithURL:URL
-                                     withParameters:nil
-                         shouldBeCalledUnauthorized:NO
-                                              error:&error];
-    
-    if (!request) {
-        completionHandler(nil, error);
-    }
-    
-    [self startPreparedRequest:request completion:completionHandler];    
+    [self sendGetRequestToURL:URL withParameters:nil canBeCalledUnauthorized:NO completionHandler:completionHandler];
 }
 
+- (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId comment:(NSString *)comment completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/comments.json", 
+                                       [self highlightsEndpoint], 
+                                       highlightId]];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:comment 
+                                                                                              forKey:@"content"]
+                                                           forKey:@"comment"];
+    
+    [self sendJSONPostRequestToURL:URL 
+                    withParameters:parameters
+           canBeCalledUnauthorized:NO 
+                 completionHandler:completionHandler];
+    
+}
 - (NSArray *)commentsForHighlightWithId:(ReadmillHighlightId)highlightId error:(NSError **)error {
+    
     NSArray *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:
                                                       [NSString stringWithFormat:@"%@/%d/comments.json", 
                                                        [self highlightsEndpoint], 
                                                        highlightId]] 
                                       withParameters:nil
-                          shouldBeCalledUnauthorized:NO
+                          canBeCalledUnauthorized:NO
                                                error:error];
     
     return apiResponse;    
 }
 
 - (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/comments.json", 
                                        [self highlightsEndpoint], 
                                        highlightId]];
     
-    NSError *error = nil;
-    NSURLRequest *request = [self getRequestWithURL:URL 
-                                     withParameters:nil 
-                         shouldBeCalledUnauthorized:NO
-                                              error:&error];
-    
-    [self startPreparedRequest:request completion:completionHandler];
+    [self sendGetRequestToURL:URL withParameters:nil canBeCalledUnauthorized:NO completionHandler:completionHandler];
 }
 #pragma mark
 #pragma Connections
@@ -540,7 +542,7 @@
     
     [self sendGetRequestToURL:URL 
                withParameters:nil
-   shouldBeCalledUnauthorized:NO 
+      canBeCalledUnauthorized:NO 
             completionHandler:completionHandler];
 }
 // Users
@@ -549,7 +551,7 @@
     
     NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d.json", [self apiEndPoint], userId]] 
                                            withParameters:nil
-                               shouldBeCalledUnauthorized:YES
+                               canBeCalledUnauthorized:YES
                                                     error:error];
     return apiResponse;
     
@@ -563,7 +565,7 @@
         
         NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@.json", [self apiEndPoint], userName]] 
                                                withParameters:nil
-                                   shouldBeCalledUnauthorized:YES
+                                   canBeCalledUnauthorized:YES
                                                         error:error];
         return apiResponse;
     }
@@ -737,7 +739,7 @@
     }
 }
 
-- (NSURLRequest *)getRequestWithURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+- (NSURLRequest *)getRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
     
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!allowUnauthed) {
@@ -780,12 +782,12 @@
     [request setTimeoutInterval:kTimeoutInterval];
     return request;
 }
-- (void)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+- (void)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
     
     NSError *error = nil;
     NSURLRequest *request = [self getRequestWithURL:url 
-                                     withParameters:parameters 
-                         shouldBeCalledUnauthorized:stripAuth
+                                         parameters:parameters 
+                            canBeCalledUnauthorized:allowUnauthed
                                               error:&error];
     
     if (!request) {
@@ -794,7 +796,7 @@
     
     [self startPreparedRequest:request completion:completionHandler];
 }
-- (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters shouldBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error {
+- (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error {
     
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!stripAuth) {
@@ -802,7 +804,7 @@
         }
     }
     
-	NSURLRequest *request = [self getRequestWithURL:url withParameters:parameters shouldBeCalledUnauthorized:stripAuth error:error];
+	NSURLRequest *request = [self getRequestWithURL:url parameters:parameters canBeCalledUnauthorized:stripAuth error:error];
 	
 	return [self sendPreparedRequest:request error:error];
 }
@@ -810,14 +812,14 @@
     return [self sendBodyRequestToURL:url httpMethod:@"PUT" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
 }
  
-- (NSURLRequest *)postRequestWithURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
-    return [self bodyRequestWithURL:url httpMethod:@"POST" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
+- (NSURLRequest *)postRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+    return [self bodyRequestWithURL:url httpMethod:@"POST" parameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
 }
 - (void)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
 
     NSError *error = nil;
     NSURLRequest *request = [self postRequestWithURL:url 
-                                      withParameters:parameters 
+                                          parameters:parameters 
                              canBeCalledUnauthorized:allowUnauthed
                                                error:&error];
     
@@ -831,7 +833,7 @@
 	return [self sendBodyRequestToURL:url httpMethod:@"POST" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
 }
 
-- (NSURLRequest *)bodyRequestWithURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+- (NSURLRequest *)bodyRequestWithURL:(NSURL *)url httpMethod:(NSString *)httpMethod parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
     
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!allowUnauthed) {
@@ -878,7 +880,9 @@
     
     NSError *error = nil;
     
-    [self bodyRequestWithURL:url httpMethod:httpMethod withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:&error];
+    NSURLRequest *request = [self bodyRequestWithURL:url httpMethod:httpMethod parameters:parameters canBeCalledUnauthorized:allowUnauthed error:&error];
+    
+    [self startPreparedRequest:request completion:completionHandler];
 }
 - (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
 
@@ -888,12 +892,18 @@
         }
     }
     
-    NSURLRequest *request = [self bodyRequestWithURL:url httpMethod:httpMethod withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
+    NSURLRequest *request = [self bodyRequestWithURL:url httpMethod:httpMethod parameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
     
     return [self sendPreparedRequest:request error:error];
 }
-- (NSURLRequest *)JSONPostRequestWithURL:(NSURL *)URL parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed {
-
+- (NSURLRequest *)JSONPostRequestWithURL:(NSURL *)URL parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+    
+    if (![self ensureAccessTokenIsCurrent:error]) {
+        if (!allowUnauthed) {
+            return nil;
+        }
+    }
+    
     NSMutableDictionary *allParameters = [NSMutableDictionary dictionaryWithObject:kReadmillClientId 
                                                                             forKey:@"client_id"];
     
@@ -914,16 +924,16 @@
     return request;
 }
 - (id)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
-    
-    if (![self ensureAccessTokenIsCurrent:error]) {
-        if (!allowUnauthed) {
-            return nil;
-        }
-    }
-	
-    NSURLRequest *request = [self JSONPostRequestWithURL:url parameters:parameters canBeCalledUnauthorized:allowUnauthed];
+  
+    NSURLRequest *request = [self JSONPostRequestWithURL:url parameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
     
     return [self sendPreparedRequest:request error:error];
+}
+- (void)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+    
+    NSURLRequest *request = [self JSONPostRequestWithURL:url parameters:parameters canBeCalledUnauthorized:allowUnauthed error:nil];
+    
+    [self startPreparedRequest:request completion:completionHandler];
 }
 - (id)parseResponse:(NSHTTPURLResponse *)response withResponseData:(NSData *)responseData connectionError:(NSError *)connectionError error:(NSError **)error {
     
@@ -974,6 +984,7 @@
 }
 - (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock {
     
+    NSAssert(request != nil, @"Request is nil!");
     ReadmillURLConnectionCompletionHandler connectionCompletionHandler = ^(NSHTTPURLResponse *response, 
                                                                            NSData *responseData, 
                                                                            NSError *connectionError) {
@@ -991,8 +1002,8 @@
             NSURL *locationURL = [NSURL URLWithString:locationHeader];
             
             NSURLRequest *newRequest = [self getRequestWithURL:locationURL 
-                                                withParameters:nil 
-                                    shouldBeCalledUnauthorized:NO 
+                                                    parameters:nil 
+                                       canBeCalledUnauthorized:NO 
                                                          error:&error];
             [self startPreparedRequest:newRequest 
                             completion:completionBlock];

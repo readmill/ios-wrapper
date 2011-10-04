@@ -10,6 +10,10 @@
 #import "JSONKit.h"
 #import "ReadmillAPIWrapper.h"
 
+@interface ReadmillURLConnection ()
+- (void)finish;
+@end
+
 @implementation ReadmillURLConnection
 
 @synthesize connectionError;
@@ -24,7 +28,6 @@
     self = [super init];
     if (self) {
         // Initialization
-        NSLog(@"ReadmillURLConnection init");
         if (_completionHandler) {
             completionHandler = [_completionHandler copy];
         }        
@@ -34,7 +37,6 @@
 }
 - (void)dealloc {
     
-    NSLog(@"ReadmillURLConnection dealloc");
     self.connection = nil;
     [completionHandler release], completionHandler = nil;
     self.connectionError = nil;

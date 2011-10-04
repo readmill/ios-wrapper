@@ -11,7 +11,7 @@
 
 typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *response, NSData *responseData, NSError *error);
 
-@interface ReadmillURLConnection : NSOperation <NSURLConnectionDataDelegate> {
+@interface ReadmillURLConnection : NSOperation {
     
 @private
     NSMutableData *responseData;
@@ -29,8 +29,6 @@ typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *respon
 @property (nonatomic, copy) NSURLRequest *request;
 @property (nonatomic, assign) BOOL isExecuting, isFinished;
 
-- (id)parseResponse:(NSError **)error;
 - (id)initWithRequest:(NSURLRequest *)request completionHandler:(ReadmillURLConnectionCompletionHandler)completionHandler;
-- (void)finish;
 
 @end
