@@ -78,7 +78,7 @@
         [self setBookId:[[cleanedDict valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
         [self setRootEditionId:[[cleanedDict valueForKey:kReadmillAPIBookRootEditionIdKey] unsignedIntegerValue]];
         
-        [self setDatePublished:[[[NSDate alloc] initWithString:[cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey]] autorelease]];
+        //[self setDatePublished:[[[NSDate alloc] initWithString:[cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey]] autorelease]];
         
     }
     return self;
