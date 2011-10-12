@@ -52,7 +52,8 @@
 
 - (id)initWithCoder:(NSCoder *)coder 
 { 
-    if ((self == [super init])) {
+    self = [super init];
+    if (self) {
         readingId = [coder decodeIntegerForKey:@"readingId"];
         progress = [coder decodeFloatForKey:@"progress"];
         duration = [coder decodeIntegerForKey:@"duration"];
