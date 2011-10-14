@@ -31,10 +31,17 @@
 @property (readwrite, copy) NSDate *dateModified;
 @property (readwrite, copy) NSDate *dateStarted;
 
-@property (readwrite, copy) NSNumber *estimatedTimeLeft;
-@property (readwrite, copy) NSNumber *timeSpent;
+@property (readwrite) NSTimeInterval *estimatedTimeLeft;
+@property (readwrite) NSTimeInterval *timeSpent;
 
 @property (readwrite, copy) NSString *closingRemark;
+
+@property (readwrite, copy) NSURL *permalinkURL;
+@property (readwrite, copy) NSURL *uri;
+@property (readwrite, copy) NSURL *comments;
+@property (readwrite, copy) NSURL *periods;
+@property (readwrite, copy) NSURL *locations;
+@property (readwrite, copy) NSURL *highlights;
 
 @property (readwrite) BOOL isPrivate;
 
@@ -90,10 +97,18 @@
     [self setBookId:[[[cleanedDict valueForKey:kReadmillAPIReadingBookKey] valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
     [self setReadingId:[[cleanedDict valueForKey:kReadmillAPIReadingIdKey] unsignedIntegerValue]];
     
-    [self setEstimatedTimeLeft:[cleanedDict valueForKey:kReadmillAPIReadingEstimatedTimeLeft]];
-    [self setTimeSpent:[cleanedDict valueForKey:kReadmillAPIReadingDuration]];
+    [self setEstimatedTimeLeft:[[cleanedDict valueForKey:kReadmillAPIReadingEstimatedTimeLeft] doubleValue]];
+    [self setTimeSpent:[[cleanedDict valueForKey:kReadmillAPIReadingDuration] doubleValue]];
  
     [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadingProgress] floatValue]];
+    
+
+    [self setPermalinkURL:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingPermalinkURLKey]]];
+    [self setUri:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingURIKey]]];
+    [self setComments:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingCommentsKey]]];
+    [self setPeriods:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingPeriodsKey]]];
+    [self setLocations:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingLocationsKey]]];
+    [self setHighlights:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingHighlightsKey]]];
 }
 
 -(NSString *)description {
@@ -111,6 +126,13 @@
 @synthesize dateStarted;
 @synthesize estimatedTimeLeft;
 @synthesize timeSpent;
+
+@synthesize permalinkURL;
+@synthesize uri;
+@synthesize comments;
+@synthesize periods;
+@synthesize locations;
+@synthesize highlights;
 
 @synthesize closingRemark;
 @synthesize isPrivate;
@@ -135,8 +157,6 @@
     [self setDateModified:nil];
     [self setDateStarted:nil];
     [self setClosingRemark:nil];
-    [self setEstimatedTimeLeft:nil];
-    [self setTimeSpent:nil];
     
     [super dealloc];
 }

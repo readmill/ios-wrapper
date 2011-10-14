@@ -730,6 +730,14 @@
 #pragma mark -
 #pragma mark Sending Requests
 
+- (void)sendRequestToURL:(NSURL *)url completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+
+    [self sendGetRequestToURL:url 
+               withParameters:nil 
+      canBeCalledUnauthorized:NO 
+            completionHandler:completionHandler];
+}
+
 - (BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
     NSLog(@"now: %@, accessExpiry: %@", [NSDate date], [self accessTokenExpiryDate]);
     if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {

@@ -51,7 +51,8 @@
     NSDate *dateFinished;
     NSDate *dateModified;
     NSDate *dateStarted;
-    NSNumber *timeSpent, *estimatedTimeLeft;
+    
+    NSTimeInterval timeSpent, estimatedTimeLeft;
     
     NSString *closingRemark;
     
@@ -66,6 +67,14 @@
     ReadmillAPIWrapper *apiWrapper;
     
     ReadmillReadingProgress progress;
+    
+    // URLs
+    NSURL *permalinkURL;
+    NSURL *uri;
+    NSURL *commentsURL;
+    NSURL *periodsURL;
+    NSURL *locationsURL;
+    NSURL *highlightsURL;
 }
 
 /*!
@@ -167,15 +176,15 @@
 
 /*!
  @property  estimatedTimeLeft
- @brief The estimated time left for a reading.
+ @brief The estimated time left for a reading, in seconds.
  */
-@property (readonly, copy) NSNumber *estimatedTimeLeft;
+@property (readonly) NSTimeInterval estimatedTimeLeft;
 
 /*!
  @property  timeSpent
- @brief The time spent on a reading.
+ @brief The time spent on a reading, in seconds.
  */
-@property (readonly, copy) NSNumber *timeSpent;
+@property (readonly) NSTimeInterval timeSpent;
 
 /*!
  @property  closingRemark
@@ -226,6 +235,34 @@
  */
 @property (readonly, retain) ReadmillAPIWrapper *apiWrapper;
 
-
-
+/*!
+ @property  permalinkURL
+ @brief The permalink of the reading.
+ */
+@property (readonly, copy) NSURL *permalinkURL;
+/*!
+ @property  uri
+ @brief The URI of the reading.
+ */
+@property (readonly, copy) NSURL *uri;
+/*!
+ @property  comments
+ @brief The URI to the comments of the reading.
+ */
+@property (readonly, copy) NSURL *comments;
+/*!
+ @property  periods
+ @brief The URI to the periods of the reading.
+ */
+@property (readonly, copy) NSURL *periods;
+/*!
+ @property  locations
+ @brief The URI to the locations of the reading.
+ */
+@property (readonly, copy) NSURL *locations;
+/*!
+ @property  highlights
+ @brief The URI to the highlights of the reading.
+ */
+@property (readonly, copy) NSURL *highlights;
 @end

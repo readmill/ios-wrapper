@@ -116,6 +116,14 @@ static NSString * const kReadmillAPIReadingEstimatedTimeLeft = @"estimated_time_
 static NSString * const kReadmillAPIReadingDuration = @"duration";
 static NSString * const kReadmillAPIReadingProgress = @"progress";
 
+static NSString * const kReadmillAPIReadingPermalinkURLKey = @"permalink_url";
+static NSString * const kReadmillAPIReadingURIKey = @"uri";
+static NSString * const kReadmillAPIReadingCommentsKey = @"comments";
+static NSString * const kReadmillAPIReadingPeriodsKey = @"periods";
+static NSString * const kReadmillAPIReadingLocationsKey = @"locations";
+static NSString * const kReadmillAPIReadingHighlightsKey = @"highlights";
+
+
 static NSString * const kReadmillAPIClientIdKey = @"client";
 
 #pragma mark -
@@ -256,6 +264,10 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  successful authorization back to the given URL.
  */
 -(NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect;
+
+
+#pragma mark -
+#pragma mark UI Presenter 
 
 /*!
  @param ISBN The ISBN number of the book to link to. 
@@ -506,5 +518,14 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Get the currently logged in user. 
  */
 - (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+#pragma mark -
+#pragma mark Unprepared requests
+/*!
+ @param url The URL to which the request will be sent
+ @param completionHandler A block that will return any result (id) and an NSError object if an error occurs.
+ @brief Send a request to the specified URL.
+ */
+- (void)sendRequestToURL:(NSURL *)url completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 @end
