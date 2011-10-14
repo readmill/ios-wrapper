@@ -79,9 +79,7 @@
     [self setDateFinished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateFinishedKey]]];
     [self setDateModified:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateModifiedKey]]];
     [self setDateStarted:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateStarted]]];
-    
-    NSLog(@"date created: %@", [self dateCreated]);
-    
+        
     [self setClosingRemark:[cleanedDict valueForKey:kReadmillAPIReadingClosingRemarkKey]];
     
     [self setIsPrivate:([[cleanedDict valueForKey:kReadmillAPIReadingIsPrivateKey] unsignedIntegerValue] == 1)];
