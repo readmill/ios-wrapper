@@ -71,10 +71,10 @@
     // URLs
     NSURL *permalinkURL;
     NSURL *uri;
-    NSURL *commentsURL;
-    NSURL *periodsURL;
-    NSURL *locationsURL;
-    NSURL *highlightsURL;
+    NSURL *comments;
+    NSURL *periods;
+    NSURL *locations;
+    NSURL *highlights;
 }
 
 /*!

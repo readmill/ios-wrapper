@@ -890,7 +890,11 @@
     
     NSURLRequest *request = [self bodyRequestWithURL:url httpMethod:httpMethod parameters:parameters canBeCalledUnauthorized:allowUnauthed error:&error];
     
-    [self startPreparedRequest:request completion:completionHandler];
+    if (request) {
+        [self startPreparedRequest:request completion:completionHandler];
+    } else {
+        completionHandler(nil, error);
+    }
 }
 - (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
 
@@ -939,9 +943,14 @@
 }
 - (void)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
     
-    NSURLRequest *request = [self JSONPostRequestWithURL:url parameters:parameters canBeCalledUnauthorized:allowUnauthed error:nil];
+    NSError *error= nil;
+    NSURLRequest *request = [self JSONPostRequestWithURL:url parameters:parameters canBeCalledUnauthorized:allowUnauthed error:&error];
     
-    [self startPreparedRequest:request completion:completionHandler];
+    if (request) {
+        [self startPreparedRequest:request completion:completionHandler];
+    } else {
+        completionHandler(nil, error);
+    }
 }
 - (id)parseResponse:(NSHTTPURLResponse *)response withResponseData:(NSData *)responseData connectionError:(NSError *)connectionError error:(NSError **)error {
     
@@ -1011,10 +1020,15 @@
             
             NSURLRequest *newRequest = [self getRequestWithURL:locationURL 
                                                     parameters:nil 
-                                       canBeCalledUnauthorized:NO 
+                                       canBeCalledUnauthorized:NO
                                                          error:&error];
-            [self startPreparedRequest:newRequest 
-                            completion:completionBlock];
+            
+            if (newRequest) {
+                [self startPreparedRequest:newRequest 
+                                completion:completionBlock];
+            } else {
+                completionBlock(nil, error);
+            }
         } else {
             
             // Parse the response
