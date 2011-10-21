@@ -798,11 +798,11 @@
                             canBeCalledUnauthorized:allowUnauthed
                                               error:&error];
     
-    if (!request) {
+    if (request) {
+        [self startPreparedRequest:request completion:completionHandler];
+    } else {
         completionHandler(nil, error);
     }
-    
-    [self startPreparedRequest:request completion:completionHandler];
 }
 - (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error {
     
@@ -831,11 +831,11 @@
                              canBeCalledUnauthorized:allowUnauthed
                                                error:&error];
     
-    if (!request) {
+    if (request) {
+        [self startPreparedRequest:request completion:completionHandler];
+    } else {
         return completionHandler(nil, error);
     }
-    
-    [self startPreparedRequest:request completion:completionHandler];
 }
 - (id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error{
 	return [self sendBodyRequestToURL:url httpMethod:@"POST" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
