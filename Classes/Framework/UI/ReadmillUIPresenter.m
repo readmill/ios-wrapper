@@ -283,6 +283,8 @@
     
     [contentViewController release];
     contentViewController = nil;
+
+    [self setView:nil];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

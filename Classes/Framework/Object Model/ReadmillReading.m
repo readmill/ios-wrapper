@@ -204,44 +204,47 @@
     ReadmillReadingState newState = [[properties valueForKey:@"state"] unsignedIntegerValue];
     NSString *remark = [properties valueForKey:@"remark"];    
     
-    NSError *error = nil;
     [[self apiWrapper] updateReadingWithId:[self readingId]
-                              withState:newState
-                                private:privacy
-                          closingRemark:remark
-                                  error:&error];
-    
-    if (error == nil) {
-        NSDictionary *newDetails = [[self apiWrapper] readingWithId:[self readingId]
-                                                              error:&error];
-        if (newDetails != nil && error == nil) {
-            [self updateWithAPIDictionary:newDetails];
-        }
-    }
-    
-    if (error == nil && readingUpdatingDelegate != nil) {
-        
-       [(NSObject *)readingUpdatingDelegate performSelector:@selector(readmillReadingDidUpdateMetadataSuccessfully:)
-                                                onThread:callbackThread
-                                              withObject:self
-                                           waitUntilDone:YES];
-        
-    } else if (error != nil && readingUpdatingDelegate != nil) {
-        
-        NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
-                                          [(NSObject *)readingUpdatingDelegate 
-                                           methodSignatureForSelector:@selector(readmillReading:didFailToUpdateMetadataWithError:)]];
-        
-        [failedInvocation setSelector:@selector(readmillReading:didFailToUpdateMetadataWithError:)];
-        
-        [failedInvocation setArgument:&self atIndex:2];
-        [failedInvocation setArgument:&error atIndex:3];
-        
-        [failedInvocation performSelector:@selector(invokeWithTarget:)
-                                 onThread:callbackThread
-                               withObject:readingUpdatingDelegate
-                            waitUntilDone:YES]; 
-    }
+                                 withState:newState
+                                   private:privacy
+                             closingRemark:remark
+                         completionHandler:^(id result, NSError *error) {
+                                    //
+                             if (error == nil) {
+                                 [[self apiWrapper] readingWithId:[self readingId]
+                                                completionHandler:^(id newDetails, NSError *error) {
+                                                    if (newDetails != nil && error == nil) {
+                                                        [self updateWithAPIDictionary:newDetails];
+                                                    }
+                                                }];
+                             }
+                             
+                             if (error == nil && readingUpdatingDelegate != nil) {
+                                 
+                                 [(NSObject *)readingUpdatingDelegate performSelector:@selector(readmillReadingDidUpdateMetadataSuccessfully:)
+                                                                             onThread:callbackThread
+                                                                           withObject:self
+                                                                        waitUntilDone:YES];
+                                 
+                             } else if (error != nil && readingUpdatingDelegate != nil) {
+                                 
+                                 NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
+                                                                   [(NSObject *)readingUpdatingDelegate 
+                                                                    methodSignatureForSelector:@selector(readmillReading:didFailToUpdateMetadataWithError:)]];
+                                 
+                                 [failedInvocation setSelector:@selector(readmillReading:didFailToUpdateMetadataWithError:)];
+                                 
+                                 ReadmillReading *aReading = self;
+                                 [failedInvocation setArgument:&aReading atIndex:2];
+                                 [failedInvocation setArgument:&error atIndex:3];
+                                 
+                                 [failedInvocation performSelector:@selector(invokeWithTarget:)
+                                                          onThread:callbackThread
+                                                        withObject:readingUpdatingDelegate
+                                                     waitUntilDone:YES]; 
+                             }
+                                                            
+                         }];
     
     [pool drain];
     

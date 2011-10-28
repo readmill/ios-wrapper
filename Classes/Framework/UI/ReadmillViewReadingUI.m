@@ -164,23 +164,27 @@
         NSDictionary *parameters = [URL queryAsDictionary];
         if ([action isEqualToString:@"change"]) {
                             
-            NSError *error = nil;
             NSString *uri = @"uri";
             if ((uri = [parameters valueForKey:uri])) { 
-                NSDictionary *readingDictionary = [[[self reading] apiWrapper] readingWithURLString:uri 
-                                                                                     error:&error];
                 
-                if (nil == error) {
-                    
-                    // Update the reading with new data (closing remark, progress, state etc)
-                    [[self reading] updateWithAPIDictionary:readingDictionary];
-                    
-                    // Notify the delegate that the reading was finished/abandoned
-                    [[self delegate] viewReadingUI:self 
-                                  didFinishReading:[self reading]];
-                }
-            }
-                
+                [[[self reading] apiWrapper] readingWithURLString:uri
+                                                completionHandler:^(id result, NSError *error) {
+                                                   
+                                                    if (result && error == nil) {
+                                                        // Update the reading with new data (closing remark, progress, state etc)
+                                                        [[self reading] updateWithAPIDictionary:result];
+                                                        
+                                                        // Notify the delegate that the reading was finished/abandoned
+                                                        [[self delegate] viewReadingUI:self 
+                                                                      didFinishReading:[self reading]];
+
+                                                    } else {
+                                                        [self.delegate viewReadingUI:self 
+                                                              didFailToFinishReading:self.reading 
+                                                                           withError:error];
+                                                    }
+                                                }];
+            }                
         } else if ([action isEqualToString:@"error"]) {
             
             NSError *error = [NSError errorWithDomain:kReadmillDomain 

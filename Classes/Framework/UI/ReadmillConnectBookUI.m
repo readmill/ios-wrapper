@@ -121,7 +121,7 @@
     [webView stopLoading];
     [webView setDelegate:nil];
     [self setWebView:nil];
-    //[self setView:nil];
+    [self setView:nil];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -194,21 +194,24 @@
             if ((uri = [parameters valueForKey:uri])) {
                 
                 // The uri parameter is the full URL to the reading we want to connect to. 
-                NSError *error = nil;
-                NSDictionary *apiResponse = [[[self user] apiWrapper] readingWithURLString:uri
-                                                                                  error:&error];
-                if (nil == error) {
-                    
-                    ReadmillReading *reading = [[ReadmillReading alloc] initWithAPIDictionary:apiResponse 
-                                                                          apiWrapper:[[self user] apiWrapper]];
-                    
-                    [[self delegate] connect:self
-                      didSucceedToLinkToBook:[self book] 
-                                 withReading:reading];
-                    
-                    [reading release]; 
-                    
-                }
+                [[[self user] apiWrapper] readingWithURLString:uri 
+                                             completionHandler:^(id result, NSError *error) {
+                                                 if (result && error == nil) {
+                                                     ReadmillReading *reading = [[ReadmillReading alloc] initWithAPIDictionary:result 
+                                                                                                                    apiWrapper:[[self user] apiWrapper]];
+                                                     [[self delegate] connect:self
+                                                       didSucceedToLinkToBook:[self book] 
+                                                                  withReading:reading];
+                                                     
+                                                     [reading release]; 
+
+                                                 } else {
+                                                     NSError *error = [NSError errorWithDomain:kReadmillDomain code:0 userInfo:parameters];
+                                                     [[self delegate] connect:self
+                                                          didFailToLinkToBook:[self book] 
+                                                                    withError:error];
+                                                 }
+                                             }];                    
             }
         } else if ([action isEqualToString:@"error"]) {
             
