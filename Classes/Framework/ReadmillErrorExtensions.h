@@ -1,6 +1,6 @@
 //
 //  ReadmillErrorExtensions.h
-//  ReadmillFramework
+//  ReadmillAPI
 //
 //  Created by Martin Hwasser on 5/13/11.
 //  Copyright 2011 KennettNet Software Limited. All rights reserved.

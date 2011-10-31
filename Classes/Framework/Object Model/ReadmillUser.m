@@ -55,6 +55,13 @@
 
 @implementation ReadmillUser
 
++(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil apiConfiguration:(ReadmillAPIConfiguration *)configuration {
+    
+    ReadmillAPIWrapper *api = [[[ReadmillAPIWrapper alloc] initWithAPIConfiguration:configuration] autorelease];
+    
+    return [api clientAuthorizationURLWithRedirectURLString:[redirectOrNil absoluteString]];
+}
+
 +(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil onStagingServer:(BOOL)onStaging {
     
     ReadmillAPIWrapper *api = nil;
@@ -66,6 +73,17 @@
     }
     
     return [api clientAuthorizationURLWithRedirectURLString:[redirectOrNil absoluteString]];
+}
+
++(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration {
+    
+    ReadmillAPIWrapper *api = [[[ReadmillAPIWrapper alloc] initWithAPIConfiguration:apiConfiguration] autorelease];
+    
+    ReadmillUser *user = [[ReadmillUser alloc] initWithAPIDictionary:nil apiWrapper:api];
+    [user authenticateCallbackURL:callbackURL baseCallbackURL:baseCallbackURL delegate:authenticationDelegate];
+    
+    [user autorelease];
+    
 }
 
 +(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate onStagingServer:(BOOL)onStaging {

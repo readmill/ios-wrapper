@@ -1,6 +1,6 @@
 //
 //  ReadmillURLConnection.h
-//  ReadmillFramework
+//  ReadmillAPI
 //
 //  Created by Martin Hwasser on 9/23/11.
 //  Copyright (c) 2011 KennettNet Software Limited. All rights reserved.

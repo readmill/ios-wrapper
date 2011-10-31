@@ -40,7 +40,7 @@
 - (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 */
 
-- (NSURLRequest *)putRequestWithURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+- (NSURLRequest *)putRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 - (NSURLRequest *)postRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 - (NSURLRequest *)getRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 - (NSURLRequest *)bodyRequestWithURL:(NSURL *)url httpMethod:(NSString *)httpMethod parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
@@ -53,19 +53,14 @@
 - (void)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 - (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock;
 
-
-- (id)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
-
-
 - (BOOL)refreshAccessToken:(NSError **)error;
-
-- (NSString *)oAuthBaseURL;
 
 @property (readwrite, copy) NSString *refreshToken;
 @property (readwrite, copy) NSString *accessToken;
 @property (readwrite, copy) NSString *authorizedRedirectURL;
 @property (readwrite, copy) NSDate *accessTokenExpiryDate;
-@property (readwrite, copy) NSString *apiEndPoint;
+//@property (readwrite, copy) NSString *apiEndPoint;
+@property (nonatomic, readwrite, retain) ReadmillAPIConfiguration *apiConfiguration;
 @end
 
 @implementation ReadmillAPIWrapper
@@ -73,18 +68,25 @@
 - (id)init {
     if ((self = [super init])) {
         // Initialization code here.
-        
-        [self setApiEndPoint:kLiveAPIEndPoint];
         queue = [[NSOperationQueue alloc] init];
-        [queue setMaxConcurrentOperationCount:10];
-
+        [queue setMaxConcurrentOperationCount:3];
+        
     }
     return self;
 }
 
+- (id)initWithAPIConfiguration:(ReadmillAPIConfiguration *)configuration {
+    self = [self init];
+    if (self) {
+        apiConfiguration = [configuration retain];
+    }
+    return self;
+}
+
+
 - (id)initWithStagingEndPoint {
     if ((self = [self init])) {
-        [self setApiEndPoint:kStagingAPIEndPoint];
+        //[self setApiEndPoint:kStagingAPIEndPoint];
     }
     return self;
 }
@@ -95,9 +97,10 @@
         
         [self setAuthorizedRedirectURL:[plist valueForKey:@"authorizedRedirectURL"]];
         [self setRefreshToken:[plist valueForKey:@"refreshToken"]];
-        [self setApiEndPoint:[plist valueForKey:@"apiEndPoint"]];
+        //[self setApiEndPoint:[plist valueForKey:@"apiEndPoint"]];
 		[self setAccessToken:[plist valueForKey:@"accessToken"]];
         [self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
+        [self setApiConfiguration:[NSKeyedUnarchiver unarchiveObjectWithData:[plist valueForKey:@"apiConfiguration"]]];
     }
     return self;
 }
@@ -107,7 +110,8 @@
             
             [self authorizedRedirectURL], @"authorizedRedirectURL",
             [self refreshToken], @"refreshToken", 
-            [self apiEndPoint], @"apiEndPoint",
+            //[self apiEndPoint], @"apiEndPoint",
+            [NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]], @"apiConfiguration",
 			[self accessToken], @"accessToken",
             [self accessTokenExpiryDate], @"accessTokenExpiryDate",
 			nil];
@@ -118,14 +122,16 @@
 @synthesize accessToken;
 @synthesize authorizedRedirectURL;
 @synthesize accessTokenExpiryDate;
-@synthesize apiEndPoint;
+//@synthesize apiEndPoint;
+@synthesize apiConfiguration;
 
 - (void)dealloc {
     [self setRefreshToken:nil];
     [self setAccessToken:nil];
     [self setAuthorizedRedirectURL:nil];
     [self setAccessTokenExpiryDate:nil];
-    [self setApiEndPoint:nil];
+    //[self setApiEndPoint:nil];
+    [self setApiConfiguration:nil];
     [queue release];
     [super dealloc];
 }
@@ -133,6 +139,9 @@
 #pragma mark -
 #pragma mark API endpoints
 
+- (NSString *)apiEndPoint {
+    return [[apiConfiguration apiBaseURL] absoluteString];
+}
 - (NSString *)booksEndpoint {
     return [NSString stringWithFormat:@"%@books", [self apiEndPoint]];
 }
@@ -161,7 +170,7 @@
     
     [parameters setValue:[NSNumber numberWithInteger:readingState] forKey:@"state"];
     [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:@"is_private"];
-    [parameters setValue:kReadmillClientId forKey:@"client_id"];
+    [parameters setValue:[apiConfiguration clientID] forKey:@"client_id"];
     
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", [self booksEndpoint], bookId]];
     [self sendPostRequestToURL:URL
@@ -183,7 +192,7 @@
                   forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingStateKey]];
     [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] 
                   forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingIsPrivateKey]];
-    [parameters setValue:kReadmillClientId 
+    [parameters setValue:[apiConfiguration clientID]
                   forKey:[NSString stringWithFormat:readingScope, kReadmillAPIClientIdKey]];
     
     if ([remark length] > 0) {
@@ -342,13 +351,15 @@
     [self sendGetRequestToURL:URL withParameters:nil canBeCalledUnauthorized:NO completionHandler:completionHandler];
 }
 
-- (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId comment:(NSString *)comment completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+- (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId comment:(NSString *)comment commentedAt:(NSDate *)date completionHandler:(ReadmillAPICompletionHandler)completionHandler {
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/comments.json", 
                                        [self highlightsEndpoint], 
                                        highlightId]];
     
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:comment 
-                                                                                              forKey:@"content"]
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                   comment, @"content",
+                                                                   date, @"commentedAt", nil]
+                                                                   
                                                            forKey:@"comment"];
     
     [self sendJSONPostRequestToURL:URL 
@@ -414,7 +425,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@me.json?access_token=%@&client_id=%@",
                                                                                              [self apiEndPoint],
                                                                                              [self accessToken],
-                                                                                             [kReadmillClientId urlEncodedString]]]
+                                                                                             [[apiConfiguration clientID] urlEncodedString]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:kTimeoutInterval];
     [request setHTTPMethod:@"GET"];
@@ -433,7 +444,7 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@me.json?access_token=%@&client_id=%@",
                                                                                                  [self apiEndPoint],
                                                                                                  [self accessToken],
-                                                                                                 [kReadmillClientId urlEncodedString]]]
+                                                                                                 [[apiConfiguration clientID] urlEncodedString]]]
                                                                cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                            timeoutInterval:kTimeoutInterval];
         [request setHTTPMethod:@"GET"];
@@ -447,7 +458,7 @@
 - (BOOL)authenticateWithParameters:(NSString *)parameterString error:(NSError **)error {
     @synchronized (self) {
         
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [self oAuthBaseURL]]]
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[apiConfiguration accessTokenURL]
                                                                cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                            timeoutInterval:kTimeoutInterval];
     
@@ -483,8 +494,8 @@
     [self setAuthorizedRedirectURL:redirectURLString];
 
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&code=%@&redirect_uri=%@",
-                                 [kReadmillClientId urlEncodedString],
-                                 [kReadmillClientSecret urlEncodedString],
+                                 [[apiConfiguration clientID] urlEncodedString],
+                                 [[apiConfiguration clientSecret] urlEncodedString],
                                  [authCode urlEncodedString],
                                  [redirectURLString urlEncodedString]];
     
@@ -494,8 +505,8 @@
 - (BOOL)refreshAccessToken:(NSError **)error {
     
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
-                                 [kReadmillClientId urlEncodedString],
-                                 [kReadmillClientSecret urlEncodedString],
+                                 [[apiConfiguration clientID] urlEncodedString],
+                                 [[apiConfiguration clientSecret] urlEncodedString],
                                  [[self refreshToken] urlEncodedString],
                                  [[self authorizedRedirectURL] urlEncodedString]];
     
@@ -505,25 +516,15 @@
 
 - (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect {
     
-    NSString *baseURL = [self oAuthBaseURL];
+    NSString *baseURL = [[apiConfiguration authURL] absoluteString];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@&mobile=1", baseURL, kReadmillClientId];
+    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@", baseURL, [apiConfiguration clientID]];
     
     if ([redirect length] > 0) {
         urlString = [NSString stringWithFormat:@"%@&redirect_uri=%@", urlString, [redirect urlEncodedString]];
     }
     
     return [NSURL URLWithString:urlString];
-}
-
-- (NSString *)oAuthBaseURL {
-    
-    if ([[self apiEndPoint] isEqualToString:kLiveAPIEndPoint]) {
-        return kLiveAuthorizationUri;
-    } else {
-        return kStagingAuthorizationUri;
-    }
-    
 }
 
 #pragma mark -
@@ -538,7 +539,7 @@
     [parameters setValue:ISBN forKey:@"isbn"];
     [parameters setValue:title forKey:@"title"];
     [parameters setValue:author forKey:@"author"];
-    [parameters setValue:kReadmillClientId forKey:@"client_id"];
+    [parameters setValue:[apiConfiguration clientID] forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
     NSURL *baseURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@ui/#!/connect/book", [self apiEndPoint]]];
@@ -553,7 +554,7 @@
     }
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    [parameters setValue:kReadmillClientId forKey:@"client_id"];
+    [parameters setValue:[apiConfiguration clientID] forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
     NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/reading/%d", [self apiEndPoint], readingId]];
@@ -598,7 +599,7 @@
         [parameterString appendFormat:@"?access_token=%@", [self accessToken]];
         first = NO;
     }
-    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:kReadmillClientId forKey:@"client_id"];
+    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:[apiConfiguration clientID] forKey:@"client_id"];
     [parametersWithClientId addEntriesFromDictionary:parameters];
     
 	for (NSString *key in [parametersWithClientId allKeys]) {		
@@ -659,7 +660,20 @@
     return [self sendBodyRequestToURL:url httpMethod:@"POST" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
 }
 */
- 
+- (void)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+    NSError *error = nil;
+    NSURLRequest *request = [self putRequestWithURL:url 
+                                         parameters:parameters 
+                            canBeCalledUnauthorized:allowUnauthed
+                                              error:&error];
+    
+    if (request) {
+        [self startPreparedRequest:request completion:completionHandler];
+    } else {
+        return completionHandler(nil, error);
+    }
+
+}
 - (void)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
 
     NSError *error = nil;
@@ -698,7 +712,7 @@
         [parameterString appendFormat:@"access_token=%@", [self accessToken]];
         first = NO;
     }
-    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:kReadmillClientId forKey:@"client_id"];
+    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:[apiConfiguration clientID] forKey:@"client_id"];
     [parametersWithClientId addEntriesFromDictionary:parameters];
     
 	for (NSString *key in [parametersWithClientId allKeys]) {		
@@ -758,7 +772,7 @@
         }
     }
     
-    NSMutableDictionary *allParameters = [NSMutableDictionary dictionaryWithObject:kReadmillClientId 
+    NSMutableDictionary *allParameters = [NSMutableDictionary dictionaryWithObject:[apiConfiguration clientID] 
                                                                             forKey:@"client_id"];
     
     if ([[self accessToken] length] > 0) {

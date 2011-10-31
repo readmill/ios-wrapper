@@ -1,6 +1,6 @@
 //
 //  NSDate+ReadmillDateExtensions.m
-//  ReadmillFramework
+//  ReadmillAPI
 //
 //  Created by Martin Hwasser on 10/27/11.
 //  Copyright (c) 2011 KennettNet Software Limited. All rights reserved.

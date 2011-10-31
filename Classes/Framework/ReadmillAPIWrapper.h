@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIConstants.h"
+#import "ReadmillAPIConfiguration.h"
 
 typedef void (^ReadmillAPICompletionHandler)(id result, NSError *error);
 
@@ -54,13 +55,6 @@ typedef enum {
 // General 
 
 static NSString * const kReadmillDomain = @"com.readmill";
-
-// URLs
-
-static NSString * const kLiveAPIEndPoint = @"http://api.readmill.com/";
-static NSString * const kStagingAPIEndPoint = @"http://api.stage-readmill.com/";
-static NSString * const kLiveAuthorizationUri = @"http://readmill.com/";
-static NSString * const kStagingAuthorizationUri = @"http://stage-readmill.com/";
 
 #pragma mark API Keys - Book
 
@@ -123,7 +117,6 @@ static NSString * const kReadmillAPIReadingPeriodsKey = @"periods";
 static NSString * const kReadmillAPIReadingLocationsKey = @"locations";
 static NSString * const kReadmillAPIReadingHighlightsKey = @"highlights";
 
-
 static NSString * const kReadmillAPIClientIdKey = @"client";
 
 #pragma mark -
@@ -144,12 +137,13 @@ static NSString * const kReadmillAPIClientIdKey = @"client";
     NSString *refreshToken;
     NSString *authorizedRedirectURL;
     NSDate *accessTokenExpiryDate;
-    NSString *apiEndPoint;
     NSOperationQueue *queue;
-    
+    ReadmillAPIConfiguration *apiConfiguration;
 }
 
 #pragma mark Initialization and Serialization 
+
+- (id)initWithAPIConfiguration:(ReadmillAPIConfiguration *)configuration;
 
 /*!
  @result The created ReadmillAPIWrapper object.
@@ -232,6 +226,12 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  */
 @property (readonly, copy) NSString *authorizedRedirectURL;
 
+/*!
+ @property  apiConfiguration
+ @brief An object representing the configuration for the API.
+ */
+@property (nonatomic, readonly, retain) ReadmillAPIConfiguration *apiConfiguration;
+
 #pragma mark -
 #pragma mark Authentication
 
@@ -297,7 +297,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @result An NSArray containing the matching books in the Readmill system as NSDictionary objects. See the API Keys - Book section of this header for keys. 
  @brief   Get a list of books matching the search string in the Readmill system. 
  */
-- (NSArray *)booksFromSearch:(NSString *)searchString error:(NSError **)error;
+//- (NSArray *)booksFromSearch:(NSString *)searchString error:(NSError **)error;
 
 /*!
  @param searchString A title to search for. Only full matches will be returned (i.e., searching for "the" will only return a book called "the", not one called "the killer").
@@ -305,7 +305,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Get a specific book in the Readmill system. 
  */
--(NSDictionary *)bookMatchingTitle:(NSString *)searchString error:(NSError **)error;
+//-(NSDictionary *)bookMatchingTitle:(NSString *)searchString error:(NSError **)error;
 
 /*!
  @param isbn An ISBN to search for. Only full matches will be returned (i.e., searching for "123" will only return a book with the ISBN "123", not one with "123456").
@@ -313,7 +313,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Get a specific book in the Readmill system. 
  */
--(NSDictionary *)bookMatchingISBN:(NSString *)isbn error:(NSError **)error;
+//-(NSDictionary *)bookMatchingISBN:(NSString *)isbn error:(NSError **)error;
 
 /*!
  @param bookId The Readmill id of the book to retrieve.
@@ -321,7 +321,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Get a specific book in the Readmill system. 
  */
--(NSDictionary *)bookWithId:(ReadmillBookId)bookId error:(NSError **)error;
+//-(NSDictionary *)bookWithId:(ReadmillBookId)bookId error:(NSError **)error;
 
 /*!
  @param bookTitle The new book's title.
@@ -334,7 +334,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  IMPORTANT: This will add a book to Readmill even if it already exists. Please search for a book before creating a new one, or use the 
  -findOrCreateBookWithISBN:title:author:delegate: convenience method in the ReadmillUser object, which does this for you. 
  */
--(NSDictionary *)addBookWithTitle:(NSString* )bookTitle author:(NSString *)bookAuthor isbn:(NSString *)bookIsbn error:(NSError **)error;
+//-(NSDictionary *)addBookWithTitle:(NSString* )bookTitle author:(NSString *)bookAuthor isbn:(NSString *)bookIsbn error:(NSError **)error;
 
 #pragma mark -
 #pragma mark Readings

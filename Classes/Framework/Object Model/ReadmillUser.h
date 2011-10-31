@@ -132,7 +132,10 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  you to handle this, but once you've handled the redirect URL you can just pass the whole thing into
  +authenticateCallbackURL:baseCallbackURL:delegate:onStagingServer: to authenticate. 
  */
-+(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil onStagingServer:(BOOL)onStaging;
+//+(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil onStagingServer:(BOOL)onStaging;
+
++(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration;
+
 
 /*!
  @param callbackURL The URL that was called by Readmill.
@@ -161,7 +164,9 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  
  This will allow the ReadmillUser object to authenticate with Readmill properly.
  */
-+(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate onStagingServer:(BOOL)onStaging;
+//+(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate onStagingServer:(BOOL)onStaging;
+
++(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration;
 
 /*!
  @param plistRep The saved credentials.

@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		502698D2130C87D400E67974 /* README.asciidoc in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.asciidoc */; };
-		7318A46B137D294800CBC7A4 /* ReadmillErrorExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318A469137D294800CBC7A4 /* ReadmillErrorExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		7318A46B137D294800CBC7A4 /* ReadmillErrorExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318A469137D294800CBC7A4 /* ReadmillErrorExtensions.h */; settings = {ATTRIBUTES = (); }; };
 		7318A46C137D294800CBC7A4 /* ReadmillErrorExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318A46A137D294800CBC7A4 /* ReadmillErrorExtensions.m */; };
-		7318DE74142C94E50002152C /* ReadmillURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318DE72142C94E50002152C /* ReadmillURLConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7318DE74142C94E50002152C /* ReadmillURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318DE72142C94E50002152C /* ReadmillURLConnection.h */; settings = {ATTRIBUTES = (); }; };
 		7318DE75142C94E50002152C /* ReadmillURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318DE73142C94E50002152C /* ReadmillURLConnection.m */; };
 		7318DE76142C94E50002152C /* ReadmillURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318DE73142C94E50002152C /* ReadmillURLConnection.m */; };
 		734A51A4135A1DF5009F9794 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED212F05E80006028D0 /* Foundation.framework */; };
@@ -21,41 +21,44 @@
 		734A51B9135A1DF6009F9794 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 734A51B7135A1DF6009F9794 /* InfoPlist.strings */; };
 		734A51BC135A1DF6009F9794 /* ReadmillAPITests.h in Resources */ = {isa = PBXBuildFile; fileRef = 734A51BB135A1DF6009F9794 /* ReadmillAPITests.h */; };
 		734A51BE135A1DF6009F9794 /* ReadmillAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 734A51BD135A1DF6009F9794 /* ReadmillAPITests.m */; };
-		734A51D3135A1E10009F9794 /* ReadmillURLExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 731471C7135304F900A41B49 /* ReadmillURLExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		734A51D3135A1E10009F9794 /* ReadmillURLExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 731471C7135304F900A41B49 /* ReadmillURLExtensions.h */; settings = {ATTRIBUTES = (); }; };
 		734A51D4135A1E10009F9794 /* ReadmillURLExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471C8135304F900A41B49 /* ReadmillURLExtensions.m */; };
-		734A51D5135A1E10009F9794 /* ReadmillDictionaryExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF0012F06360006028D0 /* ReadmillDictionaryExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		734A51D5135A1E10009F9794 /* ReadmillDictionaryExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF0012F06360006028D0 /* ReadmillDictionaryExtensions.h */; settings = {ATTRIBUTES = (); }; };
 		734A51D6135A1E10009F9794 /* ReadmillDictionaryExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0112F06360006028D0 /* ReadmillDictionaryExtensions.m */; };
-		734A51D7135A1E10009F9794 /* ReadmillStringExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF0212F06360006028D0 /* ReadmillStringExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		734A51D7135A1E10009F9794 /* ReadmillStringExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF0212F06360006028D0 /* ReadmillStringExtensions.h */; settings = {ATTRIBUTES = (); }; };
 		734A51D8135A1E10009F9794 /* ReadmillStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0312F06360006028D0 /* ReadmillStringExtensions.m */; };
-		734A51F2135A1E37009F9794 /* ReadmillBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF512F06360006028D0 /* ReadmillBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51F2135A1E37009F9794 /* ReadmillBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF512F06360006028D0 /* ReadmillBook.h */; settings = {ATTRIBUTES = (); }; };
 		734A51F3135A1E37009F9794 /* ReadmillBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEF612F06360006028D0 /* ReadmillBook.m */; };
-		734A51F4135A1E37009F9794 /* ReadmillReading.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF712F06360006028D0 /* ReadmillReading.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51F4135A1E37009F9794 /* ReadmillReading.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF712F06360006028D0 /* ReadmillReading.h */; settings = {ATTRIBUTES = (); }; };
 		734A51F5135A1E37009F9794 /* ReadmillReading.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEF812F06360006028D0 /* ReadmillReading.m */; };
-		734A51F6135A1E37009F9794 /* ReadmillReadingSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF912F06360006028D0 /* ReadmillReadingSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51F6135A1E37009F9794 /* ReadmillReadingSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEF912F06360006028D0 /* ReadmillReadingSession.h */; settings = {ATTRIBUTES = (); }; };
 		734A51F7135A1E37009F9794 /* ReadmillReadingSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFA12F06360006028D0 /* ReadmillReadingSession.m */; };
-		734A51F8135A1E37009F9794 /* ReadmillUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFB12F06360006028D0 /* ReadmillUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51F8135A1E37009F9794 /* ReadmillUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFB12F06360006028D0 /* ReadmillUser.h */; settings = {ATTRIBUTES = (); }; };
 		734A51F9135A1E37009F9794 /* ReadmillUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFC12F06360006028D0 /* ReadmillUser.m */; };
-		734A51FA135A1E3D009F9794 /* DismissingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370EE71341172C00880F5B /* DismissingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51FA135A1E3D009F9794 /* DismissingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370EE71341172C00880F5B /* DismissingView.h */; settings = {ATTRIBUTES = (); }; };
 		734A51FB135A1E3D009F9794 /* DismissingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 73370EE81341172C00880F5B /* DismissingView.m */; };
-		734A51FC135A1E41009F9794 /* ReadmillUIPresenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A90212F192EF00D7D249 /* ReadmillUIPresenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51FC135A1E41009F9794 /* ReadmillUIPresenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 96E2A90212F192EF00D7D249 /* ReadmillUIPresenter.h */; settings = {ATTRIBUTES = (); }; };
 		734A51FD135A1E41009F9794 /* ReadmillUIPresenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2A90312F192EF00D7D249 /* ReadmillUIPresenter.m */; };
-		734A51FE135A1E41009F9794 /* ReadmillConnectBookUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A51FE135A1E41009F9794 /* ReadmillConnectBookUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF3712F071FA006028D0 /* ReadmillConnectBookUI.h */; settings = {ATTRIBUTES = (); }; };
 		734A51FF135A1E41009F9794 /* ReadmillConnectBookUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF3812F071FA006028D0 /* ReadmillConnectBookUI.m */; };
-		734A5200135A1E41009F9794 /* ReadmillViewReadingUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF3D12F0951F006028D0 /* ReadmillViewReadingUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A5200135A1E41009F9794 /* ReadmillViewReadingUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF3D12F0951F006028D0 /* ReadmillViewReadingUI.h */; settings = {ATTRIBUTES = (); }; };
 		734A5201135A1E41009F9794 /* ReadmillViewReadingUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF3E12F0951F006028D0 /* ReadmillViewReadingUI.m */; };
-		734A5202135A1E41009F9794 /* ReadmillArchiverExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 731471EB1353601200A41B49 /* ReadmillArchiverExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A5202135A1E41009F9794 /* ReadmillArchiverExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 731471EB1353601200A41B49 /* ReadmillArchiverExtensions.h */; settings = {ATTRIBUTES = (); }; };
 		734A5203135A1E41009F9794 /* ReadmillArchiverExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471EC1353601200A41B49 /* ReadmillArchiverExtensions.m */; };
-		734A5204135A1E41009F9794 /* ReadmillAPIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFD12F06360006028D0 /* ReadmillAPIConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		734A5205135A1E41009F9794 /* ReadmillAPIWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A5204135A1E41009F9794 /* ReadmillAPIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFD12F06360006028D0 /* ReadmillAPIConstants.h */; settings = {ATTRIBUTES = (); }; };
+		734A5205135A1E41009F9794 /* ReadmillAPIWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */; settings = {ATTRIBUTES = (); }; };
 		734A5206135A1E41009F9794 /* ReadmillAPIWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */; };
-		734A5207135A1E46009F9794 /* ReadmillSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370FA21341197300880F5B /* ReadmillSpinner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		734A5207135A1E46009F9794 /* ReadmillSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370FA21341197300880F5B /* ReadmillSpinner.h */; settings = {ATTRIBUTES = (); }; };
 		735E3E6D13E06E2900930E8C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 735E3E6B13E06E1500930E8C /* JSONKit.m */; };
 		735E41C3135A5C7500855884 /* libReadmillAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 734A51A3135A1DF5009F9794 /* libReadmillAPI.a */; };
 		735E41C6135A601C00855884 /* ReadmillSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 73370FA31341197300880F5B /* ReadmillSpinner.m */; };
-		735E41DA135A666D00855884 /* ReadmillPing.h in Headers */ = {isa = PBXBuildFile; fileRef = 735E41D8135A666D00855884 /* ReadmillPing.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		735E41DA135A666D00855884 /* ReadmillPing.h in Headers */ = {isa = PBXBuildFile; fileRef = 735E41D8135A666D00855884 /* ReadmillPing.h */; settings = {ATTRIBUTES = (); }; };
 		735E41DB135A666D00855884 /* ReadmillPing.m in Sources */ = {isa = PBXBuildFile; fileRef = 735E41D9135A666D00855884 /* ReadmillPing.m */; };
-		736C85E3145A02A900C5E6B5 /* NSDate+ReadmillDateExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 736C85DF1459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		735EF9D5145EE43F00303F19 /* ReadmillAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 735EF9D4145EE43F00303F19 /* ReadmillAPI.h */; settings = {ATTRIBUTES = (); }; };
+		736C85E3145A02A900C5E6B5 /* NSDate+ReadmillDateExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 736C85DF1459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.h */; settings = {ATTRIBUTES = (); }; };
 		736C85E4145A964C00C5E6B5 /* NSDate+ReadmillDateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 736C85E01459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.m */; };
+		73AA2951145EB41300CDBBD6 /* ReadmillAPIConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */; settings = {ATTRIBUTES = (); }; };
+		73AA2952145EB41300CDBBD6 /* ReadmillAPIConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 73AA2950145EB41300CDBBD6 /* ReadmillAPIConfiguration.m */; };
 		9647F57C12F1A0140088CAA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9647F57B12F1A0140088CAA0 /* QuartzCore.framework */; };
 		9647F58012F1B04C0088CAA0 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 9647F57F12F1B04C0088CAA0 /* logo.png */; };
 		966E3E5412F2F7290027E05F /* Readmill_SigningInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 966E3E5212F2F7290027E05F /* Readmill_SigningInViewController.m */; };
@@ -98,7 +101,7 @@
 		7318A46A137D294800CBC7A4 /* ReadmillErrorExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillErrorExtensions.m; path = ../ReadmillErrorExtensions.m; sourceTree = "<group>"; };
 		7318DE72142C94E50002152C /* ReadmillURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillURLConnection.h; sourceTree = "<group>"; };
 		7318DE73142C94E50002152C /* ReadmillURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillURLConnection.m; sourceTree = "<group>"; };
-		733291061356FC0B0063FBF4 /* ReadmillFramework.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReadmillFramework.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		733291061356FC0B0063FBF4 /* ReadmillAPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReadmillAPI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73370EE71341172C00880F5B /* DismissingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DismissingView.h; path = ../UI/DismissingView.h; sourceTree = "<group>"; };
 		73370EE81341172C00880F5B /* DismissingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DismissingView.m; path = ../UI/DismissingView.m; sourceTree = "<group>"; };
 		73370FA21341197300880F5B /* ReadmillSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillSpinner.h; path = UI/ReadmillSpinner.h; sourceTree = "<group>"; };
@@ -115,8 +118,11 @@
 		735E3E6B13E06E1500930E8C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = JSONKit/JSONKit.m; sourceTree = SOURCE_ROOT; };
 		735E41D8135A666D00855884 /* ReadmillPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ReadmillPing.h; path = Classes/Framework/ReadmillPing.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		735E41D9135A666D00855884 /* ReadmillPing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ReadmillPing.m; path = Classes/Framework/ReadmillPing.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		735EF9D4145EE43F00303F19 /* ReadmillAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillAPI.h; sourceTree = "<group>"; };
 		736C85DF1459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+ReadmillDateExtensions.h"; path = "Classes/Framework/NSDate+ReadmillDateExtensions.h"; sourceTree = SOURCE_ROOT; };
 		736C85E01459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+ReadmillDateExtensions.m"; path = "Classes/Framework/NSDate+ReadmillDateExtensions.m"; sourceTree = SOURCE_ROOT; };
+		73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIConfiguration.h; sourceTree = "<group>"; };
+		73AA2950145EB41300CDBBD6 /* ReadmillAPIConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillAPIConfiguration.m; sourceTree = "<group>"; };
 		73C1AAA513E6AFD6006684C6 /* Readmill.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Readmill.bundle; sourceTree = SOURCE_ROOT; };
 		9647F57B12F1A0140088CAA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9647F57F12F1B04C0088CAA0 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
@@ -290,7 +296,7 @@
 		96BEAECD12F05E80006028D0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				733291061356FC0B0063FBF4 /* ReadmillFramework.app */,
+				733291061356FC0B0063FBF4 /* ReadmillAPI.app */,
 				734A51AD135A1DF5009F9794 /* ReadmillAPITests.octest */,
 			);
 			name = Products;
@@ -318,8 +324,11 @@
 				96BEAEF412F06360006028D0 /* Object Model */,
 				96BEAF3612F071D6006028D0 /* iPad UI */,
 				96BEAEFD12F06360006028D0 /* ReadmillAPIConstants.h */,
+				73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */,
+				73AA2950145EB41300CDBBD6 /* ReadmillAPIConfiguration.m */,
 				96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */,
 				96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */,
+				735EF9D4145EE43F00303F19 /* ReadmillAPI.h */,
 				7318DE72142C94E50002152C /* ReadmillURLConnection.h */,
 				7318DE73142C94E50002152C /* ReadmillURLConnection.m */,
 			);
@@ -418,13 +427,15 @@
 				734A5204135A1E41009F9794 /* ReadmillAPIConstants.h in Headers */,
 				734A5205135A1E41009F9794 /* ReadmillAPIWrapper.h in Headers */,
 				734A5207135A1E46009F9794 /* ReadmillSpinner.h in Headers */,
+				7318DE74142C94E50002152C /* ReadmillURLConnection.h in Headers */,
+				73AA2951145EB41300CDBBD6 /* ReadmillAPIConfiguration.h in Headers */,
 				734A51D7135A1E10009F9794 /* ReadmillStringExtensions.h in Headers */,
 				734A51D5135A1E10009F9794 /* ReadmillDictionaryExtensions.h in Headers */,
 				734A51D3135A1E10009F9794 /* ReadmillURLExtensions.h in Headers */,
 				735E41DA135A666D00855884 /* ReadmillPing.h in Headers */,
 				7318A46B137D294800CBC7A4 /* ReadmillErrorExtensions.h in Headers */,
-				7318DE74142C94E50002152C /* ReadmillURLConnection.h in Headers */,
 				736C85E3145A02A900C5E6B5 /* NSDate+ReadmillDateExtensions.h in Headers */,
+				735EF9D5145EE43F00303F19 /* ReadmillAPI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,7 +449,6 @@
 				734A519F135A1DF5009F9794 /* Sources */,
 				734A51A0135A1DF5009F9794 /* Frameworks */,
 				734A51A1135A1DF5009F9794 /* Headers */,
-				73A1E50C135B1A6E00CB5D17 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -483,7 +493,7 @@
 			);
 			name = ReadmillFramework;
 			productName = "Readmill Framework";
-			productReference = 733291061356FC0B0063FBF4 /* ReadmillFramework.app */;
+			productReference = 733291061356FC0B0063FBF4 /* ReadmillAPI.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -495,7 +505,7 @@
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "KennettNet Software Limited";
 			};
-			buildConfigurationList = 96BEAEC612F05E80006028D0 /* Build configuration list for PBXProject "ReadmillFramework" */;
+			buildConfigurationList = 96BEAEC612F05E80006028D0 /* Build configuration list for PBXProject "ReadmillAPI" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -553,19 +563,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
-		73A1E50C135B1A6E00CB5D17 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Version 2.0 (updated for Xcode 4, with some fixes)\n# Changes:\n#    - Works with xcode 4, even when running xcode 3 projects (Workarounds for apple bugs)\n#    - Faster / better: only runs lipo once, instead of once per recursion\n#    - Added some debugging statemetns that can be switched on/off by changing the DEBUG_THIS_SCRIPT variable to \"true\"\n#    - Fixed some typos\n# \n# Purpose:\n#   Create a static library for iPhone from within XCode\n#   Because Apple staff DELIBERATELY broke Xcode to make this impossible from the GUI (Xcode 3.2.3 specifically states this in the Release notes!)\n#   ...no, I don't understand why they did this!\n#\n# Author: Adam Martin - http://twitter.com/redglassesapps\n# Based on: original script from Eonil (main changes: Eonil's script WILL NOT WORK in Xcode GUI - it WILL CRASH YOUR COMPUTER)\n#\n# More info: see this Stack Overflow question: http://stackoverflow.com/questions/3520977/build-fat-static-library-device-simulator-using-xcode-and-sdk-4\n\n#################[ Tests: helps workaround any future bugs in Xcode ]########\n#\nDEBUG_THIS_SCRIPT=\"false\"\n\nif [ $DEBUG_THIS_SCRIPT = \"true\" ]\nthen\necho \"########### TESTS #############\"\necho \"Use the following variables when debugging this script; note that they may change on recursions\"\necho \"BUILD_DIR = $BUILD_DIR\"\necho \"BUILD_ROOT = $BUILD_ROOT\"\necho \"CONFIGURATION_BUILD_DIR = $CONFIGURATION_BUILD_DIR\"\necho \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\"\necho \"CONFIGURATION_TEMP_DIR = $CONFIGURATION_TEMP_DIR\"\necho \"TARGET_BUILD_DIR = $TARGET_BUILD_DIR\"\nfi\n\n#####################[ part 1 ]##################\n# First, work out the BASESDK version number (NB: Apple ought to report this, but they hide it)\n#    (incidental: searching for substrings in sh is a nightmare! Sob)\n\nSDK_VERSION=$(echo ${SDK_NAME} | grep -o '.\\{3\\}$')\n\n# Next, work out if we're in SIM or DEVICE\n\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\nOTHER_SDK_TO_BUILD=iphoneos${SDK_VERSION}\nelse\nOTHER_SDK_TO_BUILD=iphonesimulator${SDK_VERSION}\nfi\n\necho \"XCode has selected SDK: ${PLATFORM_NAME} with version: ${SDK_VERSION} (although back-targetting: ${IPHONEOS_DEPLOYMENT_TARGET})\"\necho \"...therefore, OTHER_SDK_TO_BUILD = ${OTHER_SDK_TO_BUILD}\"\n#\n#####################[ end of part 1 ]##################\n\n#####################[ part 2 ]##################\n#\n# IF this is the original invocation, invoke WHATEVER other builds are required\n#\n# Xcode is already building ONE target...\n#\n# ...but this is a LIBRARY, so Apple is wrong to set it to build just one.\n# ...we need to build ALL targets\n# ...we MUST NOT re-build the target that is ALREADY being built: Xcode WILL CRASH YOUR COMPUTER if you try this (infinite recursion!)\n#\n#\n# So: build ONLY the missing platforms/configurations.\n\nif [ \"true\" == ${ALREADYINVOKED:-false} ]\nthen\necho \"RECURSION: I am NOT the root invocation, so I'm NOT going to recurse\"\nelse\n# CRITICAL:\n# Prevent infinite recursion (Xcode sucks)\nexport ALREADYINVOKED=\"true\"\n\necho \"RECURSION: I am the root ... recursing all missing build targets NOW...\"\necho \"RECURSION: ...about to invoke: xcodebuild -configuration \\\"${CONFIGURATION}\\\" -target \\\"${TARGET_NAME}\\\" -sdk \\\"${OTHER_SDK_TO_BUILD}\\\" ${ACTION} RUN_CLANG_STATIC_ANALYZER=NO\"\nxcodebuild -configuration \"${CONFIGURATION}\" -target \"${TARGET_NAME}\" -sdk \"${OTHER_SDK_TO_BUILD}\" ${ACTION} RUN_CLANG_STATIC_ANALYZER=NO BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\nACTION=\"build\"\n\n#Merge all platform binaries as a fat binary for each configurations.\n\n# Calculate where the (multiple) built files are coming from:\nCURRENTCONFIG_DEVICE_DIR=${SYMROOT}/${CONFIGURATION}-iphoneos\nCURRENTCONFIG_SIMULATOR_DIR=${SYMROOT}/${CONFIGURATION}-iphonesimulator\n\necho \"Taking device build from: ${CURRENTCONFIG_DEVICE_DIR}\"\necho \"Taking simulator build from: ${CURRENTCONFIG_SIMULATOR_DIR}\"\n\nCREATING_UNIVERSAL_DIR=${SYMROOT}/${CONFIGURATION}-universal\necho \"...I will output a universal build to: ${CREATING_UNIVERSAL_DIR}\"\n\n# ... remove the products of previous runs of this script\n#      NB: this directory is ONLY created by this script - it should be safe to delete!\n\nrm -rf \"${CREATING_UNIVERSAL_DIR}\"\nmkdir \"${CREATING_UNIVERSAL_DIR}\"\n\n#\necho \"lipo: for current configuration (${CONFIGURATION}) creating output file: ${CREATING_UNIVERSAL_DIR}/${EXECUTABLE_NAME}\"\nlipo -create -output \"${CREATING_UNIVERSAL_DIR}/${EXECUTABLE_NAME}\" \"${CURRENTCONFIG_DEVICE_DIR}/${EXECUTABLE_NAME}\" \"${CURRENTCONFIG_SIMULATOR_DIR}/${EXECUTABLE_NAME}\"\n\n#########\n#\n# Added: StackOverflow suggestion to also copy \"include\" files\n#    (untested, but should work OK)\n#\nif [ -d \"${CURRENTCONFIG_DEVICE_DIR}/usr/local/include\" ]\nthen\nmkdir -p \"${CREATING_UNIVERSAL_DIR}/usr/local/include\"\n# * needs to be outside the double quotes?\ncp \"${CURRENTCONFIG_DEVICE_DIR}/usr/local/include/\"* \"${CREATING_UNIVERSAL_DIR}/usr/local/include\"\nfi\nfi";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -592,6 +589,7 @@
 				735E3E6D13E06E2900930E8C /* JSONKit.m in Sources */,
 				7318DE76142C94E50002152C /* ReadmillURLConnection.m in Sources */,
 				736C85E4145A964C00C5E6B5 /* NSDate+ReadmillDateExtensions.m in Sources */,
+				73AA2952145EB41300CDBBD6 /* ReadmillAPIConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -669,18 +667,12 @@
 		734A51C0135A1DF6009F9794 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "";
-				DSTROOT = /tmp/ReadmillAPI.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ReadmillAPI/ReadmillAPI-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = "../$(TARGET_NAME)/private";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "../$(TARGET_NAME)";
+				PRODUCT_NAME = ReadmillAPI;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -688,17 +680,11 @@
 		734A51C1135A1DF6009F9794 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "";
-				DSTROOT = /tmp/ReadmillAPI.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ReadmillAPI/ReadmillAPI-Prefix.pch";
-				GCC_VERSION = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = "../$(TARGET_NAME)/private";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "../$(TARGET_NAME)";
+				PRODUCT_NAME = ReadmillAPI;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -706,17 +692,11 @@
 		734A51C2135A1DF6009F9794 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "";
-				DSTROOT = /tmp/ReadmillAPI.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ReadmillAPI/ReadmillAPI-Prefix.pch";
-				GCC_VERSION = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = "../$(TARGET_NAME)/private";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "../$(TARGET_NAME)";
+				PRODUCT_NAME = ReadmillAPI;
 				SKIP_INSTALL = YES;
 			};
 			name = Distribution;
@@ -800,7 +780,6 @@
 		73840E061358FD3200553156 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -821,7 +800,7 @@
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = ReadmillFramework;
+				PRODUCT_NAME = ReadmillAPI;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -830,7 +809,6 @@
 		96BEAEEB12F05E80006028D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -845,7 +823,6 @@
 		96BEAEEC12F05E80006028D0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -867,7 +844,7 @@
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = ReadmillFramework;
+				PRODUCT_NAME = ReadmillAPI;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -883,7 +860,7 @@
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = ReadmillFramework;
+				PRODUCT_NAME = ReadmillAPI;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -912,7 +889,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		96BEAEC612F05E80006028D0 /* Build configuration list for PBXProject "ReadmillFramework" */ = {
+		96BEAEC612F05E80006028D0 /* Build configuration list for PBXProject "ReadmillAPI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				96BEAEEB12F05E80006028D0 /* Debug */,
