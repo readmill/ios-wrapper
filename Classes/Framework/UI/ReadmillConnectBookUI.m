@@ -196,9 +196,11 @@
                 // The uri parameter is the full URL to the reading we want to connect to. 
                 [[[self user] apiWrapper] readingWithURLString:uri 
                                              completionHandler:^(id result, NSError *error) {
+                                                 
                                                  if (result && error == nil) {
                                                      ReadmillReading *reading = [[ReadmillReading alloc] initWithAPIDictionary:result 
                                                                                                                     apiWrapper:[[self user] apiWrapper]];
+                                                     
                                                      [[self delegate] connect:self
                                                        didSucceedToLinkToBook:[self book] 
                                                                   withReading:reading];

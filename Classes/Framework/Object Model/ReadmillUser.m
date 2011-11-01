@@ -55,27 +55,14 @@
 
 @implementation ReadmillUser
 
-+(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil apiConfiguration:(ReadmillAPIConfiguration *)configuration {
++ (NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil apiConfiguration:(ReadmillAPIConfiguration *)configuration {
     
     ReadmillAPIWrapper *api = [[[ReadmillAPIWrapper alloc] initWithAPIConfiguration:configuration] autorelease];
     
     return [api clientAuthorizationURLWithRedirectURLString:[redirectOrNil absoluteString]];
 }
 
-+(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil onStagingServer:(BOOL)onStaging {
-    
-    ReadmillAPIWrapper *api = nil;
-    
-    if (onStaging) {
-        api = [[[ReadmillAPIWrapper alloc] initWithStagingEndPoint] autorelease];
-    } else {
-        api = [[[ReadmillAPIWrapper alloc] init] autorelease];
-    }
-    
-    return [api clientAuthorizationURLWithRedirectURLString:[redirectOrNil absoluteString]];
-}
-
-+(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration {
++ (void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration {
     
     ReadmillAPIWrapper *api = [[[ReadmillAPIWrapper alloc] initWithAPIConfiguration:apiConfiguration] autorelease];
     
@@ -83,27 +70,9 @@
     [user authenticateCallbackURL:callbackURL baseCallbackURL:baseCallbackURL delegate:authenticationDelegate];
     
     [user autorelease];
-    
 }
 
-+(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate onStagingServer:(BOOL)onStaging {
-    
-    ReadmillAPIWrapper *api = nil;
-    
-    if (onStaging) {
-        api = [[[ReadmillAPIWrapper alloc] initWithStagingEndPoint] autorelease];
-    } else {
-        api = [[[ReadmillAPIWrapper alloc] init] autorelease];
-    }
-    
-    ReadmillUser *user = [[ReadmillUser alloc] initWithAPIDictionary:nil apiWrapper:api];
-    [user authenticateCallbackURL:callbackURL baseCallbackURL:baseCallbackURL delegate:authenticationDelegate];
-    
-    [user autorelease];
-    
-}
-
-+(void)authenticateWithPropertyListRepresentation:(NSDictionary *)plistRep delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate {
++ (void)authenticateWithPropertyListRepresentation:(NSDictionary *)plistRep delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate {
  
     ReadmillUser *user = [[ReadmillUser alloc] initWithPropertyListRepresentation:plistRep];
     [user verifyAuthentication:authenticationDelegate];
@@ -114,10 +83,9 @@
     return [self initWithAPIDictionary:nil apiWrapper:[[[ReadmillAPIWrapper alloc] init] autorelease]];
 }
 
--(id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper {
+- (id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper {
     if ((self = [super init])) {
         // Initialization code here.
-        
         [self setApiWrapper:wrapper];
         [self updateWithAPIDictionary:apiDict];
     }
@@ -125,7 +93,7 @@
     return self;
 }
 
--(id)initWithPropertyListRepresentation:(NSDictionary *)plistRep {
+- (id)initWithPropertyListRepresentation:(NSDictionary *)plistRep {
     if ((self = [super init])) {
         // Initialization code here.
         
@@ -134,19 +102,19 @@
     return self;
 }
 
-+(NSSet *)keyPathsForValuesAffectingPropertyListRepresentation {
++ (NSSet *)keyPathsForValuesAffectingPropertyListRepresentation {
     return [NSSet setWithObject:@"apiWrapper.propertyListRepresentation"];
 }
 
--(NSDictionary *)propertyListRepresentation {
+- (NSDictionary *)propertyListRepresentation {
     return [[self apiWrapper] propertyListRepresentation]; 
 }
 
--(NSString *)description {
+- (NSString *)description {
     return [NSString stringWithFormat:@"%@: %@ (%@)", [super description], [self fullName], [self userName]];
 }
 
--(void)updateWithAPIDictionary:(NSDictionary *)apiDict {
+- (void)updateWithAPIDictionary:(NSDictionary *)apiDict {
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
     [self setCity:[cleanedDict valueForKey:kReadmillAPIUserCityKey]];
@@ -227,7 +195,7 @@
 #pragma mark -
 #pragma mark Threaded Methods
 
--(void)authenticateCallbackURL:(NSURL *)callbackURL 
+- (void)authenticateCallbackURL:(NSURL *)callbackURL 
                baseCallbackURL:(NSURL *)baseCallbackURL 
                       delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate {
     
@@ -270,7 +238,7 @@
     
 }
 
--(void)attemptAuthenticationWithProperties:(NSDictionary *)properties {
+- (void)attemptAuthenticationWithProperties:(NSDictionary *)properties {
     
     [self retain];
     
@@ -311,7 +279,7 @@
     [self release];
 }
 
--(void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate {
+- (void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate {
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 authenticationDelegate, @"delegate",
@@ -325,7 +293,7 @@
 
 
 
--(void)verifyAuthenticationWithProperties:(NSDictionary *)properties {
+- (void)verifyAuthenticationWithProperties:(NSDictionary *)properties {
     [self retain];
     NSAutoreleasePool *pool;
     pool = [[NSAutoreleasePool alloc] init];
@@ -358,7 +326,7 @@
 
 #pragma mark -
 
--(void)findBookWithISBN:(NSString *)isbn
+- (void)findBookWithISBN:(NSString *)isbn
                   title:(NSString *)title 
                delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate {
     
@@ -373,7 +341,7 @@
                            withObject:properties];
 }
 
--(void)findOrCreateBookWithISBN:(NSString *)isbn 
+- (void)findOrCreateBookWithISBN:(NSString *)isbn 
                           title:(NSString *)title 
                          author:(NSString *)author
                        delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate {
@@ -393,7 +361,7 @@
     
 }
 
--(void)findBookWithProperties:(NSDictionary *)properties {
+- (void)findBookWithProperties:(NSDictionary *)properties {
     [self retain];
     
     NSAutoreleasePool *pool;
@@ -478,7 +446,7 @@
     [self release];
 }
 
--(void)createBookWithISBN:(NSString *)isbn
+- (void)createBookWithISBN:(NSString *)isbn
                     title:(NSString *)title
                    author:(NSString *)author
                  delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate {
@@ -497,7 +465,7 @@
     
 }
 
--(void)createBookWithProperties:(NSDictionary *)properties {
+- (void)createBookWithProperties:(NSDictionary *)properties {
     
     [self retain];
     
@@ -560,7 +528,7 @@
 
 #pragma mark -
 
--(void)findReadingForBook:(ReadmillBook *)book delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate {
+- (void)findReadingForBook:(ReadmillBook *)book delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate {
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 readingFindingDelegate, @"delegate",
@@ -573,7 +541,7 @@
     
 }
 
--(void)findOrCreateReadingForBook:(ReadmillBook *)book state:(ReadmillReadingState)readingState createdReadingIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate {
+- (void)findOrCreateReadingForBook:(ReadmillBook *)book state:(ReadmillReadingState)readingState createdReadingIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate {
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 readingFindingDelegate, @"delegate",
@@ -588,7 +556,7 @@
                            withObject:properties];
 }
 
--(void)findReadingWithProperties:(NSDictionary *)properties {
+- (void)findReadingWithProperties:(NSDictionary *)properties {
     [self retain];
     
     NSAutoreleasePool *pool;
@@ -697,7 +665,7 @@
 }
 
 
--(void)createReadingForBook:(ReadmillBook *)book state:(ReadmillReadingState)readingState isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate {
+- (void)createReadingForBook:(ReadmillBook *)book state:(ReadmillReadingState)readingState isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate {
     
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 readingFindingDelegate, @"delegate",
@@ -711,7 +679,7 @@
                            withObject:properties];
 }
 
--(void)createReadingWithProperties:(NSDictionary *)properties {
+- (void)createReadingWithProperties:(NSDictionary *)properties {
     
     [self retain];
     

@@ -70,7 +70,6 @@
         // Initialization code here.
         queue = [[NSOperationQueue alloc] init];
         [queue setMaxConcurrentOperationCount:3];
-        
     }
     return self;
 }
@@ -78,15 +77,7 @@
 - (id)initWithAPIConfiguration:(ReadmillAPIConfiguration *)configuration {
     self = [self init];
     if (self) {
-        apiConfiguration = [configuration retain];
-    }
-    return self;
-}
-
-
-- (id)initWithStagingEndPoint {
-    if ((self = [self init])) {
-        //[self setApiEndPoint:kStagingAPIEndPoint];
+        [self setApiConfiguration:configuration];
     }
     return self;
 }
@@ -97,7 +88,6 @@
         
         [self setAuthorizedRedirectURL:[plist valueForKey:@"authorizedRedirectURL"]];
         [self setRefreshToken:[plist valueForKey:@"refreshToken"]];
-        //[self setApiEndPoint:[plist valueForKey:@"apiEndPoint"]];
 		[self setAccessToken:[plist valueForKey:@"accessToken"]];
         [self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
         [self setApiConfiguration:[NSKeyedUnarchiver unarchiveObjectWithData:[plist valueForKey:@"apiConfiguration"]]];
@@ -110,19 +100,16 @@
             
             [self authorizedRedirectURL], @"authorizedRedirectURL",
             [self refreshToken], @"refreshToken", 
-            //[self apiEndPoint], @"apiEndPoint",
             [NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]], @"apiConfiguration",
 			[self accessToken], @"accessToken",
             [self accessTokenExpiryDate], @"accessTokenExpiryDate",
 			nil];
-	 
 }
 
 @synthesize refreshToken;
 @synthesize accessToken;
 @synthesize authorizedRedirectURL;
 @synthesize accessTokenExpiryDate;
-//@synthesize apiEndPoint;
 @synthesize apiConfiguration;
 
 - (void)dealloc {
@@ -130,7 +117,6 @@
     [self setAccessToken:nil];
     [self setAuthorizedRedirectURL:nil];
     [self setAccessTokenExpiryDate:nil];
-    //[self setApiEndPoint:nil];
     [self setApiConfiguration:nil];
     [queue release];
     [super dealloc];
@@ -170,7 +156,7 @@
     
     [parameters setValue:[NSNumber numberWithInteger:readingState] forKey:@"state"];
     [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:@"is_private"];
-    [parameters setValue:[apiConfiguration clientID] forKey:@"client_id"];
+    [parameters setValue:[[self apiConfiguration] clientID] forKey:@"client_id"];
     
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", [self booksEndpoint], bookId]];
     [self sendPostRequestToURL:URL
@@ -192,7 +178,7 @@
                   forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingStateKey]];
     [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] 
                   forKey:[NSString stringWithFormat:readingScope, kReadmillAPIReadingIsPrivateKey]];
-    [parameters setValue:[apiConfiguration clientID]
+    [parameters setValue:[[self apiConfiguration] clientID]
                   forKey:[NSString stringWithFormat:readingScope, kReadmillAPIClientIdKey]];
     
     if ([remark length] > 0) {
@@ -425,7 +411,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@me.json?access_token=%@&client_id=%@",
                                                                                              [self apiEndPoint],
                                                                                              [self accessToken],
-                                                                                             [[apiConfiguration clientID] urlEncodedString]]]
+                                                                                             [[[self apiConfiguration] clientID] urlEncodedString]]]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:kTimeoutInterval];
     [request setHTTPMethod:@"GET"];
@@ -444,7 +430,7 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@me.json?access_token=%@&client_id=%@",
                                                                                                  [self apiEndPoint],
                                                                                                  [self accessToken],
-                                                                                                 [[apiConfiguration clientID] urlEncodedString]]]
+                                                                                                 [[[self apiConfiguration] clientID] urlEncodedString]]]
                                                                cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                            timeoutInterval:kTimeoutInterval];
         [request setHTTPMethod:@"GET"];
@@ -481,7 +467,6 @@
             
             return YES;
         } else {
-            NSLog(@"oauth response: %@", response);
             if (nil != error) {
                 NSLog(@"error: %@", *error);
             }
@@ -494,8 +479,8 @@
     [self setAuthorizedRedirectURL:redirectURLString];
 
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&code=%@&redirect_uri=%@",
-                                 [[apiConfiguration clientID] urlEncodedString],
-                                 [[apiConfiguration clientSecret] urlEncodedString],
+                                 [[[self apiConfiguration] clientID] urlEncodedString],
+                                 [[[self apiConfiguration] clientSecret] urlEncodedString],
                                  [authCode urlEncodedString],
                                  [redirectURLString urlEncodedString]];
     
@@ -505,8 +490,8 @@
 - (BOOL)refreshAccessToken:(NSError **)error {
     
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
-                                 [[apiConfiguration clientID] urlEncodedString],
-                                 [[apiConfiguration clientSecret] urlEncodedString],
+                                 [[[self apiConfiguration] clientID] urlEncodedString],
+                                 [[[self apiConfiguration] clientSecret] urlEncodedString],
                                  [[self refreshToken] urlEncodedString],
                                  [[self authorizedRedirectURL] urlEncodedString]];
     
@@ -518,7 +503,7 @@
     
     NSString *baseURL = [[apiConfiguration authURL] absoluteString];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@", baseURL, [apiConfiguration clientID]];
+    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@", baseURL, [[self apiConfiguration] clientID]];
     
     if ([redirect length] > 0) {
         urlString = [NSString stringWithFormat:@"%@&redirect_uri=%@", urlString, [redirect urlEncodedString]];
@@ -539,7 +524,7 @@
     [parameters setValue:ISBN forKey:@"isbn"];
     [parameters setValue:title forKey:@"title"];
     [parameters setValue:author forKey:@"author"];
-    [parameters setValue:[apiConfiguration clientID] forKey:@"client_id"];
+    [parameters setValue:[[self apiConfiguration] clientID] forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
     NSURL *baseURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@ui/#!/connect/book", [self apiEndPoint]]];
@@ -554,7 +539,7 @@
     }
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    [parameters setValue:[apiConfiguration clientID] forKey:@"client_id"];
+    [parameters setValue:[[self apiConfiguration] clientID] forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
     NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/reading/%d", [self apiEndPoint], readingId]];
@@ -599,7 +584,7 @@
         [parameterString appendFormat:@"?access_token=%@", [self accessToken]];
         first = NO;
     }
-    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:[apiConfiguration clientID] forKey:@"client_id"];
+    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:[[self apiConfiguration] clientID] forKey:@"client_id"];
     [parametersWithClientId addEntriesFromDictionary:parameters];
     
 	for (NSString *key in [parametersWithClientId allKeys]) {		
@@ -712,7 +697,7 @@
         [parameterString appendFormat:@"access_token=%@", [self accessToken]];
         first = NO;
     }
-    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:[apiConfiguration clientID] forKey:@"client_id"];
+    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:[[self apiConfiguration] clientID] forKey:@"client_id"];
     [parametersWithClientId addEntriesFromDictionary:parameters];
     
 	for (NSString *key in [parametersWithClientId allKeys]) {		
@@ -772,7 +757,7 @@
         }
     }
     
-    NSMutableDictionary *allParameters = [NSMutableDictionary dictionaryWithObject:[apiConfiguration clientID] 
+    NSMutableDictionary *allParameters = [NSMutableDictionary dictionaryWithObject:[[self apiConfiguration] clientID] 
                                                                             forKey:@"client_id"];
     
     if ([[self accessToken] length] > 0) {

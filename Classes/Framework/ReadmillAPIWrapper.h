@@ -143,25 +143,11 @@ static NSString * const kReadmillAPIClientIdKey = @"client";
 
 #pragma mark Initialization and Serialization 
 
+/*!
+ @result The created ReadmillAPIWrapper object.
+ @brief   Create a Readmill API object with the specified API configuration.
+ */
 - (id)initWithAPIConfiguration:(ReadmillAPIConfiguration *)configuration;
-
-/*!
- @result The created ReadmillAPIWrapper object.
- @brief   Create a Readmill API object with the default endpoint URL (the live server).
- 
- This method will create a Readmill API object with the default endpoint URL (the live
- server). This is the designated initialiser. 
- */
--(id)init;
-
-/*!
- @result The created ReadmillAPIWrapper object.
- @brief   Create a Readmill API object with the staging endpoint URL.
- 
- This method will create a Readmill API object with the staging endpoint URL.
- This is typically only used when testing the API. 
- */
--(id)initWithStagingEndPoint;
 
 /*!
  @param plist The saved credentials. 
@@ -474,7 +460,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @result A specific user in the Readmill system as an NSDictionary object. See the API Keys - User section of this header for keys. 
  @brief   Get a specific user by their id. 
  */
--(NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error;
+//-(NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error;
 
 /*!
  @param userName The username of the user you'd like to get details for.
@@ -482,7 +468,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @result A specific user in the Readmill system as an NSDictionary object. See the API Keys - User section of this header for keys. 
  @brief   Get a specific user by their Readmill username. 
  */
--(NSDictionary *)userWithName:(NSString *)userName error:(NSError **)error;
+//-(NSDictionary *)userWithName:(NSString *)userName error:(NSError **)error;
 
 /*!
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
