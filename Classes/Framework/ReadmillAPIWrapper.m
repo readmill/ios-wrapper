@@ -625,26 +625,7 @@
         completionHandler(nil, error);
     }
 }
-/*
-- (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)stripAuth error:(NSError **)error {
-    
-    if (![self ensureAccessTokenIsCurrent:error]) {
-        if (!stripAuth) {
-            return nil;
-        }
-    }
-    
-	NSURLRequest *request = [self getRequestWithURL:url parameters:parameters canBeCalledUnauthorized:stripAuth error:error];
-	
-	return [self sendPreparedRequest:request error:error];
-}
-- (id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
-    return [self sendBodyRequestToURL:url httpMethod:@"PUT" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
-}
-- (id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error{
-    return [self sendBodyRequestToURL:url httpMethod:@"POST" withParameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
-}
-*/
+
 - (void)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
     NSError *error = nil;
     NSURLRequest *request = [self putRequestWithURL:url 
@@ -736,19 +717,7 @@
         completionHandler(nil, error);
     }
 }
-/*
-- (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
 
-    if (![self ensureAccessTokenIsCurrent:error]) {
-        if (!allowUnauthed) {
-            return nil;
-        }
-    }
-    
-    NSURLRequest *request = [self bodyRequestWithURL:url httpMethod:httpMethod parameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
-    
-    return [self sendPreparedRequest:request error:error];
-}*/
 - (NSURLRequest *)JSONPostRequestWithURL:(NSURL *)URL parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
     
     if (![self ensureAccessTokenIsCurrent:error]) {
@@ -776,13 +745,7 @@
     
     return request;
 }
-/*
-- (id)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
-  
-    NSURLRequest *request = [self JSONPostRequestWithURL:url parameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
-    
-    return [self sendPreparedRequest:request error:error];
-}*/
+
 - (void)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
     
     NSError *error= nil;
@@ -799,15 +762,14 @@
     if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
         
 		if (connectionError == nil) {
-            
             id errorResponse = [[JSONDecoder decoder] objectWithData:responseData];
             
-			if (error != NULL) {
-				*error = [NSError errorWithDomain:kReadmillDomain
-											 code:[response statusCode]
-										 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-												   [errorResponse valueForKey:@"error"], NSLocalizedFailureReasonErrorKey, nil]];
-			}
+            if (error != NULL) {
+                *error = [NSError errorWithDomain:kReadmillDomain
+                                             code:[response statusCode]
+                                         userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                   [errorResponse valueForKey:@"error"], NSLocalizedFailureReasonErrorKey, nil]];
+            }
 		} else {
 			if (error != NULL) {
 				*error = connectionError;
@@ -825,41 +787,35 @@
         
         // Return the parsed JSON
         if ([[jsonString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) {
-            id parsedJsonValue = [[JSONDecoder decoder] objectWithData:responseData];
-            
+            id parsedJsonValue = [[JSONDecoder decoder] objectWithData:responseData error:&parseError];
             if (parseError != nil) {
                 if (error != NULL) {
                     *error = parseError;
                 }
-                
             } else {
-                
                 return parsedJsonValue;
             }
         }
-        
         return nil;
 	}	
 }
 - (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock {
     
     NSAssert(request != nil, @"Request is nil!");
+
+    // This block will be called when the asynchronous operation finishes
     ReadmillURLConnectionCompletionHandler connectionCompletionHandler = ^(NSHTTPURLResponse *response, 
                                                                            NSData *responseData, 
                                                                            NSError *connectionError) {
-
-        // This block will be called when the asynchronous operation finishes
         
         NSError *error = nil;
-        
+
         // If we created something (book, reading etc) we receive a 201 Created response.
         // We issue a GET request with the URL found in the "Location" header.
-        
         NSString *locationHeader = [[response allHeaderFields] valueForKey:@"Location"];
         if ([response statusCode] == 201 && locationHeader != nil) {
             
             NSURL *locationURL = [NSURL URLWithString:locationHeader];
-            
             NSURLRequest *newRequest = [self getRequestWithURL:locationURL 
                                                     parameters:nil 
                                        canBeCalledUnauthorized:NO
@@ -872,7 +828,6 @@
                 completionBlock(nil, error);
             }
         } else {
-            
             // Parse the response
             id jsonResponse = [self parseResponse:response 
                                  withResponseData:responseData 
