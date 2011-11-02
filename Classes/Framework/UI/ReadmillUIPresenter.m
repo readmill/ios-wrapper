@@ -247,7 +247,13 @@
     [self setView:backgroundView];
 
     contentContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 648.0, 440.0)];
-    [contentContainerView setBackgroundColor:[UIColor whiteColor]];
+    if (!contentViewController) {
+        // Set the background color to white if there's no current contentViewController (so we have a background)
+        [contentContainerView setBackgroundColor:[UIColor whiteColor]];
+    } else {
+        // We don't need a background color if we can present a controller
+        [contentContainerView setBackgroundColor:[UIColor clearColor]];
+    }
     [[contentContainerView layer] setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];
     [[contentContainerView layer] setShadowColor:[[UIColor blackColor] CGColor]];
     [[contentContainerView layer] setShadowRadius:8.0];

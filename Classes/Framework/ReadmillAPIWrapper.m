@@ -344,7 +344,7 @@
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                    comment, @"content",
-                                                                   date, @"commentedAt", nil]
+                                                                   [date stringWithRFC822Format], @"posted_at", nil]
                                                                    
                                                            forKey:@"comment"];
     
