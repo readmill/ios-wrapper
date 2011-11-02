@@ -25,7 +25,7 @@
 
 @interface NSString (ReadmillStringExtensions)
 
--(NSString *)urlEncodedString;
--(NSString *)urlDecodedString;
-
+- (NSString *)urlEncodedString;
+- (NSString *)urlDecodedString;
+- (NSDate *)dateWithRFC3339Formatting;
 @end

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-//#import "ReadmillAPIConstants.h"
 
 typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *response, NSData *responseData, NSError *error);
 
@@ -19,7 +18,6 @@ typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *respon
     NSHTTPURLResponse *response;
     NSURLRequest *request;
     NSURLConnection *connection;
-    ReadmillURLConnectionCompletionHandler completionHandler;
     BOOL isExecuting, isFinished;
 }
 @property (nonatomic, copy) NSError *connectionError;
@@ -28,7 +26,6 @@ typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *respon
 @property (nonatomic, copy) NSHTTPURLResponse *response;
 @property (nonatomic, copy) NSURLRequest *request;
 @property (nonatomic, assign) BOOL isExecuting, isFinished;
-@property (nonatomic, copy) ReadmillURLConnectionCompletionHandler completionHandler;
 
 - (id)initWithRequest:(NSURLRequest *)request completionHandler:(ReadmillURLConnectionCompletionHandler)completionHandler;
 

@@ -7,8 +7,6 @@
 //
 
 #import "ReadmillURLConnection.h"
-#import "JSONKit.h"
-//#import "ReadmillAPIWrapper.h"
 
 @interface ReadmillURLConnection ()
 - (void)finish;
@@ -16,14 +14,15 @@
 
 @implementation ReadmillURLConnection
 
-- (id)initWithRequest:(NSURLRequest *)aRequest completionHandler:(ReadmillURLConnectionCompletionHandler)_completionHandler
+- (id)initWithRequest:(NSURLRequest *)aRequest completionHandler:(ReadmillURLConnectionCompletionHandler)completionHandler
 {
     self = [super init];
     if (self) {
         // Initialization
-        if (_completionHandler) {
-            completionHandler = [_completionHandler copy];
-        }        
+        
+        [self setCompletionBlock:^{
+            completionHandler(self.response, self.responseData, self.connectionError);        
+        }];
         request = [aRequest copy];
     }
     return self;
@@ -31,7 +30,6 @@
 - (void)dealloc {
     
     self.connection = nil, connection = nil;
-    self.completionHandler = nil, completionHandler = nil;
     self.connectionError = nil, connectionError = nil;
     self.responseData = nil, responseData = nil;
     self.request = nil, request = nil;
@@ -44,11 +42,11 @@
 @synthesize response;
 @synthesize request;
 @synthesize isFinished, isExecuting;
-@synthesize completionHandler;
 
+/* TODO - concurrent?
 - (BOOL)isConcurrent {
     return YES;
-}
+}*/
 
 - (void)start {
     if (![NSThread isMainThread]) {
@@ -75,7 +73,6 @@
 - (void)finish {
 
     NSLog(@"status code: %d, error: %@, data size: %u", response.statusCode, connectionError, [responseData length]);
-    completionHandler(self.response, self.responseData, self.connectionError);
     
     [self willChangeValueForKey:@"isExecuting"];
     [self willChangeValueForKey:@"isFinished"];
@@ -98,7 +95,6 @@
 }
 
 - (void)connection:(NSURLConnection *)conn didReceiveResponse:(NSURLResponse *)aResponse {
-    
     self.response = (NSHTTPURLResponse *)aResponse;
     
     NSMutableData *data = [[NSMutableData alloc] init];

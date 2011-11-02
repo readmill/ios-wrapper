@@ -59,7 +59,6 @@
 @property (readwrite, copy) NSString *accessToken;
 @property (readwrite, copy) NSString *authorizedRedirectURL;
 @property (readwrite, copy) NSDate *accessTokenExpiryDate;
-//@property (readwrite, copy) NSString *apiEndPoint;
 @property (nonatomic, readwrite, retain) ReadmillAPIConfiguration *apiConfiguration;
 @end
 
@@ -257,7 +256,7 @@
     }
     
     // 2011-01-06T11:47:14Z
-    NSString *dateString = [occurrenceTime stringWithRFC822Format];
+    NSString *dateString = [occurrenceTime stringWithRFC3339Format];
     [parameters setValue:dateString forKey:[NSString stringWithFormat:pingScope, @"occurred_at"]];
 
     if (!(longitude == 0.0 && latitude == 0.0)) {
@@ -315,7 +314,7 @@
         highlightedAt = [NSDate date];
     }
     // 2011-01-06T11:47:14Z
-    [highlightParameters setValue:[highlightedAt stringWithRFC822Format] forKey:@"highlighted_at"];
+    [highlightParameters setValue:[highlightedAt stringWithRFC3339Format] forKey:@"highlighted_at"];
     [parameters setObject:highlightParameters forKey:@"highlight"];
     NSLog(@"all parameters: %@", parameters);
     
@@ -344,7 +343,7 @@
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                    comment, @"content",
-                                                                   [date stringWithRFC822Format], @"posted_at", nil]
+                                                                   [date stringWithRFC3339Format], @"posted_at", nil]
                                                                    
                                                            forKey:@"comment"];
     
@@ -825,7 +824,9 @@
                 [self startPreparedRequest:newRequest 
                                 completion:completionBlock];
             } else {
-                completionBlock(nil, error);
+                if (completionBlock) {
+                    completionBlock(nil, error);
+                }
             }
         } else {
             // Parse the response
@@ -835,7 +836,10 @@
                                             error:&error];
             
             // Execute the completionBlock
-            completionBlock(jsonResponse, error);
+            if (completionBlock) {
+                completionBlock(jsonResponse, error);
+            }
+
         }
     };
     

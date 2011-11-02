@@ -21,7 +21,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "ReadmillAPIConstants.h"
 #import "ReadmillAPIConfiguration.h"
 
 typedef void (^ReadmillAPICompletionHandler)(id result, NSError *error);

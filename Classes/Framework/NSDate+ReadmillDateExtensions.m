@@ -7,14 +7,14 @@
 //
 
 #import "NSDate+ReadmillDateExtensions.h"
+#import "RMDateFormatter.h"
 
 @implementation NSDate (ReadmillDateExtensions)
 
-- (NSString *)stringWithRFC822Format {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ssZ'"];
+- (NSString *)stringWithRFC3339Format {
+    
+    RMDateFormatter *formatter = [RMDateFormatter formatterWithRFC3339Format];
     NSString *dateString = [formatter stringFromDate:self];
-    [formatter release];
     return dateString;
 }
 @end

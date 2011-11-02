@@ -53,6 +53,7 @@
     [self setView:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    NSLog(@"ReadmillUIPresenter dealloc");
     [super dealloc];
 }
 

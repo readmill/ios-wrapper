@@ -22,6 +22,7 @@
 
 #import "ReadmillReading.h"
 #import "ReadmillDictionaryExtensions.h"
+#import "ReadmillStringExtensions.h"
 
 @interface ReadmillReading ()
 
@@ -78,14 +79,11 @@
     
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
-    NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
-    [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    
-    [self setDateAbandoned:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateAbandonedKey]]];
-    [self setDateCreated:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateCreatedKey]]];
-    [self setDateFinished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateFinishedKey]]];
-    [self setDateModified:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateModifiedKey]]];
-    [self setDateStarted:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIReadingDateStarted]]];
+    [self setDateAbandoned:[[cleanedDict valueForKey:kReadmillAPIReadingDateAbandonedKey] dateWithRFC3339Formatting]];
+    [self setDateCreated:[[cleanedDict valueForKey:kReadmillAPIReadingDateCreatedKey] dateWithRFC3339Formatting]];
+    [self setDateFinished:[[cleanedDict valueForKey:kReadmillAPIReadingDateFinishedKey] dateWithRFC3339Formatting]];
+    [self setDateModified:[[cleanedDict valueForKey:kReadmillAPIReadingDateModifiedKey] dateWithRFC3339Formatting]];
+    [self setDateStarted:[[cleanedDict valueForKey:kReadmillAPIReadingDateStarted] dateWithRFC3339Formatting]];
         
     [self setClosingRemark:[cleanedDict valueForKey:kReadmillAPIReadingClosingRemarkKey]];
     
@@ -148,7 +146,6 @@
 
 - (void)dealloc {
     // Clean-up code here.
-    
     [self setApiWrapper:nil];
     
     [self setDateAbandoned:nil];
@@ -157,6 +154,13 @@
     [self setDateModified:nil];
     [self setDateStarted:nil];
     [self setClosingRemark:nil];
+    
+    [self setUri:nil];
+    [self setHighlights:nil];
+    [self setPeriods:nil];
+    [self setLocations:nil];
+    [self setComments:nil];
+    [self setPermalinkURL:nil];
     
     [super dealloc];
 }

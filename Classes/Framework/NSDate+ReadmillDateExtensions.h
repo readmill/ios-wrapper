@@ -10,5 +10,5 @@
 
 @interface NSDate (ReadmillDateExtensions)
 
-- (NSString *)stringWithRFC822Format;
+- (NSString *)stringWithRFC3339Format;
 @end
