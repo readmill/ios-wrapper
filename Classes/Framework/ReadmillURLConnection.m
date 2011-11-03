@@ -10,25 +10,24 @@
 
 @interface ReadmillURLConnection ()
 - (void)finish;
+@property (nonatomic, readwrite, copy) ReadmillURLConnectionCompletionHandler completionHandler;
 @end
 
 @implementation ReadmillURLConnection
 
-- (id)initWithRequest:(NSURLRequest *)aRequest completionHandler:(ReadmillURLConnectionCompletionHandler)completionHandler
-{
+- (id)initWithRequest:(NSURLRequest *)aRequest completionHandler:(ReadmillURLConnectionCompletionHandler)aCompletionHandler {
     self = [super init];
     if (self) {
         // Initialization
         
-        [self setCompletionBlock:^{
-            completionHandler(self.response, self.responseData, self.connectionError);        
-        }];
-        request = [aRequest copy];
+        completionHandler = [aCompletionHandler copy];
+        [self setRequest:aRequest];
     }
     return self;
 }
 - (void)dealloc {
-    
+
+    self.completionHandler = nil, completionHandler = nil;
     self.connection = nil, connection = nil;
     self.connectionError = nil, connectionError = nil;
     self.responseData = nil, responseData = nil;
@@ -36,6 +35,7 @@
     [super dealloc];
 }
 
+@synthesize completionHandler;
 @synthesize connectionError;
 @synthesize responseData;
 @synthesize connection;
@@ -43,10 +43,10 @@
 @synthesize request;
 @synthesize isFinished, isExecuting;
 
-/* TODO - concurrent?
+// TODO - concurrent?
 - (BOOL)isConcurrent {
     return YES;
-}*/
+}
 
 - (void)start {
     if (![NSThread isMainThread]) {
@@ -74,6 +74,8 @@
 
     NSLog(@"status code: %d, error: %@, data size: %u", response.statusCode, connectionError, [responseData length]);
     
+    completionHandler(self.response, self.responseData, self.connectionError);        
+
     [self willChangeValueForKey:@"isExecuting"];
     [self willChangeValueForKey:@"isFinished"];
     

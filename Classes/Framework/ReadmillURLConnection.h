@@ -18,6 +18,7 @@ typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *respon
     NSHTTPURLResponse *response;
     NSURLRequest *request;
     NSURLConnection *connection;
+    ReadmillURLConnectionCompletionHandler completionHandler;
     BOOL isExecuting, isFinished;
 }
 @property (nonatomic, copy) NSError *connectionError;
@@ -26,6 +27,7 @@ typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *respon
 @property (nonatomic, copy) NSHTTPURLResponse *response;
 @property (nonatomic, copy) NSURLRequest *request;
 @property (nonatomic, assign) BOOL isExecuting, isFinished;
+@property (nonatomic, readonly, copy) ReadmillURLConnectionCompletionHandler completionHandler;
 
 - (id)initWithRequest:(NSURLRequest *)request completionHandler:(ReadmillURLConnectionCompletionHandler)completionHandler;
 

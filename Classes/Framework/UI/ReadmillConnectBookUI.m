@@ -222,7 +222,6 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [bself release];
                     });
-                    
                 };
 
                 [[[self user] apiWrapper] readingWithURLString:uri 

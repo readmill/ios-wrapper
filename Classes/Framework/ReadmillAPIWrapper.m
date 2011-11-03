@@ -825,7 +825,10 @@
                                 completion:completionBlock];
             } else {
                 if (completionBlock) {
-                    completionBlock(nil, error);
+                    // Always return on main thread
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        completionBlock(nil, error);
+                    }];
                 }
             }
         } else {
@@ -837,14 +840,16 @@
             
             // Execute the completionBlock
             if (completionBlock) {
-                completionBlock(jsonResponse, error);
+                // Always return on main thread
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                     completionBlock(jsonResponse, error);   
+                }];
             }
-
         }
     };
     
     ReadmillURLConnection *connection = [[ReadmillURLConnection alloc] initWithRequest:request 
-                                                                     completionHandler:connectionCompletionHandler];    
+                                                                     completionHandler:connectionCompletionHandler];
     [queue addOperation:connection];
     [connection release];
 }
