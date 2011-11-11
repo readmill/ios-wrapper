@@ -116,8 +116,9 @@
     NSUInteger interestingBookCount;
     NSUInteger openBookCount;
     
+    NSData *avatarImageData;
+    
     ReadmillAPIWrapper *apiWrapper;
-	
 }
 
 #pragma mark Static Methods
@@ -387,6 +388,12 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
  @brief The URL of the user's avatar image.
  */
 @property (readonly, copy) NSURL *avatarURL;
+
+/*!
+ @property  avatarURL
+ @brief The URL of the user's avatar image.
+ */
+@property (readwrite, copy) NSData *avatarImageData;
 
 /*!
  @property  permalinkURL

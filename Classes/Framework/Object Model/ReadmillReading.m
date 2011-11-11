@@ -23,6 +23,7 @@
 #import "ReadmillReading.h"
 #import "ReadmillDictionaryExtensions.h"
 #import "ReadmillStringExtensions.h"
+#import "ReadmillUser.h"
 
 @interface ReadmillReading ()
 
@@ -54,6 +55,7 @@
 
 @property (readwrite) ReadmillReadingProgress progress;
 
+@property (readwrite, retain) ReadmillUser *user;
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 
 @end
@@ -79,6 +81,9 @@
     
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
+    [self setUser:[[[ReadmillUser alloc] initWithAPIDictionary:[apiDict valueForKey:kReadmillAPIReadingUserKey]
+                                                    apiWrapper:self.apiWrapper] autorelease]];
+    
     [self setDateAbandoned:[[cleanedDict valueForKey:kReadmillAPIReadingDateAbandonedKey] dateWithRFC3339Formatting]];
     [self setDateCreated:[[cleanedDict valueForKey:kReadmillAPIReadingDateCreatedKey] dateWithRFC3339Formatting]];
     [self setDateFinished:[[cleanedDict valueForKey:kReadmillAPIReadingDateFinishedKey] dateWithRFC3339Formatting]];
@@ -91,7 +96,11 @@
     
     [self setState:[[cleanedDict valueForKey:kReadmillAPIReadingStateKey] unsignedIntegerValue]];
     
-    [self setUserId:[[[cleanedDict valueForKey:kReadmillAPIReadingUserKey] valueForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
+    if ([self user]) {
+        [self setUserId:[user userId]];
+    } else {
+        [self setUserId:[[[cleanedDict valueForKey:kReadmillAPIReadingUserKey] valueForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
+    }
     [self setBookId:[[[cleanedDict valueForKey:kReadmillAPIReadingBookKey] valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
     [self setReadingId:[[cleanedDict valueForKey:kReadmillAPIReadingIdKey] unsignedIntegerValue]];
     
@@ -100,7 +109,6 @@
  
     [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadingProgress] floatValue]];
     
-
     [self setPermalinkURL:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingPermalinkURLKey]]];
     [self setUri:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingURIKey]]];
     [self setComments:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingCommentsKey]]];
@@ -142,12 +150,17 @@
 
 @synthesize progress;
 
+@synthesize user;
 @synthesize apiWrapper;
+
+#pragma mark -
+#pragma mark - Dealloc
 
 - (void)dealloc {
     // Clean-up code here.
     [self setApiWrapper:nil];
-    
+    [self setUser:nil];
+
     [self setDateAbandoned:nil];
     [self setDateCreated:nil];
     [self setDateFinished:nil];
@@ -168,20 +181,23 @@
 #pragma mark -
 #pragma mark Threaded Methods
 
--(void)updateState:(ReadmillReadingState)newState delegate:(id <ReadmillReadingUpdatingDelegate>)delegate {
+-(void)updateState:(ReadmillReadingState)newState delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
+{
     [self updateWithState:newState isPrivate:[self isPrivate] closingRemark:[self closingRemark] delegate:delegate];
 }
 
--(void)updateIsPrivate:(BOOL)readingIsPrivate delegate:(id <ReadmillReadingUpdatingDelegate>)delegate {
+-(void)updateIsPrivate:(BOOL)readingIsPrivate delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
+{
     [self updateWithState:[self state] isPrivate:readingIsPrivate closingRemark:[self closingRemark] delegate:delegate];
 }
 
--(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate {
+-(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
+{
     [self updateWithState:[self state] isPrivate:[self isPrivate] closingRemark:newRemark delegate:delegate];
 }
 
--(void)updateWithState:(ReadmillReadingState)newState isPrivate:(BOOL)readingIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate {
-    
+-(void)updateWithState:(ReadmillReadingState)newState isPrivate:(BOOL)readingIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
+{    
     NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
                                 delegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
@@ -192,15 +208,12 @@
     
     [self performSelectorInBackground:@selector(updateStateAndPrivacyWithProperties:)
                            withObject:properties];
-    
 }
 
--(void)updateStateAndPrivacyWithProperties:(NSDictionary *)properties {
-    
+-(void)updateStateAndPrivacyWithProperties:(NSDictionary *)properties 
+{    
     [self retain];
-    
-    NSAutoreleasePool *pool;
-    pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillReadingUpdatingDelegate> readingUpdatingDelegate = [properties valueForKey:@"delegate"];
@@ -251,9 +264,7 @@
                          }];
     
     [pool drain];
-    
     [self release];
-    
 }
 
 

@@ -25,6 +25,7 @@
 #import "ReadmillReadingSession.h"
 
 @class ReadmillReading;
+@class ReadmillUser;
 
 @protocol ReadmillReadingUpdatingDelegate <NSObject>
 
@@ -75,6 +76,8 @@
     NSURL *periods;
     NSURL *locations;
     NSURL *highlights;
+    
+    ReadmillUser *user;
 }
 
 /*!
@@ -228,6 +231,12 @@
  @brief The progress of this reading in Readmill.
  */
 @property (readonly) ReadmillReadingProgress progress;
+
+/*!
+ @property  user
+ @brief The ReadmillUser of this reading.
+ */
+@property (readonly, retain) ReadmillUser *user;
 
 /*!
  @property  apiWrapper

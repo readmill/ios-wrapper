@@ -149,6 +149,8 @@
     [self setAuthenticationToken:[cleanedDict valueForKey:kReadmillAPIUserAuthenticationToken]];
 }
 
+@synthesize avatarImageData;
+
 @synthesize city;
 @synthesize country;
 @synthesize userDescription;
@@ -177,6 +179,7 @@
     
     [self setApiWrapper:nil];
     
+    [self setAvatarImageData:nil];
     [self setCity:nil];
     [self setCountry:nil];
     [self setUserDescription:nil];

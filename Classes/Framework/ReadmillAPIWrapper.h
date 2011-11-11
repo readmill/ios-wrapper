@@ -455,11 +455,10 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 
 /*!
  @param userId The id of the user you'd like to get details for.
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A specific user in the Readmill system as an NSDictionary object. See the API Keys - User section of this header for keys. 
+ @param completionHandler A block that will return the result and an error pointer.
  @brief   Get a specific user by their id. 
  */
-//-(NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error;
+-(void)userWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param userName The username of the user you'd like to get details for.

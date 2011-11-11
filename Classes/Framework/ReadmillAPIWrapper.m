@@ -194,18 +194,19 @@
             completionHandler:completionHandler];
 }
 
-- (void)publicReadingsForUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+- (void)publicReadingsForUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
                                                         [self usersEndpoint], 
                                                             userId]];
     [self sendGetRequestToURL:URL   
                withParameters:nil
-        canBeCalledUnauthorized:NO
+      canBeCalledUnauthorized:NO
             completionHandler:completionHandler];
 }
-- (void)readingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d.json", 
+- (void)readingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
                                        [self readingsEndpoint], 
                                        readingId]];
     [self sendGetRequestToURL:URL 
@@ -377,17 +378,16 @@
 
 #pragma mark
 #pragma mark - Users
-/*
-- (NSDictionary *)userWithId:(ReadmillUserId)userId error:(NSError **)error {
-    
-    NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d.json", [self apiEndPoint], userId]] 
-                                           withParameters:nil
-                               canBeCalledUnauthorized:YES
-                                                    error:error];
-    return apiResponse;
-    
-}
 
+- (void)userWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d.json", [self apiEndPoint], userId]];
+    [self sendGetRequestToURL:url 
+               withParameters:nil
+      canBeCalledUnauthorized:YES
+            completionHandler:completionHandler];
+}
+/*
 - (NSDictionary *)userWithName:(NSString *)userName error:(NSError **)error {
     
     if ([userName length] == 0) {
