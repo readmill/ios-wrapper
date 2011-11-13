@@ -1,19 +1,19 @@
 //
-//  DismissingView.m
+//  ReadmillDismissingView.m
 //  Readmill
 //
 //  Created by Martin Hwasser on 3/22/11.
 //  Copyright 2011 Readmill. All rights reserved.
 //
 
-#import "DismissingView.h"
+#import "ReadmillDismissingView.h"
 
 
-@implementation DismissingView
+@implementation ReadmillDismissingView
 
 @synthesize delegate;
 
-- (id)initWithFrame:(CGRect)frame delegate:(id<DismissingViewDelegate>)dismissingViewDelegate {
+- (id)initWithFrame:(CGRect)frame delegate:(id<ReadmillDismissingViewDelegate>)dismissingViewDelegate {
     self = [super initWithFrame:frame];
     if (self) {
         self.opaque = NO;

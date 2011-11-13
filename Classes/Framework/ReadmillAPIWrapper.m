@@ -33,12 +33,6 @@
 @interface ReadmillAPIWrapper ()
 
 - (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error;
-/*
-- (id)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
-- (id)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
-- (id)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
-- (id)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
-*/
 
 - (NSURLRequest *)putRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
 - (NSURLRequest *)postRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
@@ -59,21 +53,24 @@
 @property (readwrite, copy) NSString *accessToken;
 @property (readwrite, copy) NSString *authorizedRedirectURL;
 @property (readwrite, copy) NSDate *accessTokenExpiryDate;
+@property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, readwrite, retain) ReadmillAPIConfiguration *apiConfiguration;
 @end
 
 @implementation ReadmillAPIWrapper
 
-- (id)init {
+- (id)init 
+{
     if ((self = [super init])) {
         // Initialization code here.
         queue = [[NSOperationQueue alloc] init];
-        [queue setMaxConcurrentOperationCount:3];
+        [queue setMaxConcurrentOperationCount:5];
     }
     return self;
 }
 
-- (id)initWithAPIConfiguration:(ReadmillAPIConfiguration *)configuration {
+- (id)initWithAPIConfiguration:(ReadmillAPIConfiguration *)configuration 
+{
     self = [self init];
     if (self) {
         [self setApiConfiguration:configuration];
@@ -81,8 +78,8 @@
     return self;
 }
 
-- (id)initWithPropertyListRepresentation:(NSDictionary *)plist {
-    
+- (id)initWithPropertyListRepresentation:(NSDictionary *)plist 
+{    
     if ((self = [self init])) {
         
         [self setAuthorizedRedirectURL:[plist valueForKey:@"authorizedRedirectURL"]];
@@ -94,7 +91,8 @@
     return self;
 }
 
-- (NSDictionary *)propertyListRepresentation {
+- (NSDictionary *)propertyListRepresentation 
+{
     return [NSDictionary dictionaryWithObjectsAndKeys:
             
             [self authorizedRedirectURL], @"authorizedRedirectURL",
@@ -110,33 +108,40 @@
 @synthesize authorizedRedirectURL;
 @synthesize accessTokenExpiryDate;
 @synthesize apiConfiguration;
+@synthesize queue;
 
-- (void)dealloc {
+- (void)dealloc 
+{
     [self setRefreshToken:nil];
     [self setAccessToken:nil];
     [self setAuthorizedRedirectURL:nil];
     [self setAccessTokenExpiryDate:nil];
     [self setApiConfiguration:nil];
-    [queue release];
+    [self setQueue:nil];
     [super dealloc];
 }
 
 #pragma mark -
 #pragma mark API endpoints
 
-- (NSString *)apiEndPoint {
+- (NSString *)apiEndPoint 
+{
     return [[apiConfiguration apiBaseURL] absoluteString];
 }
-- (NSString *)booksEndpoint {
+- (NSString *)booksEndpoint 
+{
     return [NSString stringWithFormat:@"%@books", [self apiEndPoint]];
 }
-- (NSString *)readingsEndpoint {
+- (NSString *)readingsEndpoint 
+{
     return [NSString stringWithFormat:@"%@readings", [self apiEndPoint]];
 }
-- (NSString *)usersEndpoint {
+- (NSString *)usersEndpoint 
+{
     return [NSString stringWithFormat:@"%@users", [self apiEndPoint]];
 }
-- (NSString *)highlightsEndpoint {
+- (NSString *)highlightsEndpoint 
+{
     return [NSString stringWithFormat:@"%@highlights", [self apiEndPoint]];
 }
 
@@ -149,8 +154,8 @@
 #pragma mark - Readings
 
 - (void)createReadingWithBookId:(ReadmillBookId)bookId state:(ReadmillReadingState)readingState private:(BOOL)isPrivate 
-              completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+              completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
     [parameters setValue:[NSNumber numberWithInteger:readingState] forKey:@"state"];
@@ -168,8 +173,8 @@
                   withState:(ReadmillReadingState)readingState
                     private:(BOOL)isPrivate 
               closingRemark:(NSString *)remark 
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *readingScope = @"reading[%@]";
 
@@ -201,9 +206,10 @@
                                                             userId]];
     [self sendGetRequestToURL:URL   
                withParameters:nil
-      canBeCalledUnauthorized:NO
+      canBeCalledUnauthorized:YES
             completionHandler:completionHandler];
 }
+
 - (void)readingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {    
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
@@ -215,8 +221,8 @@
             completionHandler:completionHandler];
 }
 
-- (void)readingWithURLString:(NSString *)urlString completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+- (void)readingWithURLString:(NSString *)urlString completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSError *error = nil;
     NSURLRequest *request = [self getRequestWithURL:[NSURL URLWithString:urlString] 
                                          parameters:nil
@@ -230,6 +236,67 @@
     }
 }
 
+
+#pragma mark - 
+#pragma mark - Book
+
+- (void)booksFromSearch:(NSString *)searchString completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    return [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]] 
+                      withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q"]
+             canBeCalledUnauthorized:NO 
+                   completionHandler:completion];    
+}
+
+- (void)bookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completion
+{    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d.json", [self booksEndpoint], bookId]];
+    [self sendGetRequestToURL:url
+               withParameters:nil
+      canBeCalledUnauthorized:YES 
+            completionHandler:completion];
+}
+
+- (void)bookMatchingTitle:(NSString *)searchString completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/match.json", [self booksEndpoint]]];
+    [self sendGetRequestToURL:url
+               withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
+      canBeCalledUnauthorized:YES
+            completionHandler:completion];
+}
+- (void)bookMatchingISBN:(NSString *)isbn completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/match.json", [self booksEndpoint]]];
+    [self sendGetRequestToURL:url
+               withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
+        canBeCalledUnauthorized:YES 
+            completionHandler:completion];
+}
+
+- (void)addBookWithTitle:(NSString *)bookTitle author:(NSString *)bookAuthor isbn:(NSString *)bookIsbn completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    NSString *bookScope = @"book[%@]";
+    if ([bookTitle length] > 0) {
+        [parameters setValue:bookTitle forKey:[NSString stringWithFormat:bookScope, kReadmillAPIBookTitleKey]];
+    }
+    
+    if ([bookAuthor length] > 0) {
+        [parameters setValue:bookAuthor forKey:[NSString stringWithFormat:bookScope, kReadmillAPIBookAuthorKey]];
+    }
+    
+    if ([bookIsbn length] > 0) {
+        [parameters setValue:bookIsbn forKey:[NSString stringWithFormat:bookScope, kReadmillAPIBookISBNKey]];
+    }
+    
+    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.json", [self booksEndpoint]]]
+                withParameters:parameters
+       canBeCalledUnauthorized:NO
+             completionHandler:completionHandler];    
+}
+
 //Pings     
 #pragma mark - Pings
 
@@ -240,9 +307,8 @@
            occurrenceTime:(NSDate *)occurrenceTime
                  latitude:(CLLocationDegrees)latitude
                 longitude:(CLLocationDegrees)longitude
-        completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
-
+        completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *pingScope = @"ping[%@]";
     [parameters setValue:[NSNumber numberWithFloat:progress] forKey:[NSString stringWithFormat:pingScope, @"progress"]];
@@ -275,8 +341,8 @@
         sessionIdentifier:(NSString *)sessionId
                  duration:(ReadmillPingDuration)duration
            occurrenceTime:(NSDate *)occurrenceTime
-        completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+        completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     [self pingReadingWithId:readingId 
                withProgress:progress 
           sessionIdentifier:sessionId 
@@ -288,8 +354,11 @@
 }
 
 
-- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position highlightedAt:(NSDate *)highlightedAt comment:(NSString *)comment connections:(NSArray *)connectionsOrNil completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+#pragma mark -
+#pragma mark - Highlights
+
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position highlightedAt:(NSDate *)highlightedAt comment:(NSString *)comment connections:(NSArray *)connectionsOrNil completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
     NSMutableDictionary *highlightParameters = [NSMutableDictionary dictionary];
@@ -328,8 +397,8 @@
                  completionHandler:completionHandler];
 }
 
-- (void)highlightsForReadingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+- (void)highlightsForReadingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights.json", 
                                        [self readingsEndpoint], 
                                        readingId]];
@@ -337,7 +406,10 @@
     [self sendGetRequestToURL:URL withParameters:nil canBeCalledUnauthorized:NO completionHandler:completionHandler];
 }
 
-- (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId comment:(NSString *)comment commentedAt:(NSDate *)date completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+#pragma mark - Highlight comments
+
+- (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId comment:(NSString *)comment commentedAt:(NSDate *)date completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/comments.json", 
                                        [self highlightsEndpoint], 
                                        highlightId]];
@@ -352,22 +424,23 @@
                     withParameters:parameters
            canBeCalledUnauthorized:NO 
                  completionHandler:completionHandler];
-    
 }
 
-- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-
+- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/comments.json", 
                                        [self highlightsEndpoint], 
                                        highlightId]];
     
     [self sendGetRequestToURL:URL withParameters:nil canBeCalledUnauthorized:NO completionHandler:completionHandler];
 }
+
+
 #pragma mark
 #pragma Connections
 
-- (void)connectionsForCurrentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+- (void)connectionsForCurrentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@me/connections.json", [self apiEndPoint]]];
     
     [self sendGetRequestToURL:URL 
@@ -375,6 +448,7 @@
       canBeCalledUnauthorized:NO 
             completionHandler:completionHandler];
 }
+
 
 #pragma mark
 #pragma mark - Users
@@ -387,23 +461,9 @@
       canBeCalledUnauthorized:YES
             completionHandler:completionHandler];
 }
-/*
-- (NSDictionary *)userWithName:(NSString *)userName error:(NSError **)error {
-    
-    if ([userName length] == 0) {
-        return nil;
-    } else {
-        
-        NSDictionary *apiResponse = [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@users/%@.json", [self apiEndPoint], userName]] 
-                                               withParameters:nil
-                                   canBeCalledUnauthorized:YES
-                                                        error:error];
-        return apiResponse;
-    }
-}*/
 
-- (NSDictionary *)currentUser:(NSError **)error {
-    
+- (NSDictionary *)currentUser:(NSError **)error 
+{    
 	if (![self ensureAccessTokenIsCurrent:error]) {
 			return nil;
     }
@@ -417,8 +477,9 @@
         
     return [self sendPreparedRequest:request error:error];
 }
-- (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler {
 
+- (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
     NSError *error = nil;
     if (![self ensureAccessTokenIsCurrent:&error]) {
         
@@ -437,10 +498,13 @@
         [self startPreparedRequest:request completion:completionHandler];        
     }
 }
+
+
 #pragma mark -
 #pragma mark OAuth
 
-- (BOOL)authenticateWithParameters:(NSString *)parameterString error:(NSError **)error {
+- (BOOL)authenticateWithParameters:(NSString *)parameterString error:(NSError **)error 
+{
     @synchronized (self) {
         
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[apiConfiguration accessTokenURL]
@@ -473,8 +537,9 @@
         }
     }
 }
-- (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error {
 
+- (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error 
+{
     [self setAuthorizedRedirectURL:redirectURLString];
 
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&code=%@&redirect_uri=%@",
@@ -486,8 +551,8 @@
     [self authenticateWithParameters:parameterString error:error];
 }
 
-- (BOOL)refreshAccessToken:(NSError **)error {
-    
+- (BOOL)refreshAccessToken:(NSError **)error 
+{    
     NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
                                  [[[self apiConfiguration] clientID] urlEncodedString],
                                  [[[self apiConfiguration] clientSecret] urlEncodedString],
@@ -497,9 +562,8 @@
     return [self authenticateWithParameters:parameterString error:error];
 }
 
-
-- (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect {
-    
+- (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect 
+{    
     NSString *baseURL = [[apiConfiguration authURL] absoluteString];
     
     NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@", baseURL, [[self apiConfiguration] clientID]];
@@ -511,10 +575,22 @@
     return [NSURL URLWithString:urlString];
 }
 
+- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error 
+{
+    NSLog(@"now: %@, accessExpiry: %@", [NSDate date], [self accessTokenExpiryDate]);
+    if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
+        return [self refreshAccessToken:error];
+    } else {
+        return YES;
+    }
+}
+
+
 #pragma mark -
 #pragma mark UI URLs
 
-- (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author {
+- (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author 
+{
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
     }
@@ -532,7 +608,9 @@
 
     return URL;
 }
-- (NSURL *)URLForViewingReadingWithId:(ReadmillReadingId)readingId {
+
+- (NSURL *)URLForViewingReadingWithId:(ReadmillReadingId)readingId 
+{
     if (![self ensureAccessTokenIsCurrent:nil]) {
         return nil;
     }
@@ -547,28 +625,20 @@
     return URL;
 }
 
+
 #pragma mark -
 #pragma mark Sending Requests
 
-- (void)sendRequestToURL:(NSURL *)url completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-
+- (void)sendRequestToURL:(NSURL *)url completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
     [self sendGetRequestToURL:url 
                withParameters:nil 
       canBeCalledUnauthorized:NO 
             completionHandler:completionHandler];
 }
 
-- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error {
-    NSLog(@"now: %@, accessExpiry: %@", [NSDate date], [self accessTokenExpiryDate]);
-    if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
-        return [self refreshAccessToken:error];
-    } else {
-        return YES;
-    }
-}
-
-- (NSURLRequest *)getRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
-    
+- (NSURLRequest *)getRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error 
+{    
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!allowUnauthed) {
             return nil;
@@ -610,8 +680,9 @@
     [request setTimeoutInterval:kTimeoutInterval];
     return request;
 }
-- (void)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+
+- (void)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSError *error = nil;
     NSURLRequest *request = [self getRequestWithURL:url 
                                          parameters:parameters 
@@ -625,7 +696,8 @@
     }
 }
 
-- (void)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
+- (void)sendPutRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
     NSError *error = nil;
     NSURLRequest *request = [self putRequestWithURL:url 
                                          parameters:parameters 
@@ -637,10 +709,10 @@
     } else {
         return completionHandler(nil, error);
     }
-
 }
-- (void)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
 
+- (void)sendPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
     NSError *error = nil;
     NSURLRequest *request = [self postRequestWithURL:url 
                                           parameters:parameters 
@@ -655,20 +727,24 @@
 }
 
 
-- (NSURLRequest *)putRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+- (NSURLRequest *)putRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error 
+{
     return [self bodyRequestWithURL:url httpMethod:@"PUT" parameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
 }
-- (NSURLRequest *)postRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
+
+- (NSURLRequest *)postRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error 
+{
     return [self bodyRequestWithURL:url httpMethod:@"POST" parameters:parameters canBeCalledUnauthorized:allowUnauthed error:error];
 }
-- (NSURLRequest *)bodyRequestWithURL:(NSURL *)url httpMethod:(NSString *)httpMethod parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
-    
+
+- (NSURLRequest *)bodyRequestWithURL:(NSURL *)url httpMethod:(NSString *)httpMethod parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error 
+{    
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!allowUnauthed) {
             return nil;
         }
     }
-    
+
     BOOL first = YES;
 	
     NSMutableString *parameterString = [NSMutableString string];
@@ -704,8 +780,8 @@
     return request;
 }
 
-- (void)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+- (void)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSError *error = nil;
     
     NSURLRequest *request = [self bodyRequestWithURL:url httpMethod:httpMethod parameters:parameters canBeCalledUnauthorized:allowUnauthed error:&error];
@@ -717,8 +793,8 @@
     }
 }
 
-- (NSURLRequest *)JSONPostRequestWithURL:(NSURL *)URL parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error {
-    
+- (NSURLRequest *)JSONPostRequestWithURL:(NSURL *)URL parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error 
+{    
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!allowUnauthed) {
             return nil;
@@ -745,8 +821,8 @@
     return request;
 }
 
-- (void)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler {
-    
+- (void)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
     NSError *error= nil;
     NSURLRequest *request = [self JSONPostRequestWithURL:url parameters:parameters canBeCalledUnauthorized:allowUnauthed error:&error];
     
@@ -756,8 +832,8 @@
         completionHandler(nil, error);
     }
 }
-- (id)parseResponse:(NSHTTPURLResponse *)response withResponseData:(NSData *)responseData connectionError:(NSError *)connectionError error:(NSError **)error {
-    
+- (id)parseResponse:(NSHTTPURLResponse *)response withResponseData:(NSData *)responseData connectionError:(NSError *)connectionError error:(NSError **)error 
+{    
     if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
         
 		if (connectionError == nil) {
@@ -798,8 +874,8 @@
         return nil;
 	}	
 }
-- (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock {
-    
+- (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock 
+{    
     NSAssert(request != nil, @"Request is nil!");
 
     // This block will be called when the asynchronous operation finishes
@@ -854,8 +930,8 @@
     [connection release];
 }
     
-- (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error {
-    
+- (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error 
+{    
     NSHTTPURLResponse *response = nil;
     NSError *connectionError = nil;
      

@@ -24,7 +24,6 @@
 #import "ReadmillUser.h"
 #import "ReadmillUIPresenter.h"
 #import "ReadmillURLExtensions.h"
-#import "TestFlight.h"
 
 @interface ReadmillConnectBookUI ()
 @property (nonatomic, readwrite, retain) UIWebView *webView;
@@ -60,7 +59,6 @@
 
 - (void)dealloc {
     
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Dealloc start ReadmillConnectBookUI from main thread: %d", [NSThread isMainThread]]];
     [self setUser:nil];
     [self setISBN:nil];
     [self setBookTitle:nil];
@@ -72,7 +70,7 @@
     [webView stopLoading];
     [self setWebView:nil];
     [self setView:nil];
-    [TestFlight passCheckpoint:[NSString stringWithFormat:@"Dealloc finished ReadmillConnectBookUI from main thread: %d", [NSThread isMainThread]]];
+
     [super dealloc];
 }
 
@@ -211,7 +209,6 @@
                         
                         [reading release]; 
                         
-                        [TestFlight passCheckpoint:@"Succeeded to link to book."];
                     } else {
                         
                         NSError *error = [NSError errorWithDomain:kReadmillDomain code:0 userInfo:parameters];
@@ -237,7 +234,6 @@
         }
         
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        [TestFlight passCheckpoint:@"Return NO in webViewShouldStartLoad"];
         return NO;
     } else {
         return YES;

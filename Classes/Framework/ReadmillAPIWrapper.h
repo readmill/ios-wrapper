@@ -278,48 +278,49 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 
 /*!
  @param searchString The string to use when searching for a book.
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @param completionHandler An (optional) block that will return the result (id) and an NSError pointer.
  @result An NSArray containing the matching books in the Readmill system as NSDictionary objects. See the API Keys - Book section of this header for keys. 
  @brief   Get a list of books matching the search string in the Readmill system. 
  */
-//- (NSArray *)booksFromSearch:(NSString *)searchString error:(NSError **)error;
+- (void)booksFromSearch:(NSString *)searchString completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param searchString A title to search for. Only full matches will be returned (i.e., searching for "the" will only return a book called "the", not one called "the killer").
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @param completionHandler An (optional) block that will return the result (id) and an NSError pointer.
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Get a specific book in the Readmill system. 
  */
-//-(NSDictionary *)bookMatchingTitle:(NSString *)searchString error:(NSError **)error;
+- (void)bookMatchingTitle:(NSString *)title completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param isbn An ISBN to search for. Only full matches will be returned (i.e., searching for "123" will only return a book with the ISBN "123", not one with "123456").
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Get a specific book in the Readmill system. 
  */
-//-(NSDictionary *)bookMatchingISBN:(NSString *)isbn error:(NSError **)error;
+- (void)bookMatchingISBN:(NSString *)isbn completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The Readmill id of the book to retrieve.
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Get a specific book in the Readmill system. 
  */
-//-(NSDictionary *)bookWithId:(ReadmillBookId)bookId error:(NSError **)error;
+- (void)bookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookTitle The new book's title.
  @param bookAuthor The new book's author, or comma-separated list of authors.
  @param bookIsbn The new book's ISBN.
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
+ @param completionHandler An (optional) block that will return the result (id) and an NSError pointer.
  @result The created book in the Readmill system as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Create a book with the given title, author and ISBN in the Readmill system. 
  
  IMPORTANT: This will add a book to Readmill even if it already exists. Please search for a book before creating a new one, or use the 
  -findOrCreateBookWithISBN:title:author:delegate: convenience method in the ReadmillUser object, which does this for you. 
  */
-//-(NSDictionary *)addBookWithTitle:(NSString* )bookTitle author:(NSString *)bookAuthor isbn:(NSString *)bookIsbn error:(NSError **)error;
+- (void)addBookWithTitle:(NSString* )bookTitle author:(NSString *)bookAuthor isbn:(NSString *)bookIsbn 
+       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Readings

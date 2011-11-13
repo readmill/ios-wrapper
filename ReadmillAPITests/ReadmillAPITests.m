@@ -7,8 +7,7 @@
 //
 
 #import "ReadmillAPITests.h"
-#import <ReadmillAPI/ReadmillBook.h>
-#import <ReadmillAPI/ReadmillUser.h>
+#import "ReadmillAPI.h"
 
 @implementation ReadmillAPITests
 
@@ -17,59 +16,61 @@
     [super setUp];
     
     // Set-up code here.
-    wrapper = [[ReadmillAPIWrapper alloc] initWithStagingEndPoint];
+    ReadmillAPIConfiguration *apiConfiguration;
+    apiConfiguration = [ReadmillAPIConfiguration configurationForStagingWithClientID:@"e09c966d93341f0518b6e18a49644a43" 
+                                                                        clientSecret:@"a96949a97ab737b326a0e2fed334c49c"
+                                                                         redirectURL:nil];
+    
+    apiWrapper = [[ReadmillAPIWrapper alloc] initWithAPIConfiguration:apiConfiguration];
 }
 
 - (void)tearDown
 {
     // Tear-down code here.
-    [wrapper release];
+    [apiWrapper release];
     
     [super tearDown];
 }
 
 - (void)testUser
 {
-    NSDictionary *userDict = [wrapper userWithId:18 
-                                           error:nil];
-    
-    NSLog(@"user: %@", userDict);
-
-    STAssertNotNil(userDict, @"User is nil!");
-    
-    ReadmillUser *user = [[ReadmillUser alloc] initWithAPIDictionary:userDict apiWrapper:wrapper];
-    
-    [user release];
+    [apiWrapper userWithId:49 
+         completionHandler:^(id userDictionary, NSError *error) {
+             ReadmillUser *user = [[ReadmillUser alloc] initWithAPIDictionary:userDictionary 
+                                                                apiWrapper:apiWrapper];
+             STAssertEquals([user fullName], @"Martin Hwasser", @"User name is wrong!");
+             [user release];          
+      }];
 }
-- (void)testFindBookWithId {
-    
-    NSDictionary *bookDict = [wrapper bookWithId:1 
-                                           error:nil];
-    STAssertNotNil(bookDict, @"Book is nil!");
+- (void)testFindBookWithId 
+{    
+    [apiWrapper bookMatchingTitle:@"The Metamorphosis" 
+                completionHandler:^(id result, NSError *error) {
+                    //
+                    STAssertNotNil(result, @"Book is nil!");
+                }];
 }
-- (void)testFindBookWithTitle {
-    
+- (void)testFindBookWithTitle 
+{    
     NSString *bookTitle = @"Alice's Adventures in Wonderland";
-    NSArray *books = [wrapper booksMatchingTitle:bookTitle
-                                           error:nil];
-    
-    // Did we find at least one book?
-    STAssertTrue([books count] > 0, [NSString stringWithFormat:@"Didn't find %@", bookTitle]);
-    
-    ReadmillBook *book = [[ReadmillBook alloc] initWithAPIDictionary:[books objectAtIndex:0]];
-        
-    // Test that we got the book and that the mapping was correct.
-    STAssertTrue([bookTitle isEqualToString:[book title]], @"Not the same name.");
-    
-    [book release];
+    [apiWrapper bookMatchingTitle:bookTitle 
+                completionHandler:^(id books, NSError *error) {
+                    // Did we find at least one book?
+                    NSLog(@"books: %@", books);
+                    STAssertTrue([books count] > 0, [NSString stringWithFormat:@"Didn't find %@", bookTitle]);
+                    ReadmillBook *book = [[ReadmillBook alloc] initWithAPIDictionary:[books objectAtIndex:0]];
+                    
+                    // Test that we got the book and that the mapping was correct.
+                    STAssertTrue([bookTitle isEqualToString:[book title]], @"Not the same name.");
+                    
+                    [book release]; 
+                }];    
 }
-- (void)testFindRead {
-    
-    // Alice in wonderland
-    NSArray *reads = [wrapper publicReadingsForUserWithId:18 
-                                                    error:nil];
-    
-    NSLog(@"reads: %@", reads);
-    STAssertTrue(0 < [reads count], @"No reads for user.");
+- (void)testFindReading
+{    
+    [apiWrapper publicReadingsForUserWithId:49 
+                          completionHandler:^(id readings, NSError *error) {
+                              STAssertTrue(0 < [readings count], @"No readings for user.");
+                          }];
 }
 @end

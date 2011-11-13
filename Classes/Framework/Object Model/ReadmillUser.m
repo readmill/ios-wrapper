@@ -372,78 +372,87 @@
     
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillBookFindingDelegate> bookFindingDelegate = [properties valueForKey:@"delegate"];
-    
-    NSError *error = nil;
-    NSDictionary *bookDict = nil;
-    
+        
     NSString *isbn = [properties valueForKey:kReadmillAPIBookISBNKey];
     NSString *title = [properties valueForKey:kReadmillAPIBookTitleKey];
     NSString *author = [properties valueForKey:kReadmillAPIBookAuthorKey];
 
     BOOL createIfNotFound = [[properties valueForKey:@"createIfNotFound"] boolValue];
-
-
-    // Search by ISBN
+    
+    __block typeof(self) bself = self;
+    ReadmillAPICompletionHandler completionBlock = ^(id bookDict, NSError *error) {
+        if (error == nil && bookFindingDelegate != nil && bookDict == nil) {
+            
+            [(NSObject *)bookFindingDelegate performSelector:@selector(readmillUserFoundNoBook:)
+                                                    onThread:callbackThread
+                                                  withObject:bself
+                                               waitUntilDone:YES]; 
+            
+        } else if (error == nil && bookFindingDelegate != nil && bookDict != nil) {
+            
+            NSInvocation *successInvocation = [NSInvocation invocationWithMethodSignature:
+                                               [(NSObject *)bookFindingDelegate 
+                                                methodSignatureForSelector:@selector(readmillUser:didFindBook:)]];
+            [successInvocation setSelector:@selector(readmillUser:didFindBook:)];
+            
+            ReadmillBook *book = [[[ReadmillBook alloc] initWithAPIDictionary:bookDict] autorelease];
+            
+            [successInvocation setArgument:&bself atIndex:2];
+            [successInvocation setArgument:&book atIndex:3];
+            
+            [successInvocation performSelector:@selector(invokeWithTarget:)
+                                      onThread:callbackThread
+                                    withObject:bookFindingDelegate
+                                 waitUntilDone:YES]; 
+            
+        } else if (error != nil && bookFindingDelegate != nil) {
+            NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
+                                              [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:failedToFindBookWithError:)]];
+            [failedInvocation setSelector:@selector(readmillUser:failedToFindBookWithError:)];
+            
+            [failedInvocation setArgument:&bself atIndex:2];
+            [failedInvocation setArgument:&error atIndex:3];
+            
+            [failedInvocation performSelector:@selector(invokeWithTarget:)
+                                     onThread:callbackThread
+                                   withObject:bookFindingDelegate
+                                waitUntilDone:YES];
+        }
+    };
+    
+    NSMutableSet *books = [NSMutableSet set];
     if ([isbn length] > 0) {
-        bookDict = [[self apiWrapper] bookMatchingISBN:isbn
-                                                 error:&error];
+        // Search by ISBN
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [[self apiWrapper] bookMatchingISBN:isbn
+                              completionHandler:^(id result, NSError *error) {
+                                  if (result) {
+                                      [books addObject:result];
+                                  }
+                              }];
+        });
     } 
+    if ([title length] > 0) {
+        // Search by title
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [[self apiWrapper] bookMatchingTitle:title 
+                               completionHandler:^(id result, NSError *error) {
+                                   if (result) {
+                                       [books addObject:result];
+                                   }
+                               }];
+        });
+    } 
+
     
-    // Search by title
-    if ([title length] > 0 && bookDict == nil && error == nil) {
-        bookDict = [[self apiWrapper] bookMatchingTitle:title 
-                                                  error:&error];
+    if ([books anyObject] == nil && createIfNotFound == YES) {
+        // Create if not found
+        [[self apiWrapper] addBookWithTitle:title 
+                                     author:author 
+                                       isbn:isbn 
+                          completionHandler:completionBlock];
     }
-    
-    // Create if not found
-	if (bookDict == nil && error == nil && createIfNotFound == YES) {
         
-        bookDict = [[self apiWrapper] addBookWithTitle:title
-                                                author:author
-                                                  isbn:isbn
-                                                 error:&error];
-    }
-    
-    
-    if (error == nil && bookFindingDelegate != nil && bookDict == nil) {
-        
-        [(NSObject *)bookFindingDelegate performSelector:@selector(readmillUserFoundNoBook:)
-                                                onThread:callbackThread
-                                              withObject:self
-                                           waitUntilDone:YES]; 
-        
-    } else if (error == nil && bookFindingDelegate != nil && bookDict != nil) {
-                
-        NSInvocation *successInvocation = [NSInvocation invocationWithMethodSignature:
-                                           [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:didFindBook:)]];
-        [successInvocation setSelector:@selector(readmillUser:didFindBook:)];
-                
-        ReadmillBook *book = [[[ReadmillBook alloc] initWithAPIDictionary:bookDict] autorelease];
-        
-        [successInvocation setArgument:&self atIndex:2];
-        [successInvocation setArgument:&book atIndex:3];
-        
-        [successInvocation performSelector:@selector(invokeWithTarget:)
-                                  onThread:callbackThread
-                                withObject:bookFindingDelegate
-                             waitUntilDone:YES]; 
-        
-    } else if (error != nil && bookFindingDelegate != nil) {
-        NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
-                                          [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:failedToFindBookWithError:)]];
-        [failedInvocation setSelector:@selector(readmillUser:failedToFindBookWithError:)];
-        
-        [failedInvocation setArgument:&self atIndex:2];
-        [failedInvocation setArgument:&error atIndex:3];
-        
-        [failedInvocation performSelector:@selector(invokeWithTarget:)
-                                 onThread:callbackThread
-                               withObject:bookFindingDelegate
-                            waitUntilDone:YES]; 
-        
-        
-    }
-    
     [pool drain];
     
     [self release];
@@ -477,52 +486,54 @@
     
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillBookFindingDelegate> bookFindingDelegate = [properties valueForKey:@"delegate"];
-    
-    NSError *error = nil;
-    NSDictionary *bookDict = [[self apiWrapper] addBookWithTitle:[properties valueForKey:kReadmillAPIBookTitleKey]
-                                                          author:[properties valueForKey:kReadmillAPIBookAuthorKey]
-                                                            isbn:[properties valueForKey:kReadmillAPIBookISBNKey]
-                                                           error:&error];
-    
-    if (error == nil && bookFindingDelegate != nil && bookDict == nil) {
         
-        [(NSObject *)bookFindingDelegate performSelector:@selector(readmillUserFoundNoBook:)
-                                                onThread:callbackThread
-                                              withObject:self
-                                           waitUntilDone:YES]; 
-        
-    } else if (error == nil && bookFindingDelegate != nil && bookDict != nil) {
-        
-        NSInvocation *successInvocation = [NSInvocation invocationWithMethodSignature:
-                                           [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:didFindBook:)]];
-        [successInvocation setSelector:@selector(readmillUser:didFindBook:)];
-        
-        ReadmillBook *book = [[[ReadmillBook alloc] initWithAPIDictionary:bookDict] autorelease];
-        
-        [successInvocation setArgument:&self atIndex:2];
-        [successInvocation setArgument:&book atIndex:3];
-        
-        [successInvocation performSelector:@selector(invokeWithTarget:)
-                                  onThread:callbackThread
-                                withObject:bookFindingDelegate
-                             waitUntilDone:YES]; 
-        
-    } else if (error != nil && bookFindingDelegate != nil) {
-        
-        NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
-                                           [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:failedToFindBookWithError:)]];
-        [failedInvocation setSelector:@selector(readmillUser:failedToFindBookWithError:)];
-        
-        [failedInvocation setArgument:&self atIndex:2];
-        [failedInvocation setArgument:&error atIndex:3];
-        
-        [failedInvocation performSelector:@selector(invokeWithTarget:)
-                                 onThread:callbackThread
-                               withObject:bookFindingDelegate
-                            waitUntilDone:YES]; 
-        
-        
-    }
+    ReadmillAPICompletionHandler completionHandler = ^(NSDictionary *bookDict, NSError *error) {
+        ReadmillUser *user = self;
+
+        if (error == nil && bookFindingDelegate != nil && bookDict == nil) {
+            
+            [(NSObject *)bookFindingDelegate performSelector:@selector(readmillUserFoundNoBook:)
+                                                    onThread:callbackThread
+                                                  withObject:self
+                                               waitUntilDone:YES]; 
+            
+        } else if (error == nil && bookFindingDelegate != nil && bookDict != nil) {
+            
+            NSInvocation *successInvocation = [NSInvocation invocationWithMethodSignature:
+                                               [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:didFindBook:)]];
+            [successInvocation setSelector:@selector(readmillUser:didFindBook:)];
+            
+            ReadmillBook *book = [[[ReadmillBook alloc] initWithAPIDictionary:bookDict] autorelease];
+            
+            [successInvocation setArgument:&user atIndex:2];
+            [successInvocation setArgument:&book atIndex:3];
+            
+            [successInvocation performSelector:@selector(invokeWithTarget:)
+                                      onThread:callbackThread
+                                    withObject:bookFindingDelegate
+                                 waitUntilDone:YES]; 
+            
+        } else if (error != nil && bookFindingDelegate != nil) {
+            
+            NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
+                                              [(NSObject *)bookFindingDelegate methodSignatureForSelector:@selector(readmillUser:failedToFindBookWithError:)]];
+            [failedInvocation setSelector:@selector(readmillUser:failedToFindBookWithError:)];
+            
+            [failedInvocation setArgument:&user atIndex:2];
+            [failedInvocation setArgument:&error atIndex:3];
+            
+            [failedInvocation performSelector:@selector(invokeWithTarget:)
+                                     onThread:callbackThread
+                                   withObject:bookFindingDelegate
+                                waitUntilDone:YES]; 
+            
+            
+        }
+    };
+    [[self apiWrapper] addBookWithTitle:[properties valueForKey:kReadmillAPIBookTitleKey]
+                                 author:[properties valueForKey:kReadmillAPIBookAuthorKey]
+                                   isbn:[properties valueForKey:kReadmillAPIBookISBNKey]
+                      completionHandler:completionHandler];
     
     [pool drain];
     

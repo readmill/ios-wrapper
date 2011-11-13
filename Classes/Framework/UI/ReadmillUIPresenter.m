@@ -146,8 +146,8 @@
         // Commit animation
         [UIView commitAnimations];
     } else {
-        DismissingView *dismiss = [[DismissingView alloc] initWithFrame:self.view.bounds
-                                                               delegate:self];
+        ReadmillDismissingView *dismiss = [[ReadmillDismissingView alloc] initWithFrame:self.view.bounds
+                                                                               delegate:self];
         [dismiss addToView:self.view];
         [dismiss release];
     }
@@ -207,8 +207,8 @@
         [self release];
     }
     else if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateIn]) {
-        DismissingView *dismiss = [[DismissingView alloc] initWithFrame:self.view.frame
-                                                               delegate:self];
+        ReadmillDismissingView *dismiss = [[ReadmillDismissingView alloc] initWithFrame:self.view.frame
+                                                                               delegate:self];
         [dismiss addToView:self.view];
         [dismiss release];
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterDidAnimateIn object:nil]; 
