@@ -21,11 +21,11 @@
  */
 
 #import "ReadmillStringExtensions.h"
-#import "RMDateFormatter.h"
+#import "ReadmillDateFormatter.h"
 
 @implementation NSString (ReadmillStringExtensions)
 
--(NSString *)urlEncodedString {
+- (NSString *)urlEncodedString {
 	
 	CFStringRef str = CFURLCreateStringByAddingPercentEscapes(NULL,
 															  (CFStringRef)self,
@@ -56,7 +56,7 @@
 
 - (NSDate *)dateWithRFC3339Formatting {
 
-    RMDateFormatter *formatter = [RMDateFormatter formatterWithRFC3339Format];
+    ReadmillDateFormatter *formatter = [ReadmillDateFormatter formatterWithRFC3339Format];
     // Convert the RFC 3339 date time string to an NSDate.
     return [formatter dateFromString:self];
 }

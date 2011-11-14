@@ -3,15 +3,15 @@
 //  ReadmillAPI
 //
 //  Created by Martin Hwasser on 10/31/11.
-//  Copyright (c) 2011 KennettNet Software Limited. All rights reserved.
+//  Copyright (c) 2011 Readmill Network LTD. All rights reserved.
 //
 
 #import "ReadmillAPIConfiguration.h"
 
 @implementation ReadmillAPIConfiguration
 
-- (id)initWithClientID:(NSString *)aClientID clientSecret:(NSString *)aClientSecret redirectURL:(NSURL *)aRedirectURL apiBaseURL:(NSURL *)anApiBaseURL authURL:(NSURL *)anAuthURL {
-    
+- (id)initWithClientID:(NSString *)aClientID clientSecret:(NSString *)aClientSecret redirectURL:(NSURL *)aRedirectURL apiBaseURL:(NSURL *)anApiBaseURL authURL:(NSURL *)anAuthURL 
+{    
     NSAssert(aClientID, @"No Client ID supplied");
 	NSAssert(aClientSecret, @"No Client Secret supplied");
     NSAssert(anApiBaseURL, @"No Api Base URL supplied");
@@ -32,7 +32,8 @@
 	return self;
 }
 
-+ (id)configurationForProductionWithClientID:(NSString *)clientID clientSecret:(NSString *)clientSecret redirectURL:(NSURL *)redirectURL {
++ (id)configurationForProductionWithClientID:(NSString *)clientID clientSecret:(NSString *)clientSecret redirectURL:(NSURL *)redirectURL 
+{
 	return [[[self alloc] initWithClientID:clientID
                              clientSecret:clientSecret
                               redirectURL:redirectURL
@@ -41,7 +42,8 @@
              autorelease];
 }
 
-+ (id)configurationForStagingWithClientID:(NSString *)clientID clientSecret:(NSString *)clientSecret redirectURL:(NSURL *)redirectURL {
++ (id)configurationForStagingWithClientID:(NSString *)clientID clientSecret:(NSString *)clientSecret redirectURL:(NSURL *)redirectURL 
+{
     return [[[self alloc] initWithClientID:clientID
                              clientSecret:clientSecret
                               redirectURL:redirectURL
@@ -50,7 +52,8 @@
              autorelease];
 }
 
--(void)dealloc {
+-(void)dealloc 
+{
 	[apiBaseURL release]; apiBaseURL = nil;
 	[accessTokenURL release]; accessTokenURL = nil;
 	[authURL release]; authURL = nil;
@@ -75,7 +78,8 @@
 #pragma mark - 
 #pragma mark - NSCoding
 
-- (void)encodeWithCoder:(NSCoder *)aCoder {
+- (void)encodeWithCoder:(NSCoder *)aCoder 
+{
     [aCoder encodeObject:[[self accessTokenURL] absoluteString] forKey:@"accessTokenURL"];
     [aCoder encodeObject:[[self apiBaseURL] absoluteString] forKey:@"apiBaseURL"];
     [aCoder encodeObject:[[self authURL] absoluteString] forKey:@"authURL"];
@@ -83,7 +87,8 @@
     [aCoder encodeObject:[self clientSecret] forKey:@"clientSecret"];
     [aCoder encodeObject:[[self redirectURL] absoluteString] forKey:@"redirectURL"];
 }
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (id)initWithCoder:(NSCoder *)aDecoder 
+{
     self = [super init];
     if (self) {
         [self setAccessTokenURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:@"accessTokenURL"]]];
@@ -96,7 +101,8 @@
     return self;
 }
 
-- (NSString *)description {
+- (NSString *)description 
+{
     return [NSString stringWithFormat:@"ReadmillAPIConfiguration: %@, with endPoint: %@, clientID: %@", [super description], [self apiBaseURL], [self clientID]];
 }
 @end

@@ -125,17 +125,16 @@
 
 /*!
  @param redirect The URL that Readmill should call upon successful authorization, pass in nil if you want to use the default client redirect URL.
- @param onStaging If true, the generated URL will point to the Readmill staging server. Normally you'd pass NO. 
+ @param apiConfiguration The API configuration to use.
  @result A URL, appropriate for passing to a web browser, to Readmill to allow authentication.
  @brief   Create a URL for authenticating your application with Readmill.
  
 Upon successful authorization, Readmill will call the given redirect URL with added authentication parameters. It's up to 
  you to handle this, but once you've handled the redirect URL you can just pass the whole thing into
- +authenticateCallbackURL:baseCallbackURL:delegate:onStagingServer: to authenticate. 
+ +authenticateCallbackURL:baseCallbackURL:delegate:apiConfiguration: to authenticate. 
  */
-//+(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil onStagingServer:(BOOL)onStaging;
 
-+(NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectOrNil apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration;
++ (NSURL *)clientAuthorizationURLWithRedirectURL:(NSURL *)redirectURL apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration;
 
 
 /*!
@@ -167,7 +166,7 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  */
 //+(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate onStagingServer:(BOOL)onStaging;
 
-+(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration;
++ (void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration;
 
 /*!
  @param plistRep The saved credentials.
@@ -247,7 +246,7 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  @param authenticationDelegate The delegate object to receive notifications of success or failure.
  @brief   Authenticate a callback URL from Readmill's authentication service.
  
-See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:onStagingServer: for detailed discussion.
+See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiConfiguration: for detailed discussion.
  */
 -(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
 

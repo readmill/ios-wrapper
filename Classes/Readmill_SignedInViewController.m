@@ -23,6 +23,7 @@
 #import "Readmill_SignedInViewController.h"
 #import "ReadmillReadingSession.h"
 #import "ReadmillUIPresenter.h"
+
 #define kPingDuration 300
 
 @implementation Readmill_SignedInViewController
@@ -37,7 +38,7 @@
 
 -(void)dealloc {
     [self setUser:nil];
-    [self setRead:nil];
+    [self setReading:nil];
     [super dealloc];
 }
 
@@ -65,10 +66,6 @@
            forKeyPath:@"user.userName"
               options:NSKeyValueObservingOptionInitial
               context:nil];
-    
-    [[self user] findBookWithISBN:nil
-                            title:@"New York Trilogy, The"
-                         delegate:self];
 }
 
 
@@ -81,19 +78,21 @@
 }
 
 @synthesize welcomeLabel;
-@synthesize read;
+@synthesize reading;
 @synthesize user;
 
 #pragma mark Storing Readmill Authentication Credentials 
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    
-/*
-        Readmill's authentication credentials change from time-to-time, and will always change almost immediately after 
-        authenticating with Readmill for the first time in your application. Therefore, the reccommended way to deal with this 
-        is to observe the propertyListRepresentation property on ReadmillUser (or ReadmillAPIWrapper if you're using direct
-        API access) and save it every time it changes.
-*/
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context 
+{    
+   /*
+    * Readmill's authentication credentials change from time-to-time, and will always 
+    * change almost immediately after 
+    * authenticating with Readmill for the first time in your application. Therefore, 
+    * the reccommended way to deal with this is to observe the propertyListRepresentation
+    * property on ReadmillUser (or ReadmillAPIWrapper if you're using direct API
+    * access) and save it every time it changes.
+    */
     
     if ([keyPath isEqualToString:@"user.propertyListRepresentation"]) {
         if ([[self user] propertyListRepresentation] != nil) {
@@ -115,17 +114,15 @@
 
 #pragma mark STEP 1: Find a book in Readmill.
 
--(IBAction)linkToBookButtonWasPushed {
+- (IBAction)linkToBookButtonWasPushed {
     
     ReadmillUIPresenter *readmillUIPresenter = [[ReadmillUIPresenter alloc] init];    
     [readmillUIPresenter presentInViewController:self animated:YES];
-    
     
     ReadmillConnectBookUI *readmillConnectBookUI = [[ReadmillConnectBookUI alloc] initWithUser:[self user] 
                                                                                           ISBN:@"0340896981" 
                                                                                          title:@"One Day"
                                                                                         author:@"David Nicholls"];
-        
         
     [readmillConnectBookUI setDelegate:self];
     
@@ -136,7 +133,7 @@
 
 #pragma mark STEP 4: Handle book connection delegate methods. 
 
--(void)connect:(ReadmillConnectBookUI *)connectionUI didSkipLinkingToBook:(ReadmillBook *)aBook {
+- (void)connect:(ReadmillConnectBookUI *)connectionUI didSkipLinkingToBook:(ReadmillBook *)aBook {
     
     // STEP 4.1 The user opted to not link ther book to Readmill.
     
@@ -158,13 +155,20 @@
 
 #pragma mark STEP 5: We successfully linked a book. Create a session object and store it.
 
--(void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)aBook withReading:(ReadmillReading *)aReading {
+-(void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)book withReading:(ReadmillReading *)aReading {
+    NSLog(@"book: %@", book);
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Successfully linked book"
+                                                    message:nil
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
     
-    [self setRead:aReading];
+    [[alert autorelease] show];
+
+    [self setReading:aReading];
     
-    ReadmillReadingSession *session = [aReading createReadingSession];
+    ReadmillReadingSession *session = [reading createReadingSession];
     [session pingWithProgress:0 pingDuration:kPingDuration delegate:nil];
-    
 }
 
 #pragma mark -
@@ -174,7 +178,7 @@
 
 -(IBAction)finishReadButtonWasPushed {
     
-    if ([self read] == nil) {
+    if ([self reading] == nil) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Read To Finish"
                                                         message:nil
                                                        delegate:nil
@@ -187,7 +191,7 @@
         
         // Present the Readmill UI.
         
-        ReadmillViewReadingUI *popup = [[ReadmillViewReadingUI alloc] initWithReading:[self read]];
+        ReadmillViewReadingUI *popup = [[ReadmillViewReadingUI alloc] initWithReading:[self reading]];
         [popup setDelegate:self];
         
         ReadmillUIPresenter *presenter = [[ReadmillUIPresenter alloc] initWithContentViewController:popup];
@@ -244,7 +248,7 @@
  @brief   Delegate method informing the target that and error occurred attempting to search for or create book(s). 
  */
 -(void)readmillUser:(ReadmillUser *)user failedToFindBookWithError:(NSError *)error {
-    NSLog(@"error: %@", error);
+    NSLog(@"failedToFindBookWithError: %@", error);
 }
 
 @end

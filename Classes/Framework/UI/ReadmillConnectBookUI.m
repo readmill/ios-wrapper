@@ -53,6 +53,13 @@
         [self setISBN:anISBN];
         [self setBookTitle:aTitle];
         [self setAuthor:anAuthor];
+        NSDictionary *bookDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                        [self ISBN], kReadmillAPIBookISBNKey, 
+                                        [self bookTitle], kReadmillAPIBookTitleKey,
+                                        [self author], kReadmillAPIBookAuthorKey,
+                                        nil];
+        [self setBook:[[ReadmillBook alloc] initWithAPIDictionary:bookDictionary]];
+        [bookDictionary release];
     }
     return self;
 }
@@ -108,7 +115,7 @@
     NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[self ISBN] 
                                                                   title:[self bookTitle] 
                                                                  author:[self author]];
-    NSLog(@"url: %@", url);
+
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
                                                   cachePolicy:NSURLRequestReturnCacheDataElseLoad 
                                               timeoutInterval:30];

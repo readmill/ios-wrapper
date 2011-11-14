@@ -14,7 +14,7 @@
 - (id)initWithSpinnerType:(ReadmillSpinnerType)type {
     
     resourceBundle = [[NSBundle alloc] initWithPath:[[NSBundle mainBundle] pathForResource:@"Readmill" ofType:@"bundle"]];
-    NSAssert(resourceBundle, @"Please move the Readmill.bundle into the Resource Directory of your Application!");
+    NSAssert(resourceBundle != nil, @"Please move the Readmill.bundle into the Resource Directory of your Application!");
 
     NSInteger numberOfImages = 0;
     NSString *filenameFormat = nil;

@@ -21,9 +21,8 @@
  */
 
 #import <UIKit/UIKit.h>
-#import <ReadmillAPI/ReadmillUser.h>
-#import <ReadmillAPI/ReadmillReading.h>
-#import <ReadmillAPI/ReadmillReadingSession.h>
+
+#import "ReadmillAPI.h"
 #import "Readmill_SigningInViewController.h"
 
 @class Readmill_SignedInViewController;
@@ -31,7 +30,7 @@
 @interface Readmill_FrameworkAppDelegate : NSObject <UIApplicationDelegate, ReadmillUserAuthenticationDelegate> {
     
 @private
-    
+    ReadmillAPIConfiguration *apiConfiguration;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -39,5 +38,6 @@
 @property (nonatomic, retain) IBOutlet Readmill_SignedInViewController *signedInViewController;
 @property (nonatomic, retain) IBOutlet Readmill_SigningInViewController *signingInViewController;
 
+@property (nonatomic, retain) ReadmillAPIConfiguration *apiConfiguration;
 
 @end

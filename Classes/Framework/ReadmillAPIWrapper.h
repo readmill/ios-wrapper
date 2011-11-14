@@ -133,11 +133,14 @@ static NSString * const kReadmillAPIClientIdKey = @"client";
 @private
     
     NSString *accessToken;
-    NSString *refreshToken;
     NSString *authorizedRedirectURL;
     NSDate *accessTokenExpiryDate;
     NSOperationQueue *queue;
     ReadmillAPIConfiguration *apiConfiguration;
+    
+    
+    // This will be removed soon, in favor of non-expiring tokens
+    NSString *refreshToken DEPRECATED_ATTRIBUTE;
 }
 
 #pragma mark Initialization and Serialization 
@@ -197,7 +200,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @property  refreshToken
  @brief The current refresh token. This is used to fetch a new access token when the existing one has expired.  
  */
-@property (readonly, copy) NSString *refreshToken;
+@property (readonly, copy) NSString *refreshToken DEPRECATED_ATTRIBUTE;
 
 /*!
  @property  accessTokenExpiryDate

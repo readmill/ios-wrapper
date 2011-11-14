@@ -100,7 +100,6 @@
     if (![ReadmillReadingSession isReadingSessionIdentifierValid]) {
         archive = [[[ReadmillReadingSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
         [NSKeyedArchiver archiveReadmillReadingSession:archive];
-        NSLog(@"archive nil or date generated more than 30 minutes ago, generated one: %@", archive);
     }
     return [archive sessionIdentifier];
 }
@@ -109,10 +108,10 @@
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
     if (archive == nil || [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]] > 30 * 60) {
-        NSLog(@"ReadingSessionIdentifier not valid");
+        NSLog(@"Creating new Reading Session.");
         return NO;
     } 
-    NSLog(@"ReadingSessionIdentifier is valid");
+    NSLog(@"Using existing Reading Session.");
     return YES;
 }
 - (void)archiveFailedPing:(ReadmillPing *)ping {    

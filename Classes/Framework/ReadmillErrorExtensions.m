@@ -3,7 +3,7 @@
 //  ReadmillAPI
 //
 //  Created by Martin Hwasser on 5/13/11.
-//  Copyright 2011 KennettNet Software Limited. All rights reserved.
+//  Copyright 2011 Readmill Network Limited. All rights reserved.
 //
 
 #import "ReadmillErrorExtensions.h"

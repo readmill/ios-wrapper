@@ -3,7 +3,7 @@
 //  ReadmillAPI
 //
 //  Created by Martin Hwasser on 9/23/11.
-//  Copyright (c) 2011 KennettNet Software Limited. All rights reserved.
+//  Copyright (c) 2011 Readmill Network Limited. All rights reserved.
 //
 
 #import "ReadmillURLConnection.h"
@@ -72,7 +72,7 @@
 
 - (void)finish {
 
-    NSLog(@"status code: %d, error: %@, data size: %u", response.statusCode, connectionError, [responseData length]);
+    NSLog(@"Operation finished with status code: %d, error: %@, data size: %u", response.statusCode, connectionError, [responseData length]);
     
     completionHandler(self.response, self.responseData, self.connectionError);        
 

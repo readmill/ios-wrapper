@@ -24,6 +24,7 @@
 #import "ReadmillStringExtensions.h"
 #import "ReadmillURLExtensions.h"
 #import "ReadmillErrorExtensions.h"
+#import "ReadmillDictionaryExtensions.h"
 #import "NSDate+ReadmillDateExtensions.h"
 #import "ReadmillURLConnection.h"
 #import "JSONKit.h"
@@ -45,9 +46,10 @@
 - (void)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 - (void)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 - (void)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 - (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock;
 
-- (BOOL)refreshAccessToken:(NSError **)error;
+- (BOOL)refreshAccessToken:(NSError **)error DEPRECATED_ATTRIBUTE;
 
 @property (readwrite, copy) NSString *refreshToken;
 @property (readwrite, copy) NSString *accessToken;
@@ -73,6 +75,7 @@
 {
     self = [self init];
     if (self) {
+        NSAssert(configuration != nil, @"API Configuration is nil");
         [self setApiConfiguration:configuration];
     }
     return self;
@@ -81,26 +84,37 @@
 - (id)initWithPropertyListRepresentation:(NSDictionary *)plist 
 {    
     if ((self = [self init])) {
-        
-        [self setAuthorizedRedirectURL:[plist valueForKey:@"authorizedRedirectURL"]];
-        [self setRefreshToken:[plist valueForKey:@"refreshToken"]];
+        [self setAuthorizedRedirectURL:[plist valueForKey:@"authorizedRedirectURL"]];        
 		[self setAccessToken:[plist valueForKey:@"accessToken"]];
         [self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
         [self setApiConfiguration:[NSKeyedUnarchiver unarchiveObjectWithData:[plist valueForKey:@"apiConfiguration"]]];
+        
+        // Deprecated in favor of non-expiring tokens
+        NSString *aRefreshToken = [plist valueForKey:@"refreshToken"];
+        if (aRefreshToken) {
+            [self setRefreshToken:aRefreshToken];
+        }
     }
     return self;
 }
 
 - (NSDictionary *)propertyListRepresentation 
 {
-    return [NSDictionary dictionaryWithObjectsAndKeys:
-            
-            [self authorizedRedirectURL], @"authorizedRedirectURL",
-            [self refreshToken], @"refreshToken", 
-            [NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]], @"apiConfiguration",
-			[self accessToken], @"accessToken",
-            [self accessTokenExpiryDate], @"accessTokenExpiryDate",
-			nil];
+    NSMutableDictionary *plist = [NSMutableDictionary dictionary];
+    [plist setObject:[self accessToken] 
+              forKey:@"accessToken"];
+    [plist setObject:[self authorizedRedirectURL] 
+              forKey:@"authorizedRedirectURL"];
+    [plist setObject:[NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]] 
+              forKey:@"apiConfiguration"];
+    NSString *theRefreshToken = [self refreshToken];
+    [plist setObject:[self accessTokenExpiryDate] forKey:@"accessTokenExpiryDate"];
+    
+    // Deprecated in favor of non-expiring tokens
+    if (theRefreshToken) {
+        [plist setObject:theRefreshToken forKey:@"refreshToken"];
+    }
+    return plist;
 }
 
 @synthesize refreshToken;
@@ -146,10 +160,91 @@
 }
 
 #pragma mark -
+#pragma mark OAuth
+
+- (BOOL)authenticateWithParameters:(NSString *)parameterString error:(NSError **)error 
+{
+    @synchronized (self) {
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[[self apiConfiguration] accessTokenURL]
+                                                               cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                           timeoutInterval:kTimeoutInterval];
+        
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
+        [request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
+        [request setTimeoutInterval:kTimeoutInterval];
+        
+        NSDictionary *response = [self sendPreparedRequest:request 
+                                                     error:error];
+        
+        if (response != nil) {
+            NSLog(@"response: %@", response);
+            NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];        
+            [self willChangeValueForKey:@"propertyListRepresentation"];
+            [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
+            NSString *aRefreshToken = [response valueForKey:@"refresh_token"];
+            if (aRefreshToken) {
+                [self setRefreshToken:[response valueForKey:@"refresh_token"]];
+            }
+            [self setAccessToken:[response valueForKey:@"access_token"]];
+            [self didChangeValueForKey:@"propertyListRepresentation"];
+            return YES;
+        } 
+        
+        // Response was nil
+        return NO;
+    }
+}
+
+- (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error 
+{
+    [self setAuthorizedRedirectURL:redirectURLString];
+    
+    NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&code=%@&redirect_uri=%@",
+                                 [[[self apiConfiguration] clientID] urlEncodedString],
+                                 [[[self apiConfiguration] clientSecret] urlEncodedString],
+                                 [authCode urlEncodedString],
+                                 [redirectURLString urlEncodedString]];
+    
+    [self authenticateWithParameters:parameterString error:error];
+}
+
+- (BOOL)refreshAccessToken:(NSError **)error 
+{    
+    NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
+                                 [[[self apiConfiguration] clientID] urlEncodedString],
+                                 [[[self apiConfiguration] clientSecret] urlEncodedString],
+                                 [[self refreshToken] urlEncodedString],
+                                 [[self authorizedRedirectURL] urlEncodedString]];
+    
+    return [self authenticateWithParameters:parameterString error:error];
+}
+
+- (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect 
+{    
+    NSString *baseURL = [[[self apiConfiguration] authURL] absoluteString];
+    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@&scope=non-expiring", baseURL, [[self apiConfiguration] clientID]];
+    
+    if ([redirect length] > 0) {
+        urlString = [NSString stringWithFormat:@"%@&redirect_uri=%@", urlString, [redirect urlEncodedString]];
+    }
+    
+    return [NSURL URLWithString:urlString];
+}
+
+- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error 
+{
+    if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
+        return [self refreshAccessToken:error];
+    } else {
+        return YES;
+    }
+}
+
+
+#pragma mark -
 #pragma mark API Methods
-
-
-// Readings
 
 #pragma mark - Readings
 
@@ -265,12 +360,13 @@
       canBeCalledUnauthorized:YES
             completionHandler:completion];
 }
+
 - (void)bookMatchingISBN:(NSString *)isbn completionHandler:(ReadmillAPICompletionHandler)completion
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/match.json", [self booksEndpoint]]];
     [self sendGetRequestToURL:url
                withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
-        canBeCalledUnauthorized:YES 
+      canBeCalledUnauthorized:NO 
             completionHandler:completion];
 }
 
@@ -386,7 +482,6 @@
     // 2011-01-06T11:47:14Z
     [highlightParameters setValue:[highlightedAt stringWithRFC3339Format] forKey:@"highlighted_at"];
     [parameters setObject:highlightParameters forKey:@"highlight"];
-    NSLog(@"all parameters: %@", parameters);
     
     NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights.json", 
                                                  [self readingsEndpoint], readingId]];
@@ -467,10 +562,13 @@
 	if (![self ensureAccessTokenIsCurrent:error]) {
 			return nil;
     }
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@me.json?access_token=%@&client_id=%@",
-                                                                                             [self apiEndPoint],
-                                                                                             [self accessToken],
-                                                                                             [[[self apiConfiguration] clientID] urlEncodedString]]]
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@me.json?access_token=%@&client_id=%@",
+                                       [self apiEndPoint],
+                                       [self accessToken],
+                                       [[[self apiConfiguration] clientID] urlEncodedString]]];
+
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:kTimeoutInterval];
     [request setHTTPMethod:@"GET"];
@@ -496,92 +594,6 @@
         [request setHTTPMethod:@"GET"];
         
         [self startPreparedRequest:request completion:completionHandler];        
-    }
-}
-
-
-#pragma mark -
-#pragma mark OAuth
-
-- (BOOL)authenticateWithParameters:(NSString *)parameterString error:(NSError **)error 
-{
-    @synchronized (self) {
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[apiConfiguration accessTokenURL]
-                                                               cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                           timeoutInterval:kTimeoutInterval];
-    
-        [request setHTTPMethod:@"POST"];
-        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-type"];
-        [request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
-        [request setTimeoutInterval:kTimeoutInterval];
-        
-        NSDictionary *response = [self sendPreparedRequest:request 
-                                                     error:error];
-        
-        if (response != nil) {
-            NSLog(@"response: %@", response);
-            NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];        
-            [self willChangeValueForKey:@"propertyListRepresentation"];
-            [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
-            [self setRefreshToken:[response valueForKey:@"refresh_token"]];
-            [self setAccessToken:[response valueForKey:@"access_token"]];
-            [self didChangeValueForKey:@"propertyListRepresentation"];
-            
-            return YES;
-        } else {
-            if (nil != error) {
-                NSLog(@"error: %@", *error);
-            }
-            return NO;
-        }
-    }
-}
-
-- (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error 
-{
-    [self setAuthorizedRedirectURL:redirectURLString];
-
-    NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=authorization_code&code=%@&redirect_uri=%@",
-                                 [[[self apiConfiguration] clientID] urlEncodedString],
-                                 [[[self apiConfiguration] clientSecret] urlEncodedString],
-                                 [authCode urlEncodedString],
-                                 [redirectURLString urlEncodedString]];
-    
-    [self authenticateWithParameters:parameterString error:error];
-}
-
-- (BOOL)refreshAccessToken:(NSError **)error 
-{    
-    NSString *parameterString = [NSString stringWithFormat:@"client_id=%@&client_secret=%@&grant_type=refresh_token&refresh_token=%@&redirect_uri=%@",
-                                 [[[self apiConfiguration] clientID] urlEncodedString],
-                                 [[[self apiConfiguration] clientSecret] urlEncodedString],
-                                 [[self refreshToken] urlEncodedString],
-                                 [[self authorizedRedirectURL] urlEncodedString]];
-    
-    return [self authenticateWithParameters:parameterString error:error];
-}
-
-- (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect 
-{    
-    NSString *baseURL = [[apiConfiguration authURL] absoluteString];
-    
-    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@", baseURL, [[self apiConfiguration] clientID]];
-    
-    if ([redirect length] > 0) {
-        urlString = [NSString stringWithFormat:@"%@&redirect_uri=%@", urlString, [redirect urlEncodedString]];
-    }
-    
-    return [NSURL URLWithString:urlString];
-}
-
-- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error 
-{
-    NSLog(@"now: %@, accessExpiry: %@", [NSDate date], [self accessTokenExpiryDate]);
-    if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
-        return [self refreshAccessToken:error];
-    } else {
-        return YES;
     }
 }
 
@@ -718,7 +730,7 @@
                                           parameters:parameters 
                              canBeCalledUnauthorized:allowUnauthed
                                                error:&error];
-    
+    NSLog(@"params: %@", parameters);
     if (request) {
         [self startPreparedRequest:request completion:completionHandler];
     } else {
@@ -938,9 +950,10 @@
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request
                                                  returningResponse:&response
                                                              error:&connectionError];
-     
-    
-    return [self parseResponse:response withResponseData:responseData connectionError:connectionError error:error];
+    return [self parseResponse:response 
+              withResponseData:responseData
+               connectionError:connectionError 
+                         error:error];
 
 }
 @end
