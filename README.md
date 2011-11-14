@@ -1,9 +1,6 @@
 Readmill Framework
 ==================
 
-Installation
-============
-
 Dependencies
 ------------
 
@@ -11,29 +8,37 @@ Dependencies
 - JSONKit
 
 Installation
-============
-
-Quick Start
------------
+------------
 
 1. Clone into ReadmillAPI: 
+
     `cd /path/to/your/project` 
     `git clone git@github.com:Readmill/ios-wrapper.git ReadmillAPI` 
     (it is important that the name is ReadmillAPI for XCode to find the necessary files)
+
 2. Init and update the JSONKit submodule:  
+
     `cd ReadmillAPI; git submodule init; git submodule update`
+
 3. Add ReadmillAPI to your workspace:
     Find the ReadmillAPI.xcodeproj file and drag it into the Project Navigator (⌘1).
-4. Next, make sure that we can access the ReadmillAPI header files. To do this, add the ReadmillAPI directory to the "Header Search Paths" build setting. Start by selecting the "Build Settings" tab of your own project's settings, and add `ReadmillAPI/**` to the "Header Search Paths" setting. 
+
+4. Next, make sure that we can access the ReadmillAPI header files. To do this, add the ReadmillAPI directory 
+to the "Header Search Paths" build setting. Start by selecting the "Build Settings" tab of your own project's settings, and 
+add `ReadmillAPI/**` to the "Header Search Paths" setting.
 ![Add header search paths](https://raw.github.com/Readmill/ios-wrapper/master/Documentation/Images/headersearchpaths.png)
+
 5. Now find the 'Other linker flags' settings and add '-ObjC' and '-all_load'. This enables categories in static libraries. 
 ![Add other linker flags](https://raw.github.com/Readmill/ios-wrapper/master/Documentation/Images/otherlinkerflags.png)
+
 6. With the project settings still selected in the Project Navigator, select the "Build Phases" tab. Under the "Link Binary With Libraries" section, hit the "+" button. In the sheet that appears, select "libReadmillAPI.a" and click "Add".
 ![Link binary with libReadmillAPI library](https://raw.github.com/Readmill/ios-wrapper/master/Documentation/Images/linkwithlibraries.png)
 
-For detailed information and documentation on how to use the wrapper, see the wiki at 
-https://github.com/Readmill/ios-wrapper/wiki and the documentation
-in the header files in the framework, and check out the example app.
+7. Finally, drag the Readmill.bundle icon to your project and add it to your target. 
+
+For detailed information and documentation on how to use the wrapper, see the [wiki]
+(https://github.com/Readmill/ios-wrapper/wiki) and read up on the documentation
+in the header files in the framework. Don't forget to check out the example app.
 
 License
 -------
