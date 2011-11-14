@@ -20,52 +20,23 @@
  THE SOFTWARE.
  */
 
-#import "Readmill_SigningInViewController.h"
+#import <UIKit/UIKit.h>
+#import "ReadmillAPI.h"
 
-
-@implementation Readmill_SigningInViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [super dealloc];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
+@interface ReadmillSignedInViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillViewReadingUIDelegate, ReadmillBookFindingDelegate> {
     
-    // Release any cached data, images, etc that aren't in use.
+@private
+    ReadmillReading *reading;
+    ReadmillUser *user;
 }
 
-#pragma mark - View lifecycle
+@property (nonatomic, retain) IBOutlet UILabel *welcomeLabel;
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-}
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
+@property (nonatomic, retain) ReadmillUser *user;
+@property (nonatomic, retain) ReadmillReading *reading;
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-	return YES;
-}
+- (IBAction)linkToBookButtonWasPushed;
+- (IBAction)finishReadButtonWasPushed;
 
 @end

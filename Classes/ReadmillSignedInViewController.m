@@ -20,13 +20,13 @@
  THE SOFTWARE.
  */
 
-#import "Readmill_SignedInViewController.h"
+#import "ReadmillSignedInViewController.h"
 #import "ReadmillReadingSession.h"
 #import "ReadmillUIPresenter.h"
 
 #define kPingDuration 300
 
-@implementation Readmill_SignedInViewController
+@implementation ReadmillSignedInViewController
 
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -116,17 +116,16 @@
 
 - (IBAction)linkToBookButtonWasPushed {
     
-    ReadmillUIPresenter *readmillUIPresenter = [[ReadmillUIPresenter alloc] init];    
-    [readmillUIPresenter presentInViewController:self animated:YES];
-    
     ReadmillConnectBookUI *readmillConnectBookUI = [[ReadmillConnectBookUI alloc] initWithUser:[self user] 
-                                                                                          ISBN:@"0340896981" 
-                                                                                         title:@"One Day"
-                                                                                        author:@"David Nicholls"];
-        
-    [readmillConnectBookUI setDelegate:self];
+                                                                                          ISBN:nil
+                                                                                         title:@"The Metamorphosis"
+                                                                                        author:@"Franz Kafka"];
     
-    [readmillUIPresenter setAndDisplayContentViewController:readmillConnectBookUI];
+    [readmillConnectBookUI setDelegate:self];
+
+    ReadmillUIPresenter *readmillUIPresenter = [[ReadmillUIPresenter alloc] initWithContentViewController:readmillConnectBookUI];    
+    [readmillUIPresenter presentInViewController:self animated:YES];
+        
     [readmillConnectBookUI release];
     [readmillUIPresenter release];
 }

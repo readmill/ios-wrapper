@@ -20,24 +20,52 @@
  THE SOFTWARE.
  */
 
-#import <UIKit/UIKit.h>
+#import "ReadmillSigningInViewController.h"
 
-#import "ReadmillAPI.h"
-#import "Readmill_SigningInViewController.h"
 
-@class Readmill_SignedInViewController;
+@implementation ReadmillSigningInViewController
 
-@interface Readmill_FrameworkAppDelegate : NSObject <UIApplicationDelegate, ReadmillUserAuthenticationDelegate> {
-    
-@private
-    ReadmillAPIConfiguration *apiConfiguration;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
+- (void)dealloc
+{
+    [super dealloc];
+}
 
-@property (nonatomic, retain) IBOutlet Readmill_SignedInViewController *signedInViewController;
-@property (nonatomic, retain) IBOutlet Readmill_SigningInViewController *signingInViewController;
+- (void)didReceiveMemoryWarning
+{
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    
+    // Release any cached data, images, etc that aren't in use.
+}
 
-@property (nonatomic, retain) ReadmillAPIConfiguration *apiConfiguration;
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+	return YES;
+}
 
 @end

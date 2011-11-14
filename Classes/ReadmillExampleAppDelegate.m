@@ -20,15 +20,23 @@
  THE SOFTWARE.
  */
 
-#import "Readmill_FrameworkAppDelegate.h"
-#import "Readmill_SignedInViewController.h"
+#import "ReadmillExampleAppDelegate.h"
+#import "ReadmillSignedInViewController.h"
 
-@implementation Readmill_FrameworkAppDelegate
+@interface ReadmillExampleAppDelegate () {
+
+    NSURL *redirectURL;
+}
+@property (nonatomic, retain) NSURL *redirectURL;
+@end
+
+@implementation ReadmillExampleAppDelegate
 
 @synthesize window;
 @synthesize signedInViewController;
 @synthesize signingInViewController;
 @synthesize apiConfiguration;
+@synthesize redirectURL;
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -37,14 +45,14 @@
         
         // We don't have saved credentials. Boot the user out to Readmill for authentication with a callback URL this application is set up to handle. 
                 
-        NSURL *url = [ReadmillUser clientAuthorizationURLWithApiConfiguration:[self apiConfiguration]];
+        NSURL *url = [ReadmillUser clientAuthorizationURLWithRedirectURL:[self redirectURL] 
+                                                        apiConfiguration:[self apiConfiguration]];
         [[UIApplication sharedApplication] openURL:url];
         
     } else {
         
-        // We have saved credentials. Attempt to authorise them - delegates for this are handled below. 
+        // We have saved credentials. Attempt to authorize them - delegates for this are handled below. 
         NSDictionary *savedCredentials = [[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"];
-        NSLog(@"saved credentials: %@", savedCredentials);
         [ReadmillUser authenticateWithPropertyListRepresentation:savedCredentials
                                                         delegate:self];
     }
@@ -55,7 +63,10 @@
         
         NSURL *url = [launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
         
+        NSLog(@"callbackurl: %@", url);
+        NSLog(@"baseCallback: %@", [self redirectURL]);
         [ReadmillUser authenticateCallbackURL:url
+                              baseCallbackURL:[self redirectURL]
                                      delegate:self
                              apiConfiguration:[self apiConfiguration]];
 
@@ -75,11 +86,17 @@
     if (!apiConfiguration) {
         [self setApiConfiguration:[ReadmillAPIConfiguration configurationForStagingWithClientID:@"e09c966d93341f0518b6e18a49644a43" 
                                                                                    clientSecret:@"a96949a97ab737b326a0e2fed334c49c" 
-                                                                                    redirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]]];
+                                                                                    redirectURL:[self redirectURL]]];
     }
     return apiConfiguration;
 }
 
+- (NSURL *)redirectURL {
+    if (!redirectURL) {
+        [self setRedirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]];
+    }
+    return redirectURL;
+}
 #pragma mark -
 #pragma mark Authentication Delegates
 
@@ -109,7 +126,10 @@
 
 -(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
 	
+    NSLog(@"callbackurl: %@", url);
+    NSLog(@"baseCallback: %@", [self redirectURL]);
     [ReadmillUser authenticateCallbackURL:url
+                          baseCallbackURL:[self redirectURL]
                                  delegate:self
                          apiConfiguration:[self apiConfiguration]];
     

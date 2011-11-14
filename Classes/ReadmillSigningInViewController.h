@@ -21,22 +21,11 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "ReadmillAPI.h"
 
-@interface Readmill_SignedInViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillViewReadingUIDelegate, ReadmillBookFindingDelegate> {
-    
+
+@interface ReadmillSigningInViewController : UIViewController {
 @private
-    ReadmillReading *reading;
-    ReadmillUser *user;
+    
 }
-
-@property (nonatomic, retain) IBOutlet UILabel *welcomeLabel;
-
-
-@property (nonatomic, retain) ReadmillUser *user;
-@property (nonatomic, retain) ReadmillReading *reading;
-
-- (IBAction)linkToBookButtonWasPushed;
-- (IBAction)finishReadButtonWasPushed;
 
 @end

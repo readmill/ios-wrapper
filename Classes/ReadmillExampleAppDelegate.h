@@ -22,10 +22,22 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ReadmillAPI.h"
+#import "ReadmillSigningInViewController.h"
 
-@interface Readmill_SigningInViewController : UIViewController {
-@private
+@class ReadmillSignedInViewController;
+
+@interface ReadmillExampleAppDelegate : NSObject <UIApplicationDelegate, ReadmillUserAuthenticationDelegate> {
     
+@private
+    ReadmillAPIConfiguration *apiConfiguration;
 }
+
+@property (nonatomic, retain) IBOutlet UIWindow *window;
+
+@property (nonatomic, retain) IBOutlet ReadmillSignedInViewController *signedInViewController;
+@property (nonatomic, retain) IBOutlet ReadmillSigningInViewController *signingInViewController;
+
+@property (nonatomic, retain) ReadmillAPIConfiguration *apiConfiguration;
 
 @end
