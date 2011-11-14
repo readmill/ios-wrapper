@@ -55,12 +55,11 @@
 		735EF9D5145EE43F00303F19 /* ReadmillAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 735EF9D4145EE43F00303F19 /* ReadmillAPI.h */; settings = {ATTRIBUTES = (); }; };
 		735F50D11470898E0069A553 /* ReadmillSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 73370FA31341197300880F5B /* ReadmillSpinner.m */; };
 		735F50D214708A030069A553 /* Readmill.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 73C1AAA513E6AFD6006684C6 /* Readmill.bundle */; };
+		73603EEB1471465900889041 /* rm-overlay-views.png in Resources */ = {isa = PBXBuildFile; fileRef = 73603EEA1471465900889041 /* rm-overlay-views.png */; };
 		736C85E3145A02A900C5E6B5 /* NSDate+ReadmillDateExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 736C85DF1459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.h */; settings = {ATTRIBUTES = (); }; };
 		736C85E4145A964C00C5E6B5 /* NSDate+ReadmillDateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 736C85E01459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.m */; };
 		7398588214713CF2007D42AD /* headersearchpaths.png in Resources */ = {isa = PBXBuildFile; fileRef = 7398587E14713CF2007D42AD /* headersearchpaths.png */; };
 		7398588314713CF2007D42AD /* otherlinkerflags.png in Resources */ = {isa = PBXBuildFile; fileRef = 7398587F14713CF2007D42AD /* otherlinkerflags.png */; };
-		7398588414713CF2007D42AD /* RMConnecting.png in Resources */ = {isa = PBXBuildFile; fileRef = 7398588014713CF2007D42AD /* RMConnecting.png */; };
-		7398588514713CF2007D42AD /* RMViewReading.png in Resources */ = {isa = PBXBuildFile; fileRef = 7398588114713CF2007D42AD /* RMViewReading.png */; };
 		7398588914713F38007D42AD /* linkwithlibraries.png in Resources */ = {isa = PBXBuildFile; fileRef = 7398588814713F38007D42AD /* linkwithlibraries.png */; };
 		73AA2951145EB41300CDBBD6 /* ReadmillAPIConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */; settings = {ATTRIBUTES = (); }; };
 		73AA2952145EB41300CDBBD6 /* ReadmillAPIConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 73AA2950145EB41300CDBBD6 /* ReadmillAPIConfiguration.m */; };
@@ -127,12 +126,11 @@
 		735E41D8135A666D00855884 /* ReadmillPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ReadmillPing.h; path = Classes/Framework/ReadmillPing.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		735E41D9135A666D00855884 /* ReadmillPing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ReadmillPing.m; path = Classes/Framework/ReadmillPing.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		735EF9D4145EE43F00303F19 /* ReadmillAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPI.h; path = Classes/Framework/ReadmillAPI.h; sourceTree = "<group>"; };
+		73603EEA1471465900889041 /* rm-overlay-views.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rm-overlay-views.png"; sourceTree = "<group>"; };
 		736C85DF1459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+ReadmillDateExtensions.h"; path = "Classes/Framework/NSDate+ReadmillDateExtensions.h"; sourceTree = SOURCE_ROOT; };
 		736C85E01459FFAF00C5E6B5 /* NSDate+ReadmillDateExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+ReadmillDateExtensions.m"; path = "Classes/Framework/NSDate+ReadmillDateExtensions.m"; sourceTree = SOURCE_ROOT; };
 		7398587E14713CF2007D42AD /* headersearchpaths.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headersearchpaths.png; sourceTree = "<group>"; };
 		7398587F14713CF2007D42AD /* otherlinkerflags.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = otherlinkerflags.png; sourceTree = "<group>"; };
-		7398588014713CF2007D42AD /* RMConnecting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RMConnecting.png; sourceTree = "<group>"; };
-		7398588114713CF2007D42AD /* RMViewReading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RMViewReading.png; sourceTree = "<group>"; };
 		7398588814713F38007D42AD /* linkwithlibraries.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = linkwithlibraries.png; sourceTree = "<group>"; };
 		73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIConfiguration.h; sourceTree = "<group>"; };
 		73AA2950145EB41300CDBBD6 /* ReadmillAPIConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillAPIConfiguration.m; sourceTree = "<group>"; };
@@ -283,13 +281,13 @@
 		7398588714713D2D007D42AD /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				73603EEA1471465900889041 /* rm-overlay-views.png */,
 				7398588814713F38007D42AD /* linkwithlibraries.png */,
 				7398587E14713CF2007D42AD /* headersearchpaths.png */,
 				7398587F14713CF2007D42AD /* otherlinkerflags.png */,
-				7398588014713CF2007D42AD /* RMConnecting.png */,
-				7398588114713CF2007D42AD /* RMViewReading.png */,
 			);
 			name = Images;
+			path = Documentation/Images;
 			sourceTree = "<group>";
 		};
 		73FA54011470323400CFC589 /* URL Connection */ = {
@@ -598,9 +596,8 @@
 				735F50D214708A030069A553 /* Readmill.bundle in Resources */,
 				7398588214713CF2007D42AD /* headersearchpaths.png in Resources */,
 				7398588314713CF2007D42AD /* otherlinkerflags.png in Resources */,
-				7398588414713CF2007D42AD /* RMConnecting.png in Resources */,
-				7398588514713CF2007D42AD /* RMViewReading.png in Resources */,
 				7398588914713F38007D42AD /* linkwithlibraries.png in Resources */,
+				73603EEB1471465900889041 /* rm-overlay-views.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
