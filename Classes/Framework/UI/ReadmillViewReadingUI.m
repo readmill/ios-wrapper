@@ -74,7 +74,7 @@
     UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)] autorelease];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
-    //[webView setHidden:NO];
+    [webView setHidden:YES];
     
     UIView *containerView = [[[UIView alloc] initWithFrame:[webView frame]] autorelease];
     
@@ -83,7 +83,7 @@
     [self setView:containerView];
     
     NSURL *url = [[[self reading] apiWrapper] URLForViewingReadingWithId:[[self reading] readingId]];
-    NSLog(@"URL: %@", url);
+
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url 
                                                   cachePolicy:NSURLRequestReloadIgnoringCacheData 
                                               timeoutInterval:30];

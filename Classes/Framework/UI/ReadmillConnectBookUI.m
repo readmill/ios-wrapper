@@ -103,7 +103,7 @@
     [aWebView release];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
-    //[webView setHidden:YES];
+    [webView setHidden:YES];
     
     UIView *containerView = [[UIView alloc] initWithFrame:[webView frame]];
 
