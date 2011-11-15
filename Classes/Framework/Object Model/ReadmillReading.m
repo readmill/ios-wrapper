@@ -88,7 +88,7 @@
     [self setDateCreated:[[cleanedDict valueForKey:kReadmillAPIReadingDateCreatedKey] dateWithRFC3339Formatting]];
     [self setDateFinished:[[cleanedDict valueForKey:kReadmillAPIReadingDateFinishedKey] dateWithRFC3339Formatting]];
     [self setDateModified:[[cleanedDict valueForKey:kReadmillAPIReadingDateModifiedKey] dateWithRFC3339Formatting]];
-    [self setDateStarted:[[cleanedDict valueForKey:kReadmillAPIReadingDateStarted] dateWithRFC3339Formatting]];
+    [self setDateStarted:[[cleanedDict valueForKey:kReadmillAPIReadingDateStartedKey] dateWithRFC3339Formatting]];
         
     [self setClosingRemark:[cleanedDict valueForKey:kReadmillAPIReadingClosingRemarkKey]];
     
@@ -104,10 +104,10 @@
     [self setBookId:[[[cleanedDict valueForKey:kReadmillAPIReadingBookKey] valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
     [self setReadingId:[[cleanedDict valueForKey:kReadmillAPIReadingIdKey] unsignedIntegerValue]];
     
-    [self setEstimatedTimeLeft:[[cleanedDict valueForKey:kReadmillAPIReadingEstimatedTimeLeft] doubleValue]];
-    [self setTimeSpent:[[cleanedDict valueForKey:kReadmillAPIReadingDuration] doubleValue]];
+    [self setEstimatedTimeLeft:[[cleanedDict valueForKey:kReadmillAPIReadingEstimatedTimeLeftKey] doubleValue]];
+    [self setTimeSpent:[[cleanedDict valueForKey:kReadmillAPIReadingDurationKey] doubleValue]];
  
-    [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadingProgress] floatValue]];
+    [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadingProgressKey] floatValue]];
     
     [self setPermalinkURL:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingPermalinkURLKey]]];
     [self setUri:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingURIKey]]];
