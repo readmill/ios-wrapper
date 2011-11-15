@@ -331,7 +331,16 @@
     }
 }
 
-
+- (void)readingsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
+                                       [self booksEndpoint], 
+                                       bookId]];
+    [self sendGetRequestToURL:URL 
+               withParameters:nil
+      canBeCalledUnauthorized:NO
+            completionHandler:completionHandler];
+}
 #pragma mark - 
 #pragma mark - Book
 
@@ -956,6 +965,14 @@
                          error:error];
 
 }
+
+#pragma mark -
+#pragma mark - Cancel operations
+
+- (void)cancelAllOperations {
+    [queue cancelAllOperations];
+}
+
 @end
 
 

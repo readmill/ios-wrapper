@@ -46,7 +46,7 @@
 		734A5205135A1E41009F9794 /* ReadmillAPIWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */; settings = {ATTRIBUTES = (); }; };
 		734A5206135A1E41009F9794 /* ReadmillAPIWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */; };
 		734A5207135A1E46009F9794 /* ReadmillSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 73370FA21341197300880F5B /* ReadmillSpinner.h */; settings = {ATTRIBUTES = (); }; };
-		734CAD611461F13D00855E9B /* ReadmillDateFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 734CAD5F1461F13D00855E9B /* ReadmillDateFormatter.h */; };
+		734CAD611461F13D00855E9B /* ReadmillDateFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 734CAD5F1461F13D00855E9B /* ReadmillDateFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		734CAD621461F13D00855E9B /* ReadmillDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 734CAD601461F13D00855E9B /* ReadmillDateFormatter.m */; };
 		735E3E6D13E06E2900930E8C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 735E3E6B13E06E1500930E8C /* JSONKit.m */; };
 		735E41C3135A5C7500855884 /* libReadmillAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 734A51A3135A1DF5009F9794 /* libReadmillAPI.a */; };

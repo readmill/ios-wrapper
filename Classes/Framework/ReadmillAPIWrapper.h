@@ -98,25 +98,37 @@ static NSString * const kReadmillAPIReadingDateAbandonedKey = @"abandoned_at";
 static NSString * const kReadmillAPIReadingDateCreatedKey = @"created_at";
 static NSString * const kReadmillAPIReadingDateFinishedKey = @"finished_at";
 static NSString * const kReadmillAPIReadingDateModifiedKey = @"touched_at";
-static NSString * const kReadmillAPIReadingDateStarted = @"started_at";
+static NSString * const kReadmillAPIReadingDateStartedKey = @"started_at";
 static NSString * const kReadmillAPIReadingClosingRemarkKey = @"closing_remark";
 static NSString * const kReadmillAPIReadingIsPrivateKey = @"private";
 static NSString * const kReadmillAPIReadingStateKey = @"state";
 static NSString * const kReadmillAPIReadingBookKey = @"book";
 static NSString * const kReadmillAPIReadingUserKey = @"user";
 static NSString * const kReadmillAPIReadingIdKey = @"id";
-static NSString * const kReadmillAPIReadingEstimatedTimeLeft = @"estimated_time_left";
-static NSString * const kReadmillAPIReadingDuration = @"duration";
-static NSString * const kReadmillAPIReadingProgress = @"progress";
-
+static NSString * const kReadmillAPIReadingEstimatedTimeLeftKey = @"estimated_time_left";;
+static NSString * const kReadmillAPIReadingDurationKey = @"duration";
+static NSString * const kReadmillAPIReadingProgressKey = @"progress";
 static NSString * const kReadmillAPIReadingPermalinkURLKey = @"permalink_url";
 static NSString * const kReadmillAPIReadingURIKey = @"uri";
 static NSString * const kReadmillAPIReadingCommentsKey = @"comments";
 static NSString * const kReadmillAPIReadingPeriodsKey = @"periods";
 static NSString * const kReadmillAPIReadingLocationsKey = @"locations";
 static NSString * const kReadmillAPIReadingHighlightsKey = @"highlights";
-
 static NSString * const kReadmillAPIClientIdKey = @"client";
+
+#pragma mark API Keys - Highlights
+
+static NSString * const kReadmillAPIHighlightPreKey = @"pre";
+static NSString * const kReadmillAPIHighlightPostKey = @"post";
+static NSString * const kReadmillAPIHighlightContentKey = @"content";
+static NSString * const kReadmillAPIHighlightIdKey = @"id";
+static NSString * const kReadmillAPIHighlightPositionKey = @"position";
+static NSString * const kReadmillAPIHighlightPostToKey = @"post_to";
+static NSString * const kReadmillAPIHighlightCommentKey = @"comment";
+static NSString * const kReadmillAPIHighlightCommentsCountKey = @"comments_count";
+static NSString * const kReadmillAPIHighlightPermalinkURLKey = @"permalink_url";
+static NSString * const kReadmillAPIHighlightReadingIdKey = @"readingId";
+static NSString * const kReadmillAPIHighlightHighlightedAtKey = @"highlighted_at";
 
 #pragma mark -
 
@@ -375,6 +387,13 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 - (void)readingWithURLString:(NSString *)urlString completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+/*!
+ @param bookId The bookId for which to get readings
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Get all readings for the book with the specifiedId
+ */
+- (void)readingsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 #pragma mark -
 #pragma mark Pings
   
@@ -494,5 +513,13 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief Send a request to the specified URL.
  */
 - (void)sendRequestToURL:(NSURL *)url completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+#pragma mark - 
+#pragma mark - Cancel operations
+/*!
+ @brief Cancels all queued requests to the server.
+ */
+- (void)cancelAllOperations;
+
 
 @end
