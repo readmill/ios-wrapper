@@ -61,7 +61,7 @@
 		7398588214713CF2007D42AD /* headersearchpaths.png in Resources */ = {isa = PBXBuildFile; fileRef = 7398587E14713CF2007D42AD /* headersearchpaths.png */; };
 		7398588314713CF2007D42AD /* otherlinkerflags.png in Resources */ = {isa = PBXBuildFile; fileRef = 7398587F14713CF2007D42AD /* otherlinkerflags.png */; };
 		7398588914713F38007D42AD /* linkwithlibraries.png in Resources */ = {isa = PBXBuildFile; fileRef = 7398588814713F38007D42AD /* linkwithlibraries.png */; };
-		73AA2951145EB41300CDBBD6 /* ReadmillAPIConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */; settings = {ATTRIBUTES = (); }; };
+		73AA2951145EB41300CDBBD6 /* ReadmillAPIConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73AA2952145EB41300CDBBD6 /* ReadmillAPIConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 73AA2950145EB41300CDBBD6 /* ReadmillAPIConfiguration.m */; };
 		73FA5403147085F900CFC589 /* ReadmillStringExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0312F06360006028D0 /* ReadmillStringExtensions.m */; };
 		9647F57C12F1A0140088CAA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9647F57B12F1A0140088CAA0 /* QuartzCore.framework */; };

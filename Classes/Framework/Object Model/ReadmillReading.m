@@ -40,10 +40,10 @@
 
 @property (readwrite, copy) NSURL *permalinkURL;
 @property (readwrite, copy) NSURL *uri;
-@property (readwrite, copy) NSURL *comments;
-@property (readwrite, copy) NSURL *periods;
-@property (readwrite, copy) NSURL *locations;
-@property (readwrite, copy) NSURL *highlights;
+@property (readwrite, copy) NSURL *commentsURI;
+@property (readwrite, copy) NSURL *periodsURI;
+@property (readwrite, copy) NSURL *locationsURI;
+@property (readwrite, copy) NSURL *highlightsURI;
 
 @property (readwrite) BOOL isPrivate;
 
@@ -57,6 +57,8 @@
 
 @property (readwrite, retain) ReadmillUser *user;
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
+
+@property (nonatomic, readwrite) NSUInteger highlightCount;
 
 @end
 
@@ -81,40 +83,45 @@
     
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
-    [self setUser:[[[ReadmillUser alloc] initWithAPIDictionary:[apiDict valueForKey:kReadmillAPIReadingUserKey]
-                                                    apiWrapper:self.apiWrapper] autorelease]];
+    NSDictionary *userDictionary = [apiDict objectForKey:kReadmillAPIReadingUserKey];
+    if (userDictionary) {
+        [self setUser:[[[ReadmillUser alloc] initWithAPIDictionary:userDictionary
+                                                        apiWrapper:self.apiWrapper] autorelease]];
+    }
+    [self setDateAbandoned:[[cleanedDict objectForKey:kReadmillAPIReadingDateAbandonedKey] dateWithRFC3339Formatting]];
+    [self setDateCreated:[[cleanedDict objectForKey:kReadmillAPIReadingDateCreatedKey] dateWithRFC3339Formatting]];
+    [self setDateFinished:[[cleanedDict objectForKey:kReadmillAPIReadingDateFinishedKey] dateWithRFC3339Formatting]];
+    [self setDateModified:[[cleanedDict objectForKey:kReadmillAPIReadingDateModifiedKey] dateWithRFC3339Formatting]];
+    [self setDateStarted:[[cleanedDict objectForKey:kReadmillAPIReadingDateStartedKey] dateWithRFC3339Formatting]];
+    [self setClosingRemark:[cleanedDict objectForKey:kReadmillAPIReadingClosingRemarkKey]];
     
-    [self setDateAbandoned:[[cleanedDict valueForKey:kReadmillAPIReadingDateAbandonedKey] dateWithRFC3339Formatting]];
-    [self setDateCreated:[[cleanedDict valueForKey:kReadmillAPIReadingDateCreatedKey] dateWithRFC3339Formatting]];
-    [self setDateFinished:[[cleanedDict valueForKey:kReadmillAPIReadingDateFinishedKey] dateWithRFC3339Formatting]];
-    [self setDateModified:[[cleanedDict valueForKey:kReadmillAPIReadingDateModifiedKey] dateWithRFC3339Formatting]];
-    [self setDateStarted:[[cleanedDict valueForKey:kReadmillAPIReadingDateStartedKey] dateWithRFC3339Formatting]];
-        
-    [self setClosingRemark:[cleanedDict valueForKey:kReadmillAPIReadingClosingRemarkKey]];
+    [self setIsPrivate:([[cleanedDict objectForKey:kReadmillAPIReadingIsPrivateKey] unsignedIntegerValue] == 1)];
     
-    [self setIsPrivate:([[cleanedDict valueForKey:kReadmillAPIReadingIsPrivateKey] unsignedIntegerValue] == 1)];
-    
-    [self setState:[[cleanedDict valueForKey:kReadmillAPIReadingStateKey] unsignedIntegerValue]];
+    [self setState:[[cleanedDict objectForKey:kReadmillAPIReadingStateKey] unsignedIntegerValue]];
     
     if ([self user]) {
         [self setUserId:[user userId]];
     } else {
-        [self setUserId:[[[cleanedDict valueForKey:kReadmillAPIReadingUserKey] valueForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
+        [self setUserId:[[[cleanedDict objectForKey:kReadmillAPIReadingUserKey] objectForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
     }
-    [self setBookId:[[[cleanedDict valueForKey:kReadmillAPIReadingBookKey] valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
-    [self setReadingId:[[cleanedDict valueForKey:kReadmillAPIReadingIdKey] unsignedIntegerValue]];
+    [self setBookId:[[[cleanedDict objectForKey:kReadmillAPIReadingBookKey] objectForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
+    [self setReadingId:[[cleanedDict objectForKey:kReadmillAPIReadingIdKey] unsignedIntegerValue]];
     
-    [self setEstimatedTimeLeft:[[cleanedDict valueForKey:kReadmillAPIReadingEstimatedTimeLeftKey] doubleValue]];
-    [self setTimeSpent:[[cleanedDict valueForKey:kReadmillAPIReadingDurationKey] doubleValue]];
+    [self setEstimatedTimeLeft:[[cleanedDict objectForKey:kReadmillAPIReadingEstimatedTimeLeftKey] doubleValue]];
+    [self setTimeSpent:[[cleanedDict objectForKey:kReadmillAPIReadingDurationKey] doubleValue]];
  
-    [self setProgress:[[cleanedDict valueForKey:kReadmillAPIReadingProgressKey] floatValue]];
+    [self setProgress:[[cleanedDict objectForKey:kReadmillAPIReadingProgressKey] floatValue]];
     
     [self setPermalinkURL:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingPermalinkURLKey]]];
     [self setUri:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingURIKey]]];
-    [self setComments:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingCommentsKey]]];
-    [self setPeriods:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingPeriodsKey]]];
-    [self setLocations:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingLocationsKey]]];
-    [self setHighlights:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingHighlightsKey]]];
+    [self setCommentsURI:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingCommentsKey]]];
+    [self setPeriodsURI:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingPeriodsKey]]];
+    [self setLocationsURI:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingLocationsKey]]];
+    [self setHighlightsURI:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingHighlightsKey]]];
+    
+    [self setHighlightCount:[[cleanedDict objectForKey:kReadmillAPIReadingHighlightsCountKey] unsignedIntegerValue]];
+    
+    NSLog(@"update");
 }
 
 -(NSString *)description {
@@ -135,10 +142,10 @@
 
 @synthesize permalinkURL;
 @synthesize uri;
-@synthesize comments;
-@synthesize periods;
-@synthesize locations;
-@synthesize highlights;
+@synthesize commentsURI;
+@synthesize periodsURI;
+@synthesize locationsURI;
+@synthesize highlightsURI;
 
 @synthesize closingRemark;
 @synthesize isPrivate;
@@ -152,6 +159,8 @@
 
 @synthesize user;
 @synthesize apiWrapper;
+     
+@synthesize highlightCount;
 
 #pragma mark -
 #pragma mark - Dealloc
@@ -169,10 +178,10 @@
     [self setClosingRemark:nil];
     
     [self setUri:nil];
-    [self setHighlights:nil];
-    [self setPeriods:nil];
-    [self setLocations:nil];
-    [self setComments:nil];
+    [self setHighlightsURI:nil];
+    [self setPeriodsURI:nil];
+    [self setLocationsURI:nil];
+    [self setCommentsURI:nil];
     [self setPermalinkURL:nil];
     
     [super dealloc];

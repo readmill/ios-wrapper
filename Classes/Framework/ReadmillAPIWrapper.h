@@ -94,6 +94,7 @@ static NSString * const kReadmillAPIUserAuthenticationToken = @"authentication_t
 
 #pragma mark API Keys - Reading
 
+static NSString * const kReadmillAPIReadingKey = @"reading";
 static NSString * const kReadmillAPIReadingDateAbandonedKey = @"abandoned_at";
 static NSString * const kReadmillAPIReadingDateCreatedKey = @"created_at";
 static NSString * const kReadmillAPIReadingDateFinishedKey = @"finished_at";
@@ -115,6 +116,7 @@ static NSString * const kReadmillAPIReadingPeriodsKey = @"periods";
 static NSString * const kReadmillAPIReadingLocationsKey = @"locations";
 static NSString * const kReadmillAPIReadingHighlightsKey = @"highlights";
 static NSString * const kReadmillAPIClientIdKey = @"client";
+static NSString * const kReadmillAPIReadingHighlightsCountKey = @"highlights_count";
 
 #pragma mark API Keys - Highlights
 
@@ -393,6 +395,20 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Get all readings for the book with the specifiedId
  */
 - (void)readingsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param bookId The bookId for which to get readings
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Get the readings for the book with the specified bookId, filtered by followed people.
+ */
+- (void)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param bookId The bookId for which to get readings
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Get the most popular readings for the book with the specified bookId.
+ */
+- (void)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Pings

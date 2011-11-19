@@ -29,7 +29,9 @@
 #import "ReadmillURLConnection.h"
 #import "JSONKit.h"
 
-#define kTimeoutInterval 10.0
+static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
+
+#define kTimeoutInterval 30.0
 
 @interface ReadmillAPIWrapper ()
 
@@ -66,7 +68,7 @@
     if ((self = [super init])) {
         // Initialization code here.
         queue = [[NSOperationQueue alloc] init];
-        [queue setMaxConcurrentOperationCount:5];
+        [queue setMaxConcurrentOperationCount:10];
     }
     return self;
 }
@@ -341,6 +343,28 @@
       canBeCalledUnauthorized:NO
             completionHandler:completionHandler];
 }
+
+- (void)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
+                                       [self booksEndpoint], 
+                                       bookId]];
+    [self sendGetRequestToURL:URL 
+               withParameters:[NSDictionary dictionaryWithObject:@"friends" forKey:@"filter"]
+      canBeCalledUnauthorized:NO
+            completionHandler:completionHandler];
+}
+
+- (void)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
+                                       [self booksEndpoint], 
+                                       bookId]];
+    [self sendGetRequestToURL:URL 
+               withParameters:[NSDictionary dictionaryWithObject:@"popular" forKey:@"order"]
+      canBeCalledUnauthorized:NO
+            completionHandler:completionHandler];
+}
 #pragma mark - 
 #pragma mark - Book
 
@@ -569,7 +593,7 @@
 - (NSDictionary *)currentUser:(NSError **)error 
 {    
 	if (![self ensureAccessTokenIsCurrent:error]) {
-			return nil;
+        return nil;
     }
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@me.json?access_token=%@&client_id=%@",
@@ -861,7 +885,11 @@
             id errorResponse = [[JSONDecoder decoder] objectWithData:responseData];
             
             if (error != NULL) {
-                *error = [NSError errorWithDomain:kReadmillDomain
+                NSString *errorDomain = NSURLErrorDomain;
+                if ([[response allHeaderFields] objectForKey:kReadmillAPIHeaderKey]) {
+                    errorDomain = kReadmillDomain;
+                }
+                *error = [NSError errorWithDomain:errorDomain
                                              code:[response statusCode]
                                          userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
                                                    [errorResponse valueForKey:@"error"], NSLocalizedFailureReasonErrorKey, nil]];

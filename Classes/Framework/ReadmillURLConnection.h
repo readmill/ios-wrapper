@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <UIKit/UIKit.h>
 typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *response, NSData *responseData, NSError *error);
 
 @interface ReadmillURLConnection : NSOperation {

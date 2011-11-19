@@ -215,9 +215,7 @@
                        delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate 
 {    
     NSString *callbackURLString = [callbackURL absoluteString];
-    
     NSRange codePrefixRange = [callbackURLString rangeOfString:@"code="];
-    
     if (codePrefixRange.location == NSNotFound) {
         NSError *error = [NSError errorWithDomain:kReadmillDomain
                                              code:0
@@ -225,7 +223,7 @@
         [authenticationDelegate readmillAuthenticationDidFailWithError:error];
         return;
     }
-    
+
     NSString *code = [callbackURLString substringFromIndex:codePrefixRange.location + codePrefixRange.length];
     
     NSRange codeSuffixRange = [code rangeOfString:@"&"];
@@ -255,7 +253,7 @@
 - (void)attemptAuthenticationWithProperties:(NSDictionary *)properties 
 {    
     [self retain];
-    
+
     NSAutoreleasePool *pool;
     pool = [[NSAutoreleasePool alloc] init];
     
@@ -263,19 +261,16 @@
     id <ReadmillUserAuthenticationDelegate> authenticationDelegate = [properties valueForKey:@"delegate"];
     NSString *authenticationCode = [NSString stringWithString:[properties valueForKey:@"code"]];
     NSURL *callbackURL = [[[properties valueForKey:@"callbackURL"] copy] autorelease];
-    
-    NSError *error = nil;
-    NSLog(@"code: %@", authenticationCode);
-    NSLog(@"callbackurl: %@", [callbackURL absoluteString]);
 
+    NSError *error = nil;
     [[self apiWrapper] authorizeWithAuthorizationCode:authenticationCode
                                       fromRedirectURL:[callbackURL absoluteString]
                                                 error:&error];
-    NSLog(@"error: %@", error);    
+
     if (error == nil) {
         [self updateWithAPIDictionary:[[self apiWrapper] currentUser:&error]];
     }
-    
+
     if (error == nil && authenticationDelegate != nil) {
         
         [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidSucceedWithLoggedInUser:)

@@ -69,13 +69,15 @@
     
     ReadmillReadingProgress progress;
     
+    NSUInteger highlightCount;
+    
     // URLs
     NSURL *permalinkURL;
     NSURL *uri;
-    NSURL *comments;
-    NSURL *periods;
-    NSURL *locations;
-    NSURL *highlights;
+    NSURL *commentsURI;
+    NSURL *periodsURI;
+    NSURL *locationsURI;
+    NSURL *highlightsURI;
     
     ReadmillUser *user;
 }
@@ -249,29 +251,41 @@
  @brief The permalink of the reading.
  */
 @property (readonly, copy) NSURL *permalinkURL;
+
 /*!
  @property  uri
  @brief The URI of the reading.
  */
 @property (readonly, copy) NSURL *uri;
+
 /*!
- @property  comments
- @brief The URI to the comments of the reading.
+ @property  commentsURI
+ @brief The URI to the comments of the readingURI.
  */
-@property (readonly, copy) NSURL *comments;
+@property (readonly, copy) NSURL *commentsURI;
+
 /*!
- @property  periods
+ @property  periodsURI
  @brief The URI to the periods of the reading.
  */
-@property (readonly, copy) NSURL *periods;
+@property (readonly, copy) NSURL *periodsURI;
+
 /*!
- @property  locations
+ @property  locationsURI
  @brief The URI to the locations of the reading.
  */
-@property (readonly, copy) NSURL *locations;
+@property (readonly, copy) NSURL *locationsURI;
+
 /*!
- @property  highlights
+ @property  highlightsURI
  @brief The URI to the highlights of the reading.
  */
-@property (readonly, copy) NSURL *highlights;
+@property (readonly, copy) NSURL *highlightsURI;
+
+/*!
+ @property  highlightsCount
+ @brief The number of highlights for the reading.
+ */
+@property (readonly, nonatomic) NSUInteger highlightCount;
+
 @end
