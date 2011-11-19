@@ -199,7 +199,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     }
 }
 
-- (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error 
+- (BOOL)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error 
 {
     [self setAuthorizedRedirectURL:redirectURLString];
     
@@ -209,7 +209,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                  [authCode urlEncodedString],
                                  [redirectURLString urlEncodedString]];
     
-    [self authenticateWithParameters:parameterString error:error];
+    return [self authenticateWithParameters:parameterString error:error];
 }
 
 - (BOOL)refreshAccessToken:(NSError **)error 

@@ -12,28 +12,28 @@
 @implementation ReadmillSpinner
 
 - (id)initWithSpinnerType:(ReadmillSpinnerType)type {
-    
-    resourceBundle = [[NSBundle alloc] initWithPath:[[NSBundle mainBundle] pathForResource:@"Readmill" ofType:@"bundle"]];
-    NSAssert(resourceBundle != nil, @"Please move the Readmill.bundle into the Resource Directory of your Application!");
-
-    NSInteger numberOfImages = 0;
-    NSString *filenameFormat = nil;
-    
-    if (type == ReadmillSpinnerTypeDefault) {
-
-        numberOfImages = 30;
-        filenameFormat = @"green/spinnergreen%d";
-        
-    } else if (type == ReadmillSpinnerTypeSmallGray) {
-        
-        numberOfImages = 30;
-
-        filenameFormat = @"gray/spinner_1616_gray_%d";
-
-    }
-    self = [super initWithImage:[UIImage imageWithContentsOfFile:[resourceBundle pathForResource:[NSString stringWithFormat:filenameFormat, 1] ofType:@"png"]]];
-
+    self = [super init];
     if (self) {
+        resourceBundle = [[NSBundle alloc] initWithPath:[[NSBundle mainBundle] pathForResource:@"Readmill" ofType:@"bundle"]];
+        NSAssert(resourceBundle != nil, @"Please move the Readmill.bundle into the Resource Directory of your Application!");
+
+        NSInteger numberOfImages = 0;
+        NSString *filenameFormat = nil;
+        
+        if (type == ReadmillSpinnerTypeDefault) {
+
+            numberOfImages = 30;
+            filenameFormat = @"green/spinnergreen%d";
+            
+        } else if (type == ReadmillSpinnerTypeSmallGray) {
+            
+            numberOfImages = 30;
+
+            filenameFormat = @"gray/spinner_1616_gray_%d";
+
+        }
+
+        [self setImage:[UIImage imageWithContentsOfFile:[resourceBundle pathForResource:[NSString stringWithFormat:filenameFormat, 1] ofType:@"png"]]];
         
         NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfImages];
         

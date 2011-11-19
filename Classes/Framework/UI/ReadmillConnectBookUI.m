@@ -58,7 +58,7 @@
                                         [self bookTitle], kReadmillAPIBookTitleKey,
                                         [self author], kReadmillAPIBookAuthorKey,
                                         nil];
-        [self setBook:[[ReadmillBook alloc] initWithAPIDictionary:bookDictionary]];
+        [self setBook:[[[ReadmillBook alloc] initWithAPIDictionary:bookDictionary] autorelease]];
         [bookDictionary release];
     }
     return self;
