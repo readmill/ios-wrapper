@@ -11,29 +11,24 @@
 
 @implementation ReadmillSpinner
 
-- (id)initWithSpinnerType:(ReadmillSpinnerType)type {
+- (id)initWithSpinnerType:(ReadmillSpinnerType)type 
+{    
+    resourceBundle = [[NSBundle alloc] initWithPath:[[NSBundle mainBundle] pathForResource:@"Readmill" ofType:@"bundle"]];
+    
+    NSInteger numberOfImages = 0;
+    NSString *filenameFormat = nil;
+    
+    if (type == ReadmillSpinnerTypeDefault) {
+        numberOfImages = 30;
+        filenameFormat = @"green/spinnergreen%d";
+    } else if (type == ReadmillSpinnerTypeSmallGray) {
+        numberOfImages = 30;
+        filenameFormat = @"gray/spinner_1616_gray_%d";
+    }
+    
     self = [super init];
     if (self) {
-        resourceBundle = [[NSBundle alloc] initWithPath:[[NSBundle mainBundle] pathForResource:@"Readmill" ofType:@"bundle"]];
         NSAssert(resourceBundle != nil, @"Please move the Readmill.bundle into the Resource Directory of your Application!");
-
-        NSInteger numberOfImages = 0;
-        NSString *filenameFormat = nil;
-        
-        if (type == ReadmillSpinnerTypeDefault) {
-
-            numberOfImages = 30;
-            filenameFormat = @"green/spinnergreen%d";
-            
-        } else if (type == ReadmillSpinnerTypeSmallGray) {
-            
-            numberOfImages = 30;
-
-            filenameFormat = @"gray/spinner_1616_gray_%d";
-
-        }
-
-        [self setImage:[UIImage imageWithContentsOfFile:[resourceBundle pathForResource:[NSString stringWithFormat:filenameFormat, 1] ofType:@"png"]]];
         
         NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfImages];
         
@@ -44,18 +39,21 @@
             [images addObject:[UIImage imageWithContentsOfFile:filePath]];
             [pool drain];
         }
-
+        
         [self setAnimationImages:images];
         [images release];
-        //Add more images which will be used for the animation
+        
         [self setAnimationDuration:1.0];            
-
         [self setAnimationRepeatCount:0];
         [self setHidden:YES];
-
+        
+        CGRect frame = [self frame];
+        frame.size = [[[self animationImages] lastObject] size];
+        [self setFrame:frame];
     }
     return self;
 }
+
 - (id)initAndStartSpinning:(ReadmillSpinnerType)type {
     self = [self initWithSpinnerType:type];
     if (self) {
