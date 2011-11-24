@@ -85,8 +85,13 @@
     
     NSDictionary *userDictionary = [apiDict objectForKey:kReadmillAPIReadingUserKey];
     if (userDictionary) {
-        [self setUser:[[[ReadmillUser alloc] initWithAPIDictionary:userDictionary
-                                                        apiWrapper:self.apiWrapper] autorelease]];
+        // We might get a user_id only or a brief JSON object representing the user
+        if ([self user]) {
+            [[self user] updateWithAPIDictionary:userDictionary];
+        } else {
+            [self setUser:[[[ReadmillUser alloc] initWithAPIDictionary:userDictionary
+                                                            apiWrapper:self.apiWrapper] autorelease]];
+        }
     }
     [self setDateAbandoned:[[cleanedDict objectForKey:kReadmillAPIReadingDateAbandonedKey] dateWithRFC3339Formatting]];
     [self setDateCreated:[[cleanedDict objectForKey:kReadmillAPIReadingDateCreatedKey] dateWithRFC3339Formatting]];
