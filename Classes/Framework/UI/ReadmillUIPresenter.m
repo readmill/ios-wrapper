@@ -32,27 +32,27 @@
 
 @implementation ReadmillUIPresenter
 
--(id)initWithContentViewController:(UIViewController *)aContentViewController {
+- (id)initWithContentViewController:(UIViewController *)aContentViewController 
+{
     if ((self = [super init])) {
-        //[self setContentViewController:aContentViewController];
         [self setContentViewController:aContentViewController];
     }
     return self;
 }
 
--(void)dealloc {
+- (void)dealloc 
+{    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [spinner release];
-    
-    [backgroundView release];
     
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
     [contentContainerView release];
 
     [contentViewController release];
-    
+        
+    [backgroundView release];
     [self setView:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"ReadmillUIPresenter dealloc");
     [super dealloc];
 }
@@ -60,14 +60,15 @@
 @synthesize contentViewController;
 @synthesize spinner;
 
--(void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
 }
 
--(void)dismissModalViewControllerAnimated:(BOOL)animated {
+- (void)dismissModalViewControllerAnimated:(BOOL)animated 
+{
     [self dismissPresenterAnimated:animated];
 }
 
@@ -76,8 +77,8 @@
 #define kAnimationDuration 0.2
 #define kBackgroundOpacity 0.5
 
-- (void)willShowKeyboard:(NSNotification *)note {
-    
+- (void)willShowKeyboard:(NSNotification *)note 
+{    
     CGFloat offset = 30.0;
     CGPoint position = [contentContainerView center];
     position.y -= offset;
@@ -89,8 +90,8 @@
                      }
                      completion:nil];
 }
-- (void)willHideKeyboard:(NSNotification *)note {
-    
+- (void)willHideKeyboard:(NSNotification *)note 
+{
     CGFloat offset = 30.0;
     CGPoint position = [contentContainerView center];
     position.y += offset;
@@ -102,8 +103,8 @@
                      }
                      completion:nil];
 }
--(void)presentInViewController:(UIViewController *)theParentViewController animated:(BOOL)animated {
-
+- (void)presentInViewController:(UIViewController *)theParentViewController animated:(BOOL)animated 
+{
     [self retain];
     
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -152,16 +153,18 @@
         [dismiss release];
     }
 }
-- (void)dismissView {
+- (void)dismissView 
+{
     [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification 
                                                         object:[self contentViewController]];
 }
-- (void)contentViewControllerShouldBeDismissed:(NSNotification *)aNotification {
+- (void)contentViewControllerShouldBeDismissed:(NSNotification *)aNotification 
+{
     [self dismissPresenterAnimated:YES];
 }
 
-- (void)dismissPresenterAnimated:(BOOL)animated {
-
+- (void)dismissPresenterAnimated:(BOOL)animated 
+{
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self
                   name:ReadmillUIPresenterShouldDismissViewNotification
@@ -199,8 +202,8 @@
     }
 }
 
--(void)animation:(NSString*)animationID finished:(BOOL)didFinish context:(void *)context {
-
+- (void)animation:(NSString*)animationID finished:(BOOL)didFinish context:(void *)context 
+{
     if ([animationID isEqualToString:ReadmillUIPresenterDidAnimateOut]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterDidAnimateOut object:nil]; 
         [[self view] removeFromSuperview];
@@ -215,21 +218,24 @@
     }
 }
 
-- (void)displayContentViewController {
+- (void)displayContentViewController 
+{
     if (self.contentViewController) {
         [contentContainerView setFrame:self.contentViewController.view.bounds];
         [contentContainerView setCenter:self.view.center];
         [contentContainerView addSubview:self.contentViewController.view];
     }
 }
-- (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController {
+- (void)setAndDisplayContentViewController:(UIViewController *)aContentViewController 
+{
     [self setContentViewController:aContentViewController];
     [self displayContentViewController];
 }
 
 #pragma mark - View lifecycle
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context 
+{
     if ([keyPath isEqualToString:@"frame"]) {
         [[contentContainerView layer] setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];  
     } else {
@@ -238,8 +244,8 @@
 }
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
--(void)loadView {
-
+- (void)loadView 
+{
     backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
     [backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
     [backgroundView setOpaque:NO];
@@ -268,11 +274,11 @@
     [self displayContentViewController];
 }
 
--(void)viewDidUnload {
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    
+
     [self setSpinner:nil];
 
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
@@ -284,11 +290,9 @@
     
     [contentViewController release];
     contentViewController = nil;
-
-    [self setView:nil];
 }
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
 
 	return NO;

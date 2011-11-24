@@ -26,52 +26,64 @@
 #import "ReadmillURLExtensions.h"
 #import "ReadmillUIPresenter.h"
 
-@interface ReadmillViewReadingUI ()
+@interface ReadmillViewReadingUI () 
+{
+    UIWebView *webView;
+}
 
 @property (nonatomic, readwrite, retain) ReadmillReading *reading;
-
+@property (nonatomic, retain) UIWebView *webView;
 @end
 
 @implementation ReadmillViewReadingUI
 
--(id)initWithReading:(ReadmillReading *)aReading {
-    
+-(id)initWithReading:(ReadmillReading *)aReading 
+{    
     if ((self = [super init])) {
         [self setReading:aReading];
     }
     return self;
 }
 
--(void)dealloc {
-    
+-(void)dealloc 
+{    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
     [self setReading:nil];
     [self setDelegate:nil];
+    
+    [webView setDelegate:nil];
+    [webView stopLoading];
+    [self setWebView:nil];
+    
+    [self setView:nil];
     [super dealloc];
 }
 
 @synthesize reading;
 @synthesize delegate;
+@synthesize webView;
 
--(void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning 
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
 }
 
--(void)willBeDismissed:(NSNotification *)notification {
+- (void)willBeDismissed:(NSNotification *)notification 
+{
     [[self delegate] viewReadingUIWillCloseWithNoAction:self];
 }
 
 #pragma mark - View lifecycle
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
--(void)loadView {
-    
-    UIWebView *webView = [[[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)] autorelease];
+-(void)loadView 
+{    
+    webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
     [webView setHidden:YES];
@@ -83,17 +95,11 @@
     [self setView:containerView];
     
     NSURL *url = [[[self reading] apiWrapper] URLForViewingReadingWithId:[[self reading] readingId]];
-
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url 
                                                   cachePolicy:NSURLRequestReloadIgnoringCacheData 
                                               timeoutInterval:30];
-    
     [webView loadRequest:request];
     [request release];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    //[[self view] setFrame:CGRectMake(0.0, 0.0, 600.0, 578.0)];
 }
 
 -(void)viewDidUnload {
@@ -103,7 +109,8 @@
     [self setView:nil];
 }
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+{
     // Return YES for supported orientations
 	return YES;
 }
@@ -111,30 +118,28 @@
 #pragma mark -
 #pragma mark UIWebViewDelegate
 
--(void)webViewDidStartLoad:(UIWebView *)webView {
-	
-    //[activityIndicator startAnimating];
+- (void)webViewDidStartLoad:(UIWebView *)aWebView 
+{
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
--(void)webViewDidFinishLoad:(UIWebView *)webView {
-	
-    [webView sizeToFit];
-    [webView setAlpha:0.0];
-    [webView setHidden:NO];
-    [webView setBackgroundColor:[UIColor whiteColor]];
+- (void)webViewDidFinishLoad:(UIWebView *)aWebView 
+{	
+    [aWebView sizeToFit];
+    [aWebView setAlpha:0.0];
+    [aWebView setHidden:NO];
+    [aWebView setBackgroundColor:[UIColor whiteColor]];
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
     [UIView setAnimationDuration:0.2];
-    [webView setAlpha:1.0];
+    [aWebView setAlpha:1.0];
     [UIView commitAnimations];
 
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
--(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	
-    //[activityIndicator stopAnimating];
+- (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error 
+{	
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	
 	if ([error code] != -999) {
@@ -146,8 +151,8 @@
 	}
 }
 
--(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-	
+- (BOOL)webView:(UIWebView *)aWebView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType 
+{	
     NSURL *URL = [request URL];
     if ([[URL scheme] isEqualToString:@"readmill"]) {
 		
@@ -166,23 +171,27 @@
                             
             NSString *uri = @"uri";
             if ((uri = [parameters valueForKey:uri])) { 
-                
+
+                __block typeof(self) bself = self;
+                [bself retain];
+
                 [[[self reading] apiWrapper] readingWithURLString:uri
                                                 completionHandler:^(id result, NSError *error) {
                                                    
                                                     if (result && error == nil) {
                                                         // Update the reading with new data (closing remark, progress, state etc)
-                                                        [[self reading] updateWithAPIDictionary:result];
+                                                        [bself->reading updateWithAPIDictionary:result];
                                                         
                                                         // Notify the delegate that the reading was finished/abandoned
-                                                        [[self delegate] viewReadingUI:self 
-                                                                      didFinishReading:[self reading]];
+                                                        [bself->delegate viewReadingUI:bself
+                                                                      didFinishReading:bself->reading];
 
                                                     } else {
-                                                        [self.delegate viewReadingUI:self 
-                                                              didFailToFinishReading:self.reading 
-                                                                           withError:error];
+                                                        [bself->delegate viewReadingUI:bself
+                                                                didFailToFinishReading:bself->reading 
+                                                                             withError:error];
                                                     }
+                                                    [bself release];
                                                 }];
             }                
         } else if ([action isEqualToString:@"error"]) {
