@@ -115,7 +115,7 @@
                                                                  author:[self author]];
 
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
-                                                  cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                                  cachePolicy:NSURLRequestReloadIgnoringCacheData 
                                               timeoutInterval:30];
     [webView loadRequest:request];
     [request release];
