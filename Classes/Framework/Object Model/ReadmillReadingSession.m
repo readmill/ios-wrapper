@@ -64,6 +64,11 @@
 @property (readwrite) ReadmillReadingId readingId;
 @end
 
+@interface ReadmillReadingSession ()
+
+- (void)updateReadmillReadingSession;
+@end
+
 @implementation ReadmillReadingSession
 
 - (id)init {
@@ -76,6 +81,7 @@
         // Initialization code here.
         [self setApiWrapper:wrapper];
         [self setReadingId:sessionReadingId];
+        [self updateReadmillReadingSession];
     }
     return self;
 }
