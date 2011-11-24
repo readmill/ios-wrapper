@@ -132,6 +132,13 @@ static NSString * const kReadmillAPIHighlightPermalinkURLKey = @"permalink_url";
 static NSString * const kReadmillAPIHighlightReadingIdKey = @"reading_id";
 static NSString * const kReadmillAPIHighlightHighlightedAtKey = @"highlighted_at";
 
+#pragma mark API Filtering & Ordering
+
+static NSString * const kReadmillAPIFilterKey = @"filter";
+static NSString * const kReadmillAPIFilterByFriends = @"friends";
+static NSString * const kReadmillAPIOrderKey = @"order";
+static NSString * const kReadmillAPIOrderByPopular = @"popular";
+
 #pragma mark -
 
 /*!

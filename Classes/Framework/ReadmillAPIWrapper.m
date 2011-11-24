@@ -350,7 +350,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                        [self booksEndpoint], 
                                        bookId]];
     [self sendGetRequestToURL:URL 
-               withParameters:[NSDictionary dictionaryWithObject:@"friends" forKey:@"filter"]
+               withParameters:[NSDictionary dictionaryWithObjectsAndKeys:
+                               kReadmillAPIFilterByFriends, kReadmillAPIFilterKey, // Filter by friends
+                               [NSNumber numberWithInteger:1], @"highlights_count[from]", nil] // At least 1 highlight
       canBeCalledUnauthorized:NO
             completionHandler:completionHandler];
 }
@@ -361,8 +363,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                        [self booksEndpoint], 
                                        bookId]];
     [self sendGetRequestToURL:URL 
-               withParameters:[NSDictionary dictionaryWithObject:@"popular" forKey:@"order"]
-      canBeCalledUnauthorized:NO
+               withParameters:[NSDictionary dictionaryWithObjectsAndKeys:
+                               kReadmillAPIOrderByPopular, kReadmillAPIOrderKey, // Order by popularity (based on comments > highlights > followers)
+                               [NSNumber numberWithInteger:1], @"highlights_count[from]", nil] // At least 1 highlight
+      canBeCalledUnauthorized:YES
             completionHandler:completionHandler];
 }
 #pragma mark - 
