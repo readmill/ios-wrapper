@@ -9,13 +9,16 @@
 #import "ReadmillURLConnection.h"
 
 @interface ReadmillURLConnection ()
+
 - (void)finish;
+
 @property (nonatomic, readwrite, copy) ReadmillURLConnectionCompletionHandler completionHandler;
 @end
 
 @implementation ReadmillURLConnection
 
-- (id)initWithRequest:(NSURLRequest *)aRequest completionHandler:(ReadmillURLConnectionCompletionHandler)aCompletionHandler {
+- (id)initWithRequest:(NSURLRequest *)aRequest completionHandler:(ReadmillURLConnectionCompletionHandler)aCompletionHandler 
+{
     self = [super init];
     if (self) {
         // Initialization
@@ -25,13 +28,14 @@
     }
     return self;
 }
-- (void)dealloc {
-
-    self.completionHandler = nil, completionHandler = nil;
-    self.connection = nil, connection = nil;
-    self.connectionError = nil, connectionError = nil;
-    self.responseData = nil, responseData = nil;
-    self.request = nil, request = nil;
+- (void)dealloc 
+{
+    [self setCompletionHandler:nil], completionHandler = nil;
+    [self setConnection:nil], connection = nil;
+    [self setConnectionError:nil], connectionError = nil;
+    [self setResponse:nil], response = nil;
+    [self setResponseData:nil], responseData = nil;
+    [self setRequest:nil], request = nil;
     [super dealloc];
 }
 
@@ -43,12 +47,13 @@
 @synthesize request;
 @synthesize isFinished, isExecuting;
 
-// TODO - concurrent?
-- (BOOL)isConcurrent {
+- (BOOL)isConcurrent 
+{
     return YES;
 }
 
-- (void)start {
+- (void)start 
+{
     if (![NSThread isMainThread]) {
         return [self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
     }
@@ -71,8 +76,8 @@
     }
 }
 
-- (void)finish {
-
+- (void)finish 
+{
     NSLog(@"Operation finished with status code: %d, error: %@, data size: %u", response.statusCode, connectionError, [responseData length]);
     
     completionHandler(self.response, self.responseData, self.connectionError);        
@@ -88,21 +93,22 @@
     [self didChangeValueForKey:@"isFinished"];
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)err {
-    NSLog(@"connection failed with err: %@", err);
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)err 
+{
     self.connectionError = err;
     [self finish];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data 
+{
     if (![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     }
     [responseData appendData:data];
 }
 
-- (void)connection:(NSURLConnection *)conn didReceiveResponse:(NSURLResponse *)aResponse {
-    
+- (void)connection:(NSURLConnection *)conn didReceiveResponse:(NSURLResponse *)aResponse 
+{
     if (![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     }
@@ -113,7 +119,8 @@
     [data release];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection 
+{
     [self finish];
 }
 @end
