@@ -351,7 +351,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                        bookId]];
     [self sendGetRequestToURL:URL 
                withParameters:[NSDictionary dictionaryWithObjectsAndKeys:
-                               kReadmillAPIFilterByFriends, kReadmillAPIFilterKey, // Filter by friends
+                               kReadmillAPIFilterByFollowings, kReadmillAPIFilterKey, // Filter by followings
                                [NSNumber numberWithInteger:1], @"highlights_count[from]", nil] // At least 1 highlight
       canBeCalledUnauthorized:NO
             completionHandler:completionHandler];
