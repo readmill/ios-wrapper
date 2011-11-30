@@ -954,10 +954,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                 completion:completionBlock];
             } else {
                 if (completionBlock) {
-                    // Always return on main thread
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        completionBlock(nil, error);
-                    }];
+                    completionBlock(nil, error);
                 }
             }
         } else {
@@ -969,10 +966,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
             
             // Execute the completionBlock
             if (completionBlock) {
-                // Always return on main thread
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                     completionBlock(jsonResponse, error);   
-                }];
+                completionBlock(jsonResponse, error);
             }
         }
     };
