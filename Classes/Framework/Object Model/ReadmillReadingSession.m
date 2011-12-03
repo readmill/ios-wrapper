@@ -21,9 +21,9 @@
  */
 
 #import "ReadmillReadingSession.h"
-#import "ReadmillArchiverExtensions.h"
+#import "NSKeyedArchiver+ReadmillAdditions.h"
 #import "ReadmillPing.h"
-#import "ReadmillErrorExtensions.h"
+#import "NSError+ReadmillAdditions.h"
 
 @implementation ReadmillReadingSessionArchive
 

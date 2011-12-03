@@ -23,7 +23,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSString (ReadmillStringExtensions)
+@interface NSString (ReadmillAdditions)
 
 - (NSString *)urlEncodedString;
 - (NSString *)urlDecodedString;

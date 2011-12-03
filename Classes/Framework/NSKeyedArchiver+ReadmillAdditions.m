@@ -6,10 +6,10 @@
 //  Copyright 2011 Readmill. All rights reserved.
 //
 
-#import "ReadmillArchiverExtensions.h"
+#import "NSKeyedArchiver+ReadmillAdditions.h"
+#import "ReadmillReadingSession.h"
 
-
-@implementation NSKeyedArchiver (ReadmillArchiverExtension)
+@implementation NSKeyedArchiver (ReadmillAdditions)
 
 + (NSString *)readmillReadingSessionArchivePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDate (ReadmillDateExtensions)
+@interface NSDate (ReadmillAdditions)
 
 - (NSString *)stringWithRFC3339Format;
 @end

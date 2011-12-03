@@ -23,8 +23,8 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSDictionary (ReadmillDictionaryExtensions)
+@interface NSDictionary (ReadmillAdditions)
 
--(NSDictionary *)dictionaryByRemovingNullValues;
+- (NSDictionary *)dictionaryByRemovingNullValues;
 
 @end

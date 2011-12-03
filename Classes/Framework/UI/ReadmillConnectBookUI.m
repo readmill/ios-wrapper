@@ -23,7 +23,8 @@
 #import "ReadmillConnectBookUI.h"
 #import "ReadmillUser.h"
 #import "ReadmillUIPresenter.h"
-#import "ReadmillURLExtensions.h"
+#import "NSURL+ReadmillURLParameters.h"
+#import "UIApplication+ReadmillNetworkActivity.h"
 
 @interface ReadmillConnectBookUI ()
 @property (nonatomic, readwrite, retain) UIWebView *webView;
@@ -47,7 +48,8 @@
 
 @synthesize webView;
 
-- (id)initWithUser:(ReadmillUser *)aUser ISBN:(NSString *)anISBN title:(NSString *)aTitle author:(NSString *)anAuthor {
+- (id)initWithUser:(ReadmillUser *)aUser ISBN:(NSString *)anISBN title:(NSString *)aTitle author:(NSString *)anAuthor 
+{
     if ((self = [super init])) {
         [self setUser:aUser];
         [self setISBN:anISBN];
@@ -64,17 +66,20 @@
     return self;
 }
 
-- (void)dealloc {
-    
+- (void)dealloc 
+{    
     [self setUser:nil];
     [self setISBN:nil];
     [self setBookTitle:nil];
     [self setAuthor:nil];
     [self setBook:nil];
     [self setDelegate:nil];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [webView setDelegate:nil];
-    [webView stopLoading];
+    if ([webView isLoading]) {
+        [webView stopLoading];        
+        [[UIApplication sharedApplication] readmill_popNetworkActivity];
+    }
+
     [self setWebView:nil];
     [self setView:nil];
 
@@ -82,27 +87,29 @@
 }
 
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning 
+{
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)willBeDismissed:(NSNotification *)notification {
+- (void)willBeDismissed:(NSNotification *)notification 
+{
     [[self delegate] connect:self didSkipLinkingToBook:[self book]];
 }
 
 #pragma mark - View lifecycle
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-    
+- (void)loadView 
+{    
     webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
     [webView setHidden:YES];
-    
+
     UIView *containerView = [[UIView alloc] initWithFrame:[webView frame]];
 
     [containerView addSubview:webView];
@@ -114,14 +121,16 @@
                                                                   title:[self bookTitle] 
                                                                  author:[self author]];
 
+    NSLog(@"url: %@", url);
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
-                                                  cachePolicy:NSURLRequestReloadIgnoringCacheData 
+                                                  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
                                               timeoutInterval:30];
     [webView loadRequest:request];
     [request release];
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload 
+{
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -130,21 +139,23 @@
     [self setWebView:nil];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+{
     // Return YES for supported orientations
-	return YES;
+	return NO;
 }
 
 #pragma mark -
 #pragma mark UIWebViewDelegate
 
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-	
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+- (void)webViewDidStartLoad:(UIWebView *)webView 
+{	
+    [[UIApplication sharedApplication] readmill_pushNetworkActivity];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)aWebView {
-	
+- (void)webViewDidFinishLoad:(UIWebView *)aWebView 
+{	
+    NSLog(@"did finish load");
     [aWebView sizeToFit];
 
     [aWebView setAlpha:0.0];
@@ -156,12 +167,12 @@
     [UIView setAnimationDuration:0.2];
     [aWebView setAlpha:1.0];
     [UIView commitAnimations];
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[UIApplication sharedApplication] readmill_popNetworkActivity];
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-	
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error 
+{	
+    [[UIApplication sharedApplication] readmill_popNetworkActivity];
 	
 	if ([error code] != -999) {
         // ^ Load failed because the user clicked a new link to load
@@ -175,8 +186,8 @@
 	}
 }
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType 
+{    
 	NSURL *URL = [request URL];
     if ([[URL scheme] isEqualToString:@"readmill"]) {
         
@@ -191,6 +202,7 @@
                 
         NSString *action = [URL host];
         NSDictionary *parameters = [URL queryAsDictionary];
+
         if ([action isEqualToString:@"dismiss"]) {
             [[self delegate] connect:self didSkipLinkingToBook:[self book]];
         }
@@ -238,7 +250,6 @@
                            withError:error];
         }
         
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         return NO;
     } else {
         return YES;

@@ -177,9 +177,7 @@
     [nc removeObserver:self 
                   name:UIKeyboardWillHideNotification
                 object:nil];
-    
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    
+        
     if (animated) {
         
         [UIView beginAnimations:ReadmillUIPresenterDidAnimateOut context:nil];

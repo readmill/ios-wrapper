@@ -6,10 +6,10 @@
 //  Copyright (c) 2011 Readmill Network Limited. All rights reserved.
 //
 
-#import "NSDate+ReadmillDateExtensions.h"
+#import "NSDate+ReadmillAdditions.h"
 #import "ReadmillDateFormatter.h"
 
-@implementation NSDate (ReadmillDateExtensions)
+@implementation NSDate (ReadmillAdditions)
 
 - (NSString *)stringWithRFC3339Format {
     

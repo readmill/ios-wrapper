@@ -20,13 +20,13 @@
  THE SOFTWARE.
  */
 
-#import "ReadmillDictionaryExtensions.h"
+#import "NSDictionary+ReadmillAdditions.h"
 
 
-@implementation NSDictionary (ReadmillDictionaryExtensions)
+@implementation NSDictionary (ReadmillAdditions)
 
--(NSDictionary *)dictionaryByRemovingNullValues {
-    
+- (NSDictionary *)dictionaryByRemovingNullValues 
+{    
     NSMutableDictionary *cleanedDictionary = [[self mutableCopy] autorelease];
     NSArray *nullKeys = [self allKeysForObject:[NSNull null]];
     [cleanedDictionary removeObjectsForKeys:nullKeys];

@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ReadmillReadingSession.h"
+@class ReadmillReadingSessionArchive;
 
-@interface NSKeyedArchiver (ReadmillArchiverExtension)
+@interface NSKeyedArchiver (ReadmillAdditions)
 + (NSString *)readmillReadingSessionArchivePath;
 + (NSString *)readmillPingArchivePath;
 + (BOOL)archiveReadmillReadingSession:(ReadmillReadingSessionArchive *)archive;

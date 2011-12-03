@@ -7,6 +7,7 @@
 //
 
 #import "ReadmillURLConnection.h"
+#import "UIApplication+ReadmillNetworkActivity.h"
 
 @interface ReadmillURLConnection ()
 
@@ -64,7 +65,6 @@
     isExecuting = YES;
     [self didChangeValueForKey:@"isExecuting"];
     
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSURLConnection *aConnection = [[NSURLConnection alloc] initWithRequest:request 
                                                                    delegate:self];
     
@@ -73,15 +73,17 @@
     
     if (connection == nil) {
         [self finish];
+    } else {
+        [[UIApplication sharedApplication] readmill_pushNetworkActivity];
     }
 }
 
 - (void)finish 
 {
     NSLog(@"Operation finished with status code: %d, error: %@, data size: %u", response.statusCode, connectionError, [responseData length]);
-    
+
+    [[UIApplication sharedApplication] readmill_popNetworkActivity];
     completionHandler(self.response, self.responseData, self.connectionError);        
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
     [self willChangeValueForKey:@"isExecuting"];
     [self willChangeValueForKey:@"isFinished"];
@@ -101,17 +103,11 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data 
 {
-    if (![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    }
     [responseData appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)conn didReceiveResponse:(NSURLResponse *)aResponse 
 {
-    if (![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    }
     self.response = (NSHTTPURLResponse *)aResponse;
     
     NSMutableData *data = [[NSMutableData alloc] init];

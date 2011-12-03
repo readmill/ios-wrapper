@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSError (ReadmillErrorExtensions)
+@interface NSError (ReadmillAdditions)
 
 - (BOOL)isReadmillClientError;
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSURL (ReadmillURLExtensions)
+@interface NSURL (ReadmillURLParameters)
 + (NSURL *)URLWithParameters:(NSDictionary *)parameters;
 - (NSURL *)URLByAddingParameters:(NSDictionary *)parameters;
 - (NSDictionary *)queryAsDictionary;

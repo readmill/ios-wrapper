@@ -20,10 +20,10 @@
  THE SOFTWARE.
  */
 
-#import "ReadmillStringExtensions.h"
+#import "NSString+ReadmillAdditions.h"
 #import "ReadmillDateFormatter.h"
 
-@implementation NSString (ReadmillStringExtensions)
+@implementation NSString (ReadmillAdditions)
 
 - (NSString *)urlEncodedString {
 	

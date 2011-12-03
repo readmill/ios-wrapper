@@ -21,7 +21,7 @@
  */
 
 #import "ReadmillUser.h"
-#import "ReadmillDictionaryExtensions.h"
+#import "NSDictionary+ReadmillAdditions.h"
 #import "ReadmillBook.h"
 #import "ReadmillReading.h"
 

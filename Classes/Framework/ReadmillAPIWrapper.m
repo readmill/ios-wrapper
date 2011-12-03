@@ -21,11 +21,11 @@
  */
 
 #import "ReadmillAPIWrapper.h"
-#import "ReadmillStringExtensions.h"
-#import "ReadmillURLExtensions.h"
-#import "ReadmillErrorExtensions.h"
-#import "ReadmillDictionaryExtensions.h"
-#import "NSDate+ReadmillDateExtensions.h"
+#import "NSString+ReadmillAdditions.h"
+#import "NSURL+ReadmillURLParameters.h"
+#import "NSError+ReadmillAdditions.h"
+#import "NSDictionary+ReadmillAdditions.h"
+#import "NSDate+ReadmillAdditions.h"
 #import "ReadmillURLConnection.h"
 #import "JSONKit.h"
 

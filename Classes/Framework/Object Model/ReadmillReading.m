@@ -21,8 +21,8 @@
  */
 
 #import "ReadmillReading.h"
-#import "ReadmillDictionaryExtensions.h"
-#import "ReadmillStringExtensions.h"
+#import "NSDictionary+ReadmillAdditions.h"
+#import "NSString+ReadmillAdditions.h"
 #import "ReadmillUser.h"
 
 @interface ReadmillReading ()

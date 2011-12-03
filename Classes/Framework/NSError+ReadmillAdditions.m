@@ -6,10 +6,10 @@
 //  Copyright 2011 Readmill Network Limited. All rights reserved.
 //
 
-#import "ReadmillErrorExtensions.h"
+#import "NSError+ReadmillAdditions.h"
 #import "ReadmillAPIWrapper.h"
 
-@implementation NSError (ReadmillErrorExtensions)
+@implementation NSError (ReadmillAdditions)
 
 - (BOOL)isReadmillClientError {
     if ([[self domain] isEqualToString:kReadmillDomain]) {

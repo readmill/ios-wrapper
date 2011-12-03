@@ -6,10 +6,10 @@
 //  Copyright 2011 Readmill. All rights reserved.
 //
 
-#import "ReadmillURLExtensions.h"
-#import "ReadmillStringExtensions.h"
+#import "NSURL+ReadmillURLParameters.h"
+#import "NSString+ReadmillAdditions.h"
 
-@implementation NSURL (ReadmillURLExtensions)
+@implementation NSURL (ReadmillURLParameters)
 
 + (NSURL *)URLWithParameters:(NSDictionary *)parameters {
     NSMutableString *parameterString = [NSMutableString string];

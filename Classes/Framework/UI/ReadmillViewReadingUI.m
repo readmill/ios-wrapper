@@ -22,9 +22,10 @@
 
 #import "ReadmillViewReadingUI.h"
 #import "ReadmillUser.h"
-#import "ReadmillStringExtensions.h"
-#import "ReadmillURLExtensions.h"
+#import "NSString+ReadmillAdditions.h"
+#import "NSURL+ReadmillURLParameters.h"
 #import "ReadmillUIPresenter.h"
+#import "UIApplication+ReadmillNetworkActivity.h"
 
 @interface ReadmillViewReadingUI () 
 {
@@ -48,13 +49,15 @@
 -(void)dealloc 
 {    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 
     [self setReading:nil];
     [self setDelegate:nil];
     
     [webView setDelegate:nil];
-    [webView stopLoading];
+    if ([webView isLoading]) {
+        [[UIApplication sharedApplication] readmill_popNetworkActivity];
+        [webView stopLoading];   
+    }
     [self setWebView:nil];
     
     [self setView:nil];
@@ -120,7 +123,7 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)aWebView 
 {
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	[[UIApplication sharedApplication] readmill_pushNetworkActivity];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView 
@@ -135,12 +138,12 @@
     [aWebView setAlpha:1.0];
     [UIView commitAnimations];
 
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	[[UIApplication sharedApplication] readmill_popNetworkActivity];
 }
 
 - (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error 
 {	
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	[[UIApplication sharedApplication] readmill_popNetworkActivity];
 	
 	if ([error code] != -999) {
         // ^ Load failed because the user clicked a new link to load
@@ -204,7 +207,7 @@
                     didFailToFinishReading:[self reading] 
                                  withError:error];
         }    
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
 		return NO;
 	} else {
 		return YES;
