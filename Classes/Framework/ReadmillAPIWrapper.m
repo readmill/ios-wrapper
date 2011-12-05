@@ -68,7 +68,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     if ((self = [super init])) {
         // Initialization code here.
         queue = [[NSOperationQueue alloc] init];
-        [queue setMaxConcurrentOperationCount:10];
+        [queue setMaxConcurrentOperationCount:3];
     }
     return self;
 }
@@ -668,8 +668,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     [parameters setValue:[[self apiConfiguration] clientID] forKey:@"client_id"];
     [parameters setValue:[self accessToken] forKey:@"access_token"];
     
-    NSURL *baseURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@ui/#!/view/reading/%d", [self apiEndPoint], readingId]];
+    NSURL *baseURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@ui/#!/view/reading/%d", [self apiEndPoint], readingId]];
     NSURL *URL = [baseURL URLByAddingParameters:parameters];
+    [baseURL release];
     
     return URL;
 }
@@ -686,7 +687,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
             completionHandler:completionHandler];
 }
 
-- (NSURLRequest *)getRequestWithURL:(NSURL *)url parameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error 
+- (NSURLRequest *)getRequestWithURL:(NSURL *)url 
+                         parameters:(NSDictionary *)parameters 
+            canBeCalledUnauthorized:(BOOL)allowUnauthed 
+                              error:(NSError **)error 
 {    
     if (![self ensureAccessTokenIsCurrent:error]) {
         if (!allowUnauthed) {
@@ -702,7 +706,8 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
         [parameterString appendFormat:@"?access_token=%@", [self accessToken]];
         first = NO;
     }
-    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:[[self apiConfiguration] clientID] forKey:@"client_id"];
+    NSMutableDictionary *parametersWithClientId = [NSMutableDictionary dictionaryWithObject:[[self apiConfiguration] clientID] 
+                                                                                     forKey:@"client_id"];
     [parametersWithClientId addEntriesFromDictionary:parameters];
     
 	for (NSString *key in [parametersWithClientId allKeys]) {		
@@ -767,7 +772,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                           parameters:parameters 
                              canBeCalledUnauthorized:allowUnauthed
                                                error:&error];
-    NSLog(@"params: %@", parameters);
+
     if (request) {
         [self startPreparedRequest:request completion:completionHandler];
     } else {
@@ -824,9 +829,8 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 	[request setHTTPBody:[parameterString dataUsingEncoding:NSUTF8StringEncoding]];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     [request setTimeoutInterval:kTimeoutInterval];
-	[request autorelease];
 
-    return request;
+    return [request autorelease];
 }
 
 - (void)sendBodyRequestToURL:(NSURL *)url httpMethod:(NSString *)httpMethod withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler 
@@ -865,9 +869,8 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     [request setHTTPBody:[allParameters JSONData]];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     [request setTimeoutInterval:kTimeoutInterval];
-    [request autorelease];
     
-    return request;
+    return [request autorelease];
 }
 
 - (void)sendJSONPostRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler 

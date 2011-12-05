@@ -54,8 +54,8 @@
 
 -(void)dealloc 
 {
+    [accessTokenURL release]; accessTokenURL = nil;
 	[apiBaseURL release]; apiBaseURL = nil;
-	[accessTokenURL release]; accessTokenURL = nil;
 	[authURL release]; authURL = nil;
 	
 	[clientID release]; clientID = nil;

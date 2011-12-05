@@ -46,6 +46,19 @@
     return self;
 }
 
+- (void)cleanupWebView 
+{
+    [webView setDelegate:nil];
+    if ([webView isLoading]) {
+        [[UIApplication sharedApplication] readmill_popNetworkActivity];
+    }
+    [webView stopLoading];
+    // This is a hack to avoid a memory leak (as of iOS5.0 where
+    // the heap keeps growing
+    [webView loadHTMLString:@"" baseURL:nil];
+    [self setWebView:nil];
+}
+
 -(void)dealloc 
 {    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -53,14 +66,10 @@
     [self setReading:nil];
     [self setDelegate:nil];
     
-    [webView setDelegate:nil];
-    if ([webView isLoading]) {
-        [[UIApplication sharedApplication] readmill_popNetworkActivity];
-        [webView stopLoading];   
-    }
-    [self setWebView:nil];
+    [self cleanupWebView];
     
     [self setView:nil];
+    NSLog(@"ReadmillViewReadingUI dealloc");
     [super dealloc];
 }
 
@@ -99,7 +108,7 @@
     
     NSURL *url = [[[self reading] apiWrapper] URLForViewingReadingWithId:[[self reading] readingId]];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url 
-                                                  cachePolicy:NSURLRequestReloadIgnoringCacheData 
+                                                  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                               timeoutInterval:30];
     [webView loadRequest:request];
     [request release];
@@ -109,6 +118,9 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [self cleanupWebView];
     [self setView:nil];
 }
 

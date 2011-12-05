@@ -66,6 +66,19 @@
     return self;
 }
 
+- (void)cleanupWebView 
+{
+    [webView setDelegate:nil];
+    if ([webView isLoading]) {
+        [[UIApplication sharedApplication] readmill_popNetworkActivity];
+    }
+    [webView stopLoading];
+    // This is a hack to avoid a memory leak (as of iOS5.0 where
+    // the heap keeps growing
+    [webView loadHTMLString:@"" baseURL:nil];
+    [self setWebView:nil];
+}
+
 - (void)dealloc 
 {    
     [self setUser:nil];
@@ -74,13 +87,7 @@
     [self setAuthor:nil];
     [self setBook:nil];
     [self setDelegate:nil];
-    [webView setDelegate:nil];
-    if ([webView isLoading]) {
-        [webView stopLoading];        
-        [[UIApplication sharedApplication] readmill_popNetworkActivity];
-    }
-
-    [self setWebView:nil];
+    [self cleanupWebView];
     [self setView:nil];
 
     [super dealloc];
@@ -134,9 +141,7 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    [webView stopLoading];
-    [webView setDelegate:nil];
-    [self setWebView:nil];
+   [self cleanupWebView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
