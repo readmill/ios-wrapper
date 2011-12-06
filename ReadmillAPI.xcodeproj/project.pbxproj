@@ -223,20 +223,13 @@
 			name = "Readmill Spinner";
 			sourceTree = "<group>";
 		};
-		734A51A5135A1DF5009F9794 /* ReadmillAPI */ = {
-			isa = PBXGroup;
-			children = (
-				734A51A6135A1DF5009F9794 /* Supporting Files */,
-			);
-			path = ReadmillAPI;
-			sourceTree = "<group>";
-		};
-		734A51A6135A1DF5009F9794 /* Supporting Files */ = {
+		734A51A5135A1DF5009F9794 /* Other sources */ = {
 			isa = PBXGroup;
 			children = (
 				734A51A7135A1DF5009F9794 /* ReadmillAPI-Prefix.pch */,
 			);
-			name = "Supporting Files";
+			name = "Other sources";
+			path = ReadmillAPI;
 			sourceTree = "<group>";
 		};
 		734A51B4135A1DF6009F9794 /* ReadmillAPITests */ = {
@@ -341,10 +334,10 @@
 				502698D1130C87D300E67974 /* README.md */,
 				73C1AAA513E6AFD6006684C6 /* Readmill.bundle */,
 				735EF9D4145EE43F00303F19 /* ReadmillAPI.h */,
-				7398587D14713CE2007D42AD /* Documentation */,
 				96BEAEF312F06360006028D0 /* ReadmillAPI */,
-				96F0757A12F0620B00F6369D /* Sample Application */,
-				734A51A5135A1DF5009F9794 /* ReadmillAPI */,
+				96F0757A12F0620B00F6369D /* Example Application */,
+				7398587D14713CE2007D42AD /* Documentation */,
+				734A51A5135A1DF5009F9794 /* Other sources */,
 				734A51B4135A1DF6009F9794 /* ReadmillAPITests */,
 				96BEAECF12F05E80006028D0 /* Frameworks */,
 				96BEAECD12F05E80006028D0 /* Products */,
@@ -440,7 +433,7 @@
 			name = "iPad UI";
 			sourceTree = "<group>";
 		};
-		96F0757A12F0620B00F6369D /* Sample Application */ = {
+		96F0757A12F0620B00F6369D /* Example Application */ = {
 			isa = PBXGroup;
 			children = (
 				966E3E5012F2F6FB0027E05F /* Authentication */,
@@ -449,7 +442,7 @@
 				9647F57F12F1B04C0088CAA0 /* logo.png */,
 				96F0757B12F0622100F6369D /* Supporting Files */,
 			);
-			name = "Sample Application";
+			name = "Example Application";
 			sourceTree = "<group>";
 		};
 		96F0757B12F0622100F6369D /* Supporting Files */ = {
