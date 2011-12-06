@@ -58,7 +58,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIViewController" id="578626022">
-				<string key="IBUINibName">Readmill_SignedInViewController</string>
+				<string key="IBUINibName">ReadmillSignedInViewController</string>
 				<reference key="IBUISimulatedStatusBarMetrics" ref="456458906"/>
 				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
 					<int key="IBUIInterfaceOrientation">1</int>
@@ -68,7 +68,7 @@
 				<bool key="IBUIHorizontal">NO</bool>
 			</object>
 			<object class="IBUIViewController" id="62809589">
-				<string key="IBUINibName">Readmill_SigningInViewController</string>
+				<string key="IBUINibName">ReadmillSigningInViewController</string>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 					<int key="IBUIStatusBarStyle">2</int>
 				</object>
