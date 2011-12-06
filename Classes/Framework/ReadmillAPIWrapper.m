@@ -726,13 +726,14 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                             [url absoluteString], 
                                             parameterString]];
     
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:finalURL];
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:finalURL
+                                                                cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                                            timeoutInterval:kTimeoutInterval];
     
 	[request setHTTPMethod:@"GET"];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
-	[request autorelease];
     [request setTimeoutInterval:kTimeoutInterval];
-    return request;
+    return [request autorelease];
 }
 
 - (void)sendGetRequestToURL:(NSURL *)url withParameters:(NSDictionary *)parameters canBeCalledUnauthorized:(BOOL)allowUnauthed completionHandler:(ReadmillAPICompletionHandler)completionHandler 
@@ -742,7 +743,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                          parameters:parameters 
                             canBeCalledUnauthorized:allowUnauthed
                                               error:&error];
-    
+
     if (request) {
         [self startPreparedRequest:request completion:completionHandler];
     } else {
