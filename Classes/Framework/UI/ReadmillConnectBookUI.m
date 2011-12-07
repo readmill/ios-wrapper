@@ -25,6 +25,7 @@
 #import "ReadmillUIPresenter.h"
 #import "NSURL+ReadmillURLParameters.h"
 #import "UIApplication+ReadmillNetworkActivity.h"
+#import "ReadmillSpinner.h"
 
 @interface ReadmillConnectBookUI ()
 @property (nonatomic, readwrite, retain) UIWebView *webView;
@@ -34,6 +35,7 @@
 @property (nonatomic, readwrite, retain) NSString *ISBN;
 @property (nonatomic, readwrite, retain) NSString *bookTitle;
 @property (nonatomic, readwrite, retain) NSString *author;
+@property (nonatomic, retain) ReadmillSpinner *spinner;
 @end
 
 @implementation ReadmillConnectBookUI
@@ -46,6 +48,7 @@
 @synthesize bookTitle;
 @synthesize author;
 
+@synthesize spinner;
 @synthesize webView;
 
 - (id)initWithUser:(ReadmillUser *)aUser ISBN:(NSString *)anISBN title:(NSString *)aTitle author:(NSString *)anAuthor 
@@ -87,6 +90,7 @@
     [self setAuthor:nil];
     [self setBook:nil];
     [self setDelegate:nil];
+    [self setSpinner:nil];
     [self cleanupWebView];
     [self setView:nil];
 
@@ -116,19 +120,23 @@
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
     [webView setHidden:YES];
+    // Hack to avoid blurry text in landscape
+    [webView setOpaque:NO];
 
     UIView *containerView = [[UIView alloc] initWithFrame:[webView frame]];
-
+    [containerView setBackgroundColor:[UIColor whiteColor]];
     [containerView addSubview:webView];
-    [containerView setHidden:YES];
     [self setView:containerView];
     [containerView release];
+    
+    spinner = [[ReadmillSpinner alloc] initAndStartSpinning];
+    [spinner setCenter:[self.view center]];
+    [self.view addSubview:spinner];
     
     NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[self ISBN] 
                                                                   title:[self bookTitle] 
                                                                  author:[self author]];
 
-    NSLog(@"url: %@", url);
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
                                                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
                                               timeoutInterval:30];
@@ -139,9 +147,9 @@
 - (void)viewDidUnload 
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-   [self cleanupWebView];
+
+    [self setSpinner:nil];
+    [self cleanupWebView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
@@ -160,9 +168,8 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView 
 {	
-    NSLog(@"did finish load");
     [aWebView sizeToFit];
-
+    
     [aWebView setAlpha:0.0];
     [aWebView setHidden:NO];
     [self.view setHidden:NO];
@@ -172,11 +179,14 @@
     [UIView setAnimationDuration:0.2];
     [aWebView setAlpha:1.0];
     [UIView commitAnimations];
+    
+    [spinner setHidden:YES];
     [[UIApplication sharedApplication] readmill_popNetworkActivity];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error 
-{	
+{	    
+    [spinner setHidden:YES];
     [[UIApplication sharedApplication] readmill_popNetworkActivity];
 	
 	if ([error code] != -999) {

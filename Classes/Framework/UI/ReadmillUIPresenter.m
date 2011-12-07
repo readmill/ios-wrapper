@@ -26,7 +26,6 @@
 @interface ReadmillUIPresenter ()
 
 @property (nonatomic, readwrite, retain) UIViewController *contentViewController;
-@property (nonatomic, readwrite, retain) ReadmillSpinner *spinner;
 
 @end
 
@@ -43,8 +42,6 @@
 - (void)dealloc 
 {    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    [spinner release];
     
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
     [contentContainerView release];
@@ -58,7 +55,6 @@
 }
 
 @synthesize contentViewController;
-@synthesize spinner;
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -261,11 +257,6 @@
     [contentContainerView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin];
     
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
-    
-    spinner = [[ReadmillSpinner alloc] init];
-    [spinner setCenter:[contentContainerView center]];
-    [spinner startAnimating];
-    [contentContainerView addSubview:spinner];
 
     [self.view addSubview:contentContainerView];
     
@@ -276,9 +267,7 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-
-    [self setSpinner:nil];
-
+    
     [contentContainerView removeObserver:self forKeyPath:@"frame"];
     [contentContainerView release];
     contentContainerView = nil;

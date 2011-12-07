@@ -26,6 +26,7 @@
 #import "NSURL+ReadmillURLParameters.h"
 #import "ReadmillUIPresenter.h"
 #import "UIApplication+ReadmillNetworkActivity.h"
+#import "ReadmillSpinner.h"
 
 @interface ReadmillViewReadingUI () 
 {
@@ -34,6 +35,7 @@
 
 @property (nonatomic, readwrite, retain) ReadmillReading *reading;
 @property (nonatomic, retain) UIWebView *webView;
+@property (nonatomic, retain) ReadmillSpinner *spinner;
 @end
 
 @implementation ReadmillViewReadingUI
@@ -67,7 +69,7 @@
     [self setDelegate:nil];
     
     [self cleanupWebView];
-    
+    [self setSpinner:nil];
     [self setView:nil];
     NSLog(@"ReadmillViewReadingUI dealloc");
     [super dealloc];
@@ -75,6 +77,7 @@
 
 @synthesize reading;
 @synthesize delegate;
+@synthesize spinner;
 @synthesize webView;
 
 - (void)didReceiveMemoryWarning 
@@ -93,18 +96,23 @@
 #pragma mark - View lifecycle
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
--(void)loadView 
+- (void)loadView 
 {    
     webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 648.0, 440.0)];
     [[[webView subviews] lastObject] setScrollEnabled:NO];
     [webView setDelegate:self];
     [webView setHidden:YES];
+    // Hack to avoid blurry text in landscape
+    [webView setOpaque:NO];
     
-    UIView *containerView = [[[UIView alloc] initWithFrame:[webView frame]] autorelease];
-    
+    UIView *containerView = [[UIView alloc] initWithFrame:[webView frame]];
     [containerView addSubview:webView];
-    
     [self setView:containerView];
+    [containerView release];
+    
+    spinner = [[ReadmillSpinner alloc] initAndStartSpinning];
+    [spinner setCenter:[self.view center]];
+    [self.view addSubview:spinner];
     
     NSURL *url = [[[self reading] apiWrapper] URLForViewingReadingWithId:[[self reading] readingId]];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url 
@@ -114,17 +122,19 @@
     [request release];
 }
 
--(void)viewDidUnload {
+- (void)viewDidUnload 
+{
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self cleanupWebView];
+    [self setSpinner:nil];
     [self setView:nil];
 }
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {
     // Return YES for supported orientations
 	return YES;
@@ -150,11 +160,13 @@
     [aWebView setAlpha:1.0];
     [UIView commitAnimations];
 
+    [spinner setHidden:YES];
 	[[UIApplication sharedApplication] readmill_popNetworkActivity];
 }
 
 - (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error 
 {	
+    [spinner setHidden:YES];
 	[[UIApplication sharedApplication] readmill_popNetworkActivity];
 	
 	if ([error code] != -999) {
@@ -219,7 +231,6 @@
                     didFailToFinishReading:[self reading] 
                                  withError:error];
         }    
-
 		return NO;
 	} else {
 		return YES;
