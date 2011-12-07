@@ -934,7 +934,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 - (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock 
 {    
     NSAssert(request != nil, @"Request is nil!");
+    static NSString * const LocationHeader = @"Location";
 
+    dispatch_queue_t currentQueue = dispatch_get_current_queue();
     // This block will be called when the asynchronous operation finishes
     ReadmillURLConnectionCompletionHandler connectionCompletionHandler = ^(NSHTTPURLResponse *response, 
                                                                            NSData *responseData, 
@@ -944,7 +946,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
         // If we created something (book, reading etc) we receive a 201 Created response.
         // We issue a GET request with the URL found in the "Location" header.
-        NSString *locationHeader = [[response allHeaderFields] valueForKey:@"Location"];
+        NSString *locationHeader = [[response allHeaderFields] valueForKey:LocationHeader];
         if ([response statusCode] == 201 && locationHeader != nil) {
             
             NSURL *locationURL = [NSURL URLWithString:locationHeader];
@@ -958,7 +960,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                 completion:completionBlock];
             } else {
                 if (completionBlock) {
-                    completionBlock(nil, error);
+                    dispatch_async(currentQueue, ^{
+                        completionBlock(nil, error);
+                    });
                 }
             }
         } else {
@@ -970,7 +974,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
             
             // Execute the completionBlock
             if (completionBlock) {
-                completionBlock(jsonResponse, error);
+                dispatch_async(currentQueue, ^{
+                    completionBlock(jsonResponse, error);
+                });
             }
         }
     };
