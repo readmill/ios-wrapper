@@ -13,10 +13,8 @@ typedef enum {
     ReadmillSpinnerTypeSmallGray = 2
 } ReadmillSpinnerType;
 
-@interface ReadmillSpinner : UIImageView {
-    
-    NSBundle *resourceBundle;
-}
+@interface ReadmillSpinner : UIImageView
+
 - (id)initWithSpinnerType:(ReadmillSpinnerType)type;
 - (id)initAndStartSpinning;
 - (id)initAndStartSpinning:(ReadmillSpinnerType)type;
