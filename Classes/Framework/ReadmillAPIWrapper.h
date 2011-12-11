@@ -54,6 +54,8 @@ typedef enum {
 // General 
 
 static NSString * const kReadmillDomain = @"com.readmill";
+static NSString * const kReadmillAPIClientIdKey = @"client_id";
+static NSString * const kReadmillAPIAccessTokenKey = @"access_token";
 
 #pragma mark API Keys - Book
 
@@ -115,7 +117,6 @@ static NSString * const kReadmillAPIReadingCommentsKey = @"comments";
 static NSString * const kReadmillAPIReadingPeriodsKey = @"periods";
 static NSString * const kReadmillAPIReadingLocationsKey = @"locations";
 static NSString * const kReadmillAPIReadingHighlightsKey = @"highlights";
-static NSString * const kReadmillAPIClientIdKey = @"client";
 static NSString * const kReadmillAPIReadingHighlightsCountKey = @"highlights_count";
 
 #pragma mark API Keys - Highlights
@@ -131,6 +132,20 @@ static NSString * const kReadmillAPIHighlightCommentsCountKey = @"comments_count
 static NSString * const kReadmillAPIHighlightPermalinkURLKey = @"permalink_url";
 static NSString * const kReadmillAPIHighlightReadingIdKey = @"reading_id";
 static NSString * const kReadmillAPIHighlightHighlightedAtKey = @"highlighted_at";
+
+#pragma mark API Keys - Comments
+
+static NSString * const kReadmillAPICommentPostedAtKey = @"posted_at";
+static NSString * const kReadmillAPICommentContentKey = @"content";
+
+#pragma mark API Keys - Pings
+
+static NSString * const kReadmillAPIPingProgressKey = @"progress";
+static NSString * const kReadmillAPIPingDurationKey = @"duration";
+static NSString * const kReadmillAPIPingIdentifierKey = @"identifier";
+static NSString * const kReadmillAPIPingOccurredAtKey = @"occurred_at";
+static NSString * const kReadmillAPIPingLatitudeKey = @"lat";
+static NSString * const kReadmillAPIPingLongitudeKey = @"lng";
 
 #pragma mark API Filtering & Ordering
 

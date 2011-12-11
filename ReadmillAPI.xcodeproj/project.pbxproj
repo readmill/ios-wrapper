@@ -370,7 +370,7 @@
 			children = (
 				73FA5402147082D700CFC589 /* JSONKit */,
 				735E41D7135A655B00855884 /* Readmill Helper Classes */,
-				96BEAF3112F0636C006028D0 /* Extensions */,
+				96BEAF3112F0636C006028D0 /* Additions */,
 				96BEAEF412F06360006028D0 /* Object Model */,
 				96BEAF3612F071D6006028D0 /* iPad UI */,
 				73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */,
@@ -397,7 +397,7 @@
 			path = "Object Model";
 			sourceTree = "<group>";
 		};
-		96BEAF3112F0636C006028D0 /* Extensions */ = {
+		96BEAF3112F0636C006028D0 /* Additions */ = {
 			isa = PBXGroup;
 			children = (
 				731471EB1353601200A41B49 /* NSKeyedArchiver+ReadmillAdditions.h */,
@@ -415,7 +415,7 @@
 				332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */,
 				332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */,
 			);
-			name = Extensions;
+			name = Additions;
 			path = "Object Model";
 			sourceTree = "<group>";
 		};

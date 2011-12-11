@@ -8,26 +8,13 @@
 
 #import "NSURL+ReadmillURLParameters.h"
 #import "NSString+ReadmillAdditions.h"
+#import "NSDictionary+ReadmillAdditions.h"
 
 @implementation NSURL (ReadmillURLParameters)
 
-+ (NSURL *)URLWithParameters:(NSDictionary *)parameters {
-    NSMutableString *parameterString = [NSMutableString string];
-    BOOL first = YES;
-    for (NSString *key in [parameters allKeys]) {		
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		id value = [parameters valueForKey:key];
-		
-		if (value) {
-			[parameterString appendFormat:@"%@%@=%@",
-             first ? @"?" : @"&", 
-             key, 
-             [value isKindOfClass:[NSString class]] ? [value urlEncodedString] : [[value stringValue] urlEncodedString]];
-			first = NO;
-		}
-		[pool drain];
-	}
-    return [NSURL URLWithString:parameterString];
++ (NSURL *)URLWithParameters:(NSDictionary *)parameters 
+{    
+    return [NSURL URLWithString:[parameters urlParameterString]];
 }
 - (NSURL *)URLByAddingParameters:(NSDictionary *)parameters {
 

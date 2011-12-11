@@ -26,5 +26,6 @@
 @interface NSDictionary (ReadmillAdditions)
 
 - (NSDictionary *)dictionaryByRemovingNullValues;
+- (NSString *)urlParameterString;
 
 @end

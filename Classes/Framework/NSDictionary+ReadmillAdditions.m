@@ -21,7 +21,7 @@
  */
 
 #import "NSDictionary+ReadmillAdditions.h"
-
+#import "NSString+ReadmillAdditions.h"
 
 @implementation NSDictionary (ReadmillAdditions)
 
@@ -34,4 +34,22 @@
     return [NSDictionary dictionaryWithDictionary:cleanedDictionary];
 }
 
+- (NSString *)urlParameterString
+{
+    NSMutableString *parameterString = [[NSMutableString alloc] init];
+    BOOL first = YES;
+    for (NSString *key in [self allKeys]) {		
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        id value = [self valueForKey:key];
+        if (value) {
+            [parameterString appendFormat:@"%@%@=%@",
+                first ? @"?" : @"&", 
+                key, 
+                [value isKindOfClass:[NSString class]] ? [value urlEncodedString] : [[value stringValue] urlEncodedString]];
+            first = NO;
+        }
+        [pool drain];
+    }
+    return [parameterString autorelease];
+}
 @end
