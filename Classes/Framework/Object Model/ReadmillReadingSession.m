@@ -30,29 +30,37 @@
 @synthesize lastSessionDate;
 @synthesize sessionIdentifier;
 
-- (id)initWithSessionIdentifier:(NSString *)aSessionIdentifier {
+- (id)initWithSessionIdentifier:(NSString *)aSessionIdentifier 
+{
     if ((self = [super init])) {
         [self setSessionIdentifier:aSessionIdentifier];
         [self setLastSessionDate:[NSDate date]];
     }
     return self;
 }
-- (void)encodeWithCoder:(NSCoder *)coder {   
+
+- (void)encodeWithCoder:(NSCoder *)coder 
+{   
     [coder encodeObject:lastSessionDate forKey:@"lastSessionDate"];
     [coder encodeObject:sessionIdentifier forKey:@"sessionIdentifier"];
 } 
 
-- (id)initWithCoder:(NSCoder *)coder {
+- (id)initWithCoder:(NSCoder *)coder 
+{
     if ((self = [super init])) {
-        self.lastSessionDate = [coder decodeObjectForKey:@"lastSessionDate"];
-        self.sessionIdentifier = [coder decodeObjectForKey:@"sessionIdentifier"];
+        [self setLastSessionDate:[coder decodeObjectForKey:@"lastSessionDate"]];
+        [self setSessionIdentifier:[coder decodeObjectForKey:@"sessionIdentifier"] ];
     }
     return self; 
 }
--(NSString *)description {
+
+-(NSString *)description
+{
     return [NSString stringWithFormat:@"%@ sessionIdentifier %@ withDate %@", [super description], [self sessionIdentifier], [self lastSessionDate]]; 
 }
-- (void)dealloc {
+
+- (void)dealloc 
+{
     [lastSessionDate release];
     [sessionIdentifier release];
     [super dealloc];
@@ -71,12 +79,13 @@
 
 @implementation ReadmillReadingSession
 
-- (id)init {
+- (id)init 
+{
     return [self initWithAPIWrapper:nil readingId:0];
 }
 
--(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readingId:(ReadmillReadingId)sessionReadingId {
-    
+-(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readingId:(ReadmillReadingId)sessionReadingId
+{    
     if ((self = [super init])) {
         // Initialization code here.
         [self setApiWrapper:wrapper];
@@ -86,20 +95,23 @@
     return self;
 }
 
--(NSString *)description {
+-(NSString *)description 
+{
     return [NSString stringWithFormat:@"%@ reading %d", [super description], [self readingId]]; 
 }
 
 @synthesize apiWrapper;
 @synthesize readingId;
 
-- (void)updateReadmillReadingSession {
+- (void)updateReadmillReadingSession 
+{
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
     [archive setLastSessionDate:[NSDate date]];
     [NSKeyedArchiver archiveReadmillReadingSession:archive];
 }
 
-- (NSString *)generateSessionIdentifier {
+- (NSString *)generateSessionIdentifier 
+{
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
@@ -109,7 +121,9 @@
     }
     return [archive sessionIdentifier];
 }
-+ (BOOL)isReadingSessionIdentifierValid {
+
++ (BOOL)isReadingSessionIdentifierValid 
+{
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
@@ -120,9 +134,10 @@
     NSLog(@"Using existing Reading Session.");
     return YES;
 }
-- (void)archiveFailedPing:(ReadmillPing *)ping {    
-    // Grab all archived pings
-    
+
+- (void)archiveFailedPing:(ReadmillPing *)ping 
+{    
+    // Grab all archived pings    
     NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
     NSMutableArray *failedPings = [[NSMutableArray alloc] init];
     if (nil != unarchivedPings) {
@@ -136,15 +151,19 @@
     NSLog(@"Failed ping: %@\n All pings: %@", ping, failedPings);
     [failedPings release];
 }
-+ (void)pingArchived:(ReadmillAPIWrapper *)wrapper {
+
++ (void)pingArchived:(ReadmillAPIWrapper *)wrapper 
+{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"Ping archived pings.");
     NSArray *unarchivedPings = nil;
     unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
     if (nil != unarchivedPings && 0 < [unarchivedPings count]) {
         NSMutableArray *failedPings = [[NSMutableArray alloc] init];
+        dispatch_group_t group = dispatch_group_create();
         for (ReadmillPing *ping in unarchivedPings) {
 
+            dispatch_group_enter(group);
             [wrapper pingReadingWithId:[ping readingId] 
                           withProgress:[ping progress] 
                      sessionIdentifier:[ping sessionIdentifier] 
@@ -153,86 +172,55 @@
                               latitude:[ping latitude] 
                              longitude:[ping longitude]
                      completionHandler:^(id result, NSError *error) {
-                                if (error) {
-                                    if (![error isReadmillClientError]) {
-                                        // No client error so ping could not be delivered correctly
-                                        [failedPings addObject:ping];
-                                    } else {
-                                        NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
-                                    }
-                                } else {
-                                    NSLog(@"Sent archived ping.");
-                                }
-                            }];
-                    }
-        [NSKeyedArchiver archiveReadmillPings:failedPings];
-        [failedPings release];
+                         if (error) {
+                             if ([[error domain] isEqualToString:NSURLErrorDomain] || // NSURL internet connection
+                                 ([error isReadmillDomain] && ![error isClientError])) { // Client error on Readmill
+                                 // No client error so ping could not be delivered correctly
+                                 [failedPings addObject:ping];
+                             } else {
+                                 NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
+                             }
+                         } else {
+                             NSLog(@"Sent archived ping.");
+                         }
+                         dispatch_group_leave(group);
+                     }];
+        }
+
+        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+            [NSKeyedArchiver archiveReadmillPings:failedPings];
+            NSLog(@"failed pings: %@", failedPings);
+            [failedPings release];
+        });
+        dispatch_release(group);
     } else {
         NSLog(@"No archived pings.");
     }
     [pool drain];
 }
+
+
 #pragma mark -
 #pragma mark Threaded Messages
 
--(void)pingWithProgress:(ReadmillReadingProgress)progress 
+- (void)pingWithProgress:(ReadmillReadingProgress)progress 
            pingDuration:(ReadmillPingDuration)pingDuration 
-               delegate:(id <ReadmillPingDelegate>)delegate {
-    
-    
-    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                delegate, @"delegate",
-                                [NSThread currentThread], @"callbackThread",
-                                [NSNumber numberWithFloat:progress], @"progress",
-                                [NSNumber numberWithUnsignedInteger:pingDuration], @"pingDuration",
-                                nil];
-    
-    [self performSelectorInBackground:@selector(pingWithProperties:)
-                           withObject:properties];
-    
+               delegate:(id <ReadmillPingDelegate>)pingDelegate 
+{
+    [self pingWithProgress:progress 
+              pingDuration:pingDuration 
+                  latitude:0.0
+                 longitude:0.0
+                  delegate:pingDelegate];
 }
 
--(void)pingWithProgress:(ReadmillReadingProgress)progress
+- (void)pingWithProgress:(ReadmillReadingProgress)progress
            pingDuration:(ReadmillPingDuration)pingDuration 
                latitude:(CLLocationDegrees)latitude 
               longitude:(CLLocationDegrees)longitude 
-               delegate:(id<ReadmillPingDelegate>)delegate {
-    
-    
-    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                delegate, @"delegate",
-                                [NSThread currentThread], @"callbackThread",
-                                [NSNumber numberWithFloat:progress], @"progress",
-                                [NSNumber numberWithUnsignedInteger:pingDuration], @"pingDuration",
-                                [NSNumber numberWithDouble:latitude], @"latitude",
-                                [NSNumber numberWithDouble:longitude], @"longitude",
-                                nil];
-    
-    [self performSelectorInBackground:@selector(pingWithProperties:)
-                           withObject:properties];
-    
-}
--(void)pingWithProperties:(NSDictionary *)properties {
-    
-    [self retain];
-    
-    NSAutoreleasePool *pool;
-    pool = [[NSAutoreleasePool alloc] init];
-    
-    //NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
-    id <ReadmillPingDelegate> pingDelegate = [properties valueForKey:@"delegate"];
-    
-    
-    ReadmillReadingProgress progress = [[properties valueForKey:@"progress"] floatValue];
-    ReadmillPingDuration pingDuration = [[properties valueForKey:@"pingDuration"] unsignedIntegerValue];
-    
+               delegate:(id<ReadmillPingDelegate>)pingDelegate 
+{    
     NSString *sessionIdentifier = [self generateSessionIdentifier];
-
-    // Should always be 0.0 if not specified
-    CLLocationDegrees latitude = [[properties valueForKey:@"latitude"] doubleValue];
-    CLLocationDegrees longitude = [[properties valueForKey:@"longitude"] doubleValue];
     
     // Create the ping so we can archive it if the ping fails
     ReadmillPing *ping = [[ReadmillPing alloc] initWithReadingId:[self readingId] 
@@ -242,7 +230,8 @@
                                                   occurrenceTime:[NSDate date] 
                                                         latitude:latitude 
                                                        longitude:longitude];
-
+    
+    dispatch_queue_t currentQueue = dispatch_get_current_queue();
     
     [[self apiWrapper] pingReadingWithId:[ping readingId]
                             withProgress:[ping progress]
@@ -252,35 +241,33 @@
                                 latitude:[ping latitude]
                                longitude:[ping longitude]
                        completionHandler:^(id result, NSError *error) {
-                                  if (error == nil && pingDelegate != nil) {
-                            
-                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                          [pingDelegate readmillReadingSessionDidPingSuccessfully:self];  
-                                      });
-                                    
-                                      // Since we succeeded to ping, try to send any archived pings
-                                      [ReadmillReadingSession pingArchived:[self apiWrapper]];
-                                      
-                                  } else if (error != nil && pingDelegate != nil) {
-                                      
-                                      dispatch_async(dispatch_get_main_queue(), ^(void) {
-                                          [pingDelegate readmillReadingSession:self didFailToPingWithError:error];  
-                                      });
-                                      
-                                      if (![error isReadmillClientError]) {
-                                          // Ping was not sent successfully
-                                          [self archiveFailedPing:ping];
-                                      }
-                                  }
-                              }];
+                           
+                           if (error == nil && pingDelegate != nil) {
+                               dispatch_async(currentQueue, ^{
+                                   [pingDelegate readmillReadingSessionDidPingSuccessfully:self];  
+                               });
+                               
+                               // Since we succeeded to ping, try to send any archived pings
+                               [ReadmillReadingSession pingArchived:[self apiWrapper]];
+                               
+                           } else if (error != nil && pingDelegate != nil) {
+                               
+                               dispatch_async(currentQueue, ^(void) {
+                                   [pingDelegate readmillReadingSession:self 
+                                                 didFailToPingWithError:error];  
+                               });
+                               
+                               if ([[error domain] isEqualToString:NSURLErrorDomain] || ([error isReadmillDomain] && ![error isClientError])) {
+                                   // Ping was not sent successfully
+                                   [self archiveFailedPing:ping];
+                               }
+                           }
+                       }];
     
     [self updateReadmillReadingSession];
-    
-    [ping release];
-    [pool drain];
-    
-    [self release];
+    [ping release];    
 }
+
 - (void)dealloc {
     // Clean-up code here.
     

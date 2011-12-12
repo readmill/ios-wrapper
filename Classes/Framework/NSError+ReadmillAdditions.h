@@ -11,5 +11,7 @@
 
 @interface NSError (ReadmillAdditions)
 
-- (BOOL)isReadmillClientError;
+- (BOOL)isReadmillDomain;
+- (BOOL)isClientError;
+
 @end
