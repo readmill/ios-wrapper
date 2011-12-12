@@ -100,7 +100,7 @@
     [self setDateStarted:[[cleanedDict objectForKey:kReadmillAPIReadingDateStartedKey] dateWithRFC3339Formatting]];
     [self setClosingRemark:[cleanedDict objectForKey:kReadmillAPIReadingClosingRemarkKey]];
     
-    [self setIsPrivate:([[cleanedDict objectForKey:kReadmillAPIReadingIsPrivateKey] unsignedIntegerValue] == 1)];
+    [self setIsPrivate:([[cleanedDict objectForKey:kReadmillAPIReadingPrivateKey] unsignedIntegerValue] == 1)];
     
     [self setState:[[cleanedDict objectForKey:kReadmillAPIReadingStateKey] unsignedIntegerValue]];
     

@@ -78,25 +78,32 @@
 #pragma mark - 
 #pragma mark - NSCoding
 
+static NSString * const kReadmillAPIConfigurationAccessTokenURLKey = @"accessTokenURL";
+static NSString * const kReadmillAPIConfigurationAPIBaseURLKey = @"apiBaseURL";
+static NSString * const kReadmillAPIConfigurationAuthURLKey = @"authURL";
+static NSString * const kReadmillAPIConfigurationClientIDKey = @"clientID";
+static NSString * const kReadmillAPIConfigurationClientSecretKey = @"clientSecret";
+static NSString * const kReadmillAPIConfigurationRedirectURLKey = @"redirectURL";
+
 - (void)encodeWithCoder:(NSCoder *)aCoder 
 {
-    [aCoder encodeObject:[[self accessTokenURL] absoluteString] forKey:@"accessTokenURL"];
-    [aCoder encodeObject:[[self apiBaseURL] absoluteString] forKey:@"apiBaseURL"];
-    [aCoder encodeObject:[[self authURL] absoluteString] forKey:@"authURL"];
-    [aCoder encodeObject:[self clientID] forKey:@"clientID"];
-    [aCoder encodeObject:[self clientSecret] forKey:@"clientSecret"];
-    [aCoder encodeObject:[[self redirectURL] absoluteString] forKey:@"redirectURL"];
+    [aCoder encodeObject:[[self accessTokenURL] absoluteString] forKey:kReadmillAPIConfigurationAccessTokenURLKey];
+    [aCoder encodeObject:[[self apiBaseURL] absoluteString] forKey:kReadmillAPIConfigurationAPIBaseURLKey];
+    [aCoder encodeObject:[[self authURL] absoluteString] forKey:kReadmillAPIConfigurationAuthURLKey];
+    [aCoder encodeObject:[self clientID] forKey:kReadmillAPIConfigurationClientIDKey];
+    [aCoder encodeObject:[self clientSecret] forKey:kReadmillAPIConfigurationClientSecretKey];
+    [aCoder encodeObject:[[self redirectURL] absoluteString] forKey:kReadmillAPIConfigurationRedirectURLKey];
 }
 - (id)initWithCoder:(NSCoder *)aDecoder 
 {
     self = [super init];
     if (self) {
-        [self setAccessTokenURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:@"accessTokenURL"]]];
-        [self setApiBaseURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:@"apiBaseURL"]]];
-        [self setAuthURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:@"authURL"]]];
-        [self setClientID:[aDecoder decodeObjectForKey:@"clientID"]];
-        [self setClientSecret:[aDecoder decodeObjectForKey:@"clientSecret"]];
-        [self setRedirectURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:@"redirectURL"]]];
+        [self setAccessTokenURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationAccessTokenURLKey]]];
+        [self setApiBaseURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationAPIBaseURLKey]]];
+        [self setAuthURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationAuthURLKey]]];
+        [self setClientID:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationClientIDKey]];
+        [self setClientSecret:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationClientSecretKey]];
+        [self setRedirectURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationRedirectURLKey]]];
     }
     return self;
 }
@@ -105,4 +112,5 @@
 {
     return [NSString stringWithFormat:@"ReadmillAPIConfiguration: %@, with endPoint: %@, clientID: %@", [super description], [self apiBaseURL], [self clientID]];
 }
+
 @end

@@ -55,6 +55,7 @@ typedef enum {
 
 static NSString * const kReadmillDomain = @"com.readmill";
 static NSString * const kReadmillAPIClientIdKey = @"client_id";
+static NSString * const kReadmillAPIClientSecretKey = @"client_secret";
 static NSString * const kReadmillAPIAccessTokenKey = @"access_token";
 
 #pragma mark API Keys - Book
@@ -103,7 +104,7 @@ static NSString * const kReadmillAPIReadingDateFinishedKey = @"finished_at";
 static NSString * const kReadmillAPIReadingDateModifiedKey = @"touched_at";
 static NSString * const kReadmillAPIReadingDateStartedKey = @"started_at";
 static NSString * const kReadmillAPIReadingClosingRemarkKey = @"closing_remark";
-static NSString * const kReadmillAPIReadingIsPrivateKey = @"private";
+static NSString * const kReadmillAPIReadingPrivateKey = @"private";
 static NSString * const kReadmillAPIReadingStateKey = @"state";
 static NSString * const kReadmillAPIReadingBookKey = @"book";
 static NSString * const kReadmillAPIReadingUserKey = @"user";

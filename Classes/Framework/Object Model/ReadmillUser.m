@@ -312,8 +312,7 @@
     id <ReadmillUserAuthenticationDelegate> authenticationDelegate = [properties valueForKey:@"delegate"];
     NSError *error = nil;
     [self updateWithAPIDictionary:[[self apiWrapper] currentUser:&error]];
-    NSLog(@"apiConf: %@", [[self apiWrapper] apiConfiguration]);
-	NSLog(@"error: %@", error);
+
     if (error == nil && authenticationDelegate != nil) {
         
         [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidSucceedWithLoggedInUser:)
@@ -571,7 +570,7 @@
                                 book, @"book", 
                                 [NSNumber numberWithBool:YES], @"createIfNotFound",
 								[NSNumber numberWithInteger:readingState],kReadmillAPIReadingStateKey,
-                                [NSNumber numberWithBool:isPrivate], kReadmillAPIReadingIsPrivateKey,
+                                [NSNumber numberWithBool:isPrivate], kReadmillAPIReadingPrivateKey,
                                 nil];
     
     [self performSelectorInBackground:@selector(findReadingWithProperties:)
@@ -588,7 +587,7 @@
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillReadingFindingDelegate> readingFindingDelegate = [properties valueForKey:@"delegate"];
     BOOL createIfNotFound = [[properties valueForKey:@"createIfNotFound"] boolValue];
-    BOOL isPrivate = [[properties valueForKey:kReadmillAPIReadingIsPrivateKey] boolValue];
+    BOOL isPrivate = [[properties valueForKey:kReadmillAPIReadingPrivateKey] boolValue];
 	ReadmillReadingState readingState = [[properties valueForKey:kReadmillAPIReadingStateKey] integerValue];
     
     NSMutableArray *matchingReadings = [NSMutableArray array];
@@ -694,7 +693,7 @@
                                 readingFindingDelegate, @"delegate",
                                 [NSThread currentThread], @"callbackThread",
                                 book, @"book", 
-                                [NSNumber numberWithBool:isPrivate], kReadmillAPIReadingIsPrivateKey,
+                                [NSNumber numberWithBool:isPrivate], kReadmillAPIReadingPrivateKey,
 								[NSNumber numberWithInteger:readingState], kReadmillAPIReadingStateKey,
                                 nil];
     
@@ -711,7 +710,7 @@
     
     NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
     id <ReadmillReadingFindingDelegate> readingFindingDelegate = [properties valueForKey:@"delegate"];
-    BOOL isPrivate = [[properties valueForKey:kReadmillAPIReadingIsPrivateKey] boolValue];
+    BOOL isPrivate = [[properties valueForKey:kReadmillAPIReadingPrivateKey] boolValue];
 	ReadmillReadingState readingState = [[properties valueForKey:kReadmillAPIReadingStateKey] integerValue];
     ReadmillBook *book = [properties valueForKey:@"book"];
 
