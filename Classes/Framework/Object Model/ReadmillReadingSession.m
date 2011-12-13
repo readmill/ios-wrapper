@@ -135,21 +135,23 @@
     return YES;
 }
 
-- (void)archiveFailedPing:(ReadmillPing *)ping 
++ (void)archiveFailedPing:(ReadmillPing *)ping 
 {    
-    // Grab all archived pings    
-    NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
-    NSMutableArray *failedPings = [[NSMutableArray alloc] init];
-    if (nil != unarchivedPings) {
-        [failedPings addObjectsFromArray:unarchivedPings];
+    @synchronized (self) {
+        // Grab all archived pings    
+        NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
+        NSMutableArray *failedPings = [[NSMutableArray alloc] init];
+        if (nil != unarchivedPings) {
+            [failedPings addObjectsFromArray:unarchivedPings];
+        }
+        // Add the new one
+        [failedPings addObject:ping];
+        // Archive all pings
+        [NSKeyedArchiver archiveReadmillPings:failedPings];
+        
+        NSLog(@"Failed ping: %@\n All pings: %@", ping, failedPings);
+        [failedPings release];
     }
-    // Add the new one
-    [failedPings addObject:ping];
-    // Archive all pings
-    [NSKeyedArchiver archiveReadmillPings:failedPings];
-    
-    NSLog(@"Failed ping: %@\n All pings: %@", ping, failedPings);
-    [failedPings release];
 }
 
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper 
@@ -158,12 +160,11 @@
     NSLog(@"Ping archived pings.");
     NSArray *unarchivedPings = nil;
     unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
-    if (nil != unarchivedPings && 0 < [unarchivedPings count]) {
-        NSMutableArray *failedPings = [[NSMutableArray alloc] init];
-        dispatch_group_t group = dispatch_group_create();
+    if (nil != unarchivedPings && 0 < [unarchivedPings count])  {
+        // Empty the archive
+        [NSKeyedArchiver archiveReadmillPings:[NSArray array]];
         for (ReadmillPing *ping in unarchivedPings) {
 
-            dispatch_group_enter(group);
             [wrapper pingReadingWithId:[ping readingId] 
                           withProgress:[ping progress] 
                      sessionIdentifier:[ping sessionIdentifier] 
@@ -176,23 +177,15 @@
                              if ([[error domain] isEqualToString:NSURLErrorDomain] || // NSURL internet connection
                                  ([error isReadmillDomain] && ![error isClientError])) { // Client error on Readmill
                                  // No client error so ping could not be delivered correctly
-                                 [failedPings addObject:ping];
+                                 [[self class] archiveFailedPing:ping];
                              } else {
                                  NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
                              }
                          } else {
                              NSLog(@"Sent archived ping.");
                          }
-                         dispatch_group_leave(group);
                      }];
         }
-
-        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-            [NSKeyedArchiver archiveReadmillPings:failedPings];
-            NSLog(@"failed pings: %@", failedPings);
-            [failedPings release];
-        });
-        dispatch_release(group);
     } else {
         NSLog(@"No archived pings.");
     }
@@ -257,9 +250,10 @@
                                                  didFailToPingWithError:error];  
                                });
                                
-                               if ([[error domain] isEqualToString:NSURLErrorDomain] || ([error isReadmillDomain] && ![error isClientError])) {
-                                   // Ping was not sent successfully
-                                   [self archiveFailedPing:ping];
+                               if ([[error domain] isEqualToString:NSURLErrorDomain] || // NSURL internet connection
+                                   ([error isReadmillDomain] && ![error isClientError])) { // Client error on Readmill
+                                   // No client error so ping could not be delivered correctly
+                                   [[self class] archiveFailedPing:ping];
                                }
                            }
                        }];

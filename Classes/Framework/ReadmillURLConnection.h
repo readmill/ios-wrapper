@@ -22,7 +22,7 @@ typedef void (^ReadmillURLConnectionCompletionHandler)(NSHTTPURLResponse *respon
     BOOL isExecuting, isFinished;
 }
 @property (nonatomic, copy) NSError *connectionError;
-@property (nonatomic, retain) NSMutableData *responseData;
+@property (nonatomic, readonly, retain) NSMutableData *responseData;
 @property (nonatomic, retain) NSURLConnection *connection;
 @property (nonatomic, copy) NSHTTPURLResponse *response;
 @property (nonatomic, copy) NSURLRequest *request;

@@ -31,6 +31,7 @@
 @interface ReadmillViewReadingUI () 
 {
     UIWebView *webView;
+    ReadmillReadingId readingId;
 }
 
 @property (nonatomic, readwrite, retain) ReadmillReading *reading;
@@ -64,7 +65,6 @@
 -(void)dealloc 
 {    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
     [self setReading:nil];
     [self setDelegate:nil];
     
@@ -114,7 +114,8 @@
     [spinner setCenter:[self.view center]];
     [self.view addSubview:spinner];
     
-    NSURL *url = [[[self reading] apiWrapper] URLForViewingReadingWithId:[[self reading] readingId]];
+    NSURL *url = [[reading apiWrapper] URLForViewingReadingWithId:[reading readingId]];
+    NSLog(@"url: %@", url);
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url 
                                                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                               timeoutInterval:30];

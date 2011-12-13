@@ -47,9 +47,18 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                           parameters:(NSDictionary *)parameters
           shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                                error:(NSError **)error;
+
 - (NSURLRequest *)getRequestWithURL:(NSURL *)url
                          parameters:(NSDictionary *)parameters 
-         shouldBeCalledUnauthorized:(BOOL)allowUnauthed error:(NSError **)error;
+         shouldBeCalledUnauthorized:(BOOL)allowUnauthed 
+                        cachePolicy:(NSURLRequestCachePolicy)cachePolicy
+                              error:(NSError **)error;
+
+- (NSURLRequest *)getRequestWithURL:(NSURL *)url
+                         parameters:(NSDictionary *)parameters 
+         shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                              error:(NSError **)error;
+
 - (NSURLRequest *)bodyRequestWithURL:(NSURL *)url
                           httpMethod:(NSString *)httpMethod 
                           parameters:(NSDictionary *)parameters
@@ -60,14 +69,23 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
              withParameters:(NSDictionary *)parameters 
  shouldBeCalledUnauthorized:(BOOL)allowUnauthed
           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 - (void)sendPostRequestToURL:(NSURL *)url
               withParameters:(NSDictionary *)parameters
   shouldBeCalledUnauthorized:(BOOL)allowUnauthed
            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+- (void)sendGetRequestToURL:(NSURL *)url
+             withParameters:(NSDictionary *)parameters 
+ shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                cachePolicy:(NSURLRequestCachePolicy)cachePolicy
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 - (void)sendGetRequestToURL:(NSURL *)url
              withParameters:(NSDictionary *)parameters 
  shouldBeCalledUnauthorized:(BOOL)allowUnauthed
           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 - (void)sendBodyRequestToURL:(NSURL *)url 
                   httpMethod:(NSString *)httpMethod
               withParameters:(NSDictionary *)parameters 
@@ -386,11 +404,15 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
                                        [self booksEndpoint], 
                                        bookId]];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                kReadmillAPIFilterByFollowings, kReadmillAPIFilterKey, // Filter by followings
+                                [NSNumber numberWithInteger:1], @"highlights_count[from]", nil]; // At least 1 highlight
+    
     [self sendGetRequestToURL:URL 
-               withParameters:[NSDictionary dictionaryWithObjectsAndKeys:
-                               kReadmillAPIFilterByFollowings, kReadmillAPIFilterKey, // Filter by followings
-                               [NSNumber numberWithInteger:1], @"highlights_count[from]", nil] // At least 1 highlight
+               withParameters:parameters
    shouldBeCalledUnauthorized:NO
+                  cachePolicy:NSURLRequestReturnCacheDataElseLoad
             completionHandler:completionHandler];
 }
 
@@ -400,11 +422,15 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
                                        [self booksEndpoint], 
                                        bookId]];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                kReadmillAPIOrderByPopular, kReadmillAPIOrderKey, // Order by popularity (based on comments > highlights > followers)
+                                [NSNumber numberWithInteger:1], @"highlights_count[from]", nil]; // At least 1 highlight
+
     [self sendGetRequestToURL:URL 
-               withParameters:[NSDictionary dictionaryWithObjectsAndKeys:
-                               kReadmillAPIOrderByPopular, kReadmillAPIOrderKey, // Order by popularity (based on comments > highlights > followers)
-                               [NSNumber numberWithInteger:1], @"highlights_count[from]", nil] // At least 1 highlight
+               withParameters:parameters
    shouldBeCalledUnauthorized:YES
+                  cachePolicy:NSURLRequestReturnCacheDataElseLoad
             completionHandler:completionHandler];
 }
 #pragma mark - 
@@ -784,6 +810,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 - (NSURLRequest *)getRequestWithURL:(NSURL *)url 
                          parameters:(NSDictionary *)parameters 
          shouldBeCalledUnauthorized:(BOOL)calledUnauthorized 
+                        cachePolicy:(NSURLRequestCachePolicy)cachePolicy
                               error:(NSError **)error 
 {    
     if (![self ensureAccessTokenIsCurrent:error]) {
@@ -806,13 +833,25 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     [finalParameters release];
         
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:finalURL
-                                                                cachePolicy:NSURLRequestReturnCacheDataElseLoad 
+                                                                cachePolicy:cachePolicy
                                                             timeoutInterval:kTimeoutInterval];
     
 	[request setHTTPMethod:@"GET"];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     [request setTimeoutInterval:kTimeoutInterval];
     return [request autorelease];
+}
+
+- (NSURLRequest *)getRequestWithURL:(NSURL *)url 
+                         parameters:(NSDictionary *)parameters
+         shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                              error:(NSError **)error
+{
+    return [self getRequestWithURL:url 
+                        parameters:parameters
+        shouldBeCalledUnauthorized:allowUnauthed 
+                       cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                             error:error];
 }
 
 - (NSURLRequest *)putRequestWithURL:(NSURL *)url 
@@ -887,12 +926,34 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 - (void)sendGetRequestToURL:(NSURL *)url
              withParameters:(NSDictionary *)parameters  
  shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                cachePolicy:(NSURLRequestCachePolicy)cachePolicy
           completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {    
     NSError *error = nil;
     NSURLRequest *request = [self getRequestWithURL:url 
                                          parameters:parameters 
                          shouldBeCalledUnauthorized:allowUnauthed
+                                        cachePolicy:cachePolicy
+                                              error:&error];
+    
+    if (request) {
+        [self startPreparedRequest:request 
+                        completion:completionHandler];
+    } else {
+        completionHandler(nil, error);
+    }
+}
+
+- (void)sendGetRequestToURL:(NSURL *)url
+             withParameters:(NSDictionary *)parameters  
+ shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
+    NSError *error = nil;
+    NSURLRequest *request = [self getRequestWithURL:url 
+                                         parameters:parameters 
+                         shouldBeCalledUnauthorized:allowUnauthed
+                                        cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                               error:&error];
     
     if (request) {

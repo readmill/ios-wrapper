@@ -60,11 +60,11 @@
 }
 
 /*!
- @param aReading The ReadmillReading to finish.
+ @param reading The ReadmillReading to view.
  @result The initialized ReadmillViewReadingUI object.
  @brief   Initialize a ReadmillViewReadingUI.
  */
--(id)initWithReading:(ReadmillReading *)aReading;
+- (id)initWithReading:(ReadmillReading *)reading;
 
 /*!
  @property reading

@@ -14,6 +14,7 @@
 - (void)finish;
 
 @property (nonatomic, readwrite, copy) ReadmillURLConnectionCompletionHandler completionHandler;
+@property (nonatomic, readwrite, retain) NSMutableData *responseData;
 @end
 
 @implementation ReadmillURLConnection
@@ -83,6 +84,7 @@
     NSLog(@"Operation finished with status code: %d, error: %@, data size: %u", response.statusCode, connectionError, [responseData length]);
 
     [[UIApplication sharedApplication] readmill_popNetworkActivity];
+    
     completionHandler(self.response, self.responseData, self.connectionError);        
 
     [self willChangeValueForKey:@"isExecuting"];
