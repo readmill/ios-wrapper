@@ -339,12 +339,11 @@
                   title:(NSString *)title 
                delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate 
 {    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                bookfindingDelegate, @"delegate",
-                                [NSThread currentThread], @"callbackThread",
-                                isbn, kReadmillAPIBookISBNKey, 
-                                title, kReadmillAPIBookTitleKey,
-                                nil];
+    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+    [properties setValue:bookfindingDelegate forKey:@"delegate"];
+    [properties setValue:[NSThread currentThread] forKey:@"callbackThread"];
+    [properties setValue:isbn forKey:kReadmillAPIBookISBNKey]; 
+    [properties setValue:title forKey:kReadmillAPIBookTitleKey];
     
     [self performSelectorInBackground:@selector(findBookWithProperties:)
                            withObject:properties];
@@ -355,14 +354,13 @@
                          author:(NSString *)author
                        delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate 
 {
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                bookfindingDelegate, @"delegate",
-                                [NSThread currentThread], @"callbackThread",
-                                title, kReadmillAPIBookTitleKey,
-                                isbn, kReadmillAPIBookISBNKey, 
-                                author, kReadmillAPIBookAuthorKey,
-                                [NSNumber numberWithBool:YES], @"createIfNotFound",
-                                nil];
+    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+    [properties setValue:bookfindingDelegate forKey:@"delegate"];
+    [properties setValue:[NSThread currentThread] forKey:@"callbackThread"];
+    [properties setValue:[NSNumber numberWithBool:YES] forKey:@"createIfNotFound"];
+    [properties setValue:title forKey:kReadmillAPIBookTitleKey];
+    [properties setValue:isbn forKey:kReadmillAPIBookISBNKey];
+    [properties setValue:author forKey:kReadmillAPIBookAuthorKey];
     	
     [self performSelectorInBackground:@selector(findBookWithProperties:)
                            withObject:properties];
@@ -471,13 +469,12 @@
                    author:(NSString *)author
                  delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate 
 {    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                bookfindingDelegate, @"delegate",
-                                [NSThread currentThread], @"callbackThread",
-                                isbn, kReadmillAPIBookISBNKey, 
-                                title, kReadmillAPIBookTitleKey,
-                                author, kReadmillAPIBookAuthorKey,
-                                nil];
+    NSMutableDictionary *properties = [NSMutableDictionary dictionary];
+    [properties setValue:bookfindingDelegate forKey:@"delegate"];
+    [properties setValue:[NSThread currentThread] forKey:@"callbackThread"];
+    [properties setValue:isbn forKey:kReadmillAPIBookISBNKey]; 
+    [properties setValue:title forKey:kReadmillAPIBookTitleKey];
+    [properties setValue:author forKey:kReadmillAPIBookAuthorKey];
     
     [self performSelectorInBackground:@selector(createBookWithProperties:)
                            withObject:properties];
