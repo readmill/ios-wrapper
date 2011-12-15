@@ -768,11 +768,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     }
  
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setObject:ISBN forKey:@"isbn"];
-    [parameters setObject:title forKey:@"title"];
-    [parameters setObject:author forKey:@"author"];
-    [parameters setObject:[[self apiConfiguration] clientID] forKey:kReadmillAPIClientIdKey];
-    [parameters setObject:[self accessToken] forKey:kReadmillAPIAccessTokenKey];
+    [parameters setValue:ISBN forKey:@"isbn"];
+    [parameters setValue:title forKey:@"title"];
+    [parameters setValue:author forKey:@"author"];
+    [parameters setValue:[[self apiConfiguration] clientID] forKey:kReadmillAPIClientIdKey];
+    [parameters setValue:[self accessToken] forKey:kReadmillAPIAccessTokenKey];
     
     NSURL *baseURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@ui/#!/connect/book", 
                                                     [self apiEndPoint]]];

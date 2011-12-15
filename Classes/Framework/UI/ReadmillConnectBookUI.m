@@ -32,9 +32,6 @@
 @property (nonatomic, readwrite, retain) ReadmillUser *user;
 @property (nonatomic, readwrite, retain) ReadmillBook *book;
 
-@property (nonatomic, readwrite, retain) NSString *ISBN;
-@property (nonatomic, readwrite, retain) NSString *bookTitle;
-@property (nonatomic, readwrite, retain) NSString *author;
 @property (nonatomic, retain) ReadmillSpinner *spinner;
 @end
 
@@ -44,31 +41,35 @@
 @synthesize delegate;
 @synthesize book;
 
-@synthesize ISBN;
-@synthesize bookTitle;
-@synthesize author;
-
 @synthesize spinner;
 @synthesize webView;
 
-- (id)initWithUser:(ReadmillUser *)aUser ISBN:(NSString *)anISBN title:(NSString *)aTitle author:(NSString *)anAuthor 
+- (id)initWithUser:(ReadmillUser *)aUser 
+              ISBN:(NSString *)anISBN 
+             title:(NSString *)aTitle
+            author:(NSString *)anAuthor 
 {
     if ((self = [super init])) {
         [self setUser:aUser];
-        [self setISBN:anISBN];
-        [self setBookTitle:aTitle];
-        [self setAuthor:anAuthor];
-        NSDictionary *bookDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                        [self ISBN], kReadmillAPIBookISBNKey, 
-                                        [self bookTitle], kReadmillAPIBookTitleKey,
-                                        [self author], kReadmillAPIBookAuthorKey,
-                                        nil];
+        
+        NSMutableDictionary *bookDictionary = [NSMutableDictionary dictionary];
+        [bookDictionary setValue:anISBN forKey:kReadmillAPIBookISBNKey];
+        [bookDictionary setValue:aTitle forKey:kReadmillAPIBookTitleKey];
+        [bookDictionary setValue:anAuthor forKey:kReadmillAPIBookAuthorKey];
         [self setBook:[[[ReadmillBook alloc] initWithAPIDictionary:bookDictionary] autorelease]];
-        [bookDictionary release];
     }
     return self;
 }
-
+- (id)initWithUser:(ReadmillUser *)aUser 
+              book:(ReadmillBook *)aBook
+{
+    self = [super init];
+    if (self) {
+        [self setUser:aUser];
+        [self setBook:aBook];
+    }
+    return self;
+}
 - (void)cleanupWebView 
 {
     [webView setDelegate:nil];
@@ -85,9 +86,6 @@
 - (void)dealloc 
 {    
     [self setUser:nil];
-    [self setISBN:nil];
-    [self setBookTitle:nil];
-    [self setAuthor:nil];
     [self setBook:nil];
     [self setDelegate:nil];
     [self setSpinner:nil];
@@ -133,9 +131,9 @@
     [spinner setCenter:[self.view center]];
     [self.view addSubview:spinner];
     
-    NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[self ISBN] 
-                                                                  title:[self bookTitle] 
-                                                                 author:[self author]];
+    NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[book isbn] 
+                                                                  title:[book title] 
+                                                                 author:[book author]];
 
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
                                                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 

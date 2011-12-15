@@ -64,15 +64,24 @@
     id <ReadmillConnectBookUIDelegate> delegate;
         
 }
+
 /*!
- @param aUser The Readmill user to connect.
+ @param user The Readmill user to connect.
  @param ISBN The ISBN of the book the user wishes to connect.
  @param title The title of the book the user wishes to connect to. 
  @param author The author of the book the user wishes to connect to. 
  @result The initialized ReadmillConnectBookUI object.
  @brief   Initialize a ReadmillConnectBookUI.
  */
-- (id)initWithUser:(ReadmillUser *)aUser ISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author;
+- (id)initWithUser:(ReadmillUser *)user ISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author;
+
+/*!
+ @param user The Readmill user to connect.
+ @param book The ReadmillBook object the user wishes to connect.
+ @result The initialized ReadmillConnectBookUI object.
+ @brief   Initialize a ReadmillConnectBookUI.
+ */
+- (id)initWithUser:(ReadmillUser *)user book:(ReadmillBook *)book;
 
 /*!
  @property user 
