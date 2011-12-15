@@ -197,8 +197,8 @@
 #pragma mark Threaded Messages
 
 - (void)pingWithProgress:(ReadmillReadingProgress)progress 
-           pingDuration:(ReadmillPingDuration)pingDuration 
-               delegate:(id <ReadmillPingDelegate>)pingDelegate 
+            pingDuration:(ReadmillPingDuration)pingDuration 
+                delegate:(id <ReadmillPingDelegate>)pingDelegate 
 {
     [self pingWithProgress:progress 
               pingDuration:pingDuration 
@@ -208,10 +208,10 @@
 }
 
 - (void)pingWithProgress:(ReadmillReadingProgress)progress
-           pingDuration:(ReadmillPingDuration)pingDuration 
-               latitude:(CLLocationDegrees)latitude 
-              longitude:(CLLocationDegrees)longitude 
-               delegate:(id<ReadmillPingDelegate>)pingDelegate 
+            pingDuration:(ReadmillPingDuration)pingDuration 
+                latitude:(CLLocationDegrees)latitude 
+               longitude:(CLLocationDegrees)longitude 
+                delegate:(id<ReadmillPingDelegate>)pingDelegate 
 {    
     NSString *sessionIdentifier = [self generateSessionIdentifier];
     
@@ -241,7 +241,7 @@
                                });
                                
                                // Since we succeeded to ping, try to send any archived pings
-                               [ReadmillReadingSession pingArchived:[self apiWrapper]];
+                               [[self class] pingArchived:[self apiWrapper]];
                                
                            } else if (error != nil && pingDelegate != nil) {
                                

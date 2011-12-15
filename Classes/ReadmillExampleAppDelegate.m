@@ -27,6 +27,7 @@
 
     NSURL *redirectURL;
 }
+
 @property (nonatomic, retain) NSURL *redirectURL;
 @end
 
@@ -37,14 +38,42 @@
 @synthesize signingInViewController;
 @synthesize apiConfiguration;
 @synthesize redirectURL;
+@synthesize navigationController;
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    [self authenticate];
+    // If we were launched with a URL, attempt to authenticate from it - delegates for this are handled below, the same as authenticating with values from NSUserDefaults.
+    
+    if ([launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] != nil) {
+        
+        NSURL *url = [launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
+        
+        [ReadmillUser authenticateCallbackURL:url
+                              baseCallbackURL:[self redirectURL]
+                                     delegate:self
+                             apiConfiguration:[self apiConfiguration]];
+
+    }
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:[self signingInViewController]];
+    [self setNavigationController:navController];
+    [navController release];
+    
+    [[self window] setRootViewController:navigationController];
+    [[self window] makeKeyAndVisible];
+    
+    return YES;
+    
+}
+
+- (void)authenticate 
+{
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"] == nil) {
         
         // We don't have saved credentials. Boot the user out to Readmill for authentication with a callback URL this application is set up to handle. 
-                
+        
         NSURL *url = [ReadmillUser clientAuthorizationURLWithRedirectURL:[self redirectURL] 
                                                         apiConfiguration:[self apiConfiguration]];
         [[UIApplication sharedApplication] openURL:url];
@@ -56,76 +85,68 @@
         [ReadmillUser authenticateWithPropertyListRepresentation:savedCredentials
                                                         delegate:self];
     }
-    
-    // If we were launched with a URL, attempt to authenticate from it - delegates for this are handled below, the same as authenticating with values from NSUserDefaults.
-    
-    if ([launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] != nil) {
-        
-        NSURL *url = [launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
-        
-        NSLog(@"callbackurl: %@", url);
-        NSLog(@"baseCallback: %@", [self redirectURL]);
-        [ReadmillUser authenticateCallbackURL:url
-                              baseCallbackURL:[self redirectURL]
-                                     delegate:self
-                             apiConfiguration:[self apiConfiguration]];
-
-    }
-    
-    [[self window] setRootViewController:[self signingInViewController]];
-    [[self window] makeKeyAndVisible];
-    
-    return YES;
-    
 }
-
 #pragma mark - 
 #pragma mark - API Configuration
 
-- (ReadmillAPIConfiguration *)apiConfiguration {
+- (ReadmillAPIConfiguration *)apiConfiguration 
+{
     if (!apiConfiguration) {
-        [self setApiConfiguration:[ReadmillAPIConfiguration configurationForStagingWithClientID:@"e09c966d93341f0518b6e18a49644a43" 
-                                                                                   clientSecret:@"a96949a97ab737b326a0e2fed334c49c" 
-                                                                                    redirectURL:[self redirectURL]]];
+        /*
+        [self setApiConfiguration:[ReadmillAPIConfiguration configurationForProductionWithClientID:@"994ab561cda91e036a271ca7dbaeff71" 
+                                                                                      clientSecret:@"26a08e050145cab8aa705eced9980c90" 
+                                                                                       redirectURL:[self redirectURL]]];*/
+
+        ReadmillAPIConfiguration *apiConf = [[ReadmillAPIConfiguration alloc] initWithClientID:@"484fe693816c497ae3f60ea1cfc60892" 
+                                                                                  clientSecret:@"4e80bf4530fb33d39cf9ecd233b4ce4a" 
+                                                                                   redirectURL:nil
+                                                                                    apiBaseURL:[NSURL URLWithString:@"http://api.readmill.local:8080/"] 
+                                                                                       authURL:[NSURL URLWithString:@"http://m.readmill.local:8080/"]];
+        
+        [self setApiConfiguration:apiConf];
+        [apiConf release];
     }
     return apiConfiguration;
 }
 
-- (NSURL *)redirectURL {
+- (NSURL *)redirectURL 
+{
     if (!redirectURL) {
-        [self setRedirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]];
+        //[self setRedirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]];
+        [self setRedirectURL:[NSURL URLWithString:@"readmill-beta://authorize"]];
     }
     return redirectURL;
 }
 #pragma mark -
 #pragma mark Authentication Delegates
 
--(void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError {
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Authentication Failed!"
-                                                    message:[authenticationError localizedDescription]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:nil];
-    
-    [[alert autorelease] show];
+- (void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError 
+{    
+    // Check if user has deauthorized the app
+    if ([authenticationError code] == 401) {
+        
+        [[[[UIAlertView alloc] initWithTitle:@"Authentication Failed!"
+                                     message:[authenticationError localizedDescription]
+                                    delegate:nil
+                           cancelButtonTitle:@"Cancel"
+                           otherButtonTitles:nil] autorelease] show];
 
-    // Clear any saved credentials and start again next time.
-    
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"readmill"];
+        // Clear any saved credentials and start again next time.
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"readmill"];
+    }
 }
 
--(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser {
-    // Authentication was successful. 
+- (void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser 
+{    // Authentication was successful. 
     
-    [[self signedInViewController] setUser:loggedInUser];    
-    [[self window] setRootViewController:[self signedInViewController]];
+    [[self signedInViewController] setUser:loggedInUser]; 
+    [navigationController pushViewController:signedInViewController animated:YES];
 }
 
 #pragma mark -
 
--(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-	
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url 
+{	
     NSLog(@"callbackurl: %@", url);
     NSLog(@"baseCallback: %@", [self redirectURL]);
     [ReadmillUser authenticateCallbackURL:url
@@ -157,7 +178,8 @@
     [apiConfiguration release];
     [window release];
     [signedInViewController release];
-
+    [navigationController release];
+    
     [super dealloc];
 }
 

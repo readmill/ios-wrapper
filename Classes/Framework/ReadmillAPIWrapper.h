@@ -204,7 +204,7 @@ static NSString * const kReadmillAPIOrderByPopular = @"popular";
  credentials will break the authentication and starting the authentication process (sending the 
  user to the Readmill site) will be required.
  */
--(id)initWithPropertyListRepresentation:(NSDictionary *)plist;
+- (id)initWithPropertyListRepresentation:(NSDictionary *)plist;
 
 /*!
  @result A set of saved credentials appropriate for storing in NSUserDefaults.
@@ -224,7 +224,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  observing, or save them when the application is about to quit.
  
  */
--(NSDictionary *)propertyListRepresentation;
+- (NSDictionary *)propertyListRepresentation;
 
 #pragma mark -
 #pragma mark Properties
@@ -272,7 +272,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call this automatically if 
  needed. There's normally no need to call this yourself except for debugging purposes. 
  */
--(BOOL)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error;
+- (BOOL)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error;
 
 /*!
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
@@ -282,7 +282,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call this automatically if 
  needed. There's normally no need to call this yourself except for debugging purposes. 
  */
--(BOOL)ensureAccessTokenIsCurrent:(NSError **)error;
+- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error;
 
 /*!
  @param redirect The URL Readmill should return to once authorization succeeds. 
@@ -290,7 +290,7 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Obtain an authorization URL containing the parameters to have Readmill redirect a 
  successful authorization back to the given URL.
  */
--(NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect;
+- (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect;
 
 
 #pragma mark -
@@ -361,7 +361,9 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  IMPORTANT: This will add a book to Readmill even if it already exists. Please search for a book before creating a new one, or use the 
  -findOrCreateBookWithISBN:title:author:delegate: convenience method in the ReadmillUser object, which does this for you. 
  */
-- (void)addBookWithTitle:(NSString* )bookTitle author:(NSString *)bookAuthor isbn:(NSString *)bookIsbn 
+- (void)addBookWithTitle:(NSString* )bookTitle
+                  author:(NSString *)bookAuthor
+                    isbn:(NSString *)bookIsbn 
        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
@@ -378,7 +380,10 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  IMPORTANT: This will add a reading to Readmill even if it already exists. Please search for a reading before creating a new one, or use the 
  -findOrCreateReadingForBook:delegate: convenience method in the ReadmillUser object, which does this for you. 
  */
--(void)createReadingWithBookId:(ReadmillBookId)bookId state:(ReadmillReadingState)readingState private:(BOOL)isPrivate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)createReadingWithBookId:(ReadmillBookId)bookId 
+                          state:(ReadmillReadingState)readingState 
+                      isPrivate:(BOOL)isPrivate
+              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading to update.
@@ -387,7 +392,11 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Update a reading with the given Id with a new state, privacy and closing remark. 
 */
--(void)updateReadingWithId:(ReadmillReadingId)readingId withState:(ReadmillReadingState)readingState private:(BOOL)isPrivate closingRemark:(NSString *)remark completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)updateReadingWithId:(ReadmillReadingId)readingId
+                  withState:(ReadmillReadingState)readingState
+                  isPrivate:(BOOL)isPrivate
+              closingRemark:(NSString *)remark
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param userId The user Id of the user you'd like readings for.
@@ -395,8 +404,18 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @result A list of readings in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
  @brief   Get a list of readings for a given user Id. 
 */
--(void)publicReadingsForUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)publicReadingsForUserWithId:(ReadmillUserId)userId 
+                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
  
+/*!
+ @param userId The user Id of the user you'd like readings for.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @result A list of readings in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
+ @brief   Get a list of readings for a given user Id. 
+ */
+- (void)readingsForUserWithId:(ReadmillUserId)userId 
+            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 
 /*!
  @param readingId The Id of the reading you'd like to get details for.
@@ -405,35 +424,40 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @brief   Get a specific reading by its id.
  */
 
--(void)readingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)readingWithId:(ReadmillReadingId)readingId 
+    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param url The URL as a string of the reading you'd like to get details for.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get a specific reading by its URL.
  */
-- (void)readingWithURLString:(NSString *)urlString completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)readingWithURLString:(NSString *)urlString 
+           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get all readings for the book with the specifiedId
  */
-- (void)readingsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)readingsForBookWithId:(ReadmillBookId)bookId 
+            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get the readings for the book with the specified bookId, filtered by followed people.
  */
-- (void)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId 
+                             completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get the most popular readings for the book with the specified bookId.
  */
-- (void)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId 
+                            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Pings
@@ -447,7 +471,12 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time.
  */
--(void)pingReadingWithId:(ReadmillReadingId)readingId withProgress:(ReadmillReadingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)pingReadingWithId:(ReadmillReadingId)readingId 
+             withProgress:(ReadmillReadingProgress)progress
+        sessionIdentifier:(NSString *)sessionId
+                 duration:(ReadmillPingDuration)duration
+           occurrenceTime:(NSDate *)occurrenceTime
+        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading you'd like to ping.
@@ -460,7 +489,14 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time. 
  */
--(void)pingReadingWithId:(ReadmillReadingId)readingId withProgress:(ReadmillReadingProgress)progress sessionIdentifier:(NSString *)sessionId duration:(ReadmillPingDuration)duration occurrenceTime:(NSDate *)occurrenceTime latitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)pingReadingWithId:(ReadmillReadingId)readingId 
+             withProgress:(ReadmillReadingProgress)progress
+        sessionIdentifier:(NSString *)sessionId
+                 duration:(ReadmillPingDuration)duration
+           occurrenceTime:(NSDate *)occurrenceTime 
+                 latitude:(CLLocationDegrees)latitude
+                longitude:(CLLocationDegrees)longitude
+        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Highlights
@@ -478,7 +514,15 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Send a highlighted text snippet to Readmill.
  */
--(void)createHighlightForReadingWithId:(ReadmillReadingId)readingId highlightedText:(NSString *)highlightedText pre:(NSString *)pre post:(NSString *)post approximatePosition:(ReadmillReadingProgress)position highlightedAt:(NSDate *)highlightedAt comment:(NSString *)comment connections:(NSArray *)connectionsOrNil completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
+                        highlightedText:(NSString *)highlightedText
+                                    pre:(NSString *)preOrNil
+                                   post:(NSString *)postOrNil
+                    approximatePosition:(ReadmillReadingProgress)position
+                          highlightedAt:(NSDate *)highlightedAtOrNil
+                                comment:(NSString *)commentOrNil
+                            connections:(NSArray *)connectionsOrNil
+                      completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading.
@@ -522,22 +566,15 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  @param completionHandler A block that will return the result and an error pointer.
  @brief   Get a specific user by their id. 
  */
--(void)userWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
-
-/*!
- @param userName The username of the user you'd like to get details for.
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result A specific user in the Readmill system as an NSDictionary object. See the API Keys - User section of this header for keys. 
- @brief   Get a specific user by their Readmill username. 
- */
-//-(NSDictionary *)userWithName:(NSString *)userName error:(NSError **)error;
+- (void)userWithId:(ReadmillUserId)userId
+ completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @result The current authenticated user as an NSDictionary object. See the API Keys - User section of this header for keys. 
  @brief   Get the currently logged in user. 
  */
--(NSDictionary *)currentUser:(NSError **)error;
+- (NSDictionary *)currentUser:(NSError **)error;
 
 /*!
  @param completionHandler A block that will return the result (id) and an NSError object if an error occurs. 

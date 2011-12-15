@@ -300,25 +300,33 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 #pragma mark - Readings
 
-- (void)createReadingWithBookId:(ReadmillBookId)bookId state:(ReadmillReadingState)readingState private:(BOOL)isPrivate 
+- (void)createReadingWithBookId:(ReadmillBookId)bookId 
+                          state:(ReadmillReadingState)readingState 
+                      isPrivate:(BOOL)isPrivate 
               completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
-    [parameters setValue:[NSNumber numberWithInteger:readingState] forKey:kReadmillAPIReadingStateKey];
-    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] forKey:kReadmillAPIReadingPrivateKey];
-    [parameters setValue:[[self apiConfiguration] clientID] forKey:kReadmillAPIClientIdKey];
+    [parameters setValue:[NSNumber numberWithInteger:readingState] 
+                  forKey:kReadmillAPIReadingStateKey];
+    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0]
+                  forKey:kReadmillAPIReadingPrivateKey];
+    [parameters setValue:[[self apiConfiguration] clientID] 
+                  forKey:kReadmillAPIClientIdKey];
     
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", [self booksEndpoint], bookId]];
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
+                                       [self booksEndpoint], 
+                                       bookId]];
+
     [self sendPostRequestToURL:URL
-                withParameters:parameters
+                withParameters:[NSDictionary dictionaryWithObject:parameters forKey:kReadmillAPIReadingKey]
     shouldBeCalledUnauthorized:NO
              completionHandler:completionHandler];
 }
 
 - (void)updateReadingWithId:(ReadmillReadingId)readingId 
                   withState:(ReadmillReadingState)readingState
-                    private:(BOOL)isPrivate 
+                  isPrivate:(BOOL)isPrivate 
               closingRemark:(NSString *)remark 
           completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {    
@@ -358,6 +366,17 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     [self sendGetRequestToURL:URL   
                withParameters:nil
    shouldBeCalledUnauthorized:YES
+            completionHandler:completionHandler];
+}
+
+- (void)readingsForUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
+                                       [self usersEndpoint], 
+                                       userId]];
+    [self sendGetRequestToURL:URL   
+               withParameters:nil
+   shouldBeCalledUnauthorized:NO
             completionHandler:completionHandler];
 }
 
@@ -908,7 +927,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     [request setTimeoutInterval:kTimeoutInterval];
     [finalParameters release];
-    
     return [request autorelease];
 }
 
@@ -1087,10 +1105,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
         
         NSError *error = nil;
 
-        // If we created something (book, reading etc) we receive a 201 Created response.
-        // We issue a GET request with the URL found in the "Location" header.
+        // If we created something (201) or tried to create an existing
+        // resource (409), we issue a GET request with the URL found 
+        // in the "Location" header that contains the resource.
         NSString *locationHeader = [[response allHeaderFields] valueForKey:LocationHeader];
-        if ([response statusCode] == 201 && locationHeader != nil) {
+        if (([response statusCode] == 201 || [response statusCode] == 409) && locationHeader != nil) {
             
             NSURL *locationURL = [NSURL URLWithString:locationHeader];
             NSURLRequest *newRequest = [self getRequestWithURL:locationURL 

@@ -33,6 +33,8 @@
     ReadmillAPIConfiguration *apiConfiguration;
 }
 
+- (void)authenticate;
+
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
 @property (nonatomic, retain) IBOutlet ReadmillSignedInViewController *signedInViewController;
@@ -40,4 +42,5 @@
 
 @property (nonatomic, retain) ReadmillAPIConfiguration *apiConfiguration;
 
+@property (nonatomic, retain) UINavigationController *navigationController;
 @end

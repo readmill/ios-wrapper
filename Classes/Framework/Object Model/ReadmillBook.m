@@ -45,12 +45,13 @@
 @implementation ReadmillBook
 
 
-- (id)init {
+- (id)init 
+{
     return [self initWithAPIDictionary:nil];
 }
 
--(id)initWithAPIDictionary:(NSDictionary *)apiDict {
-    
+- (id)initWithAPIDictionary:(NSDictionary *)apiDict 
+{
     if ((self = [super init])) {
         
         // Clean out null values from JSON
@@ -86,8 +87,8 @@
     return self;
 }
 
--(NSString *)description {
-    
+-(NSString *)description 
+{    
     return [NSString stringWithFormat:@"%@ id %d: %@ by %@ [ISBN %@]", [super description], [self bookId], [self title], [self author], [self isbn]];
 }
 
@@ -108,8 +109,6 @@
 
 - (void)dealloc 
 {
-    // Clean-up code here.
-    
     [self setAuthor:nil];
     [self setIsbn:nil];
     [self setLanguage:nil];
@@ -126,8 +125,8 @@
 #pragma mark -
 #pragma mark NSCoding
 
--(void)encodeWithCoder:(NSCoder *)encoder {	
-    
+-(void)encodeWithCoder:(NSCoder *)encoder 
+{	    
     [encoder encodeObject:[self title] forKey:@"title"];
     [encoder encodeObject:[self coverImageURL] forKey:@"coverImageURL"];
     [encoder encodeObject:[self metaDataURL] forKey:@"metaDataURL"];
@@ -141,8 +140,8 @@
     [encoder encodeObject:[self datePublished] forKey:@"datePublished"];
 }
 
--(id)initWithCoder:(NSCoder *)decoder {
-    
+- (id)initWithCoder:(NSCoder *)decoder 
+{    
     if ((self = [super init])) { 
         [self setTitle:[decoder decodeObjectForKey:@"title"]];
         [self setCoverImageURL:[decoder decodeObjectForKey:@"coverImageURL"]];

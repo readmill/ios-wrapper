@@ -235,7 +235,7 @@
     
     [[self apiWrapper] updateReadingWithId:[self readingId]
                                  withState:newState
-                                   private:privacy
+                                 isPrivate:privacy
                              closingRemark:remark
                          completionHandler:^(id result, NSError *error) {
                                     //

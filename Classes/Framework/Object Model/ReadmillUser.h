@@ -25,6 +25,7 @@
 #import "ReadmillBook.h"
 
 @class ReadmillUser;
+@class ReadmillReading;
 
 @protocol ReadmillUserAuthenticationDelegate <NSObject>
 
@@ -32,13 +33,13 @@
  @param authenticationError An NSError object describing the error. 
  @brief   Delegate method informing the target that the Readmill authentication failed. 
  */
--(void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError;
+- (void)readmillAuthenticationDidFailWithError:(NSError *)authenticationError;
 
 /*!
  @param loggedInUser A ReadmillUser object, authenticated with Readmill and ready to use. 
  @brief   Delegate method informing the target that the Readmill authentication succeeded. 
  */
--(void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser;
+- (void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser;
 
 @end
 @protocol ReadmillBookFindingDelegate <NSObject>
@@ -48,38 +49,38 @@
  @param books An array of ReadmillBook objects that matched the given search parameters or were created. 
  @brief   Delegate method informing the target that Readmill found or created the given books. 
  */
--(void)readmillUser:(ReadmillUser *)user didFindBook:(ReadmillBook *)book;
+- (void)readmillUser:(ReadmillUser *)user didFindBook:(ReadmillBook *)book;
 
 /*!
  @param user The user object that was performing the request.
  @brief   Delegate method informing the target that Readmill could not find any books matching the previously given search criteria. 
  */
--(void)readmillUserFoundNoBook:(ReadmillUser *)user;
+- (void)readmillUserFoundNoBook:(ReadmillUser *)user;
 
 /*!
  @param user The user object that was performing the request
  @param error An NSError object describing the error that occurred. 
  @brief   Delegate method informing the target that and error occurred attempting to search for or create book(s). 
  */
--(void)readmillUser:(ReadmillUser *)user failedToFindBookWithError:(NSError *)error;
+- (void)readmillUser:(ReadmillUser *)user failedToFindBookWithError:(NSError *)error;
 
 @end
 @protocol ReadmillReadingFindingDelegate <NSObject>
 
 /*!
  @param user The user object that was performing the request.
- @param readings An array of ReadmillReading objects that matched the given search parameters or were created. 
- @param book The book that the reading(s) were found or created for.
- @brief   Delegate method informing the target that Readmill found or created the given readings. 
+ @param reading The ReadmillReading objects that matched the given search parameters or were created. 
+ @param book The book that the reading were found or created for.
+ @brief   Delegate method informing the target that Readmill found or created the given reading.
  */
--(void)readmillUser:(ReadmillUser *)user didFindReadings:(NSArray *)readings forBook:(ReadmillBook *)book;
+- (void)readmillUser:(ReadmillUser *)user didFindReading:(ReadmillReading *)reading forBook:(ReadmillBook *)book;
 
 /*!
  @param user The user object that was performing the request.
  @param book The book that the reading(s) were found or created for.
- @brief   Delegate method informing the target that Readmill could not find any readings matching the previously given search criteria and book. 
+ @brief   Delegate method informing the target that Readmill could not find any reading matching the previously given search criteria and book. 
  */
--(void)readmillUser:(ReadmillUser *)user foundNoReadingsForBook:(ReadmillBook *)book;
+- (void)readmillUser:(ReadmillUser *)user foundNoReadingForBook:(ReadmillBook *)book;
 
 /*!
  @param user The user object that was performing the request
@@ -87,7 +88,7 @@
  @param error An NSError object describing the error that occurred. 
  @brief   Delegate method informing the target that and error occurred attempting to search for or create reading(s). 
  */
--(void)readmillUser:(ReadmillUser *)user failedToFindReadingForBook:(ReadmillBook *)book withError:(NSError *)error;
+- (void)readmillUser:(ReadmillUser *)user failedToFindReadingForBook:(ReadmillBook *)book withError:(NSError *)error;
 
 @end
 
@@ -191,7 +192,7 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  for new authentications or +authenticateWithPropertyListRepresentation:delegate: for existing, saved details.
  
  */
--(id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper;
+- (id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper;
 
 /*!
  @paramRep plist The saved credentials.
@@ -207,7 +208,7 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  credentials will break the authentication and starting the authentication process (sending the 
  user to the Readmill site) will be required.
  */
--(id)initWithPropertyListRepresentation:(NSDictionary *)plistRep;
+- (id)initWithPropertyListRepresentation:(NSDictionary *)plistRep;
 
 /*!
  @result A set of saved credentials appropriate for storing in NSUserDefaults.
@@ -227,7 +228,7 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  observing, or save them when the application is about to quit.
  
  */
--(NSDictionary *)propertyListRepresentation;
+- (NSDictionary *)propertyListRepresentation;
 
 /*!
  @param apiDict An API user dictionary. 
@@ -235,7 +236,7 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  
  Typically, there's no need to call this method.
  */
--(void)updateWithAPIDictionary:(NSDictionary *)apiDict;
+- (void)updateWithAPIDictionary:(NSDictionary *)apiDict;
 
 #pragma mark -
 #pragma mark Authentication
@@ -248,13 +249,13 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  
 See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiConfiguration: for detailed discussion.
  */
--(void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
+- (void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
 
 /*!
  @param authenticationDelegate The delegate object to receive notifications of success or failure.
  @brief   Verify the authentication credentials of this user with Readmill.
  */
--(void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
+- (void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
 
 #pragma mark -
 #pragma mark Books
@@ -269,19 +270,7 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
  with a title different to that passed in, it will still be returned. This also applies if no books with the passed ISBN 
  are found but match the passed title. 
  */
--(void)findBookWithISBN:(NSString *)isbn title:(NSString *)title delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
-
-/*!
- @param isbn The full ISBN of the book to create.
- @param title The full title of the book to create.
- @param author The full author of the book to create.
- @param bookfindingDelegate The delegate object to receive notifications of success or failure.
- @brief   Create a book in Readmill.
- 
-IMPORTANT: The book will be created even if it exists in Readmill. Please search first, or use the convenience method
- -findOrCreateBookWithISBN:title:author:delegate:.
- */
--(void)createBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+- (void)findBookWithISBN:(NSString *)isbn title:(NSString *)title delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 /*!
  @param isbn The full ISBN of the book to find or create.
@@ -293,32 +282,14 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
  Note: Books are searched for first by ISBN, then by title - not both at the same time. If the ISBN matches a book
  with a title different to that passed in, it will still be returned. This also applies if no books with the passed ISBN 
  are found but match the passed title. 
- 
- This is equivalent of calling -findBooksWithISBN:title:author:delegate:, then calling createBookWithISBN:title:author:delegate: if none are found.
  */
--(void)findOrCreateBookWithISBN:(NSString *)isbn title:(NSString *)title author:(NSString *)author delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+- (void)findOrCreateBookWithISBN:(NSString *)isbn
+                           title:(NSString *)title
+                          author:(NSString *)author
+                        delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 #pragma mark -
 #pragma mark Readings
-
-/*!
- @param book The book to create a reading for.
- @param readingState The initial reading state.
- @param isPrivate The privacy of the reading.
- @param readingFindingDelegate The delegate object to receive notifications of success or failure.
- @brief   Create a reading for the given book in Readmill.
- 
- IMPORTANT: The reading will be created even if one exists in Readmill. Please search first, or use the convenience method
- -findOrCreateReadingForBook:delegate:.
- */
--(void)createReadingForBook:(ReadmillBook *)book state:(ReadmillReadingState)readingState isPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
-
-/*!
- @param book The book to find a reading for.
- @param readingFindingDelegate The delegate object to receive notifications of success or failure.
- @brief   Find a reading for the given book in Readmill.
- */
--(void)findReadingForBook:(ReadmillBook *)book delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
 
 /*!
  @param book The book to find or create a reading for.
@@ -327,9 +298,12 @@ IMPORTANT: The book will be created even if it exists in Readmill. Please search
  @param readingFindingDelegate The delegate object to receive notifications of success or failure.
  @brief   Find a reading for the given book in Readmill, creating one if it doesn't exist.
 
- This is equivalent of calling -createReadingForBook:delegate:, then calling findReadingForBook:delegate: if none are found.
+ This method returns any existing reading for the particular bookId.
  */
--(void)findOrCreateReadingForBook:(ReadmillBook *)book state:(ReadmillReadingState)readingState createdReadingIsPrivate:(BOOL)isPrivate delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
+- (void)findOrCreateReadingForBook:(ReadmillBook *)book 
+                            state:(ReadmillReadingState)readingState 
+          createdReadingIsPrivate:(BOOL)isPrivate
+                         delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
 
 #pragma mark -
 #pragma mark Properties
