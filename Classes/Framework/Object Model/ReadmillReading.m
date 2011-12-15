@@ -83,7 +83,7 @@
     
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
-    NSDictionary *userDictionary = [apiDict objectForKey:kReadmillAPIReadingUserKey];
+    NSDictionary *userDictionary = [apiDict objectForKey:kReadmillAPIUserKey];
     if (userDictionary) {
         // We might get a user_id only or a brief JSON object representing the user
         if ([self user]) {
@@ -107,7 +107,7 @@
     if ([self user]) {
         [self setUserId:[user userId]];
     } else {
-        [self setUserId:[[[cleanedDict objectForKey:kReadmillAPIReadingUserKey] objectForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
+        [self setUserId:[[[cleanedDict objectForKey:kReadmillAPIUserKey] objectForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
     }
     [self setBookId:[[[cleanedDict objectForKey:kReadmillAPIReadingBookKey] objectForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
     [self setReadingId:[[cleanedDict objectForKey:kReadmillAPIReadingIdKey] unsignedIntegerValue]];

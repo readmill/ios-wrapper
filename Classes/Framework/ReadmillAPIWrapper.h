@@ -60,6 +60,7 @@ static NSString * const kReadmillAPIAccessTokenKey = @"access_token";
 
 #pragma mark API Keys - Book
 
+static NSString * const kReadmillAPIBookKey = @"book";
 static NSString * const kReadmillAPIBookAuthorKey = @"author";
 static NSString * const kReadmillAPIBookLanguageKey = @"language";
 static NSString * const kReadmillAPIBookSummaryKey = @"story";
@@ -76,6 +77,7 @@ static NSString * const kReadmillAPIBookDatePublishedKey = @"published_at";
 
 #pragma mark API Keys - User
 
+static NSString * const kReadmillAPIUserKey = @"user";
 static NSString * const kReadmillAPIUserAvatarURLKey = @"avatar_url";
 static NSString * const kReadmillAPIUserAbandonedBooksKey = @"books_abandoned";
 static NSString * const kReadmillAPIUserFinishedBooksKey = @"books_finished";
@@ -107,7 +109,6 @@ static NSString * const kReadmillAPIReadingClosingRemarkKey = @"closing_remark";
 static NSString * const kReadmillAPIReadingPrivateKey = @"private";
 static NSString * const kReadmillAPIReadingStateKey = @"state";
 static NSString * const kReadmillAPIReadingBookKey = @"book";
-static NSString * const kReadmillAPIReadingUserKey = @"user";
 static NSString * const kReadmillAPIReadingIdKey = @"id";
 static NSString * const kReadmillAPIReadingEstimatedTimeLeftKey = @"estimated_time_left";;
 static NSString * const kReadmillAPIReadingDurationKey = @"duration";
@@ -136,6 +137,7 @@ static NSString * const kReadmillAPIHighlightHighlightedAtKey = @"highlighted_at
 
 #pragma mark API Keys - Comments
 
+static NSString * const kReadmillAPICommentIdKey = @"id";
 static NSString * const kReadmillAPICommentPostedAtKey = @"posted_at";
 static NSString * const kReadmillAPICommentContentKey = @"content";
 

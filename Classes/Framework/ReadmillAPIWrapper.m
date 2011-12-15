@@ -224,7 +224,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPBody:[parameters JSONData]];
-        [request setTimeoutInterval:kTimeoutInterval];
         
         NSDictionary *response = [self sendPreparedRequest:request 
                                                      error:error];
@@ -337,7 +336,8 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                              forKey:kReadmillAPIReadingClosingRemarkKey];
     }
 
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:readingParameters forKey:@"reading"];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:readingParameters 
+                                                           forKey:kReadmillAPIReadingKey];
     [readingParameters release];
     
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
@@ -494,7 +494,8 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                           forKey:kReadmillAPIBookISBNKey];
     }
     
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:bookParameters forKey:@"book"];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:bookParameters 
+                                                           forKey:kReadmillAPIBookKey];
     [bookParameters release];
     
     [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", [self booksEndpoint]]]
