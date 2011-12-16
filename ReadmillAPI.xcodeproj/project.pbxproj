@@ -849,6 +849,7 @@
 		73840E071358FD3200553156 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
@@ -859,6 +860,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "Readmill Example";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 			};
 			name = Distribution;
@@ -889,6 +891,7 @@
 		96BEAEEE12F05E80006028D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -900,6 +903,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "Readmill Example";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 			};
 			name = Debug;
@@ -907,6 +911,7 @@
 		96BEAEEF12F05E80006028D0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
@@ -917,6 +922,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "Readmill Example";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 			};
 			name = Release;

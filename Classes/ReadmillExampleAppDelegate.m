@@ -92,19 +92,9 @@
 - (ReadmillAPIConfiguration *)apiConfiguration 
 {
     if (!apiConfiguration) {
-        /*
         [self setApiConfiguration:[ReadmillAPIConfiguration configurationForProductionWithClientID:@"994ab561cda91e036a271ca7dbaeff71" 
                                                                                       clientSecret:@"26a08e050145cab8aa705eced9980c90" 
-                                                                                       redirectURL:[self redirectURL]]];*/
-
-        ReadmillAPIConfiguration *apiConf = [[ReadmillAPIConfiguration alloc] initWithClientID:@"484fe693816c497ae3f60ea1cfc60892" 
-                                                                                  clientSecret:@"4e80bf4530fb33d39cf9ecd233b4ce4a" 
-                                                                                   redirectURL:nil
-                                                                                    apiBaseURL:[NSURL URLWithString:@"http://api.readmill.local:8080/"] 
-                                                                                       authURL:[NSURL URLWithString:@"http://m.readmill.local:8080/"]];
-        
-        [self setApiConfiguration:apiConf];
-        [apiConf release];
+                                                                                       redirectURL:[self redirectURL]]];        
     }
     return apiConfiguration;
 }
@@ -112,8 +102,7 @@
 - (NSURL *)redirectURL 
 {
     if (!redirectURL) {
-        //[self setRedirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]];
-        [self setRedirectURL:[NSURL URLWithString:@"readmill-beta://authorize"]];
+        [self setRedirectURL:[NSURL URLWithString:@"readmillTestAuth://authorize"]];
     }
     return redirectURL;
 }

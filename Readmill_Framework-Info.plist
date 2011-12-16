@@ -31,7 +31,7 @@
 			<string>com.readmill.ReadmillTestAuth</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>readmill-beta</string>
+				<string>readmillTestAuth</string>
 			</array>
 		</dict>
 	</array>
