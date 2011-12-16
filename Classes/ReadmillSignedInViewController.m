@@ -43,7 +43,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return YES;
+    return NO;
 }
 
 - (void)didReceiveMemoryWarning 
@@ -68,6 +68,10 @@
               options:NSKeyValueObservingOptionInitial
               context:nil];
     
+
+    [[self navigationItem] setHidesBackButton:YES];
+    [[self navigationController] setNavigationBarHidden:NO animated:YES];
+
     [[[self textView] layer] setBorderColor:[UIColor blackColor].CGColor];
     [[[self textView] layer] setBorderWidth:1];
 }
@@ -252,7 +256,7 @@
 - (void)readmillUser:(ReadmillUser *)readmillUser didFindBook:(ReadmillBook *)book 
 {
     NSLog(@"didFindBook: %@", [book description]);
-    [textView setText:[[textView text] stringByAppendingString:[book description]]];
+    [textView setText:[[textView text] stringByAppendingString:[@"\n" stringByAppendingString:[book description]]]];
 
     [user findOrCreateReadingForBook:book 
                                state:ReadingStateReading 
@@ -286,7 +290,7 @@
 - (void)readmillUser:(ReadmillUser *)aUser didFindReading:(ReadmillReading *)aReading forBook:(ReadmillBook *)book
 {
     NSLog(@"Found reading: %@", aReading);
-    [textView setText:[[textView text] stringByAppendingString:[aReading description]]];
+    [textView setText:[[textView text] stringByAppendingString:[@"\n" stringByAppendingString:[aReading description]]]];
 }
 - (void)readmillUser:(ReadmillUser *)user failedToFindReadingForBook:(ReadmillBook *)book withError:(NSError *)error
 {

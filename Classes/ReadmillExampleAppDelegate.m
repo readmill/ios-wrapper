@@ -58,6 +58,7 @@
     }
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:[self signingInViewController]];
+    [navController setNavigationBarHidden:YES];
     [self setNavigationController:navController];
     [navController release];
     
