@@ -32,6 +32,7 @@
 
 - (void)dealloc 
 {
+    [self setBook:nil];
     [self setConnectButton:nil];
     [self setAuthorTextField:nil];
     [self setTitleTextField:nil];
@@ -91,6 +92,7 @@
 
 @synthesize connectButton;
 @synthesize reading;
+@synthesize book;
 @synthesize user;
 @synthesize titleTextField, authorTextField, isbnTextField;
 @synthesize textView;
@@ -135,15 +137,27 @@
 }
 
 #pragma mark -
+#pragma mark - Finding a book
+
+- (IBAction)findBookButtonClicked:(id)sender
+{
+    [user findBookWithISBN:[isbnTextField text]
+                     title:[titleTextField text] 
+                  delegate:self];
+}
+#pragma mark -
 #pragma mark Linking to a Book
 
 - (IBAction)findOrCreateReadingButtonClicked:(id)sender
 {
-    
-    [user findOrCreateBookWithISBN:[isbnTextField text] 
-                             title:[titleTextField text] 
-                            author:[authorTextField text]
-                          delegate:self];
+    if (!book) {
+        [textView setText:[[textView text] stringByAppendingString:@"\nYou need to find a book before creating a reading."]];
+        return;
+    } 
+    [user findOrCreateReadingForBook:book 
+                               state:ReadingStateReading
+             createdReadingIsPrivate:YES
+                            delegate:self];
 }
 
 #pragma mark STEP 1: Find a book in Readmill.
@@ -203,9 +217,19 @@
 
 #pragma mark STEP 5: We successfully linked a book. Create a session object and store it.
 
-- (void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)book withReading:(ReadmillReading *)aReading 
+- (void)ping:(NSTimer *)timer 
 {
-    NSLog(@"didSucceedToLinkToBook: %@", book);
+    static ReadmillReadingSession *session = nil;
+    if (!session) {
+        session = [reading createReadingSession];
+    }
+    [session pingWithProgress:1 
+                 pingDuration:kPingDuration
+                     delegate:self];
+}
+- (void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)aBook withReading:(ReadmillReading *)aReading 
+{
+    NSLog(@"didSucceedToLinkToBook: %@", aBook);
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Successfully linked book"
                                                     message:nil
                                                    delegate:nil
@@ -217,9 +241,12 @@
     [self setReading:aReading];
 
     [connectButton setTitle:@"View reading" forState:UIControlStateNormal];
-    
-    ReadmillReadingSession *session = [reading createReadingSession];
-    [session pingWithProgress:0 pingDuration:kPingDuration delegate:nil];
+        
+    [NSTimer scheduledTimerWithTimeInterval:kPingDuration 
+                                     target:self
+                                   selector:@selector(ping:) 
+                                   userInfo:nil 
+                                    repeats:YES];
 }
 
 #pragma mark -
@@ -253,15 +280,11 @@
 
 #pragma mark ReadmillBookFindingDelegate
 
-- (void)readmillUser:(ReadmillUser *)readmillUser didFindBook:(ReadmillBook *)book 
+- (void)readmillUser:(ReadmillUser *)readmillUser didFindBook:(ReadmillBook *)aBook 
 {
+    [self setBook:aBook];
     NSLog(@"didFindBook: %@", [book description]);
-    [textView setText:[[textView text] stringByAppendingString:[@"\n" stringByAppendingString:[book description]]]];
-
-    [user findOrCreateReadingForBook:book 
-                               state:ReadingStateReading 
-             createdReadingIsPrivate:YES 
-                            delegate:self];
+    [textView setText:[book description]];
 }
 
 /*!
@@ -290,7 +313,12 @@
 - (void)readmillUser:(ReadmillUser *)aUser didFindReading:(ReadmillReading *)aReading forBook:(ReadmillBook *)book
 {
     NSLog(@"Found reading: %@", aReading);
-    [textView setText:[[textView text] stringByAppendingString:[@"\n" stringByAppendingString:[aReading description]]]];
+    [textView setText:[aReading description]];
+    
+    [aReading updateWithState:ReadingStateFinished 
+                    isPrivate:YES 
+                closingRemark:@"Interesting book!"
+                     delegate:self];
 }
 - (void)readmillUser:(ReadmillUser *)user failedToFindReadingForBook:(ReadmillBook *)book withError:(NSError *)error
 {
@@ -299,5 +327,28 @@
 - (void)readmillUser:(ReadmillUser *)user foundNoReadingForBook:(ReadmillBook *)book
 {
     NSLog(@"No readings found.");
+}
+
+#pragma mark ReadmillReadingUpdatingDelegate
+
+- (void)readmillReading:(ReadmillReading *)reading didFailToUpdateMetadataWithError:(NSError *)error
+{
+    NSLog(@"Failed to update metadata: %@", error);
+}
+- (void)readmillReadingDidUpdateMetadataSuccessfully:(ReadmillReading *)aReading
+{
+    NSLog(@"Reading metadata updated: %@", aReading);
+    [textView setText:[aReading description]];
+}
+
+#pragma mark ReadmillPingDelegate
+
+- (void)readmillReadingSession:(ReadmillReadingSession *)session didFailToPingWithError:(NSError *)error
+{
+    NSLog(@"didFailToPingWithError: %@", error);
+}
+- (void)readmillReadingSessionDidPingSuccessfully:(ReadmillReadingSession *)session
+{
+    NSLog(@"readmillReadingSessionDidPingSuccessfully");
 }
 @end
