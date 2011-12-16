@@ -64,7 +64,7 @@
               context:nil];
     
     [user addObserver:self
-           forKeyPath:@"userName"
+           forKeyPath:@"fullName"
               options:NSKeyValueObservingOptionInitial
               context:nil];
     
