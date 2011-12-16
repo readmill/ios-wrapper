@@ -68,7 +68,7 @@
     return [self initWithAPIDictionary:nil apiWrapper:nil];
 }
 
--(id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper {
+- (id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper {
     if ((self = [super init])) {
         // Initialization code here.
         
@@ -79,7 +79,7 @@
     return self;
 }
 
--(void)updateWithAPIDictionary:(NSDictionary *)apiDict {
+- (void)updateWithAPIDictionary:(NSDictionary *)apiDict {
     
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
@@ -127,11 +127,13 @@
     [self setHighlightCount:[[cleanedDict objectForKey:kReadmillAPIReadingHighlightsCountKey] unsignedIntegerValue]];    
 }
 
--(NSString *)description {
+- (NSString *)description 
+{
     return [NSString stringWithFormat:@"%@ id %d: Reading of book %d by %d, reading state: %d", [super description], [self readingId], [self bookId], [self userId], [self state]];
 }
 
--(ReadmillReadingSession *)createReadingSession {
+- (ReadmillReadingSession *)createReadingSession 
+{
     return [[[ReadmillReadingSession alloc] initWithAPIWrapper:[self apiWrapper] readingId:[self readingId]] autorelease];
 }
 
@@ -193,91 +195,54 @@
 #pragma mark -
 #pragma mark Threaded Methods
 
--(void)updateState:(ReadmillReadingState)newState delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
+- (void)updateState:(ReadmillReadingState)newState 
+           delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
 {
-    [self updateWithState:newState isPrivate:[self isPrivate] closingRemark:[self closingRemark] delegate:delegate];
+    [self updateWithState:newState 
+                isPrivate:[self isPrivate] 
+            closingRemark:[self closingRemark] 
+                 delegate:delegate];
 }
 
--(void)updateIsPrivate:(BOOL)readingIsPrivate delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
+- (void)updateIsPrivate:(BOOL)readingIsPrivate 
+               delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
 {
-    [self updateWithState:[self state] isPrivate:readingIsPrivate closingRemark:[self closingRemark] delegate:delegate];
+    [self updateWithState:[self state]
+                isPrivate:readingIsPrivate
+            closingRemark:[self closingRemark] 
+                 delegate:delegate];
 }
 
--(void)updateClosingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
+- (void)updateClosingRemark:(NSString *)newRemark
+                   delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
 {
-    [self updateWithState:[self state] isPrivate:[self isPrivate] closingRemark:newRemark delegate:delegate];
+    [self updateWithState:[self state]
+                isPrivate:[self isPrivate] 
+            closingRemark:newRemark 
+                 delegate:delegate];
 }
 
--(void)updateWithState:(ReadmillReadingState)newState isPrivate:(BOOL)readingIsPrivate closingRemark:(NSString *)newRemark delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
-{    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                delegate, @"delegate",
-                                [NSThread currentThread], @"callbackThread",
-                                [NSNumber numberWithUnsignedInteger:newState], @"state",
-                                [NSNumber numberWithBool:readingIsPrivate], @"privacy",
-                                newRemark, @"remark",
-                                nil];
-    
-    [self performSelectorInBackground:@selector(updateStateAndPrivacyWithProperties:)
-                           withObject:properties];
-}
-
--(void)updateStateAndPrivacyWithProperties:(NSDictionary *)properties 
-{    
-    [self retain];
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
-    id <ReadmillReadingUpdatingDelegate> readingUpdatingDelegate = [properties valueForKey:@"delegate"];
-    BOOL privacy = [[properties valueForKey:@"privacy"] boolValue];
-    ReadmillReadingState newState = [[properties valueForKey:@"state"] unsignedIntegerValue];
-    NSString *remark = [properties valueForKey:@"remark"];    
-    
+- (void)updateWithState:(ReadmillReadingState)newState
+              isPrivate:(BOOL)newIsPrivate 
+          closingRemark:(NSString *)newRemark
+               delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
+{        
     [[self apiWrapper] updateReadingWithId:[self readingId]
                                  withState:newState
-                                 isPrivate:privacy
-                             closingRemark:remark
-                         completionHandler:^(id result, NSError *error) {
-                                    //
+                                 isPrivate:newIsPrivate
+                             closingRemark:newRemark
+                         completionHandler:^(id result, NSError *error) {                             
                              if (error == nil) {
-                                 [[self apiWrapper] readingWithId:[self readingId]
-                                                completionHandler:^(id newDetails, NSError *error) {
-                                                    if (newDetails != nil && error == nil) {
-                                                        [self updateWithAPIDictionary:newDetails];
-                                                    }
-                                                }];
+                                 // PUT does not return a result, but if there was no error, we 
+                                 // can safely assume reading was uppdated successfully.
+                                 [self setState:newState];
+                                 [self setIsPrivate:newIsPrivate];
+                                 [self setClosingRemark:newRemark];
+                                 [delegate readmillReadingDidUpdateMetadataSuccessfully:self];
+                             } else {
+                                 [delegate readmillReading:self didFailToUpdateMetadataWithError:error];
                              }
-                             
-                             if (error == nil && readingUpdatingDelegate != nil) {
-                                 
-                                 [(NSObject *)readingUpdatingDelegate performSelector:@selector(readmillReadingDidUpdateMetadataSuccessfully:)
-                                                                             onThread:callbackThread
-                                                                           withObject:self
-                                                                        waitUntilDone:YES];
-                                 
-                             } else if (error != nil && readingUpdatingDelegate != nil) {
-                                 
-                                 NSInvocation *failedInvocation = [NSInvocation invocationWithMethodSignature:
-                                                                   [(NSObject *)readingUpdatingDelegate 
-                                                                    methodSignatureForSelector:@selector(readmillReading:didFailToUpdateMetadataWithError:)]];
-                                 
-                                 [failedInvocation setSelector:@selector(readmillReading:didFailToUpdateMetadataWithError:)];
-                                 
-                                 ReadmillReading *aReading = self;
-                                 [failedInvocation setArgument:&aReading atIndex:2];
-                                 [failedInvocation setArgument:&error atIndex:3];
-                                 
-                                 [failedInvocation performSelector:@selector(invokeWithTarget:)
-                                                          onThread:callbackThread
-                                                        withObject:readingUpdatingDelegate
-                                                     waitUntilDone:YES]; 
-                             }
-                                                            
                          }];
-    
-    [pool drain];
-    [self release];
 }
-
 
 @end
