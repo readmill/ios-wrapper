@@ -7,11 +7,11 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-@class ReadmillAPIWrapper;
 
-@interface ReadmillAPITests : SenTestCase {
+@interface ReadmillAPIReadingTests : SenTestCase {
 @private
-    ReadmillAPIWrapper *apiWrapper;
+
+    NSDictionary *readingDictionary;
 }
 
 @end

@@ -55,36 +55,40 @@
     if ((self = [super init])) {
         
         // Clean out null values from JSON
-        
-        NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
-        
-        [self setAuthor:[cleanedDict valueForKey:kReadmillAPIBookAuthorKey]];
-        [self setLanguage:[cleanedDict valueForKey:kReadmillAPIBookLanguageKey]];
-        [self setSummary:[cleanedDict valueForKey:kReadmillAPIBookSummaryKey]];
-        [self setTitle:[cleanedDict valueForKey:kReadmillAPIBookTitleKey]];
-        [self setIsbn:[cleanedDict valueForKey:kReadmillAPIBookISBNKey]];
-        
-        if ([cleanedDict valueForKey:kReadmillAPIBookCoverImageURLKey]) {
-            [self setCoverImageURL:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIBookCoverImageURLKey]]];
-        }
-        
-        if ([cleanedDict valueForKey:kReadmillAPIBookMetaDataURLKey]) {
-            [self setMetaDataURL:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIBookMetaDataURLKey]]];
-        }
-        
-        if ([cleanedDict valueForKey:kReadmillAPIBookPermalinkURLKey]) {
-            [self setPermalinkURL:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIBookPermalinkURLKey]]];
-        }
-        
-        [self setBookId:[[cleanedDict valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
-        [self setRootEditionId:[[cleanedDict valueForKey:kReadmillAPIBookRootEditionIdKey] unsignedIntegerValue]];
-        
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-        [self setDatePublished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey]]];
-        [formatter release];
+        [self updateWithAPIDictionary:apiDict];
     }
     return self;
+}
+
+- (void)updateWithAPIDictionary:(NSDictionary *)apiDictionary
+{
+    NSDictionary *cleanedDict = [apiDictionary dictionaryByRemovingNullValues];
+    
+    [self setAuthor:[cleanedDict valueForKey:kReadmillAPIBookAuthorKey]];
+    [self setLanguage:[cleanedDict valueForKey:kReadmillAPIBookLanguageKey]];
+    [self setSummary:[cleanedDict valueForKey:kReadmillAPIBookSummaryKey]];
+    [self setTitle:[cleanedDict valueForKey:kReadmillAPIBookTitleKey]];
+    [self setIsbn:[cleanedDict valueForKey:kReadmillAPIBookISBNKey]];
+    
+    if ([cleanedDict valueForKey:kReadmillAPIBookCoverImageURLKey]) {
+        [self setCoverImageURL:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIBookCoverImageURLKey]]];
+    }
+    
+    if ([cleanedDict valueForKey:kReadmillAPIBookMetaDataURLKey]) {
+        [self setMetaDataURL:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIBookMetaDataURLKey]]];
+    }
+    
+    if ([cleanedDict valueForKey:kReadmillAPIBookPermalinkURLKey]) {
+        [self setPermalinkURL:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIBookPermalinkURLKey]]];
+    }
+    
+    [self setBookId:[[cleanedDict valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
+    [self setRootEditionId:[[cleanedDict valueForKey:kReadmillAPIBookRootEditionIdKey] unsignedIntegerValue]];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    [self setDatePublished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey]]];
+    [formatter release];
 }
 
 -(NSString *)description 

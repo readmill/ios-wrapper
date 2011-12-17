@@ -52,6 +52,13 @@
 -(id)initWithAPIDictionary:(NSDictionary *)apiDict;
 
 /*!
+ @param apiDict The NSDictionary object describing the book.
+ @result The updated book.
+ @brief   Update a ReadmillBook object from a book dictionary from a ReadmillAPIWrapper object.
+ */
+- (void)updateWithAPIDictionary:(NSDictionary *)apiDict;
+
+/*!
  @property  author
  @brief The book's author. 
  */

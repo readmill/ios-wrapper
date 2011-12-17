@@ -230,6 +230,9 @@
                 ReadmillAPICompletionHandler completionHandler = ^(id result, NSError *error) {
                     
                     if (result && error == nil) {
+                        NSDictionary *bookDictionary = [result valueForKey:kReadmillAPIBookKey];
+                        [bself->book updateWithAPIDictionary:bookDictionary];
+                        
                         ReadmillReading *reading = [[ReadmillReading alloc] initWithAPIDictionary:result 
                                                                                        apiWrapper:[bself->user apiWrapper]];
                         
