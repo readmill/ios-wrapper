@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		332FD3931489062E00F755CD /* UIApplication+ReadmillNetworkActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */; };
 		332FD3941489062E00F755CD /* UIApplication+ReadmillNetworkActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */; };
+		335E809B149BA60F00BC8565 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D9B994149BA50D00C6876E /* libOCMock.a */; };
+		335E809E149BA94100BC8565 /* reading22533.json in Resources */ = {isa = PBXBuildFile; fileRef = 335E809D149BA94100BC8565 /* reading22533.json */; };
 		33D9B950149B7CE900C6876E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B94F149B7CE900C6876E /* logo.png */; };
 		33D9B953149B7D5900C6876E /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B952149B7D5900C6876E /* Default-Portrait~ipad.png */; };
 		502698D2130C87D400E67974 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.md */; };
@@ -22,8 +24,8 @@
 		734A51B0135A1DF5009F9794 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED412F05E80006028D0 /* CoreGraphics.framework */; };
 		734A51B3135A1DF5009F9794 /* libReadmillAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 734A51A3135A1DF5009F9794 /* libReadmillAPI.a */; };
 		734A51B9135A1DF6009F9794 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 734A51B7135A1DF6009F9794 /* InfoPlist.strings */; };
-		734A51BC135A1DF6009F9794 /* ReadmillAPITests.h in Resources */ = {isa = PBXBuildFile; fileRef = 734A51BB135A1DF6009F9794 /* ReadmillAPITests.h */; };
-		734A51BE135A1DF6009F9794 /* ReadmillAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 734A51BD135A1DF6009F9794 /* ReadmillAPITests.m */; };
+		734A51BC135A1DF6009F9794 /* ReadmillAPIReadingTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 734A51BB135A1DF6009F9794 /* ReadmillAPIReadingTests.h */; };
+		734A51BE135A1DF6009F9794 /* ReadmillAPIReadingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 734A51BD135A1DF6009F9794 /* ReadmillAPIReadingTests.m */; };
 		734A51D3135A1E10009F9794 /* NSURL+ReadmillURLParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 731471C7135304F900A41B49 /* NSURL+ReadmillURLParameters.h */; settings = {ATTRIBUTES = (); }; };
 		734A51D4135A1E10009F9794 /* NSURL+ReadmillURLParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 731471C8135304F900A41B49 /* NSURL+ReadmillURLParameters.m */; };
 		734A51D5135A1E10009F9794 /* NSDictionary+ReadmillAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BEAF0012F06360006028D0 /* NSDictionary+ReadmillAdditions.h */; settings = {ATTRIBUTES = (); }; };
@@ -83,6 +85,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		33D9B98F149BA50D00C6876E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33D9B986149BA50D00C6876E /* OCMock.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 030EF0A814632FD000B04273;
+			remoteInfo = OCMock;
+		};
+		33D9B991149BA50D00C6876E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33D9B986149BA50D00C6876E /* OCMock.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 030EF0C014632FD000B04273;
+			remoteInfo = OCMockTests;
+		};
+		33D9B993149BA50D00C6876E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33D9B986149BA50D00C6876E /* OCMock.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 030EF0DC14632FF700B04273;
+			remoteInfo = OCMockLib;
+		};
 		734A51B1135A1DF5009F9794 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 96BEAEC312F05E80006028D0 /* Project object */;
@@ -102,8 +125,10 @@
 /* Begin PBXFileReference section */
 		332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+ReadmillNetworkActivity.h"; path = "Classes/Framework/UIApplication+ReadmillNetworkActivity.h"; sourceTree = SOURCE_ROOT; };
 		332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+ReadmillNetworkActivity.m"; path = "Classes/Framework/UIApplication+ReadmillNetworkActivity.m"; sourceTree = SOURCE_ROOT; };
+		335E809D149BA94100BC8565 /* reading22533.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reading22533.json; sourceTree = "<group>"; };
 		33D9B94F149B7CE900C6876E /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		33D9B952149B7D5900C6876E /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
+		33D9B986149BA50D00C6876E /* OCMock.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OCMock.xcodeproj; path = ocmock/Source/OCMock.xcodeproj; sourceTree = "<group>"; };
 		502698D1130C87D300E67974 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		731471C7135304F900A41B49 /* NSURL+ReadmillURLParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+ReadmillURLParameters.h"; path = "Classes/Framework/NSURL+ReadmillURLParameters.h"; sourceTree = SOURCE_ROOT; };
 		731471C8135304F900A41B49 /* NSURL+ReadmillURLParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+ReadmillURLParameters.m"; path = "Classes/Framework/NSURL+ReadmillURLParameters.m"; sourceTree = SOURCE_ROOT; };
@@ -124,8 +149,8 @@
 		734A51B6135A1DF6009F9794 /* ReadmillAPITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ReadmillAPITests-Info.plist"; sourceTree = "<group>"; };
 		734A51B8135A1DF6009F9794 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		734A51BA135A1DF6009F9794 /* ReadmillAPITests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReadmillAPITests-Prefix.pch"; sourceTree = "<group>"; };
-		734A51BB135A1DF6009F9794 /* ReadmillAPITests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadmillAPITests.h; sourceTree = "<group>"; };
-		734A51BD135A1DF6009F9794 /* ReadmillAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillAPITests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		734A51BB135A1DF6009F9794 /* ReadmillAPIReadingTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIReadingTests.h; sourceTree = "<group>"; };
+		734A51BD135A1DF6009F9794 /* ReadmillAPIReadingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillAPIReadingTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		734CAD5F1461F13D00855E9B /* ReadmillDateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillDateFormatter.h; path = Classes/Framework/ReadmillDateFormatter.h; sourceTree = SOURCE_ROOT; };
 		734CAD601461F13D00855E9B /* ReadmillDateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillDateFormatter.m; path = Classes/Framework/ReadmillDateFormatter.m; sourceTree = SOURCE_ROOT; };
 		735E3E6A13E06E1500930E8C /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = JSONKit/JSONKit.h; sourceTree = SOURCE_ROOT; };
@@ -194,6 +219,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				335E809B149BA60F00BC8565 /* libOCMock.a in Frameworks */,
 				734A51AE135A1DF5009F9794 /* UIKit.framework in Frameworks */,
 				734A51AF135A1DF5009F9794 /* Foundation.framework in Frameworks */,
 				734A51B0135A1DF5009F9794 /* CoreGraphics.framework in Frameworks */,
@@ -216,6 +242,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		33D9B987149BA50D00C6876E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				33D9B990149BA50D00C6876E /* OCMock.framework */,
+				33D9B992149BA50D00C6876E /* OCMockTests.octest */,
+				33D9B994149BA50D00C6876E /* libOCMock.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		73370FA11341187800880F5B /* Readmill Spinner */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,8 +273,8 @@
 		734A51B4135A1DF6009F9794 /* ReadmillAPITests */ = {
 			isa = PBXGroup;
 			children = (
-				734A51BB135A1DF6009F9794 /* ReadmillAPITests.h */,
-				734A51BD135A1DF6009F9794 /* ReadmillAPITests.m */,
+				734A51BB135A1DF6009F9794 /* ReadmillAPIReadingTests.h */,
+				734A51BD135A1DF6009F9794 /* ReadmillAPIReadingTests.m */,
 				734A51B5135A1DF6009F9794 /* Supporting Files */,
 			);
 			path = ReadmillAPITests;
@@ -250,6 +286,7 @@
 				734A51B6135A1DF6009F9794 /* ReadmillAPITests-Info.plist */,
 				734A51B7135A1DF6009F9794 /* InfoPlist.strings */,
 				734A51BA135A1DF6009F9794 /* ReadmillAPITests-Prefix.pch */,
+				335E809D149BA94100BC8565 /* reading22533.json */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -333,6 +370,7 @@
 		96BEAEC112F05E80006028D0 = {
 			isa = PBXGroup;
 			children = (
+				33D9B986149BA50D00C6876E /* OCMock.xcodeproj */,
 				502698D1130C87D300E67974 /* README.md */,
 				73C1AAA513E6AFD6006684C6 /* Readmill.bundle */,
 				735EF9D4145EE43F00303F19 /* ReadmillAPI.h */,
@@ -567,6 +605,12 @@
 			mainGroup = 96BEAEC112F05E80006028D0;
 			productRefGroup = 96BEAECD12F05E80006028D0 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 33D9B987149BA50D00C6876E /* Products */;
+					ProjectRef = 33D9B986149BA50D00C6876E /* OCMock.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				96BEAECB12F05E80006028D0 /* Readmill Example */,
@@ -576,13 +620,38 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		33D9B990149BA50D00C6876E /* OCMock.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OCMock.framework;
+			remoteRef = 33D9B98F149BA50D00C6876E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		33D9B992149BA50D00C6876E /* OCMockTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = OCMockTests.octest;
+			remoteRef = 33D9B991149BA50D00C6876E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		33D9B994149BA50D00C6876E /* libOCMock.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libOCMock.a;
+			remoteRef = 33D9B993149BA50D00C6876E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		734A51AA135A1DF5009F9794 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				734A51B9135A1DF6009F9794 /* InfoPlist.strings in Resources */,
-				734A51BC135A1DF6009F9794 /* ReadmillAPITests.h in Resources */,
+				734A51BC135A1DF6009F9794 /* ReadmillAPIReadingTests.h in Resources */,
+				335E809E149BA94100BC8565 /* reading22533.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +726,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				734A51BE135A1DF6009F9794 /* ReadmillAPITests.m in Sources */,
+				734A51BE135A1DF6009F9794 /* ReadmillAPIReadingTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -782,8 +851,13 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ReadmillAPITests/ReadmillAPITests-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Libraries/Headers/**";
 				INFOPLIST_FILE = "ReadmillAPITests/ReadmillAPITests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Libraries",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
@@ -804,8 +878,13 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ReadmillAPITests/ReadmillAPITests-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Libraries/Headers/**";
 				INFOPLIST_FILE = "ReadmillAPITests/ReadmillAPITests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Libraries",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
@@ -826,8 +905,13 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ReadmillAPITests/ReadmillAPITests-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Libraries/Headers/**";
 				INFOPLIST_FILE = "ReadmillAPITests/ReadmillAPITests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Libraries",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,

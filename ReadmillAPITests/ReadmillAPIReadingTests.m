@@ -9,7 +9,7 @@
 #import "ReadmillAPIReadingTests.h"
 #import "JSONKit.h"
 #import "ReadmillAPI.h"
-#import "OCMock.h"
+//#import "OCMock.h"
 
 #define kTimeoutInterval 30
 
