@@ -64,11 +64,13 @@
 
 @implementation ReadmillReading
 
-- (id)init {
+- (id)init 
+{
     return [self initWithAPIDictionary:nil apiWrapper:nil];
 }
 
-- (id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper {
+- (id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper 
+{
     if ((self = [super init])) {
         // Initialization code here.
         
@@ -79,8 +81,8 @@
     return self;
 }
 
-- (void)updateWithAPIDictionary:(NSDictionary *)apiDict {
-    
+- (void)updateWithAPIDictionary:(NSDictionary *)apiDict 
+{    
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
     
     NSDictionary *userDictionary = [apiDict objectForKey:kReadmillAPIUserKey];
@@ -170,7 +172,8 @@
 #pragma mark -
 #pragma mark - Dealloc
 
-- (void)dealloc {
+- (void)dealloc 
+{
     // Clean-up code here.
     [self setApiWrapper:nil];
     [self setUser:nil];

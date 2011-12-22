@@ -227,6 +227,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
         
         NSDictionary *response = [self sendPreparedRequest:request 
                                                      error:error];
+        NSLog(@"response: %@", response);
         if (response != nil) {
             NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];        
             [self willChangeValueForKey:@"propertyListRepresentation"];
@@ -320,7 +321,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
     [self sendPostRequestToURL:URL
                 withParameters:[NSDictionary dictionaryWithObject:parameters forKey:kReadmillAPIReadingKey]
-    shouldBeCalledUnauthorized:NO
+    shouldBeCalledUnauthorized:YES
              completionHandler:completionHandler];
 }
 

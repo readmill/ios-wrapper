@@ -156,7 +156,7 @@
     } 
     [user findOrCreateReadingForBook:book 
                                state:ReadingStateReading
-             createdReadingIsPrivate:YES
+             createdReadingIsPrivate:NO
                             delegate:self];
 }
 
@@ -221,9 +221,11 @@
 {
     static ReadmillReadingSession *session = nil;
     if (!session) {
-        session = [reading createReadingSession];
+        //session = [reading createReadingSession];
+        session = [[ReadmillReadingSession alloc] initWithAPIWrapper:[user apiWrapper]
+                                                           readingId:[[self reading] readingId]];
     }
-    [session pingWithProgress:1 
+    [session pingWithProgress:0.2 
                  pingDuration:kPingDuration
                      delegate:self];
 }
@@ -247,6 +249,8 @@
                                    selector:@selector(ping:) 
                                    userInfo:nil 
                                     repeats:YES];
+    
+
 }
 
 #pragma mark -
@@ -314,11 +318,6 @@
 {
     NSLog(@"Found reading: %@", aReading);
     [textView setText:[aReading description]];
-    
-    [aReading updateWithState:ReadingStateFinished 
-                    isPrivate:YES 
-                closingRemark:@"Interesting book!"
-                     delegate:self];
 }
 - (void)readmillUser:(ReadmillUser *)user failedToFindReadingForBook:(ReadmillBook *)book withError:(NSError *)error
 {

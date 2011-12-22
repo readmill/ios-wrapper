@@ -81,10 +81,11 @@
 
 - (id)init 
 {
+    NSLog(@"ReadmillReadingSession needs to be instantiated with a ReadmillAPIWrapper and a readingId.");
     return [self initWithAPIWrapper:nil readingId:0];
 }
 
--(id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readingId:(ReadmillReadingId)sessionReadingId
+- (id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readingId:(ReadmillReadingId)sessionReadingId
 {    
     if ((self = [super init])) {
         // Initialization code here.
@@ -95,7 +96,7 @@
     return self;
 }
 
--(NSString *)description 
+- (NSString *)description 
 {
     return [NSString stringWithFormat:@"%@ reading %d", [super description], [self readingId]]; 
 }
@@ -235,7 +236,8 @@
                                longitude:[ping longitude]
                        completionHandler:^(id result, NSError *error) {
                            
-                           if (error == nil && pingDelegate != nil) {
+                           NSLog(@"result: %@, error: %@", result, error);
+                           if (error == nil) {
                                dispatch_async(currentQueue, ^{
                                    [pingDelegate readmillReadingSessionDidPingSuccessfully:self];  
                                });
@@ -243,9 +245,9 @@
                                // Since we succeeded to ping, try to send any archived pings
                                [[self class] pingArchived:[self apiWrapper]];
                                
-                           } else if (error != nil && pingDelegate != nil) {
+                           } else {
                                
-                               dispatch_async(currentQueue, ^(void) {
+                               dispatch_async(currentQueue, ^{
                                    [pingDelegate readmillReadingSession:self 
                                                  didFailToPingWithError:error];  
                                });
@@ -262,9 +264,8 @@
     [ping release];    
 }
 
-- (void)dealloc {
-    // Clean-up code here.
-    
+- (void)dealloc 
+{
     [self setApiWrapper:nil];    
     [super dealloc];
 }

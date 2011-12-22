@@ -81,6 +81,7 @@
         
     } else {
         
+
         // We have saved credentials. Attempt to authorize them - delegates for this are handled below. 
         NSDictionary *savedCredentials = [[NSUserDefaults standardUserDefaults] valueForKey:@"readmill"];
         [ReadmillUser authenticateWithPropertyListRepresentation:savedCredentials
@@ -115,15 +116,16 @@
     // Check if user has deauthorized the app
     if ([authenticationError code] == 401) {
         
-        [[[[UIAlertView alloc] initWithTitle:@"Authentication Failed!"
-                                     message:[authenticationError localizedDescription]
-                                    delegate:nil
-                           cancelButtonTitle:@"Cancel"
-                           otherButtonTitles:nil] autorelease] show];
-
         // Clear any saved credentials and start again next time.
         [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"readmill"];
     }
+    
+    [[[[UIAlertView alloc] initWithTitle:@"Authentication Failed!"
+                                 message:[authenticationError localizedDescription]
+                                delegate:nil
+                       cancelButtonTitle:@"Cancel"
+                       otherButtonTitles:nil] autorelease] show];
+
 }
 
 - (void)readmillAuthenticationDidSucceedWithLoggedInUser:(ReadmillUser *)loggedInUser 
