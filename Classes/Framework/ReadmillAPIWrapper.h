@@ -531,6 +531,13 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 - (void)highlightsForReadingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+/*!
+ @param highlightId The id of the highlight.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Deletes the particular highlight in Readmill.
+ */
+- (void)deleteHighlightWithId:(NSUInteger)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 #pragma mark Comments
 
 /*!

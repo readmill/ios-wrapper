@@ -43,6 +43,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                          parameters:(NSDictionary *)parameters
          shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                               error:(NSError **)error;
+
+- (NSURLRequest *)deleteRequestWithURL:(NSURL *)url
+                            parameters:(NSDictionary *)parameters
+                                 error:(NSError **)error;
+
 - (NSURLRequest *)postRequestWithURL:(NSURL *)url
                           parameters:(NSDictionary *)parameters
           shouldBeCalledUnauthorized:(BOOL)allowUnauthed
@@ -69,6 +74,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
              withParameters:(NSDictionary *)parameters 
  shouldBeCalledUnauthorized:(BOOL)allowUnauthed
           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+- (void)sendDeleteRequestToURL:(NSURL *)url 
+                withParameters:(NSDictionary *)parameters 
+             completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 - (void)sendPostRequestToURL:(NSURL *)url
               withParameters:(NSDictionary *)parameters
@@ -666,6 +675,18 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
             completionHandler:completionHandler];
 }
 
+- (void)deleteHighlightWithId:(NSUInteger)highlightId 
+            completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
+                                       [self highlightsEndpoint], 
+                                       highlightId]];
+    
+    [self sendDeleteRequestToURL:URL
+                  withParameters:nil
+               completionHandler:completionHandler];
+}
+
 #pragma mark - Highlight comments
 
 - (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId 
@@ -887,6 +908,17 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                               error:error];
 }
 
+- (NSURLRequest *)deleteRequestWithURL:(NSURL *)url
+                            parameters:(NSDictionary *)parameters 
+                                 error:(NSError **)error
+{
+    return [self bodyRequestWithURL:url 
+                         httpMethod:@"DELETE"
+                         parameters:parameters
+         shouldBeCalledUnauthorized:NO
+                              error:error];
+}
+
 - (NSURLRequest *)postRequestWithURL:(NSURL *)url
                           parameters:(NSDictionary *)parameters
           shouldBeCalledUnauthorized:(BOOL)allowUnauthed
@@ -994,6 +1026,23 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                          parameters:parameters 
                          shouldBeCalledUnauthorized:allowUnauthed
                                               error:&error];
+    
+    if (request) {
+        [self startPreparedRequest:request 
+                        completion:completionHandler];
+    } else {
+        return completionHandler(nil, error);
+    }
+}
+
+- (void)sendDeleteRequestToURL:(NSURL *)url
+                withParameters:(NSDictionary *)parameters
+             completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSError *error = nil;
+    NSURLRequest *request = [self deleteRequestWithURL:url 
+                                            parameters:parameters 
+                                                 error:&error];
     
     if (request) {
         [self startPreparedRequest:request 
