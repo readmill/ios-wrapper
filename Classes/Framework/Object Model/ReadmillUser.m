@@ -291,47 +291,17 @@
 }
 
 - (void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate 
-{    
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                authenticationDelegate, @"delegate",
-                                [NSThread currentThread], @"callbackThread",
-                                nil];
-    
-    [self performSelectorInBackground:@selector(verifyAuthenticationWithProperties:)
-                           withObject:properties];
-}
-
-- (void)verifyAuthenticationWithProperties:(NSDictionary *)properties 
 {
-    [self retain];
-    NSAutoreleasePool *pool;
-    pool = [[NSAutoreleasePool alloc] init];
-    
-    NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
-	
-    id <ReadmillUserAuthenticationDelegate> authenticationDelegate = [properties valueForKey:@"delegate"];
-    NSError *error = nil;
-    [self updateWithAPIDictionary:[[self apiWrapper] currentUser:&error]];
-
-    if (error == nil && authenticationDelegate != nil) {
-        
-        [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidSucceedWithLoggedInUser:)
-                                                   onThread:callbackThread
-                                                 withObject:self
-                                              waitUntilDone:YES]; 
-        
-    } else if (error != nil && authenticationDelegate != nil) {
-        [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidFailWithError:)
-                                                   onThread:callbackThread
-                                                 withObject:error
-                                              waitUntilDone:YES];
-    }
-    
-    [pool drain];
-    
-    [self release];
+    __block typeof(self) bself = self;
+    [[self apiWrapper] currentUserWithCompletionHandler:^(id result, NSError *error) {
+        if (result && !error) {
+            [self updateWithAPIDictionary:result];
+            [authenticationDelegate readmillAuthenticationDidSucceedWithLoggedInUser:self];
+        } else {
+            [authenticationDelegate readmillAuthenticationDidFailWithError:error];
+        }
+    }];
 }
-
 
 #pragma mark -
 
