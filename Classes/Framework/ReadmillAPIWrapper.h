@@ -272,7 +272,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call this automatically if 
  needed. There's normally no need to call this yourself except for debugging purposes. 
  */
-- (BOOL)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error;
+- (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString completionHandler:(ReadmillAPICompletionHandler)completion;
 
 /*!
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
@@ -282,7 +282,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call this automatically if 
  needed. There's normally no need to call this yourself except for debugging purposes. 
  */
-- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error;
+//- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error;
 
 /*!
  @param redirect The URL Readmill should return to once authorization succeeds. 

@@ -60,7 +60,6 @@
     ReadmillUser *user;
     ReadmillBook *book;
     
-    NSString *ISBN, *bookTitle, *author;
     id <ReadmillConnectBookUIDelegate> delegate;
         
 }

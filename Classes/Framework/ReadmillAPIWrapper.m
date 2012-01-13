@@ -103,7 +103,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock;
 
-- (BOOL)refreshAccessToken:(NSError **)error DEPRECATED_ATTRIBUTE;
+//- (BOOL)refreshAccessToken:(NSError **)error DEPRECATED_ATTRIBUTE;
 
 @property (readwrite, copy) NSString *refreshToken;
 @property (readwrite, copy) NSString *accessToken;
@@ -146,12 +146,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 		[self setAccessToken:[plist valueForKey:@"accessToken"]];
         [self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
         [self setApiConfiguration:[NSKeyedUnarchiver unarchiveObjectWithData:[plist valueForKey:@"apiConfiguration"]]];
-        
-        // Deprecated in favor of non-expiring tokens
-        NSString *aRefreshToken = [plist valueForKey:@"refreshToken"];
-        if (aRefreshToken) {
-            [self setRefreshToken:aRefreshToken];
-        }
     }
     return self;
 }
@@ -165,13 +159,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
               forKey:@"authorizedRedirectURL"];
     [plist setObject:[NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]] 
               forKey:@"apiConfiguration"];
-    NSString *theRefreshToken = [self refreshToken];
+
     [plist setObject:[self accessTokenExpiryDate] forKey:@"accessTokenExpiryDate"];
     
-    // Deprecated in favor of non-expiring tokens
-    if (theRefreshToken) {
-        [plist setObject:theRefreshToken forKey:@"refreshToken"];
-    }
     return plist;
 }
 
@@ -185,7 +175,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (void)dealloc 
 {
-    [self setRefreshToken:nil];
     [self setAccessToken:nil];
     [self setAuthorizedRedirectURL:nil];
     [self setAccessTokenExpiryDate:nil];
@@ -222,40 +211,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 #pragma mark -
 #pragma mark OAuth
 
-- (BOOL)authenticateWithParameters:(NSDictionary *)parameters error:(NSError **)error 
-{
-    @synchronized (self) {
-        
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[[self apiConfiguration] accessTokenURL]
-                                                               cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                           timeoutInterval:kTimeoutInterval];
-        
-        [request setHTTPMethod:@"POST"];
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        [request setHTTPBody:[parameters JSONData]];
-        
-        NSDictionary *response = [self sendPreparedRequest:request 
-                                                     error:error];
-        NSLog(@"response: %@", response);
-        if (response != nil) {
-            NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];        
-            [self willChangeValueForKey:@"propertyListRepresentation"];
-            [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
-            NSString *aRefreshToken = [response valueForKey:@"refresh_token"];
-            if (aRefreshToken) {
-                [self setRefreshToken:aRefreshToken];
-            }
-            [self setAccessToken:[response valueForKey:@"access_token"]];
-            [self didChangeValueForKey:@"propertyListRepresentation"];
-            return YES;
-        } 
-        
-        // Response was nil
-        return NO;
-    }
-}
-
-- (BOOL)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString error:(NSError **)error 
+- (void)authorizeWithAuthorizationCode:(NSString *)authCode 
+                       fromRedirectURL:(NSString *)redirectURLString
+                     completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     [self setAuthorizedRedirectURL:redirectURLString];
     
@@ -265,20 +223,25 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                 authCode, @"code",
                                 redirectURLString, @"redirect_uri",
                                 @"authorization_code", @"grant_type", nil];
-    
-    return [self authenticateWithParameters:parameters error:error];
-}
 
-- (BOOL)refreshAccessToken:(NSError **)error 
-{
-    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [[self apiConfiguration] clientID], kReadmillAPIClientIdKey, 
-                                [[self apiConfiguration] clientSecret], kReadmillAPIClientSecretKey,
-                                [self authorizedRedirectURL], @"redirect_uri",
-                                [self refreshToken], @"refresh_token",
-                                @"refresh_token", @"grant_type", nil];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[[self apiConfiguration] accessTokenURL]
+                                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                       timeoutInterval:kTimeoutInterval];
     
-    return [self authenticateWithParameters:parameters error:error];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:[parameters JSONData]];
+
+    [self startPreparedRequest:request completion:^(NSDictionary *response, NSError *error) {
+        if (response != nil) {
+            NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];        
+            [self willChangeValueForKey:@"propertyListRepresentation"];
+            [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
+            [self setAccessToken:[response valueForKey:@"access_token"]];
+            [self didChangeValueForKey:@"propertyListRepresentation"];
+        }            
+        completionHandler(response, error);
+    }];
 }
 
 - (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect 
@@ -294,16 +257,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     }
     return [NSURL URLWithString:urlString];
 }
-
-- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error 
-{
-    if ([self accessTokenExpiryDate] == nil || [(NSDate *)[NSDate date] compare:[self accessTokenExpiryDate]] == NSOrderedDescending) {
-        return [self refreshAccessToken:error];
-    } else {
-        return YES;
-    }
-}
-
 
 #pragma mark -
 #pragma mark API Methods
@@ -765,10 +718,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 }
 - (NSDictionary *)currentUser:(NSError **)error 
 {    
-	if (![self ensureAccessTokenIsCurrent:error]) {
-        return nil;
-    }
-    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self urlForCurrentUser]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:kTimeoutInterval];
@@ -779,21 +728,12 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {
-    NSError *error = nil;
-    if (![self ensureAccessTokenIsCurrent:&error]) {
-        
-        // Failed, fail completion block
-        completionHandler(nil, error);
-        
-    } else {
-
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self urlForCurrentUser]
-                                                               cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                           timeoutInterval:kTimeoutInterval];
-        [request setHTTPMethod:@"GET"];
-        
-        [self startPreparedRequest:request completion:completionHandler];        
-    }
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self urlForCurrentUser]
+                                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                       timeoutInterval:kTimeoutInterval];
+    [request setHTTPMethod:@"GET"];
+    
+    [self startPreparedRequest:request completion:completionHandler];
 }
 
 
@@ -804,10 +744,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                   title:(NSString *)title 
                                  author:(NSString *)author 
 {
-    if (![self ensureAccessTokenIsCurrent:nil]) {
-        return nil;
-    }
- 
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [parameters setValue:ISBN forKey:@"isbn"];
     [parameters setValue:title forKey:@"title"];
@@ -826,10 +762,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (NSURL *)URLForViewingReadingWithId:(ReadmillReadingId)readingId 
 {
-    if (![self ensureAccessTokenIsCurrent:nil]) {
-        return nil;
-    }
-    
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [parameters setValue:[[self apiConfiguration] clientID] forKey:kReadmillAPIClientIdKey];
     [parameters setValue:[self accessToken] forKey:kReadmillAPIAccessTokenKey];
@@ -855,12 +787,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                         cachePolicy:(NSURLRequestCachePolicy)cachePolicy
                               error:(NSError **)error 
 {    
-    if (![self ensureAccessTokenIsCurrent:error]) {
-        if (!calledUnauthorized) {
-            return nil;
-        }
-    }
-	
     NSMutableDictionary *finalParameters = [[NSMutableDictionary alloc] initWithDictionary:parameters];
     
     if ([[self accessToken] length] > 0 && !calledUnauthorized) {
@@ -937,12 +863,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
           shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                                error:(NSError **)error 
 {    
-    if (![self ensureAccessTokenIsCurrent:error]) {
-        if (!allowUnauthed) {
-            return nil;
-        }
-    }
-	
     NSMutableDictionary *finalParameters = [[NSMutableDictionary alloc] initWithDictionary:parameters];
     
     if ([[self accessToken] length] > 0 && !allowUnauthed) {
@@ -957,9 +877,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 	[request setHTTPMethod:httpMethod];
 	[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 	[request setHTTPBody:[finalParameters JSONData]];
+    [finalParameters release];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     [request setTimeoutInterval:kTimeoutInterval];
-    [finalParameters release];
+    
     return [request autorelease];
 }
 
@@ -1178,6 +1099,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                 }
             }
         } else {
+            if ([response statusCode] != 200) {
+                [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+            }
             // Parse the response
             id jsonResponse = [self parseResponse:response 
                                  withResponseData:responseData 

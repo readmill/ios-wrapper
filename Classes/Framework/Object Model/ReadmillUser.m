@@ -67,8 +67,7 @@
                        delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate 
                apiConfiguration:(ReadmillAPIConfiguration *)apiConfiguration 
 {    
-    ReadmillAPIWrapper *apiWrapper = [[[ReadmillAPIWrapper alloc] initWithAPIConfiguration:apiConfiguration] 
-                                      autorelease];
+    ReadmillAPIWrapper *apiWrapper = [[[ReadmillAPIWrapper alloc] initWithAPIConfiguration:apiConfiguration] autorelease];
     
     ReadmillUser *user = [[ReadmillUser alloc] initWithAPIDictionary:nil
                                                           apiWrapper:apiWrapper];
@@ -223,7 +222,7 @@
         [authenticationDelegate readmillAuthenticationDidFailWithError:error];
         return;
     }
-
+    
     NSString *code = [callbackURLString substringFromIndex:codePrefixRange.location + codePrefixRange.length];
     
     NSRange codeSuffixRange = [code rangeOfString:@"&"];
@@ -239,60 +238,28 @@
         return;
     }
     
-    NSDictionary *properties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                code, @"code",
-                                baseCallbackURL, @"callbackURL",
-                                authenticationDelegate, @"delegate",
-                                [NSThread currentThread], @"callbackThread",
-                                nil];
+    // The block to be called when authorization request returns
+    void (^authorizationHandler)(id, NSError *) = ^(id result, NSError *error) {
+        if (!error) {
+            // Authorization succeeded, now try to fetch & update the user
+            [[self apiWrapper] currentUserWithCompletionHandler:^(id result, NSError *error) {
+                if (!error) {
+                    [self updateWithAPIDictionary:result];
+                }
+                [authenticationDelegate readmillAuthenticationDidSucceedWithLoggedInUser:self];
+            }];
+        } else {
+            [authenticationDelegate readmillAuthenticationDidFailWithError:error];   
+        }
+    };
     
-    [self performSelectorInBackground:@selector(attemptAuthenticationWithProperties:)
-                           withObject:properties];
-}
-
-- (void)attemptAuthenticationWithProperties:(NSDictionary *)properties 
-{    
-    [self retain];
-
-    NSAutoreleasePool *pool;
-    pool = [[NSAutoreleasePool alloc] init];
-    
-    NSThread *callbackThread = [properties valueForKey:@"callbackThread"];
-    id <ReadmillUserAuthenticationDelegate> authenticationDelegate = [properties valueForKey:@"delegate"];
-    NSString *authenticationCode = [NSString stringWithString:[properties valueForKey:@"code"]];
-    NSURL *callbackURL = [[[properties valueForKey:@"callbackURL"] copy] autorelease];
-
-    NSError *error = nil;
-    [[self apiWrapper] authorizeWithAuthorizationCode:authenticationCode
-                                      fromRedirectURL:[callbackURL absoluteString]
-                                                error:&error];
-
-    if (error == nil) {
-        [self updateWithAPIDictionary:[[self apiWrapper] currentUser:&error]];
-    }
-
-    if (error == nil && authenticationDelegate != nil) {
-        
-        [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidSucceedWithLoggedInUser:)
-                                                   onThread:callbackThread
-                                                 withObject:self
-                                              waitUntilDone:YES]; 
-        
-    } else if (error != nil && authenticationDelegate != nil) {
-        [(NSObject *)authenticationDelegate performSelector:@selector(readmillAuthenticationDidFailWithError:)
-                                                   onThread:callbackThread
-                                                 withObject:error
-                                              waitUntilDone:YES];
-    }
-    
-    [pool drain];
-    
-    [self release];
+    [[self apiWrapper] authorizeWithAuthorizationCode:code
+                                      fromRedirectURL:[baseCallbackURL absoluteString]
+                                    completionHandler:authorizationHandler];
 }
 
 - (void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate 
 {
-    __block typeof(self) bself = self;
     [[self apiWrapper] currentUserWithCompletionHandler:^(id result, NSError *error) {
         if (result && !error) {
             [self updateWithAPIDictionary:result];
@@ -395,12 +362,12 @@
     __block typeof (self) bself = self;
     void (^completionBlock)(NSDictionary *, NSError *);
     completionBlock = ^(NSDictionary *readingDictionary, NSError *error) {
-
+        
         if (error || !readingDictionary) {
             [delegate readmillUser:bself failedToFindReadingForBook:book 
                          withError:error];
         } else {
-
+            
             ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary
                                                                             apiWrapper:bself->apiWrapper] autorelease];
             [delegate readmillUser:bself
@@ -408,7 +375,7 @@
                            forBook:book];
         }
     };
-
+    
     [[self apiWrapper] createReadingWithBookId:[book bookId]
                                          state:readingState
                                      isPrivate:isPrivate 
