@@ -24,6 +24,7 @@
 #import "NSKeyedArchiver+ReadmillAdditions.h"
 #import "ReadmillPing.h"
 #import "NSError+ReadmillAdditions.h"
+#import "ReadmillReadingSession+Internal.h"
 
 @implementation ReadmillReadingSessionArchive
 
@@ -54,7 +55,7 @@
     return self; 
 }
 
--(NSString *)description
+- (NSString *)description
 {
     return [NSString stringWithFormat:@"%@ sessionIdentifier %@ withDate %@", [super description], [self sessionIdentifier], [self lastSessionDate]]; 
 }
@@ -70,11 +71,6 @@
 @interface ReadmillReadingSession ()
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 @property (readwrite) ReadmillReadingId readingId;
-@end
-
-@interface ReadmillReadingSession ()
-
-- (void)updateReadmillReadingSession;
 @end
 
 @implementation ReadmillReadingSession
@@ -104,14 +100,7 @@
 @synthesize apiWrapper;
 @synthesize readingId;
 
-- (void)updateReadmillReadingSession 
-{
-    ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
-    [archive setLastSessionDate:[NSDate date]];
-    [NSKeyedArchiver archiveReadmillReadingSession:archive];
-}
-
-- (NSString *)generateSessionIdentifier 
+- (NSString *)sessionIdentifier 
 {
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
     
@@ -136,25 +125,6 @@
     return YES;
 }
 
-+ (void)archiveFailedPing:(ReadmillPing *)ping 
-{    
-    @synchronized (self) {
-        // Grab all archived pings    
-        NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
-        NSMutableArray *failedPings = [[NSMutableArray alloc] init];
-        if (nil != unarchivedPings) {
-            [failedPings addObjectsFromArray:unarchivedPings];
-        }
-        // Add the new one
-        [failedPings addObject:ping];
-        // Archive all pings
-        [NSKeyedArchiver archiveReadmillPings:failedPings];
-        
-        NSLog(@"Failed ping: %@\n All pings: %@", ping, failedPings);
-        [failedPings release];
-    }
-}
-
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper 
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -165,7 +135,7 @@
         // Empty the archive
         [NSKeyedArchiver archiveReadmillPings:[NSArray array]];
         for (ReadmillPing *ping in unarchivedPings) {
-
+            
             [wrapper pingReadingWithId:[ping readingId] 
                           withProgress:[ping progress] 
                      sessionIdentifier:[ping sessionIdentifier] 
@@ -178,7 +148,7 @@
                              if ([[error domain] isEqualToString:NSURLErrorDomain] || // NSURL internet connection
                                  ([error isReadmillDomain] && ![error isClientError])) { // Client error on Readmill
                                  // No client error so ping could not be delivered correctly
-                                 [[self class] archiveFailedPing:ping];
+                                 [self archiveFailedPing:ping];
                              } else {
                                  NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
                              }
@@ -193,6 +163,10 @@
     [pool drain];
 }
 
+- (void)archiveFailedPing:(ReadmillPing *)ping
+{
+    [[self class] archiveFailedPing:ping];
+}
 
 #pragma mark -
 #pragma mark Threaded Messages
@@ -214,18 +188,41 @@
                longitude:(CLLocationDegrees)longitude 
                 delegate:(id<ReadmillPingDelegate>)pingDelegate 
 {    
-    NSString *sessionIdentifier = [self generateSessionIdentifier];
-    
     // Create the ping so we can archive it if the ping fails
     ReadmillPing *ping = [[ReadmillPing alloc] initWithReadingId:[self readingId] 
                                                  readingProgress:progress 
-                                               sessionIdentifier:sessionIdentifier 
+                                               sessionIdentifier:[self sessionIdentifier] 
                                                         duration:pingDuration
                                                   occurrenceTime:[NSDate date] 
                                                         latitude:latitude 
                                                        longitude:longitude];
     
     dispatch_queue_t currentQueue = dispatch_get_current_queue();
+    
+    ReadmillAPICompletionHandler completionHandler = ^(id result, NSError *error) {
+        NSLog(@"result: %@, error: %@", result, error);
+        if (error == nil) {
+            dispatch_async(currentQueue, ^{
+                [pingDelegate readmillReadingSessionDidPingSuccessfully:self];  
+            });
+            
+            // Since we succeeded to ping, try to send any archived pings
+            [[self class] pingArchived:[self apiWrapper]];
+            
+        } else {
+            
+            dispatch_async(currentQueue, ^{
+                [pingDelegate readmillReadingSession:self 
+                              didFailToPingWithError:error];  
+            });
+            
+            if ([[error domain] isEqualToString:NSURLErrorDomain] || // NSURL internet connection
+                ([error isReadmillDomain] && ![error isClientError])) { // Client error on Readmill
+                // No client error so ping could not be delivered correctly
+                [self archiveFailedPing:ping];
+            }
+        }
+    };
     
     [[self apiWrapper] pingReadingWithId:[ping readingId]
                             withProgress:[ping progress]
@@ -234,31 +231,7 @@
                           occurrenceTime:[ping occurrenceTime]
                                 latitude:[ping latitude]
                                longitude:[ping longitude]
-                       completionHandler:^(id result, NSError *error) {
-                           
-                           NSLog(@"result: %@, error: %@", result, error);
-                           if (error == nil) {
-                               dispatch_async(currentQueue, ^{
-                                   [pingDelegate readmillReadingSessionDidPingSuccessfully:self];  
-                               });
-                               
-                               // Since we succeeded to ping, try to send any archived pings
-                               [[self class] pingArchived:[self apiWrapper]];
-                               
-                           } else {
-                               
-                               dispatch_async(currentQueue, ^{
-                                   [pingDelegate readmillReadingSession:self 
-                                                 didFailToPingWithError:error];  
-                               });
-                               
-                               if ([[error domain] isEqualToString:NSURLErrorDomain] || // NSURL internet connection
-                                   ([error isReadmillDomain] && ![error isClientError])) { // Client error on Readmill
-                                   // No client error so ping could not be delivered correctly
-                                   [[self class] archiveFailedPing:ping];
-                               }
-                           }
-                       }];
+                       completionHandler:completionHandler];
     
     [self updateReadmillReadingSession];
     [ping release];    

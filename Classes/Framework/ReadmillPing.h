@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ReadmillAPI/ReadmillAPIWrapper.h>
+#import "ReadmillAPI.h"
 
 @interface ReadmillPing : NSObject <NSCoding> {
     NSString *sessionIdentifier;

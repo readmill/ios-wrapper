@@ -19,7 +19,8 @@
 
 @implementation ReadmillURLConnection
 
-- (id)initWithRequest:(NSURLRequest *)aRequest completionHandler:(ReadmillURLConnectionCompletionHandler)aCompletionHandler 
+- (id)initWithRequest:(NSURLRequest *)aRequest 
+    completionHandler:(ReadmillURLConnectionCompletionHandler)aCompletionHandler 
 {
     self = [super init];
     if (self) {

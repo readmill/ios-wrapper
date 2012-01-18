@@ -115,6 +115,8 @@
 
 + (BOOL)isReadingSessionIdentifierValid;
 
+- (NSString *)sessionIdentifier;
+
 @end
 
 

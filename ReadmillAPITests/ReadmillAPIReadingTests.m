@@ -11,8 +11,6 @@
 #import "ReadmillAPI.h"
 #import "OCMock.h"
 
-#define kTimeoutInterval 30
-
 @implementation ReadmillAPIReadingTests 
 
 - (void)setUp
@@ -40,7 +38,7 @@
      
     STAssertTrue([reading readingId] == 22533, @"ReadingId is wrong: %d", [reading readingId]);
 }
-- (void)testUser
+- (void)testUserFromReading
 {
     /*
      "user": {
@@ -70,21 +68,20 @@
     STAssertTrue([user followingCount] == 1, @"Following count is wrong");
     STAssertTrue([[user permalinkURL] isEqual:[NSURL URLWithString:@"https://readmill.com/yannifx"]], @"permalink is wrong");
 }
-
 - (void)testUpdateReading
 {
-    id mockReading = [OCMockObject mockForClass:[ReadmillReading class]];
-    
-    [[[mockReading expect] andCall:@selector(readmillReading:didFailToUpdateMetadataWithError:) onObject:nil] updateWithState:ReadingStateInteresting
-                                                                                                                    isPrivate:NO 
-                                                                                                                closingRemark:nil
-                                                                                                                     delegate:nil];
-    
+    id mockWrapper = [OCMockObject mockForClass:[ReadmillAPIWrapper class]];
     ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary 
-                                                                    apiWrapper:nil] autorelease];
-    [reading updateState:ReadingStateInteresting delegate:nil];
+                                                                    apiWrapper:mockWrapper] autorelease];
+
+    [[mockWrapper expect] updateReadingWithId:22533 
+                                    withState:ReadingStateFinished 
+                                    isPrivate:[reading isPrivate]
+                                closingRemark:[reading closingRemark] 
+                            completionHandler:OCMOCK_ANY];
     
-    [mockReading verify];
+    [reading updateState:ReadingStateFinished delegate:nil];
+    [mockWrapper verify];
 }
 
 

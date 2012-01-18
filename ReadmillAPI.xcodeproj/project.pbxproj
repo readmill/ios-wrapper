@@ -9,10 +9,15 @@
 /* Begin PBXBuildFile section */
 		332FD3931489062E00F755CD /* UIApplication+ReadmillNetworkActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */; };
 		332FD3941489062E00F755CD /* UIApplication+ReadmillNetworkActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */; };
+		333FC84A14C719F800DC62AD /* ReadmillAPIWrapper+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 333FC84814C719F800DC62AD /* ReadmillAPIWrapper+Internal.h */; };
+		333FC84B14C719F800DC62AD /* ReadmillAPIWrapper+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 333FC84914C719F800DC62AD /* ReadmillAPIWrapper+Internal.m */; };
+		333FC84E14C7204300DC62AD /* ReadmillReadingSession+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 333FC84C14C7204300DC62AD /* ReadmillReadingSession+Internal.h */; };
+		333FC84F14C7204300DC62AD /* ReadmillReadingSession+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 333FC84D14C7204300DC62AD /* ReadmillReadingSession+Internal.m */; };
 		335E809B149BA60F00BC8565 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D9B994149BA50D00C6876E /* libOCMock.a */; };
 		335E809E149BA94100BC8565 /* reading22533.json in Resources */ = {isa = PBXBuildFile; fileRef = 335E809D149BA94100BC8565 /* reading22533.json */; };
 		33D9B950149B7CE900C6876E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B94F149B7CE900C6876E /* logo.png */; };
 		33D9B953149B7D5900C6876E /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B952149B7D5900C6876E /* Default-Portrait~ipad.png */; };
+		33EDA94714C6E2F900733C0A /* ReadmillPingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EDA94614C6E2F900733C0A /* ReadmillPingTests.m */; };
 		502698D2130C87D400E67974 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.md */; };
 		7318A46B137D294800CBC7A4 /* NSError+ReadmillAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318A469137D294800CBC7A4 /* NSError+ReadmillAdditions.h */; settings = {ATTRIBUTES = (); }; };
 		7318A46C137D294800CBC7A4 /* NSError+ReadmillAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318A46A137D294800CBC7A4 /* NSError+ReadmillAdditions.m */; };
@@ -125,10 +130,16 @@
 /* Begin PBXFileReference section */
 		332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+ReadmillNetworkActivity.h"; path = "Classes/Framework/UIApplication+ReadmillNetworkActivity.h"; sourceTree = SOURCE_ROOT; };
 		332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+ReadmillNetworkActivity.m"; path = "Classes/Framework/UIApplication+ReadmillNetworkActivity.m"; sourceTree = SOURCE_ROOT; };
+		333FC84814C719F800DC62AD /* ReadmillAPIWrapper+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ReadmillAPIWrapper+Internal.h"; sourceTree = "<group>"; };
+		333FC84914C719F800DC62AD /* ReadmillAPIWrapper+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ReadmillAPIWrapper+Internal.m"; sourceTree = "<group>"; };
+		333FC84C14C7204300DC62AD /* ReadmillReadingSession+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ReadmillReadingSession+Internal.h"; sourceTree = "<group>"; };
+		333FC84D14C7204300DC62AD /* ReadmillReadingSession+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ReadmillReadingSession+Internal.m"; sourceTree = "<group>"; };
 		335E809D149BA94100BC8565 /* reading22533.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reading22533.json; sourceTree = "<group>"; };
 		33D9B94F149B7CE900C6876E /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		33D9B952149B7D5900C6876E /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
 		33D9B986149BA50D00C6876E /* OCMock.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OCMock.xcodeproj; path = ocmock/Source/OCMock.xcodeproj; sourceTree = "<group>"; };
+		33EDA94514C6E2F900733C0A /* ReadmillPingTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillPingTests.h; sourceTree = "<group>"; };
+		33EDA94614C6E2F900733C0A /* ReadmillPingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillPingTests.m; sourceTree = "<group>"; };
 		502698D1130C87D300E67974 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		731471C7135304F900A41B49 /* NSURL+ReadmillURLParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+ReadmillURLParameters.h"; path = "Classes/Framework/NSURL+ReadmillURLParameters.h"; sourceTree = SOURCE_ROOT; };
 		731471C8135304F900A41B49 /* NSURL+ReadmillURLParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+ReadmillURLParameters.m"; path = "Classes/Framework/NSURL+ReadmillURLParameters.m"; sourceTree = SOURCE_ROOT; };
@@ -242,6 +253,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		333FC83614C717DD00DC62AD /* ReadmillReadingSession */ = {
+			isa = PBXGroup;
+			children = (
+				333FC83B14C717EA00DC62AD /* ReadmillReadingSession_Internal */,
+				96BEAEF912F06360006028D0 /* ReadmillReadingSession.h */,
+				96BEAEFA12F06360006028D0 /* ReadmillReadingSession.m */,
+			);
+			name = ReadmillReadingSession;
+			sourceTree = "<group>";
+		};
+		333FC83B14C717EA00DC62AD /* ReadmillReadingSession_Internal */ = {
+			isa = PBXGroup;
+			children = (
+				333FC84C14C7204300DC62AD /* ReadmillReadingSession+Internal.h */,
+				333FC84D14C7204300DC62AD /* ReadmillReadingSession+Internal.m */,
+			);
+			name = ReadmillReadingSession_Internal;
+			sourceTree = "<group>";
+		};
+		333FC84414C7193400DC62AD /* ReadmillAPIWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				333FC84514C7193D00DC62AD /* Internal */,
+				96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */,
+				96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */,
+			);
+			name = ReadmillAPIWrapper;
+			sourceTree = "<group>";
+		};
+		333FC84514C7193D00DC62AD /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				333FC84814C719F800DC62AD /* ReadmillAPIWrapper+Internal.h */,
+				333FC84914C719F800DC62AD /* ReadmillAPIWrapper+Internal.m */,
+			);
+			name = Internal;
+			sourceTree = "<group>";
+		};
 		33D9B987149BA50D00C6876E /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,6 +324,8 @@
 			children = (
 				734A51BB135A1DF6009F9794 /* ReadmillAPIReadingTests.h */,
 				734A51BD135A1DF6009F9794 /* ReadmillAPIReadingTests.m */,
+				33EDA94514C6E2F900733C0A /* ReadmillPingTests.h */,
+				33EDA94614C6E2F900733C0A /* ReadmillPingTests.m */,
 				734A51B5135A1DF6009F9794 /* Supporting Files */,
 			);
 			path = ReadmillAPITests;
@@ -415,8 +466,7 @@
 				96BEAF3612F071D6006028D0 /* iPad UI */,
 				73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */,
 				73AA2950145EB41300CDBBD6 /* ReadmillAPIConfiguration.m */,
-				96BEAEFE12F06360006028D0 /* ReadmillAPIWrapper.h */,
-				96BEAEFF12F06360006028D0 /* ReadmillAPIWrapper.m */,
+				333FC84414C7193400DC62AD /* ReadmillAPIWrapper */,
 			);
 			name = ReadmillAPI;
 			path = Classes/Framework;
@@ -429,8 +479,7 @@
 				96BEAEF612F06360006028D0 /* ReadmillBook.m */,
 				96BEAEF712F06360006028D0 /* ReadmillReading.h */,
 				96BEAEF812F06360006028D0 /* ReadmillReading.m */,
-				96BEAEF912F06360006028D0 /* ReadmillReadingSession.h */,
-				96BEAEFA12F06360006028D0 /* ReadmillReadingSession.m */,
+				333FC83614C717DD00DC62AD /* ReadmillReadingSession */,
 				96BEAEFB12F06360006028D0 /* ReadmillUser.h */,
 				96BEAEFC12F06360006028D0 /* ReadmillUser.m */,
 			);
@@ -526,6 +575,8 @@
 				73AA2951145EB41300CDBBD6 /* ReadmillAPIConfiguration.h in Headers */,
 				734CAD611461F13D00855E9B /* ReadmillDateFormatter.h in Headers */,
 				332FD3931489062E00F755CD /* UIApplication+ReadmillNetworkActivity.h in Headers */,
+				333FC84A14C719F800DC62AD /* ReadmillAPIWrapper+Internal.h in Headers */,
+				333FC84E14C7204300DC62AD /* ReadmillReadingSession+Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -719,6 +770,8 @@
 				73FA5403147085F900CFC589 /* NSString+ReadmillAdditions.m in Sources */,
 				735F50D11470898E0069A553 /* ReadmillSpinner.m in Sources */,
 				332FD3941489062E00F755CD /* UIApplication+ReadmillNetworkActivity.m in Sources */,
+				333FC84B14C719F800DC62AD /* ReadmillAPIWrapper+Internal.m in Sources */,
+				333FC84F14C7204300DC62AD /* ReadmillReadingSession+Internal.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -727,6 +780,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				734A51BE135A1DF6009F9794 /* ReadmillAPIReadingTests.m in Sources */,
+				33EDA94714C6E2F900733C0A /* ReadmillPingTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,6 +23,8 @@
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIConfiguration.h"
 
+#define kTimeoutInterval 30.0
+
 typedef void (^ReadmillAPICompletionHandler)(id result, NSError *error);
 
 typedef NSUInteger ReadmillBookId;

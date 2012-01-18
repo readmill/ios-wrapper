@@ -7,6 +7,7 @@
 //
 
 #import "ReadmillPing.h"
+
 @interface ReadmillPing ()
 @property (nonatomic, readwrite, retain) NSString *sessionIdentifier;
 @property (nonatomic, readwrite, retain) NSDate *occurrenceTime;
