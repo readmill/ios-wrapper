@@ -5,11 +5,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class OCMockObserver;
+@interface OCObserverMockObject : NSObject 
+{
+	BOOL			expectationOrderMatters;
+	NSMutableArray	*recorders;
+}
 
+- (void)setExpectationOrderMatters:(BOOL)flag;
 
-@interface NSNotificationCenter(OCMAdditions)
+- (id)expect;
 
-- (void)addMockObserver:(OCMockObserver *)notificationObserver name:(NSString *)notificationName object:(id)notificationSender;
+- (void)verify;
+
+- (void)handleNotification:(NSNotification *)aNotification;
 
 @end

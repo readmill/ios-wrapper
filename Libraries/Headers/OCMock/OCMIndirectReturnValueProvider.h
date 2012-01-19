@@ -5,11 +5,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class OCMockObserver;
+@interface OCMIndirectReturnValueProvider : NSObject 
+{
+	id	provider;
+	SEL	selector;
+}
 
+- (id)initWithProvider:(id)aProvider andSelector:(SEL)aSelector;
 
-@interface NSNotificationCenter(OCMAdditions)
-
-- (void)addMockObserver:(OCMockObserver *)notificationObserver name:(NSString *)notificationName object:(id)notificationSender;
+- (void)handleInvocation:(NSInvocation *)anInvocation;
 
 @end

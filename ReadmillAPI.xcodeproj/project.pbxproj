@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3313AEE514C77C5D0087EABF /* OCMockObject+RMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3313AEE414C77C5D0087EABF /* OCMockObject+RMAdditions.m */; };
+		3313AEEB14C82C910087EABF /* ReadmillHighlightTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3313AEEA14C82C910087EABF /* ReadmillHighlightTests.m */; };
 		332FD3931489062E00F755CD /* UIApplication+ReadmillNetworkActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */; };
 		332FD3941489062E00F755CD /* UIApplication+ReadmillNetworkActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */; };
+		333BA9AF14C7563600A247BF /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D9B994149BA50D00C6876E /* libOCMock.a */; };
 		333FC84A14C719F800DC62AD /* ReadmillAPIWrapper+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 333FC84814C719F800DC62AD /* ReadmillAPIWrapper+Internal.h */; };
 		333FC84B14C719F800DC62AD /* ReadmillAPIWrapper+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 333FC84914C719F800DC62AD /* ReadmillAPIWrapper+Internal.m */; };
 		333FC84E14C7204300DC62AD /* ReadmillReadingSession+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 333FC84C14C7204300DC62AD /* ReadmillReadingSession+Internal.h */; };
 		333FC84F14C7204300DC62AD /* ReadmillReadingSession+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 333FC84D14C7204300DC62AD /* ReadmillReadingSession+Internal.m */; };
-		335E809B149BA60F00BC8565 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D9B994149BA50D00C6876E /* libOCMock.a */; };
 		335E809E149BA94100BC8565 /* reading22533.json in Resources */ = {isa = PBXBuildFile; fileRef = 335E809D149BA94100BC8565 /* reading22533.json */; };
 		33D9B950149B7CE900C6876E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B94F149B7CE900C6876E /* logo.png */; };
 		33D9B953149B7D5900C6876E /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B952149B7D5900C6876E /* Default-Portrait~ipad.png */; };
@@ -90,6 +92,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		333BA9A814C7558900A247BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 33D9B986149BA50D00C6876E /* OCMock.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 030EF0DB14632FF700B04273;
+			remoteInfo = OCMockLib;
+		};
 		33D9B98F149BA50D00C6876E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 33D9B986149BA50D00C6876E /* OCMock.xcodeproj */;
@@ -128,6 +137,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3313AEE314C77C5D0087EABF /* OCMockObject+RMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OCMockObject+RMAdditions.h"; sourceTree = "<group>"; };
+		3313AEE414C77C5D0087EABF /* OCMockObject+RMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OCMockObject+RMAdditions.m"; sourceTree = "<group>"; };
+		3313AEE914C82C910087EABF /* ReadmillHighlightTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillHighlightTests.h; sourceTree = "<group>"; };
+		3313AEEA14C82C910087EABF /* ReadmillHighlightTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillHighlightTests.m; sourceTree = "<group>"; };
 		332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+ReadmillNetworkActivity.h"; path = "Classes/Framework/UIApplication+ReadmillNetworkActivity.h"; sourceTree = SOURCE_ROOT; };
 		332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+ReadmillNetworkActivity.m"; path = "Classes/Framework/UIApplication+ReadmillNetworkActivity.m"; sourceTree = SOURCE_ROOT; };
 		333FC84814C719F800DC62AD /* ReadmillAPIWrapper+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ReadmillAPIWrapper+Internal.h"; sourceTree = "<group>"; };
@@ -230,7 +243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				335E809B149BA60F00BC8565 /* libOCMock.a in Frameworks */,
+				333BA9AF14C7563600A247BF /* libOCMock.a in Frameworks */,
 				734A51AE135A1DF5009F9794 /* UIKit.framework in Frameworks */,
 				734A51AF135A1DF5009F9794 /* Foundation.framework in Frameworks */,
 				734A51B0135A1DF5009F9794 /* CoreGraphics.framework in Frameworks */,
@@ -326,6 +339,8 @@
 				734A51BD135A1DF6009F9794 /* ReadmillAPIReadingTests.m */,
 				33EDA94514C6E2F900733C0A /* ReadmillPingTests.h */,
 				33EDA94614C6E2F900733C0A /* ReadmillPingTests.m */,
+				3313AEE914C82C910087EABF /* ReadmillHighlightTests.h */,
+				3313AEEA14C82C910087EABF /* ReadmillHighlightTests.m */,
 				734A51B5135A1DF6009F9794 /* Supporting Files */,
 			);
 			path = ReadmillAPITests;
@@ -334,6 +349,8 @@
 		734A51B5135A1DF6009F9794 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3313AEE314C77C5D0087EABF /* OCMockObject+RMAdditions.h */,
+				3313AEE414C77C5D0087EABF /* OCMockObject+RMAdditions.m */,
 				734A51B6135A1DF6009F9794 /* ReadmillAPITests-Info.plist */,
 				734A51B7135A1DF6009F9794 /* InfoPlist.strings */,
 				734A51BA135A1DF6009F9794 /* ReadmillAPITests-Prefix.pch */,
@@ -612,6 +629,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				333BA9A914C7558900A247BF /* PBXTargetDependency */,
 				734A51B2135A1DF5009F9794 /* PBXTargetDependency */,
 			);
 			name = ReadmillAPITests;
@@ -781,6 +799,8 @@
 			files = (
 				734A51BE135A1DF6009F9794 /* ReadmillAPIReadingTests.m in Sources */,
 				33EDA94714C6E2F900733C0A /* ReadmillPingTests.m in Sources */,
+				3313AEE514C77C5D0087EABF /* OCMockObject+RMAdditions.m in Sources */,
+				3313AEEB14C82C910087EABF /* ReadmillHighlightTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -798,6 +818,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		333BA9A914C7558900A247BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OCMockLib;
+			targetProxy = 333BA9A814C7558900A247BF /* PBXContainerItemProxy */;
+		};
 		734A51B2135A1DF5009F9794 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 734A51A2135A1DF5009F9794 /* ReadmillAPI */;
@@ -919,6 +944,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Library/Headers";
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -946,6 +972,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Library/Headers";
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
@@ -973,6 +1000,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Library/Headers";
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Distribution;

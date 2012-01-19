@@ -11,10 +11,11 @@
 
 @implementation NSDate (ReadmillAdditions)
 
-- (NSString *)stringWithRFC3339Format {
-    
+- (NSString *)stringWithRFC3339Format 
+{    
     ReadmillDateFormatter *formatter = [ReadmillDateFormatter formatterWithRFC3339Format];
     NSString *dateString = [formatter stringFromDate:self];
     return dateString;
 }
+
 @end

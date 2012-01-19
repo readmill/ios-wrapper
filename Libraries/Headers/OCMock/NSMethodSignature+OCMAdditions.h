@@ -5,11 +5,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class OCMockObserver;
+@interface NSMethodSignature(PrivateAPI)
 
++ (id)signatureWithObjCTypes:(const char *)types;
 
-@interface NSNotificationCenter(OCMAdditions)
+@end
 
-- (void)addMockObserver:(OCMockObserver *)notificationObserver name:(NSString *)notificationName object:(id)notificationSender;
+@interface NSMethodSignature(OCMAdditions)
+
+- (const char *)methodReturnTypeWithoutQualifiers;
 
 @end

@@ -103,6 +103,16 @@
               longitude:(CLLocationDegrees)longitude 
                delegate:(id <ReadmillPingDelegate>)delegate;
 
+
+/*!
+ @brief Try to send all saved "Pings" that have been archived.
+ 
+ This should be called whenever there may be archived pings and a connection to Readmill
+ is possible to ensure progress data is synchronized. This method assumes the session
+ already has a valid apiWrapper.
+ */
+- (void)pingArchived;
+
 /*!
  @param wrapper The ReadmillAPIWrapper to be used by the session.
  @brief Try to send all saved "Pings" that have been archived.

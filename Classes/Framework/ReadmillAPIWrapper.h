@@ -125,9 +125,12 @@ static NSString * const kReadmillAPIReadingHighlightsCountKey = @"highlights_cou
 
 #pragma mark API Keys - Highlights
 
+static NSString * const kReadmillAPIHighlightKey = @"highlight";
 static NSString * const kReadmillAPIHighlightPreKey = @"pre";
+static NSString * const kReadmillAPIHighlightMidKey = @"mid";
 static NSString * const kReadmillAPIHighlightPostKey = @"post";
 static NSString * const kReadmillAPIHighlightContentKey = @"content";
+static NSString * const kReadmillAPIHighlightLocatorsKey = @"locators";
 static NSString * const kReadmillAPIHighlightIdKey = @"id";
 static NSString * const kReadmillAPIHighlightPositionKey = @"position";
 static NSString * const kReadmillAPIHighlightPostToKey = @"post_to";
@@ -275,16 +278,6 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  needed. There's normally no need to call this yourself except for debugging purposes. 
  */
 - (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString completionHandler:(ReadmillAPICompletionHandler)completion;
-
-/*!
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result YES if the current access token is valid and current, or if a new one was fetched successfully.
- @brief   Refresh the current access token if it's invalid or expired.
- 
-IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call this automatically if 
- needed. There's normally no need to call this yourself except for debugging purposes. 
- */
-//- (BOOL)ensureAccessTokenIsCurrent:(NSError **)error;
 
 /*!
  @param redirect The URL Readmill should return to once authorization succeeds. 
@@ -505,22 +498,21 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
 
 /*!
  @param readingId The id of the reading you want to create a highlight in.
- @param highlightedText The highlighted text
- @param pre (optional) The text before the highlightText (needed in case the highlightedText is very short)
- @param post (optional) The text after the highlightedText (needed in case the highlightedText is very short)
+ @param highlightedText The highlighted (formatted) text
+ @param locators An NSDictionary of locators used to find the particular highlight. 
+    See https://github.com/Readmill/API/wiki/Highlights for examples.
  @param position The approximate position of the highlighted text in the book as float percentage.
- @param highlightedAt An NSDate object representing the date the resource was created, pass nil for "now". 
+ @param highlightedAt (optional) An NSDate object representing the date the resource was created, pass nil for "now". 
  @param comment (optional) A comment on the highlight
- @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user 
-                               /me/connections/). Use nil for default connections.
+ @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+    IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Send a highlighted text snippet to Readmill.
  */
 - (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
                         highlightedText:(NSString *)highlightedText
-                                    pre:(NSString *)preOrNil
-                                   post:(NSString *)postOrNil
-                    approximatePosition:(ReadmillReadingProgress)position
+                               locators:(NSDictionary *)locators
+                               progress:(ReadmillReadingProgress)progress
                           highlightedAt:(NSDate *)highlightedAtOrNil
                                 comment:(NSString *)commentOrNil
                             connections:(NSArray *)connectionsOrNil
@@ -608,5 +600,30 @@ IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call t
  */
 - (void)cancelAllOperations;
 
+#pragma mark -
+#pragma mark - Deprecated methods
+
+/*!
+ @param readingId The id of the reading you want to create a highlight in.
+ @param highlightedText The highlighted text
+ @param pre (optional) The text before the highlightText (needed in case the highlightedText is very short)
+ @param post (optional) The text after the highlightedText (needed in case the highlightedText is very short)
+ @param position The approximate position of the highlighted text in the book as float percentage.
+ @param highlightedAt An NSDate object representing the date the resource was created, pass nil for "now". 
+ @param comment (optional) A comment on the highlight
+ @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user 
+ /me/connections/). Use nil for default connections.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Send a highlighted text snippet to Readmill.
+ */
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
+                        highlightedText:(NSString *)highlightedText
+                                    pre:(NSString *)preOrNil
+                                   post:(NSString *)postOrNil
+                    approximatePosition:(ReadmillReadingProgress)position
+                          highlightedAt:(NSDate *)highlightedAtOrNil
+                                comment:(NSString *)commentOrNil
+                            connections:(NSArray *)connectionsOrNil
+                      completionHandler:(ReadmillAPICompletionHandler)completionHandler DEPRECATED_ATTRIBUTE;
 
 @end

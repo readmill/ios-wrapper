@@ -7,13 +7,10 @@
 //
 
 #import "ReadmillPingTests.h"
-#import "ReadmillAPI.h"
 #import "ReadmillPing.h"
 #import "ReadmillReadingSession+Internal.h"
 #import "ReadmillAPIWrapper+Internal.h"
 #import "ReadmillURLConnection.h"
-#import "JSONKit.h"
-#import "OCMock.h"
 
 @implementation ReadmillPingTests
 
@@ -67,19 +64,23 @@
     [mockWrapper verify];
 }
 
-- (void)testReadingSessionArchivesPingOnFail
+- (void)testReadingSessionPingFail
 {
     ReadmillReadingSession *session = [reading createReadingSession];
     
     id mockReadingSession = [OCMockObject partialMockForObject:session];
+    id mockPingDelegate = [OCMockObject mockForProtocol:@protocol(ReadmillPingDelegate)];
+
     ReadmillPingDuration duration = 4711;
     
+    // Expect startPreparedRequest:completion: to be called and inject our own handler
     [[[mockWrapper expect] andDo:^(NSInvocation *invocation) {
         ReadmillAPICompletionHandler handler;
         [invocation getArgument:&handler atIndex:3];
         handler(nil, [NSError errorWithDomain:NSURLErrorDomain code:400 userInfo:nil]);
     }] startPreparedRequest:OCMOCK_ANY completion:OCMOCK_ANY];
     
+    // Expect the session to archive the failed ping
     [[mockReadingSession expect] archiveFailedPing:[OCMArg checkWithBlock:^BOOL(ReadmillPing *ping) {
         if ([ping readingId] != [reading readingId]) {
             return NO;
@@ -93,11 +94,56 @@
         return YES;
     }]];
     
+    // Ping failed so delegate should not be notified of successful ping
+    [[mockPingDelegate reject] readmillReadingSessionDidPingSuccessfully:session];
+    // Ping failed so delegate should be notified of successful ping
+    [[mockPingDelegate expect] readmillReadingSession:session didFailToPingWithError:OCMOCK_ANY];
+
+    // Do the actual ping
     [mockReadingSession pingWithProgress:[reading progress] 
                             pingDuration:duration
-                                delegate:nil];
+                                delegate:mockPingDelegate];
     [mockWrapper verify];
     [mockReadingSession verify];
+    // Timeout since the delegate callback is asynchronous
+    [mockPingDelegate verifyWithTimeout:1];
 }
+- (void)testReadingSessionPingSuccess
+{
+    ReadmillReadingSession *session = [reading createReadingSession];
+    
+    
+    id mockReadingSession = [OCMockObject partialMockForObject:session];
+    id mockPingDelegate = [OCMockObject mockForProtocol:@protocol(ReadmillPingDelegate)];
+    
+    ReadmillPingDuration duration = 4711;
+    
+    // Expect startPreparedRequest:completion: to be called and inject our own handler
+    [[[mockWrapper expect] andDo:^(NSInvocation *invocation) {
+        ReadmillAPICompletionHandler handler;
+        [invocation getArgument:&handler atIndex:3];
+        handler([NSDictionary dictionary], nil);
+    }] startPreparedRequest:OCMOCK_ANY completion:OCMOCK_ANY];
+    
+    // Ping succeeded so don't archive
+    [[mockReadingSession reject] archiveFailedPing:OCMOCK_ANY];
+    // Ping succeeded so try to ping archived
+    [[mockReadingSession expect] pingArchived];
+    
+    // Ping succeeded so delegate should be notified of successful ping
+    [[mockPingDelegate expect] readmillReadingSessionDidPingSuccessfully:session];
+    // Ping succeeded so delegate should not be notified of failed ping
+    [[mockPingDelegate reject] readmillReadingSession:session didFailToPingWithError:OCMOCK_ANY];
+    
+        // Do the actual ping
+    [mockReadingSession pingWithProgress:[reading progress] 
+                            pingDuration:duration
+                                delegate:mockPingDelegate];
+    [mockWrapper verify];
+    [mockReadingSession verify];
+    // Timeout since the delegate callback is asynchronous
+    [mockPingDelegate verifyWithTimeout:1];
+}
+
 
 @end

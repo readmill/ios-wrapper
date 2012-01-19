@@ -7,9 +7,6 @@
 //
 
 #import "ReadmillAPIReadingTests.h"
-#import "JSONKit.h"
-#import "ReadmillAPI.h"
-#import "OCMock.h"
 
 @implementation ReadmillAPIReadingTests 
 

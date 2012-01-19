@@ -167,6 +167,11 @@
 {
     [[self class] archiveFailedPing:ping];
 }
+- (void)pingArchived
+{
+    NSAssert([self apiWrapper] != nil, @"No apiWrapper!");
+    [[self class] pingArchived:[self apiWrapper]];
+}
 
 #pragma mark -
 #pragma mark Threaded Messages
@@ -200,14 +205,13 @@
     dispatch_queue_t currentQueue = dispatch_get_current_queue();
     
     ReadmillAPICompletionHandler completionHandler = ^(id result, NSError *error) {
-        NSLog(@"result: %@, error: %@", result, error);
         if (error == nil) {
             dispatch_async(currentQueue, ^{
                 [pingDelegate readmillReadingSessionDidPingSuccessfully:self];  
             });
             
             // Since we succeeded to ping, try to send any archived pings
-            [[self class] pingArchived:[self apiWrapper]];
+            [self pingArchived];
             
         } else {
             

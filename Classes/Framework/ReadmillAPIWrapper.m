@@ -488,47 +488,48 @@
 
 - (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
                         highlightedText:(NSString *)highlightedText
-                                    pre:(NSString *)pre
-                                   post:(NSString *)post
-                    approximatePosition:(ReadmillReadingProgress)position
-                          highlightedAt:(NSDate *)highlightedAt
+                               locators:(NSDictionary *)locators
+                               progress:(ReadmillReadingProgress)progress
+                          highlightedAt:(NSDate *)highlightedAt 
                                 comment:(NSString *)comment
-                            connections:(NSArray *)connectionsOrNil
-                      completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
+                            connections:(NSArray *)connections
+                      completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{       
+    NSAssert(0 < readingId, @"readingId: %d is invalid.", readingId);
+    NSAssert(highlightedText != nil && [highlightedText length], @"Locators can't be nil.");
+    NSAssert(locators != nil && [locators count], @"Locators can't be nil.");
+
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     
     NSMutableDictionary *highlightParameters = [[NSMutableDictionary alloc] init];
+    [highlightParameters setValue:locators 
+                           forKey:kReadmillAPIHighlightLocatorsKey];
     [highlightParameters setValue:highlightedText
                            forKey:kReadmillAPIHighlightContentKey];
-    [highlightParameters setValue:[NSNumber numberWithFloat:position] 
+    [highlightParameters setValue:[NSNumber numberWithFloat:progress] 
                            forKey:kReadmillAPIHighlightPositionKey];
-    [highlightParameters setValue:pre
-                           forKey:kReadmillAPIHighlightPreKey];
-    [highlightParameters setValue:post
-                           forKey:kReadmillAPIHighlightPostKey];
-    
-    if (comment != nil && [comment length] > 0) {
+        
+    if (comment != nil && 0 < [comment length]) {
         [parameters setValue:comment forKey:kReadmillAPIHighlightCommentKey];
     }
     
-    if (connectionsOrNil != nil) {
+    if (connections != nil) {
         // Create a list of JSON objects (i.e array of NSDicionaries
         NSMutableArray *connectionsArray = [NSMutableArray array];
-        for (id connection in connectionsOrNil) {
+        for (id connection in connections) {
             [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
                                                                     forKey:@"id"]];
         }
         [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
     }
-
+    
     if (!highlightedAt) {
         highlightedAt = [NSDate date];
     }
     // 2011-01-06T11:47:14Z
     [highlightParameters setValue:[highlightedAt stringWithRFC3339Format] 
                            forKey:kReadmillAPIHighlightHighlightedAtKey];
-    [parameters setObject:highlightParameters forKey:@"highlight"];
+    [parameters setObject:highlightParameters forKey:kReadmillAPIHighlightKey];
     [highlightParameters release];
     
     NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights", 
@@ -720,6 +721,63 @@
 - (void)cancelAllOperations 
 {
     [queue cancelAllOperations];
+}
+
+#pragma mark - 
+#pragma mark - Deprecated
+
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
+                        highlightedText:(NSString *)highlightedText
+                                    pre:(NSString *)pre
+                                   post:(NSString *)post
+                    approximatePosition:(ReadmillReadingProgress)position
+                          highlightedAt:(NSDate *)highlightedAt
+                                comment:(NSString *)comment
+                            connections:(NSArray *)connectionsOrNil
+                      completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+{    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    
+    NSMutableDictionary *highlightParameters = [[NSMutableDictionary alloc] init];
+    [highlightParameters setValue:highlightedText
+                           forKey:kReadmillAPIHighlightContentKey];
+    [highlightParameters setValue:[NSNumber numberWithFloat:position] 
+                           forKey:kReadmillAPIHighlightPositionKey];
+    [highlightParameters setValue:pre
+                           forKey:kReadmillAPIHighlightPreKey];
+    [highlightParameters setValue:post
+                           forKey:kReadmillAPIHighlightPostKey];
+    
+    if (comment != nil && [comment length] > 0) {
+        [parameters setValue:comment forKey:kReadmillAPIHighlightCommentKey];
+    }
+    
+    if (connectionsOrNil != nil) {
+        // Create a list of JSON objects (i.e array of NSDicionaries
+        NSMutableArray *connectionsArray = [NSMutableArray array];
+        for (id connection in connectionsOrNil) {
+            [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
+                                                                    forKey:@"id"]];
+        }
+        [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
+    }
+    
+    if (!highlightedAt) {
+        highlightedAt = [NSDate date];
+    }
+    // 2011-01-06T11:47:14Z
+    [highlightParameters setValue:[highlightedAt stringWithRFC3339Format] 
+                           forKey:kReadmillAPIHighlightHighlightedAtKey];
+    [parameters setObject:highlightParameters forKey:@"highlight"];
+    [highlightParameters release];
+    
+    NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights", 
+                                                 [self readingsEndpoint], readingId]];
+    
+    [self sendPostRequestToURL:highlightsURL 
+                withParameters:[parameters autorelease]
+    shouldBeCalledUnauthorized:NO
+             completionHandler:completionHandler];
 }
 
 @end

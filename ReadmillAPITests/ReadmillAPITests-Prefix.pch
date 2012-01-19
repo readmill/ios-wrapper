@@ -4,4 +4,8 @@
 
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
+    #import "ReadmillAPI.h"
+    #import "OCMock.h"
+    #import "OCMockObject+RMAdditions.h"
+    #import "JSONKit.h"
 #endif

@@ -5,11 +5,15 @@
 
 #import <Foundation/Foundation.h>
 
-@class OCMockObserver;
+@interface OCMObserverRecorder : NSObject 
+{
+	NSNotification *recordedNotification;
+}
 
+- (void)notificationWithName:(NSString *)name object:(id)sender;
 
-@interface NSNotificationCenter(OCMAdditions)
+- (BOOL)matchesNotification:(NSNotification *)aNotification;
 
-- (void)addMockObserver:(OCMockObserver *)notificationObserver name:(NSString *)notificationName object:(id)notificationSender;
+- (BOOL)argument:(id)expectedArg matchesArgument:(id)observedArg;
 
 @end
