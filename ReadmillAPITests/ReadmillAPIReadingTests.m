@@ -7,6 +7,7 @@
 //
 
 #import "ReadmillAPIReadingTests.h"
+#import "OCMock.h"
 
 @implementation ReadmillAPIReadingTests 
 
@@ -81,5 +82,20 @@
     [mockWrapper verify];
 }
 
+- (void)testReadingSessionIdentifier
+{
+    ReadmillReadingSession *readingSession = [[ReadmillReadingSession alloc] initWithAPIWrapper:nil
+                                                                                      readingId:1];
+    id mockReadingSession = [OCMockObject partialMockForObject:readingSession];
+
+    NSString *sessionIdentifier = [mockReadingSession sessionIdentifier];
+
+    [[[mockReadingSession expect] andReturnValue:[NSNumber numberWithBool:NO]] isReadingSessionIdentifierValid];
+    
+    [mockReadingSession pingWithProgress:0 pingDuration:0 delegate:OCMOCK_ANY];
+    
+    [mockReadingSession verify];
+    STAssertTrue(![sessionIdentifier isEqualToString:[mockReadingSession sessionIdentifier]], @"Not equal session identifiers.");
+}
 
 @end

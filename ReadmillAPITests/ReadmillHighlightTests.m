@@ -35,11 +35,13 @@
                               @"mid", kReadmillAPIHighlightMidKey,
                               @"post", kReadmillAPIHighlightPostKey, nil];
     
-    NSDate *date = [NSDate date];
+    NSDate *date = [NSDate dateWithTimeIntervalSinceNow:-100];
     
     void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
+        // Get the input parameters
         NSDictionary *allParameters;
         [invocation getArgument:&allParameters atIndex:3];
+        
         NSDictionary *highlightParameters = [allParameters valueForKey:kReadmillAPIHighlightKey];
         STAssertNotNil([highlightParameters valueForKey:kReadmillAPIHighlightLocatorsKey], @"Highlight locators nil");
         STAssertNotNil([allParameters valueForKey:kReadmillAPIHighlightCommentKey], @"Comment is missing");        

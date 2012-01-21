@@ -47,18 +47,22 @@
     ReadmillReadingSession *session = [reading createReadingSession];
     
     ReadmillPingDuration duration = 4711;
+    CLLocationDegrees lat = 0.4711;
+    CLLocationDegrees lng = 0.17;
     
     [[mockWrapper expect] pingReadingWithId:[reading readingId]
                                withProgress:[reading progress]
                           sessionIdentifier:[session sessionIdentifier]
                                    duration:duration
                              occurrenceTime:[OCMArg isNotNil]
-                                   latitude:0
-                                  longitude:0
+                                   latitude:lat
+                                  longitude:lng
                           completionHandler:OCMOCK_ANY];
     
     [session pingWithProgress:[reading progress] 
                  pingDuration:duration
+                     latitude:lat
+                    longitude:lng
                      delegate:nil];
     
     [mockWrapper verify];
@@ -75,9 +79,9 @@
     
     // Expect startPreparedRequest:completion: to be called and inject our own handler
     [[[mockWrapper expect] andDo:^(NSInvocation *invocation) {
-        ReadmillAPICompletionHandler handler;
-        [invocation getArgument:&handler atIndex:3];
-        handler(nil, [NSError errorWithDomain:NSURLErrorDomain code:400 userInfo:nil]);
+        ReadmillAPICompletionHandler completionBlock;
+        [invocation getArgument:&completionBlock atIndex:3];
+        completionBlock(nil, [NSError errorWithDomain:NSURLErrorDomain code:400 userInfo:nil]);
     }] startPreparedRequest:OCMOCK_ANY completion:OCMOCK_ANY];
     
     // Expect the session to archive the failed ping
@@ -112,7 +116,6 @@
 {
     ReadmillReadingSession *session = [reading createReadingSession];
     
-    
     id mockReadingSession = [OCMockObject partialMockForObject:session];
     id mockPingDelegate = [OCMockObject mockForProtocol:@protocol(ReadmillPingDelegate)];
     
@@ -120,9 +123,10 @@
     
     // Expect startPreparedRequest:completion: to be called and inject our own handler
     [[[mockWrapper expect] andDo:^(NSInvocation *invocation) {
-        ReadmillAPICompletionHandler handler;
-        [invocation getArgument:&handler atIndex:3];
-        handler([NSDictionary dictionary], nil);
+        ReadmillAPICompletionHandler completionBlock;
+        [invocation getArgument:&completionBlock atIndex:3];
+        // Return empty dictionary and nil error
+        completionBlock([NSDictionary dictionary], nil);
     }] startPreparedRequest:OCMOCK_ANY completion:OCMOCK_ANY];
     
     // Ping succeeded so don't archive

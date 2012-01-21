@@ -124,6 +124,7 @@
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper;
 
 + (BOOL)isReadingSessionIdentifierValid;
+- (BOOL)isReadingSessionIdentifierValid;
 
 - (NSString *)sessionIdentifier;
 

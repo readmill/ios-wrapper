@@ -492,11 +492,11 @@
 		96BEAEF412F06360006028D0 /* Object Model */ = {
 			isa = PBXGroup;
 			children = (
+				333FC83614C717DD00DC62AD /* ReadmillReadingSession */,
 				96BEAEF512F06360006028D0 /* ReadmillBook.h */,
 				96BEAEF612F06360006028D0 /* ReadmillBook.m */,
 				96BEAEF712F06360006028D0 /* ReadmillReading.h */,
 				96BEAEF812F06360006028D0 /* ReadmillReading.m */,
-				333FC83614C717DD00DC62AD /* ReadmillReadingSession */,
 				96BEAEFB12F06360006028D0 /* ReadmillUser.h */,
 				96BEAEFC12F06360006028D0 /* ReadmillUser.m */,
 			);

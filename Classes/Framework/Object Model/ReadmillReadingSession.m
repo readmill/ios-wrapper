@@ -105,7 +105,7 @@
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
-    if (![ReadmillReadingSession isReadingSessionIdentifierValid]) {
+    if (![self isReadingSessionIdentifierValid]) {
         archive = [[[ReadmillReadingSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
         [NSKeyedArchiver archiveReadmillReadingSession:archive];
     }
@@ -123,6 +123,11 @@
     } 
     NSLog(@"Using existing Reading Session.");
     return YES;
+}
+
+- (BOOL)isReadingSessionIdentifierValid
+{
+    return [ReadmillReadingSession isReadingSessionIdentifierValid];
 }
 
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper 
