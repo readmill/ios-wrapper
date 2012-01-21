@@ -82,20 +82,28 @@
     [mockWrapper verify];
 }
 
-- (void)testReadingSessionIdentifier
+- (void)testSessionIdentifierUpdates
 {
-    ReadmillReadingSession *readingSession = [[ReadmillReadingSession alloc] initWithAPIWrapper:nil
-                                                                                      readingId:1];
+    id mockWrapper = [OCMockObject niceMockForClass:[ReadmillAPIWrapper class]];
+    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary 
+                                                                    apiWrapper:mockWrapper] autorelease];
+    
+    ReadmillReadingSession *readingSession = [reading createReadingSession];
     id mockReadingSession = [OCMockObject partialMockForObject:readingSession];
-
-    NSString *sessionIdentifier = [mockReadingSession sessionIdentifier];
+    NSString *sessionIdentifier = [readingSession sessionIdentifier];
 
     [[[mockReadingSession expect] andReturnValue:[NSNumber numberWithBool:NO]] isReadingSessionIdentifierValid];
+    NSString *newSessionIdentifier = [mockReadingSession sessionIdentifier];
     
-    [mockReadingSession pingWithProgress:0 pingDuration:0 delegate:OCMOCK_ANY];
-    
+    STAssertTrue(![sessionIdentifier isEqualToString:newSessionIdentifier], @"Not equal session identifiers: %@, %@", sessionIdentifier, newSessionIdentifier);
     [mockReadingSession verify];
-    STAssertTrue(![sessionIdentifier isEqualToString:[mockReadingSession sessionIdentifier]], @"Not equal session identifiers.");
+    
+    // Test that it does not update if it's valid
+    [[[mockReadingSession expect] andReturnValue:[NSNumber numberWithBool:YES]] isReadingSessionIdentifierValid];
+    NSString *sameSessionIdentifier = [mockReadingSession sessionIdentifier];
+    
+    STAssertTrue([newSessionIdentifier isEqualToString:sameSessionIdentifier], @"Equal session identifiers: %@, %@", sessionIdentifier, newSessionIdentifier);
+    [mockReadingSession verify];
 }
 
 @end

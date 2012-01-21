@@ -106,8 +106,11 @@
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
     if (![self isReadingSessionIdentifierValid]) {
+        NSLog(@"Creating new Reading Session.");
         archive = [[[ReadmillReadingSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
         [NSKeyedArchiver archiveReadmillReadingSession:archive];
+    } else {
+        NSLog(@"Using existing Reading Session.");
     }
     return [archive sessionIdentifier];
 }
@@ -117,11 +120,11 @@
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
-    if (archive == nil || [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]] > 30 * 60) {
-        NSLog(@"Creating new Reading Session.");
+    NSTimeInterval timeIntervalSinceLastSession = [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]];
+    NSLog(@"timeIntervalSinceLastSession: %f", timeIntervalSinceLastSession);
+    if (archive == nil || timeIntervalSinceLastSession > 30 * 60) {
         return NO;
     } 
-    NSLog(@"Using existing Reading Session.");
     return YES;
 }
 
@@ -201,7 +204,7 @@
     // Create the ping so we can archive it if the ping fails
     ReadmillPing *ping = [[ReadmillPing alloc] initWithReadingId:[self readingId] 
                                                  readingProgress:progress 
-                                               sessionIdentifier:[self sessionIdentifier] 
+                                               sessionIdentifier:[self sessionIdentifier]
                                                         duration:pingDuration
                                                   occurrenceTime:[NSDate date] 
                                                         latitude:latitude 

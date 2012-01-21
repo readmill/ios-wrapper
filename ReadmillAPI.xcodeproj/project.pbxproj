@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3313AEE514C77C5D0087EABF /* OCMockObject+RMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3313AEE414C77C5D0087EABF /* OCMockObject+RMAdditions.m */; };
-		3313AEEB14C82C910087EABF /* ReadmillHighlightTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3313AEEA14C82C910087EABF /* ReadmillHighlightTests.m */; };
 		332FD3931489062E00F755CD /* UIApplication+ReadmillNetworkActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */; };
 		332FD3941489062E00F755CD /* UIApplication+ReadmillNetworkActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */; };
 		333BA9AF14C7563600A247BF /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D9B994149BA50D00C6876E /* libOCMock.a */; };
@@ -19,7 +18,6 @@
 		335E809E149BA94100BC8565 /* reading22533.json in Resources */ = {isa = PBXBuildFile; fileRef = 335E809D149BA94100BC8565 /* reading22533.json */; };
 		33D9B950149B7CE900C6876E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B94F149B7CE900C6876E /* logo.png */; };
 		33D9B953149B7D5900C6876E /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B952149B7D5900C6876E /* Default-Portrait~ipad.png */; };
-		33EDA94714C6E2F900733C0A /* ReadmillPingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EDA94614C6E2F900733C0A /* ReadmillPingTests.m */; };
 		502698D2130C87D400E67974 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.md */; };
 		7318A46B137D294800CBC7A4 /* NSError+ReadmillAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318A469137D294800CBC7A4 /* NSError+ReadmillAdditions.h */; settings = {ATTRIBUTES = (); }; };
 		7318A46C137D294800CBC7A4 /* NSError+ReadmillAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318A46A137D294800CBC7A4 /* NSError+ReadmillAdditions.m */; };
@@ -798,9 +796,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				734A51BE135A1DF6009F9794 /* ReadmillAPIReadingTests.m in Sources */,
-				33EDA94714C6E2F900733C0A /* ReadmillPingTests.m in Sources */,
 				3313AEE514C77C5D0087EABF /* OCMockObject+RMAdditions.m in Sources */,
-				3313AEEB14C82C910087EABF /* ReadmillHighlightTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
