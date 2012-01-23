@@ -11,7 +11,7 @@
 @class ReadmillPing;
 @interface ReadmillReadingSession (Internal)
 
-- (void)updateReadmillReadingSession;
+- (void)refreshSessionDate;
 + (void)archiveFailedPing:(ReadmillPing *)ping;
 - (void)archiveFailedPing:(ReadmillPing *)ping;
 

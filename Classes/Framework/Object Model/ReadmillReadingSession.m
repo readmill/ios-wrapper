@@ -84,10 +84,8 @@
 - (id)initWithAPIWrapper:(ReadmillAPIWrapper *)wrapper readingId:(ReadmillReadingId)sessionReadingId
 {    
     if ((self = [super init])) {
-        // Initialization code here.
         [self setApiWrapper:wrapper];
         [self setReadingId:sessionReadingId];
-        [self updateReadmillReadingSession];
     }
     return self;
 }
@@ -103,14 +101,10 @@
 - (NSString *)sessionIdentifier 
 {
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
-    
-    // Do we have a saved archive that was generated less than 30 minutes ago?
+
     if (![self isReadingSessionIdentifierValid]) {
-        NSLog(@"Creating new Reading Session.");
         archive = [[[ReadmillReadingSessionArchive alloc] initWithSessionIdentifier:[[NSProcessInfo processInfo] globallyUniqueString]] autorelease];
         [NSKeyedArchiver archiveReadmillReadingSession:archive];
-    } else {
-        NSLog(@"Using existing Reading Session.");
     }
     return [archive sessionIdentifier];
 }
@@ -121,7 +115,6 @@
     
     // Do we have a saved archive that was generated less than 30 minutes ago?
     NSTimeInterval timeIntervalSinceLastSession = [[NSDate date] timeIntervalSinceDate:[archive lastSessionDate]];
-    NSLog(@"timeIntervalSinceLastSession: %f", timeIntervalSinceLastSession);
     if (archive == nil || timeIntervalSinceLastSession > 30 * 60) {
         return NO;
     } 
@@ -222,7 +215,6 @@
             [self pingArchived];
             
         } else {
-            
             dispatch_async(currentQueue, ^{
                 [pingDelegate readmillReadingSession:self 
                               didFailToPingWithError:error];  
@@ -245,7 +237,8 @@
                                longitude:[ping longitude]
                        completionHandler:completionHandler];
     
-    [self updateReadmillReadingSession];
+    // Update the session date since
+    [self refreshSessionDate];
     [ping release];    
 }
 

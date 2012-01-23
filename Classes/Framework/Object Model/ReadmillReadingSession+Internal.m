@@ -12,7 +12,7 @@
 
 @implementation ReadmillReadingSession (Internal)
 
-- (void)updateReadmillReadingSession 
+- (void)refreshSessionDate
 {
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
     [archive setLastSessionDate:[NSDate date]];

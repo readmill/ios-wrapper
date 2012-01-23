@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33028E8514CD582100257CA6 /* ReadmillPingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EDA94614C6E2F900733C0A /* ReadmillPingTests.m */; };
+		33028E8914CD582400257CA6 /* ReadmillHighlightTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3313AEEA14C82C910087EABF /* ReadmillHighlightTests.m */; };
 		3313AEE514C77C5D0087EABF /* OCMockObject+RMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3313AEE414C77C5D0087EABF /* OCMockObject+RMAdditions.m */; };
 		332FD3931489062E00F755CD /* UIApplication+ReadmillNetworkActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 332FD3911489062D00F755CD /* UIApplication+ReadmillNetworkActivity.h */; };
 		332FD3941489062E00F755CD /* UIApplication+ReadmillNetworkActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */; };
@@ -797,6 +799,8 @@
 			files = (
 				734A51BE135A1DF6009F9794 /* ReadmillAPIReadingTests.m in Sources */,
 				3313AEE514C77C5D0087EABF /* OCMockObject+RMAdditions.m in Sources */,
+				33028E8514CD582100257CA6 /* ReadmillPingTests.m in Sources */,
+				33028E8914CD582400257CA6 /* ReadmillHighlightTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
