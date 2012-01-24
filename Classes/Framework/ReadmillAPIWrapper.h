@@ -512,7 +512,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 - (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
                         highlightedText:(NSString *)highlightedText
                                locators:(NSDictionary *)locators
-                               progress:(ReadmillReadingProgress)progress
+                               position:(ReadmillReadingProgress)position
                           highlightedAt:(NSDate *)highlightedAtOrNil
                                 comment:(NSString *)commentOrNil
                             connections:(NSArray *)connectionsOrNil

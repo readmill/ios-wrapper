@@ -489,7 +489,7 @@
 - (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
                         highlightedText:(NSString *)highlightedText
                                locators:(NSDictionary *)locators
-                               progress:(ReadmillReadingProgress)progress
+                               position:(ReadmillReadingProgress)position
                           highlightedAt:(NSDate *)highlightedAt 
                                 comment:(NSString *)comment
                             connections:(NSArray *)connections
@@ -506,7 +506,7 @@
                            forKey:kReadmillAPIHighlightLocatorsKey];
     [highlightParameters setValue:highlightedText
                            forKey:kReadmillAPIHighlightContentKey];
-    [highlightParameters setValue:[NSNumber numberWithFloat:progress] 
+    [highlightParameters setValue:[NSNumber numberWithFloat:position] 
                            forKey:kReadmillAPIHighlightPositionKey];
         
     if (comment != nil && 0 < [comment length]) {
