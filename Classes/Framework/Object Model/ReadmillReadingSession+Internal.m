@@ -33,7 +33,6 @@
         // Archive all pings
         [NSKeyedArchiver archiveReadmillPings:failedPings];
         
-        NSLog(@"Failed ping: %@\n All pings: %@", ping, failedPings);
         [failedPings release];
     }
 }

@@ -157,7 +157,6 @@
     [request setHTTPBody:[parameters JSONData]];
 
     [self startPreparedRequest:request completion:^(NSDictionary *response, NSError *error) {
-        NSLog(@"response: %@", response);
         if (response != nil) {
             NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];        
             [self willChangeValueForKey:@"propertyListRepresentation"];

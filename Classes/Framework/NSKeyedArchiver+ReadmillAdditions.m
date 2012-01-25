@@ -29,7 +29,6 @@ static NSString * const ReadmillReadingSessionArchiveFileName = @"ReadmillReadin
 + (BOOL)archiveReadmillReadingSession:(ReadmillReadingSessionArchive *)archive 
 {
     BOOL result = [self archiveRootObject:archive toFile:[NSKeyedArchiver readmillReadingSessionArchivePath]];
-    NSLog(@"result: %d", result);
     return result;
 }
 + (BOOL)archiveReadmillPings:(NSArray *)readmillPings 

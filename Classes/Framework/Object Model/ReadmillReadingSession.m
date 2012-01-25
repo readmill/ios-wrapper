@@ -129,7 +129,6 @@
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper 
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"Ping archived pings.");
     NSArray *unarchivedPings = nil;
     unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
     if (nil != unarchivedPings && 0 < [unarchivedPings count])  {
@@ -153,8 +152,6 @@
                              } else {
                                  NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
                              }
-                         } else {
-                             NSLog(@"Sent archived ping.");
                          }
                      }];
         }

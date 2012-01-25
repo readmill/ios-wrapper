@@ -50,7 +50,6 @@
         
     [backgroundView release];
     [self setView:nil];
-    NSLog(@"ReadmillUIPresenter dealloc");
     [super dealloc];
 }
 

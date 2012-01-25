@@ -71,7 +71,6 @@
     [self cleanupWebView];
     [self setSpinner:nil];
     [self setView:nil];
-    NSLog(@"ReadmillViewReadingUI dealloc");
     [super dealloc];
 }
 
@@ -115,7 +114,6 @@
     [self.view addSubview:spinner];
     
     NSURL *url = [[reading apiWrapper] URLForViewingReadingWithId:[reading readingId]];
-    NSLog(@"url: %@", url);
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url 
                                                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                               timeoutInterval:30];
