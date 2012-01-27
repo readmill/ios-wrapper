@@ -207,7 +207,7 @@
 
     [self sendPostRequestToURL:URL
                 withParameters:[NSDictionary dictionaryWithObject:parameters forKey:kReadmillAPIReadingKey]
-    shouldBeCalledUnauthorized:YES
+    shouldBeCalledUnauthorized:NO
              completionHandler:completionHandler];
 }
 
