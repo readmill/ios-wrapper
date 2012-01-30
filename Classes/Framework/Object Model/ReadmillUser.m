@@ -273,11 +273,21 @@
 #pragma mark -
 
 - (void)findOrCreateBookWithISBN:(NSString *)isbn
-                          author:(NSString *)author
                            title:(NSString *)title 
+                          author:(NSString *)author
                 createIfNotFound:(BOOL)createIfNotFound
                         delegate:(id <ReadmillBookFindingDelegate>)delegate 
 {
+    if (!([isbn length] || ([author length] && [title length]))) {
+        // Need at least ISBN or (author and title)
+        NSError *error = [NSError errorWithDomain:kReadmillDomain 
+                                             code:0 
+                                         userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                   @"Insufficient arguments. Need either ISBN or author & title.", NSLocalizedDescriptionKey, nil]];
+
+        return [delegate readmillUser:self failedToFindBookWithError:error];
+    }
+    
     __block typeof(self) bself = self;
     ReadmillAPICompletionHandler completionBlock = ^(NSDictionary *bookDictionary, NSError *error) {
         
@@ -305,37 +315,29 @@
         }
     };
     
-    if ([isbn length] > 0) {
-        // Search by ISBN
-        [[self apiWrapper] bookMatchingISBN:isbn
-                          completionHandler:^(id result, NSError *error) {
-                              if (result == nil && [title length] > 0) {
-                                  // Search by title
-                                  [bself->apiWrapper bookMatchingTitle:title 
-                                                     completionHandler:searchBookBlock];
-                              } else {
-                                  searchBookBlock(result, error);
-                              }
-                          }];
-    } else if ([title length] > 0) {
-        [[self apiWrapper] bookMatchingTitle:title 
-                           completionHandler:searchBookBlock];
-    } else {
-        completionBlock(nil, [NSError errorWithDomain:kReadmillDomain 
-                                                 code:0 
-                                             userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                       @"No title and no isbn", NSLocalizedDescriptionKey, 
-                                                       nil]]);
-    }
+    [[self apiWrapper] bookMatchingISBN:isbn
+                                  title:title 
+                                 author:author
+                      completionHandler:searchBookBlock];
 }
 
+- (void)findBookWithTitle:(NSString *)title
+                   author:(NSString *)author 
+                 delegate:(id<ReadmillBookFindingDelegate>)delegate
+{
+    [self findBookWithISBN:nil 
+                     title:title
+                    author:author 
+                  delegate:delegate];
+}
 - (void)findBookWithISBN:(NSString *)isbn
                    title:(NSString *)title 
+                  author:(NSString *)author 
                 delegate:(id <ReadmillBookFindingDelegate>)delegate 
 {    
     [self findOrCreateBookWithISBN:isbn 
-                            author:nil
                              title:title 
+                            author:author
                   createIfNotFound:NO 
                           delegate:delegate];
 }
@@ -346,8 +348,8 @@
                         delegate:(id <ReadmillBookFindingDelegate>)delegate
 {
     [self findOrCreateBookWithISBN:isbn 
-                            author:author 
                              title:title
+                            author:author 
                   createIfNotFound:YES
                           delegate:delegate];
 }

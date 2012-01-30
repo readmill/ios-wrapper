@@ -249,7 +249,9 @@ Upon successful authorization, Readmill will call the given redirect URL with ad
  
 See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiConfiguration: for detailed discussion.
  */
-- (void)authenticateCallbackURL:(NSURL *)callbackURL baseCallbackURL:(NSURL *)baseCallbackURL delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
+- (void)authenticateCallbackURL:(NSURL *)callbackURL
+                baseCallbackURL:(NSURL *)baseCallbackURL
+                       delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate;
 
 /*!
  @param authenticationDelegate The delegate object to receive notifications of success or failure.
@@ -261,16 +263,27 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
 #pragma mark Books
 
 /*!
- @param isbn The full ISBN of the book to search for. Can be nil if a title is given.
- @param title The full title of the book to search for. Can be nil if an ISBN is given.
- @param bookfindingDelegate The delegate object to receive notifications of success or failure.
- @brief   Search for a book in Readmill by ISBN and title.
- 
- Note: Books are searched for first by ISBN, then by title - not both at the same time. If the ISBN matches a book
- with a title different to that passed in, it will still be returned. This also applies if no books with the passed ISBN 
- are found but match the passed title. 
+ @param title The title to search for.
+ @param author The author to search for.
+ @param delegate The delegate object to receive notifications of success or failure.
+ @brief   Search for a book in Readmill by title and author. 
  */
-- (void)findBookWithISBN:(NSString *)isbn title:(NSString *)title delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+
+- (void)findBookWithTitle:(NSString *)title
+                   author:(NSString *)author
+                 delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+
+/*!
+ @param isbn (optional) The ISBN/Identifier of the book to search for.
+ @param author (optional) The author to search for.
+ @param title (optional) The title to search for.
+ @param delegate The delegate object to receive notifications of success or failure.
+ @brief   Search for a book in Readmill by isbn, author and title. 
+ */
+- (void)findBookWithISBN:(NSString *)isbnOrNil
+                   title:(NSString *)titleOrNil
+                  author:(NSString *)authorOrNil
+                delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 /*!
  @param isbn The full ISBN of the book to find or create.

@@ -359,21 +359,45 @@
             completionHandler:completion];
 }
 
-- (void)bookMatchingTitle:(NSString *)searchString completionHandler:(ReadmillAPICompletionHandler)completion
+- (void)bookMatchingTitle:(NSString *)title
+                   author:(NSString *)author
+        completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/match", [self booksEndpoint]]];
-    [self sendGetRequestToURL:url
-               withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q[title]"]
-   shouldBeCalledUnauthorized:YES
-            completionHandler:completion];
+    [self bookMatchingISBN:nil
+                     title:title
+                    author:author 
+         completionHandler:completion];
 }
 
 - (void)bookMatchingISBN:(NSString *)isbn 
        completionHandler:(ReadmillAPICompletionHandler)completion
 {
+    [self bookMatchingISBN:isbn
+                     title:nil
+                    author:nil 
+         completionHandler:completion];
+}
+
+- (void)bookMatchingISBN:(NSString *)isbn
+                   title:(NSString *)title 
+                  author:(NSString *)author
+       completionHandler:(ReadmillAPICompletionHandler)completion
+{
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/match", [self booksEndpoint]]];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
+    if (isbn && [isbn length]) {
+        [parameters setValue:isbn forKey:@"q[isbn]"];
+    }
+    if (author && [author length]) {
+        [parameters setValue:author forKey:@"q[author]"];
+    }
+    if (title && [title length]) {
+        [parameters setValue:title forKey:@"q[title]"];
+    }
+    
     [self sendGetRequestToURL:url
-               withParameters:[NSDictionary dictionaryWithObject:isbn forKey:@"q[isbn]"]
+               withParameters:parameters
    shouldBeCalledUnauthorized:NO 
             completionHandler:completion];
 }

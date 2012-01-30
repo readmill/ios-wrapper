@@ -322,21 +322,18 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 - (void)booksFromSearch:(NSString *)searchString completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
- @param searchString A title to search for. Only full matches will be returned (i.e., searching for "the" will only return a book called "the", not one called "the killer").
- @param completionHandler An (optional) block that will return the result (id) and an NSError pointer.
- @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
- @brief   Get a specific book in the Readmill system. 
- */
-- (void)bookMatchingTitle:(NSString *)title completionHandler:(ReadmillAPICompletionHandler)completionHandler;
-
-/*!
- @param isbn An ISBN to search for. Only full matches will be returned (i.e., searching for "123" will only return a book with the ISBN "123", not one with "123456").
+ @param isbn The ISBN to search for. 
+ @param title The title to search for.
+ @param author The author to search for. 
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
- @brief   Get a specific book in the Readmill system. 
+ @brief   Get a specific book in the Readmill system. If isbn is included, a match against ISBN is tried first. 
+          If that fails, a match against title and author is attempted.
  */
-- (void)bookMatchingISBN:(NSString *)isbn completionHandler:(ReadmillAPICompletionHandler)completionHandler;
-
+- (void)bookMatchingISBN:(NSString *)isbn 
+                   title:(NSString *)title
+                  author:(NSString *)author
+       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 /*!
  @param bookId The Readmill id of the book to retrieve.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
@@ -356,7 +353,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  IMPORTANT: This will add a book to Readmill even if it already exists. Please search for a book before creating a new one, or use the 
  -findOrCreateBookWithISBN:title:author:delegate: convenience method in the ReadmillUser object, which does this for you. 
  */
-- (void)addBookWithTitle:(NSString* )bookTitle
+- (void)addBookWithTitle:(NSString *)bookTitle
                   author:(NSString *)bookAuthor
                     isbn:(NSString *)bookIsbn 
        completionHandler:(ReadmillAPICompletionHandler)completionHandler;

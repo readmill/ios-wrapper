@@ -143,6 +143,7 @@
 {
     [user findBookWithISBN:[isbnTextField text]
                      title:[titleTextField text] 
+                    author:[authorTextField text]
                   delegate:self];
 }
 #pragma mark -
