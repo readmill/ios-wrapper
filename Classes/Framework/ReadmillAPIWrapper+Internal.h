@@ -14,7 +14,6 @@
 
 - (NSURLRequest *)putRequestWithURL:(NSURL *)url 
                          parameters:(NSDictionary *)parameters
-         shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                               error:(NSError **)error;
 
 - (NSURLRequest *)deleteRequestWithURL:(NSURL *)url
@@ -23,7 +22,6 @@
 
 - (NSURLRequest *)postRequestWithURL:(NSURL *)url
                           parameters:(NSDictionary *)parameters
-          shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                                error:(NSError **)error;
 
 - (NSURLRequest *)getRequestWithURL:(NSURL *)url
@@ -45,7 +43,6 @@
 
 - (void)sendPutRequestToURL:(NSURL *)url
              withParameters:(NSDictionary *)parameters 
- shouldBeCalledUnauthorized:(BOOL)allowUnauthed
           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 - (void)sendDeleteRequestToURL:(NSURL *)url 
@@ -54,7 +51,6 @@
 
 - (void)sendPostRequestToURL:(NSURL *)url
               withParameters:(NSDictionary *)parameters
-  shouldBeCalledUnauthorized:(BOOL)allowUnauthed
            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 - (void)sendGetRequestToURL:(NSURL *)url

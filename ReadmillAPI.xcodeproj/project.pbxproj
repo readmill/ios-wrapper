@@ -881,7 +881,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../../../Downloads/TestFlightSDK0.7.2\"",
 				);
 				PRODUCT_NAME = ReadmillAPI;
 				SKIP_INSTALL = YES;
@@ -897,7 +896,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../../../Downloads/TestFlightSDK0.7.2\"",
 				);
 				PRODUCT_NAME = ReadmillAPI;
 				SKIP_INSTALL = YES;
@@ -913,7 +911,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/../../../Downloads/TestFlightSDK0.7.2\"",
 				);
 				PRODUCT_NAME = ReadmillAPI;
 				SKIP_INSTALL = YES;

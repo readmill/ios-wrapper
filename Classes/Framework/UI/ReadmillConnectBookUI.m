@@ -134,7 +134,7 @@
     NSURL *url = [[[self user] apiWrapper] URLForConnectingBookWithISBN:[book isbn] 
                                                                   title:[book title] 
                                                                  author:[book author]];
-
+    NSLog(@"url: %@", url);
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
                                                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
                                               timeoutInterval:30];

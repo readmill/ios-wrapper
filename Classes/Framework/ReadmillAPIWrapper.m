@@ -131,6 +131,10 @@
 {
     return [NSString stringWithFormat:@"%@highlights", [self apiEndPoint]];
 }
+- (NSString *)likesEndpoint
+{
+    return [NSString stringWithFormat:@"%@likes/highlight", [self apiEndPoint]];
+}
 
 #pragma mark -
 #pragma mark OAuth
@@ -207,7 +211,6 @@
 
     [self sendPostRequestToURL:URL
                 withParameters:[NSDictionary dictionaryWithObject:parameters forKey:kReadmillAPIReadingKey]
-    shouldBeCalledUnauthorized:NO
              completionHandler:completionHandler];
 }
 
@@ -241,7 +244,6 @@
 
     [self sendPutRequestToURL:URL 
                withParameters:parameters 
-   shouldBeCalledUnauthorized:NO 
             completionHandler:completionHandler];
 }
 
@@ -430,7 +432,6 @@
     
     [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", [self booksEndpoint]]]
                 withParameters:parameters
-    shouldBeCalledUnauthorized:NO
              completionHandler:completionHandler];    
 }
 
@@ -485,7 +486,6 @@
     
     [self sendPostRequestToURL:URL 
                 withParameters:parameters
-    shouldBeCalledUnauthorized:NO
              completionHandler:completionHandler];
 }
 - (void)pingReadingWithId:(ReadmillReadingId)readingId 
@@ -560,7 +560,6 @@
     
     [self sendPostRequestToURL:highlightsURL 
                 withParameters:[parameters autorelease]
-    shouldBeCalledUnauthorized:NO
              completionHandler:completionHandler];
 }
 
@@ -609,7 +608,6 @@
     
     [self sendPostRequestToURL:URL 
                 withParameters:parameters
-    shouldBeCalledUnauthorized:NO 
              completionHandler:completionHandler];
 }
 
@@ -626,8 +624,36 @@
             completionHandler:completionHandler];
 }
 
+#pragma mark -
+#pragma mark - Likes
 
-#pragma mark
+
+- (void)likesForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId]];
+    [self sendGetRequestToURL:URL 
+               withParameters:nil
+   shouldBeCalledUnauthorized:NO
+            completionHandler:completion];
+}
+
+- (void)likeHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId]];
+    [self sendPostRequestToURL:URL 
+                withParameters:nil
+             completionHandler:completion];
+}
+
+- (void)unlikeHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId]];
+    [self sendDeleteRequestToURL:URL 
+                  withParameters:nil
+               completionHandler:completion];
+}
+
+#pragma mark -
 #pragma Connections
 
 - (void)connectionsForCurrentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler 
@@ -799,7 +825,6 @@
     
     [self sendPostRequestToURL:highlightsURL 
                 withParameters:[parameters autorelease]
-    shouldBeCalledUnauthorized:NO
              completionHandler:completionHandler];
 }
 

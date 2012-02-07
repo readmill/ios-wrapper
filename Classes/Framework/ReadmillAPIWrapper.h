@@ -547,6 +547,30 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  */
 - (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+#pragma mark Likes
+
+/*!
+ @param highlightId The id of the highlight.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Get all users that liked the particular highlight in Readmill.
+ */
+- (void)likesForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion;
+
+/*!
+ @param highlightId The id of the highlight.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Like the particular highlight on Readmill.
+ */
+- (void)likeHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion;
+
+/*!
+ @param highlightId The id of the highlight.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Unlike the particular highlight on Readmill.
+ */
+- (void)unlikeHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion;
+
+
 #pragma mark -
 #pragma mark Service connections (Facebook / Twitter etc)
 

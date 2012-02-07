@@ -74,13 +74,12 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (NSURLRequest *)putRequestWithURL:(NSURL *)url 
                          parameters:(NSDictionary *)parameters
-         shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                               error:(NSError **)error 
 {
     return [self bodyRequestWithURL:url 
                          httpMethod:@"PUT"
                          parameters:parameters
-         shouldBeCalledUnauthorized:allowUnauthed
+         shouldBeCalledUnauthorized:NO
                               error:error];
 }
 
@@ -97,13 +96,12 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (NSURLRequest *)postRequestWithURL:(NSURL *)url
                           parameters:(NSDictionary *)parameters
-          shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                                error:(NSError **)error 
 {
     return [self bodyRequestWithURL:url
                          httpMethod:@"POST"
                          parameters:parameters 
-         shouldBeCalledUnauthorized:allowUnauthed
+         shouldBeCalledUnauthorized:NO
                               error:error];
 }
 
@@ -180,13 +178,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (void)sendPutRequestToURL:(NSURL *)url 
              withParameters:(NSDictionary *)parameters  
- shouldBeCalledUnauthorized:(BOOL)allowUnauthed
           completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {
     NSError *error = nil;
     NSURLRequest *request = [self putRequestWithURL:url 
                                          parameters:parameters 
-                         shouldBeCalledUnauthorized:allowUnauthed
                                               error:&error];
     
     if (request) {
@@ -216,13 +212,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (void)sendPostRequestToURL:(NSURL *)url 
               withParameters:(NSDictionary *)parameters
-  shouldBeCalledUnauthorized:(BOOL)allowUnauthed
            completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {
     NSError *error = nil;
     NSURLRequest *request = [self postRequestWithURL:url 
                                           parameters:parameters 
-                          shouldBeCalledUnauthorized:allowUnauthed
                                                error:&error];
     
     if (request) {
