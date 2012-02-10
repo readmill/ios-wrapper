@@ -338,9 +338,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                 }
             }
         } else {
-            if ([response statusCode] != 200) {
-                [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-            }
             // Parse the response
             id jsonResponse = [self parseResponse:response 
                                  withResponseData:responseData 

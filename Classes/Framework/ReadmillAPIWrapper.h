@@ -136,6 +136,7 @@ static NSString * const kReadmillAPIHighlightPositionKey = @"position";
 static NSString * const kReadmillAPIHighlightPostToKey = @"post_to";
 static NSString * const kReadmillAPIHighlightCommentKey = @"comment";
 static NSString * const kReadmillAPIHighlightCommentsCountKey = @"comments_count";
+static NSString * const kReadmillAPIHighlightLikesCountKey = @"likes_count";
 static NSString * const kReadmillAPIHighlightPermalinkURLKey = @"permalink_url";
 static NSString * const kReadmillAPIHighlightReadingIdKey = @"reading_id";
 static NSString * const kReadmillAPIHighlightHighlightedAtKey = @"highlighted_at";
