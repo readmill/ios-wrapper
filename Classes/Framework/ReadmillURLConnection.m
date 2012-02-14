@@ -68,21 +68,30 @@
     [self didChangeValueForKey:@"isExecuting"];
     
     NSURLConnection *aConnection = [[NSURLConnection alloc] initWithRequest:request 
-                                                                   delegate:self];
+                                                                   delegate:self
+                                                           startImmediately:NO];
     
     self.connection = aConnection;
     [aConnection release];
     
-    if (connection == nil) {
+    [[UIApplication sharedApplication] readmill_pushNetworkActivity];
+
+    if (connection == nil || [self isCancelled]) {
         [self finish];
     } else {
-        [[UIApplication sharedApplication] readmill_pushNetworkActivity];
+        [connection start];
     }
 }
 
 - (void)finish 
 {
-    NSLog(@"Operation finished with status code: %d, error: %@, data size: %u", response.statusCode, connectionError, [responseData length]);
+    if (connectionError) {
+        NSLog(@"Operation for url: %@ finished with status code: %d, error: %@, data size: %u", 
+              [request URL], [response statusCode], connectionError, [responseData length]);
+    } else {
+        NSLog(@"Operation for url: %@ finished with status code: %d, data size: %u", 
+              [request URL], [response statusCode], [responseData length]);
+    }
 
     [[UIApplication sharedApplication] readmill_popNetworkActivity];
     

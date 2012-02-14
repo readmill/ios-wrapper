@@ -261,8 +261,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
         
 		if (connectionError == nil) {
-            id errorResponse = [[self jsonDecoder] objectWithData:responseData];
-            
+            // Length > 1 hack to avoid JSONKit error on whitespace
+            id errorResponse = nil;
+            if (responseData && [responseData length] > 1) {
+                errorResponse = [[self jsonDecoder] objectWithData:responseData];
+            }
             if (error != NULL) {
                 NSString *errorDomain = NSURLErrorDomain;
                 if ([[response allHeaderFields] objectForKey:kReadmillAPIHeaderKey]) {
@@ -301,6 +304,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 - (void)startPreparedRequest:(NSURLRequest *)request 
                   completion:(ReadmillAPICompletionHandler)completionBlock 
+               queuePriority:(NSOperationQueuePriority)queuePriority
 {    
     NSAssert(request != nil, @"Request is nil!");
     static NSString * const LocationHeader = @"Location";
@@ -328,8 +332,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                                          error:&error];
             
             if (newRequest) {
+                // It's important that we return this resource ASAP
                 [self startPreparedRequest:newRequest 
-                                completion:completionBlock];
+                                completion:completionBlock
+                             queuePriority:NSOperationQueuePriorityVeryHigh];
             } else {
                 if (completionBlock) {
                     dispatch_async(currentQueue, ^{
@@ -356,10 +362,18 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     
     ReadmillURLConnection *connection = [[ReadmillURLConnection alloc] initWithRequest:request 
                                                                      completionHandler:connectionCompletionHandler];
+    [connection setQueuePriority:queuePriority];
     [queue addOperation:connection];
     [connection release];
 }
 
+- (void)startPreparedRequest:(NSURLRequest *)request 
+                  completion:(ReadmillAPICompletionHandler)completionBlock
+{
+    [self startPreparedRequest:request 
+                    completion:completionBlock
+                 queuePriority:NSOperationQueuePriorityNormal];
+}
 - (id)sendPreparedRequest:(NSURLRequest *)request 
                     error:(NSError **)error 
 {    

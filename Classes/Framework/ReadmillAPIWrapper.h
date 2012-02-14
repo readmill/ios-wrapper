@@ -452,6 +452,14 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 - (void)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId 
                             completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+/*!
+ @param readingId The readingId for which to get periods
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Get the periods for the reading with the specified readingId
+ */
+- (void)periodsForReadingWithId:(ReadmillReadingId)readingId
+              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 #pragma mark -
 #pragma mark Pings
   

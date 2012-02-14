@@ -48,7 +48,7 @@
     if ((self = [super init])) {
         // Initialization code here.
         queue = [[NSOperationQueue alloc] init];
-        [queue setMaxConcurrentOperationCount:3];        
+        [queue setMaxConcurrentOperationCount:10];        
     }
     return self;
 }
@@ -341,6 +341,20 @@
                   cachePolicy:NSURLRequestReturnCacheDataElseLoad
             completionHandler:completionHandler];
 }
+
+- (void)periodsForReadingWithId:(ReadmillReadingId)readingId 
+              completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/periods", 
+                                       [self readingsEndpoint], 
+                                       readingId]];
+    [self sendGetRequestToURL:URL 
+               withParameters:nil
+   shouldBeCalledUnauthorized:NO
+                  cachePolicy:NSURLRequestReturnCacheDataElseLoad
+            completionHandler:completionHandler];
+}
+
 #pragma mark - 
 #pragma mark - Book
 
