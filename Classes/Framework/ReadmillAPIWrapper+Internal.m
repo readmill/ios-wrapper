@@ -257,6 +257,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     connectionError:(NSError *)connectionError 
               error:(NSError **)error 
 {   
+    /* 
+     * TODO - Error if not X-Readmill-API header (needs to be implemented for oauth route first)
+     */
+    BOOL isReadmillResponse = [[response allHeaderFields] objectForKey:kReadmillAPIHeaderKey] != nil;
     
     if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
         
@@ -268,7 +272,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
             }
             if (error != NULL) {
                 NSString *errorDomain = NSURLErrorDomain;
-                if ([[response allHeaderFields] objectForKey:kReadmillAPIHeaderKey]) {
+                if (isReadmillResponse) {
                     errorDomain = kReadmillDomain;
                 }
                 *error = [NSError errorWithDomain:errorDomain
@@ -344,6 +348,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                 }
             }
         } else {
+            
+            // Remove cached requests for errors 
+            [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+            
             // Parse the response
             id jsonResponse = [self parseResponse:response 
                                  withResponseData:responseData 

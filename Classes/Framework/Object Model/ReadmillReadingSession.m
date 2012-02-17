@@ -152,6 +152,8 @@
                              } else {
                                  NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
                              }
+                         } else {
+                             NSLog(@"Pinged reading: %d succesfully", [ping readingId]);
                          }
                      }];
         }

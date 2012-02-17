@@ -52,14 +52,13 @@
     // Inject our block 
     [[[mockWrapper expect] andDo:theBlock] sendPostRequestToURL:OCMOCK_ANY
                                                  withParameters:OCMOCK_ANY
-                                     shouldBeCalledUnauthorized:NO
                                               completionHandler:OCMOCK_ANY];
 
     // Create the highlight
     [mockWrapper createHighlightForReadingWithId:4711 
                                  highlightedText:@"abc"
                                         locators:locators 
-                                        progress:progress 
+                                        position:progress 
                                    highlightedAt:date 
                                          comment:@"a comment" 
                                      connections:nil 

@@ -87,7 +87,7 @@
 {
     if (connectionError) {
         NSLog(@"Operation for url: %@ finished with status code: %d, error: %@, data size: %u", 
-              [request URL], [response statusCode], connectionError, [responseData length]);
+              [request URL], [response statusCode], [connectionError localizedDescription], [responseData length]);
     } else {
         NSLog(@"Operation for url: %@ finished with status code: %d, data size: %u", 
               [request URL], [response statusCode], [responseData length]);

@@ -533,7 +533,7 @@
                       completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {       
     NSAssert(0 < readingId, @"readingId: %d is invalid.", readingId);
-    NSAssert(highlightedText != nil && [highlightedText length], @"Locators can't be nil.");
+    NSAssert(highlightedText != nil && [highlightedText length], @"Highlighted text can't be nil.");
     NSAssert(locators != nil && [locators count], @"Locators can't be nil.");
 
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
