@@ -348,15 +348,16 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                 }
             }
         } else {
-            
-            // Remove cached requests for errors 
-            [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-            
             // Parse the response
             id jsonResponse = [self parseResponse:response 
                                  withResponseData:responseData 
                                   connectionError:connectionError
                                             error:&error];
+            
+            if (connectionError || error) {
+                // Remove cached requests for errors
+                [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+            }
             
             // Execute the completionBlock
             if (completionBlock) {
