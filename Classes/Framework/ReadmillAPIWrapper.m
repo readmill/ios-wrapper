@@ -191,10 +191,10 @@
 
 #pragma mark - Readings
 
-- (void)createReadingWithBookId:(ReadmillBookId)bookId 
-                          state:(ReadmillReadingState)readingState 
-                      isPrivate:(BOOL)isPrivate 
-              completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+- (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
+                                state:(ReadmillReadingState)readingState 
+                            isPrivate:(BOOL)isPrivate 
+                    completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     

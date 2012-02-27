@@ -157,7 +157,7 @@
     } 
     [user findOrCreateReadingForBook:book 
                                state:ReadingStateReading
-             createdReadingIsPrivate:NO
+                           isPrivate:NO
                             delegate:self];
 }
 

@@ -291,10 +291,6 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
  @param author The full author of the book to find or create.
  @param bookfindingDelegate The delegate object to receive notifications of success or failure.
  @brief   Search for a book in Readmill, creating one if it doesn't exist.
- 
- Note: Books are searched for first by ISBN, then by title - not both at the same time. If the ISBN matches a book
- with a title different to that passed in, it will still be returned. This also applies if no books with the passed ISBN 
- are found but match the passed title. 
  */
 - (void)findOrCreateBookWithISBN:(NSString *)isbn
                            title:(NSString *)title
@@ -306,17 +302,18 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
 
 /*!
  @param book The book to find or create a reading for.
- @param readingState The initial reading state.
+ @param readingState The state of the reading if a new one is created.
  @param isPrivate The privacy of the reading if a new one is created.
  @param readingFindingDelegate The delegate object to receive notifications of success or failure.
  @brief   Find a reading for the given book in Readmill, creating one if it doesn't exist.
 
- This method returns any existing reading for the particular bookId.
+ Note: This method returns any existing reading for the particular bookId.
+ IMPORTANT: The state and privacy may not match the passed arguments if a reading already existed.
  */
 - (void)findOrCreateReadingForBook:(ReadmillBook *)book 
-                            state:(ReadmillReadingState)readingState 
-          createdReadingIsPrivate:(BOOL)isPrivate
-                         delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
+                             state:(ReadmillReadingState)readingState 
+                         isPrivate:(BOOL)isPrivate
+                          delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
 
 #pragma mark -
 #pragma mark Properties

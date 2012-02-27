@@ -358,7 +358,7 @@
 
 - (void)findOrCreateReadingForBook:(ReadmillBook *)book 
                              state:(ReadmillReadingState)readingState
-           createdReadingIsPrivate:(BOOL)isPrivate
+                         isPrivate:(BOOL)isPrivate 
                           delegate:(id <ReadmillReadingFindingDelegate>)delegate 
 {    
     __block typeof (self) bself = self;
@@ -378,10 +378,10 @@
         }
     };
     
-    [[self apiWrapper] createReadingWithBookId:[book bookId]
-                                         state:readingState
-                                     isPrivate:isPrivate 
-                             completionHandler:completionBlock];
+    [[self apiWrapper] findOrCreateReadingWithBookId:[book bookId]
+                                               state:readingState
+                                           isPrivate:isPrivate 
+                                   completionHandler:completionBlock];
 }
 
 @end

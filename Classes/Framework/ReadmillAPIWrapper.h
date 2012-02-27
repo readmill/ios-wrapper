@@ -364,19 +364,18 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 /*!
  @param bookId The id of the book to create a reading for.
- @param readingState The initial reading state.
- @param isPrivate The intial reading privacy.
+ @param readingState The initial reading state if a new reading is created.
+ @param isPrivate The intial reading privacy if a new reading is created.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result The created reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
  @brief   Create a reading for the current user for the given book Id. 
  
- IMPORTANT: This will add a reading to Readmill even if it already exists. Please search for a reading before creating a new one, or use the 
- -findOrCreateReadingForBook:delegate: convenience method in the ReadmillUser object, which does this for you. 
+ IMPORTANT: The state and privacy options may not match the passed arguments if a reading already existed.
  */
-- (void)createReadingWithBookId:(ReadmillBookId)bookId 
-                          state:(ReadmillReadingState)readingState 
-                      isPrivate:(BOOL)isPrivate
-              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
+                                state:(ReadmillReadingState)readingState 
+                            isPrivate:(BOOL)isPrivate
+                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading to update.
