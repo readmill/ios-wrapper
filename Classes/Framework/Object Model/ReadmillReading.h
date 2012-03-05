@@ -183,13 +183,13 @@
  @property  estimatedTimeLeft
  @brief The estimated time left for a reading, in seconds.
  */
-@property (readonly, assign) NSTimeInterval estimatedTimeLeft;
+@property (readonly) NSTimeInterval estimatedTimeLeft;
 
 /*!
  @property  timeSpent
  @brief The time spent on a reading, in seconds.
  */
-@property (readonly, assign) NSTimeInterval timeSpent;
+@property (readonly) NSTimeInterval timeSpent;
 
 /*!
  @property  closingRemark

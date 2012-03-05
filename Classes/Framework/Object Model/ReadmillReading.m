@@ -33,8 +33,8 @@
 @property (readwrite, copy) NSDate *dateModified;
 @property (readwrite, copy) NSDate *dateStarted;
 
-@property (readwrite, assign) NSTimeInterval estimatedTimeLeft;
-@property (readwrite, assign) NSTimeInterval timeSpent;
+@property (readwrite) NSTimeInterval estimatedTimeLeft;
+@property (readwrite) NSTimeInterval timeSpent;
 
 @property (readwrite, copy) NSString *closingRemark;
 
