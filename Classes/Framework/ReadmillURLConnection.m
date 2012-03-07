@@ -60,9 +60,7 @@
     if (![NSThread isMainThread]) {
         return [self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
     }
-    
-    NSLog(@"operation for <%@> started.", [request URL]);
-    
+        
     [self willChangeValueForKey:@"isExecuting"];
     isExecuting = YES;
     [self didChangeValueForKey:@"isExecuting"];
