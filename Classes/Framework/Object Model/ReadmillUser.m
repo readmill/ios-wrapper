@@ -304,7 +304,7 @@
     };
     
     ReadmillAPICompletionHandler searchBookBlock = ^(NSDictionary *bookDictionary, NSError *error) {
-        if (!bookDictionary && createIfNotFound) {
+        if (!bookDictionary && createIfNotFound && !error) {
             // Create if not found
             [bself->apiWrapper addBookWithTitle:title 
                                          author:author 
