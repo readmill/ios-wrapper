@@ -315,6 +315,24 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
                          isPrivate:(BOOL)isPrivate
                           delegate:(id <ReadmillReadingFindingDelegate>)readingFindingDelegate;
 
+/*!
+ @param book The book to find or create a reading for.
+ @param readingState The state of the reading if a new one is created.
+ @param isPrivate The privacy of the reading if a new one is created.
+ @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+    IMPORTANT: Passing nil connections uses default connections.
+ @param readingFindingDelegate The delegate object to receive notifications of success or failure.
+ @brief   Find a reading for the given book in Readmill, creating one if it doesn't exist.
+ 
+ Note: This method returns any existing reading for the particular bookId.
+ IMPORTANT: The state and privacy may not match the passed arguments if a reading already existed.
+*/
+- (void)findOrCreateReadingForBook:(ReadmillBook *)book 
+                             state:(ReadmillReadingState)readingState
+                         isPrivate:(BOOL)isPrivate 
+                       connections:(NSArray *)connections
+                          delegate:(id <ReadmillReadingFindingDelegate>)delegate;
+
 #pragma mark -
 #pragma mark Properties
 

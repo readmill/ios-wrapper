@@ -122,6 +122,7 @@ static NSString * const kReadmillAPIReadingPeriodsKey = @"periods";
 static NSString * const kReadmillAPIReadingLocationsKey = @"locations";
 static NSString * const kReadmillAPIReadingHighlightsKey = @"highlights";
 static NSString * const kReadmillAPIReadingHighlightsCountKey = @"highlights_count";
+static NSString * const kReadmillAPIReadingRecommendedKey = @"recommended";
 
 #pragma mark API Keys - Highlights
 
@@ -366,6 +367,24 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param bookId The id of the book to create a reading for.
  @param readingState The initial reading state if a new reading is created.
  @param isPrivate The intial reading privacy if a new reading is created.
+ @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+    IMPORTANT: Passing nil connections uses default connections.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @result The created reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
+ @brief   Create a reading for the current user for the given book Id. 
+ 
+ IMPORTANT: The state and privacy options may not match the passed arguments if a reading already existed.
+ */
+- (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
+                                state:(ReadmillReadingState)readingState 
+                            isPrivate:(BOOL)isPrivate
+                          connections:(NSArray *)connections
+                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param bookId The id of the book to create a reading for.
+ @param readingState The initial reading state if a new reading is created.
+ @param isPrivate The intial reading privacy if a new reading is created.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result The created reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
  @brief   Create a reading for the current user for the given book Id. 
@@ -381,14 +400,43 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param readingId The id of the reading to update.
  @param readingState The new reading state.
  @param isPrivate The new reading privacy.
+ @param closingRemark The new reading remark.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Update a reading with the given Id with a new state, privacy and closing remark. 
 */
 - (void)updateReadingWithId:(ReadmillReadingId)readingId
                   withState:(ReadmillReadingState)readingState
                   isPrivate:(BOOL)isPrivate
-              closingRemark:(NSString *)remark
+              closingRemark:(NSString *)closingRemark
           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param readingId The id of the reading to finish.
+ @param closingRemark (optional) A closing remark.
+ @param recommended (optional) Should be recommended.
+ @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+    IMPORTANT: Passing nil connections uses default connections.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Finish a reading with the given Id with an optional closing remark and do/dont recommend.
+ */
+- (void)finishReadingWithId:(ReadmillReadingId)readingId
+              closingRemark:(NSString *)closingRemark
+                recommended:(BOOL)recommended
+                connections:(NSArray *)connections
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param readingId The id of the reading to abandon.
+ @param closingRemark (optional) A closing remark.
+ @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+    IMPORTANT: Passing nil connections uses default connections.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Abandon a reading with the given Id with an optional closing remark.
+ */
+- (void)abandonReadingWithId:(ReadmillReadingId)readingId 
+               closingRemark:(NSString *)closingRemark
+                 connections:(NSArray *)connections
+           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param userId The user Id of the user you'd like readings for.

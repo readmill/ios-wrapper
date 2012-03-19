@@ -194,6 +194,7 @@
 - (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
                                 state:(ReadmillReadingState)readingState 
                             isPrivate:(BOOL)isPrivate 
+                          connections:(NSArray *)connections
                     completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
@@ -209,9 +210,45 @@
                                        [self booksEndpoint], 
                                        bookId]];
 
+    NSDictionary *finalParameters = [NSDictionary dictionaryWithObject:parameters forKey:kReadmillAPIReadingKey];
+    if (connections != nil && [connections count]) {
+        // Create a list of JSON objects (i.e array of NSDicionaries)
+        NSMutableArray *connectionsArray = [NSMutableArray array];
+        for (id connection in connections) {
+            [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
+                                                                    forKey:@"id"]];
+        }
+        [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
+    }
+
     [self sendPostRequestToURL:URL
-                withParameters:[NSDictionary dictionaryWithObject:parameters forKey:kReadmillAPIReadingKey]
+                withParameters:finalParameters
              completionHandler:completionHandler];
+}
+
+- (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId
+                                state:(ReadmillReadingState)readingState
+                            isPrivate:(BOOL)isPrivate 
+                    completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    [self findOrCreateReadingWithBookId:bookId
+                                  state:readingState
+                              isPrivate:isPrivate
+                            connections:nil 
+                      completionHandler:completionHandler];
+}
+
+- (void)updateReadingWithId:(ReadmillReadingId)readingId
+                 parameters:(NSDictionary *)parameters
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
+                                       [self readingsEndpoint], 
+                                       readingId]];
+
+    [self sendPutRequestToURL:URL 
+               withParameters:parameters 
+            completionHandler:completionHandler];
 }
 
 - (void)updateReadingWithId:(ReadmillReadingId)readingId 
@@ -224,7 +261,7 @@
 
     [readingParameters setValue:[NSNumber numberWithInteger:readingState] 
                          forKey:kReadmillAPIReadingStateKey];
-    [readingParameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0] 
+    [readingParameters setValue:[NSNumber numberWithBool:isPrivate] 
                          forKey:kReadmillAPIReadingPrivateKey];
     [readingParameters setValue:[[self apiConfiguration] clientID]
                          forKey:kReadmillAPIClientIdKey];
@@ -238,12 +275,68 @@
                                                            forKey:kReadmillAPIReadingKey];
     [readingParameters release];
     
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
-                                       [self readingsEndpoint], 
-                                       readingId]];
+    [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
+}
 
-    [self sendPutRequestToURL:URL 
-               withParameters:parameters 
+- (void)updateReadingWithId:(ReadmillReadingId)readingId
+                      state:(ReadmillReadingState)readingState
+              closingRemark:(NSString *)closingRemark 
+                recommended:(BOOL)recommended
+                connections:(NSArray *)connections
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSMutableDictionary *readingParameters = [[NSMutableDictionary alloc] init];
+    
+    [readingParameters setValue:[NSNumber numberWithInteger:readingState] 
+                         forKey:kReadmillAPIReadingStateKey];
+    [readingParameters setValue:[NSNumber numberWithBool:recommended]
+                         forKey:kReadmillAPIReadingRecommendedKey];    
+    if ([closingRemark length] > 0) {
+        [readingParameters setValue:closingRemark 
+                             forKey:kReadmillAPIReadingClosingRemarkKey];
+    }
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:readingParameters 
+                                                           forKey:kReadmillAPIReadingKey];
+    [readingParameters release];
+
+    if (connections != nil && [connections count]) {
+        // Create a list of JSON objects (i.e array of NSDicionaries)
+        NSMutableArray *connectionsArray = [NSMutableArray array];
+        for (id connection in connections) {
+            [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
+                                                                    forKey:@"id"]];
+        }
+        [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
+    }
+    
+    [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
+}
+
+- (void)finishReadingWithId:(ReadmillReadingId)readingId 
+              closingRemark:(NSString *)closingRemark
+                recommended:(BOOL)recommended 
+                connections:(NSArray *)connections 
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    [self updateReadingWithId:readingId 
+                        state:ReadingStateFinished
+                closingRemark:closingRemark 
+                  recommended:recommended
+                  connections:connections
+            completionHandler:completionHandler];
+}
+
+- (void)abandonReadingWithId:(ReadmillReadingId)readingId 
+               closingRemark:(NSString *)closingRemark
+                 connections:(NSArray *)connections
+           completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    [self updateReadingWithId:readingId 
+                        state:ReadingStateAbandoned
+                closingRemark:closingRemark 
+                  recommended:NO
+                  connections:connections
             completionHandler:completionHandler];
 }
 

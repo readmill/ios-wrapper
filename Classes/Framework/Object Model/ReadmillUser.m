@@ -359,11 +359,11 @@
 - (void)findOrCreateReadingForBook:(ReadmillBook *)book 
                              state:(ReadmillReadingState)readingState
                          isPrivate:(BOOL)isPrivate 
+                       connections:(NSArray *)connections
                           delegate:(id <ReadmillReadingFindingDelegate>)delegate 
 {    
     __block typeof (self) bself = self;
-    void (^completionBlock)(NSDictionary *, NSError *);
-    completionBlock = ^(NSDictionary *readingDictionary, NSError *error) {
+    ReadmillAPICompletionHandler completionBlock = ^(id readingDictionary, NSError *error) {
         
         if (error || !readingDictionary) {
             [delegate readmillUser:bself failedToFindReadingForBook:book 
@@ -382,6 +382,18 @@
                                                state:readingState
                                            isPrivate:isPrivate 
                                    completionHandler:completionBlock];
+}
+
+- (void)findOrCreateReadingForBook:(ReadmillBook *)book 
+                             state:(ReadmillReadingState)readingState
+                         isPrivate:(BOOL)isPrivate
+                          delegate:(id<ReadmillReadingFindingDelegate>)readingFindingDelegate
+{
+    [self findOrCreateReadingForBook:book 
+                               state:readingState 
+                           isPrivate:isPrivate
+                         connections:nil 
+                            delegate:readingFindingDelegate];
 }
 
 @end
