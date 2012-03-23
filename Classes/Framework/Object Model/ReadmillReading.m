@@ -46,6 +46,7 @@
 @property (readwrite, copy) NSURL *highlightsURI;
 
 @property (readwrite) BOOL isPrivate;
+@property (readwrite) BOOL isRecommended;
 
 @property (readwrite) ReadmillReadingState state;
 
@@ -127,6 +128,8 @@
     [self setHighlightsURI:[NSURL URLWithString:[cleanedDict objectForKey:kReadmillAPIReadingHighlightsKey]]];
     
     [self setHighlightCount:[[cleanedDict objectForKey:kReadmillAPIReadingHighlightsCountKey] unsignedIntegerValue]];    
+    
+    [self setIsRecommended:[[cleanedDict objectForKey:kReadmillAPIReadingRecommendedKey] boolValue]];
 }
 
 - (NSString *)description 
@@ -156,6 +159,7 @@
 
 @synthesize closingRemark;
 @synthesize isPrivate;
+@synthesize isRecommended;
 @synthesize state;
 
 @synthesize bookId;

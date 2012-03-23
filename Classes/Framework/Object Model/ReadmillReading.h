@@ -205,6 +205,12 @@
 @property (readonly) BOOL isPrivate;
 
 /*!
+ @property  isRecommended
+ @brief The current recommended of this reading.
+ */
+@property (readonly) BOOL isRecommended;
+
+/*!
  @property  state
  @brief The current state of the reading.
  */
