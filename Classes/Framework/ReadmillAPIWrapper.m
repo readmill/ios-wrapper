@@ -191,26 +191,55 @@
 
 #pragma mark - Readings
 
+- (void)readingForUserWithId:(ReadmillUserId)userId
+                matchingISBN:(NSString *)isbn 
+                       title:(NSString *)title
+                      author:(NSString *)author
+           completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings/exists", 
+                                       [self usersEndpoint], 
+                                       userId]];
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    if (isbn && [isbn length]) {
+        [parameters setValue:isbn forKey:@"q[isbn]"];
+    }
+    if (author && [author length]) {
+        [parameters setValue:author forKey:@"q[author]"];
+    }
+    if (title && [title length]) {
+        [parameters setValue:title forKey:@"q[title]"];
+    }
+    
+    [self sendGetRequestToURL:URL
+               withParameters:parameters
+   shouldBeCalledUnauthorized:NO 
+            completionHandler:completion];
+
+}
+
 - (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
                                 state:(ReadmillReadingState)readingState 
                             isPrivate:(BOOL)isPrivate 
                           connections:(NSArray *)connections
                     completionHandler:(ReadmillAPICompletionHandler)completionHandler 
 {    
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    NSMutableDictionary *readingParameters = [NSMutableDictionary dictionary];
     
-    [parameters setValue:[NSNumber numberWithInteger:readingState] 
-                  forKey:kReadmillAPIReadingStateKey];
-    [parameters setValue:[NSNumber numberWithInteger:isPrivate ? 1 : 0]
-                  forKey:kReadmillAPIReadingPrivateKey];
-    [parameters setValue:[[self apiConfiguration] clientID] 
-                  forKey:kReadmillAPIClientIdKey];
+    [readingParameters setValue:[NSNumber numberWithInteger:readingState] 
+                         forKey:kReadmillAPIReadingStateKey];
+    [readingParameters setValue:isPrivate ? @"true" : @"false"
+                         forKey:kReadmillAPIReadingPrivateKey];
     
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
                                        [self booksEndpoint], 
                                        bookId]];
 
-    NSDictionary *finalParameters = [NSDictionary dictionaryWithObject:parameters forKey:kReadmillAPIReadingKey];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:readingParameters 
+                                                                         forKey:kReadmillAPIReadingKey];
+
     if (connections != nil && [connections count]) {
         // Create a list of JSON objects (i.e array of NSDicionaries)
         NSMutableArray *connectionsArray = [NSMutableArray array];
@@ -218,11 +247,14 @@
             [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
                                                                     forKey:@"id"]];
         }
-        [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
+        // In the root
+        [parameters setValue:connectionsArray
+                      forKey:kReadmillAPIReadingPostToKey];
     }
+    
 
     [self sendPostRequestToURL:URL
-                withParameters:finalParameters
+                withParameters:parameters
              completionHandler:completionHandler];
 }
 
@@ -261,10 +293,8 @@
 
     [readingParameters setValue:[NSNumber numberWithInteger:readingState] 
                          forKey:kReadmillAPIReadingStateKey];
-    [readingParameters setValue:[NSNumber numberWithBool:isPrivate] 
+    [readingParameters setValue:isPrivate ? @"true" : @"false" 
                          forKey:kReadmillAPIReadingPrivateKey];
-    [readingParameters setValue:[[self apiConfiguration] clientID]
-                         forKey:kReadmillAPIClientIdKey];
     
     if ([remark length] > 0) {
         [readingParameters setValue:remark 
@@ -289,15 +319,15 @@
     
     [readingParameters setValue:[NSNumber numberWithInteger:readingState] 
                          forKey:kReadmillAPIReadingStateKey];
-    [readingParameters setValue:[NSNumber numberWithBool:recommended]
+    [readingParameters setValue:[NSNumber numberWithUnsignedInteger:recommended]
                          forKey:kReadmillAPIReadingRecommendedKey];    
     if ([closingRemark length] > 0) {
         [readingParameters setValue:closingRemark 
                              forKey:kReadmillAPIReadingClosingRemarkKey];
     }
     
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:readingParameters 
-                                                           forKey:kReadmillAPIReadingKey];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:readingParameters 
+                                                                         forKey:kReadmillAPIReadingKey];
     [readingParameters release];
 
     if (connections != nil && [connections count]) {
@@ -309,7 +339,6 @@
         }
         [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
     }
-    
     [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
 }
 
@@ -511,10 +540,10 @@
             completionHandler:completion];
 }
 
-- (void)addBookWithTitle:(NSString *)bookTitle 
-                  author:(NSString *)bookAuthor 
-                    isbn:(NSString *)bookIsbn 
-       completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (void)findOrCreateBookWithTitle:(NSString *)bookTitle 
+                           author:(NSString *)bookAuthor 
+                             isbn:(NSString *)bookIsbn 
+                completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableDictionary *bookParameters = [[NSMutableDictionary alloc] init];
     

@@ -10,7 +10,8 @@
 
 typedef enum {
     ReadmillSpinnerTypeDefault = 1,
-    ReadmillSpinnerTypeSmallGray = 2
+    ReadmillSpinnerTypeSmallGray = 2,
+    ReadmillSpinnerTypeSmallWhite = 3
 } ReadmillSpinnerType;
 
 @interface ReadmillSpinner : UIImageView

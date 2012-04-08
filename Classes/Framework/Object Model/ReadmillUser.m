@@ -303,22 +303,10 @@
         }
     };
     
-    ReadmillAPICompletionHandler searchBookBlock = ^(NSDictionary *bookDictionary, NSError *error) {
-        if (!bookDictionary && createIfNotFound && !error) {
-            // Create if not found
-            [bself->apiWrapper addBookWithTitle:title 
-                                         author:author 
-                                           isbn:isbn 
-                              completionHandler:completionBlock];
-        } else {
-            completionBlock(bookDictionary, error);
-        }
-    };
-    
-    [[self apiWrapper] bookMatchingISBN:isbn
-                                  title:title 
-                                 author:author
-                      completionHandler:searchBookBlock];
+    [[self apiWrapper] findOrCreateBookWithTitle:title 
+                                          author:author
+                                            isbn:isbn 
+                               completionHandler:completionBlock];    
 }
 
 - (void)findBookWithTitle:(NSString *)title
@@ -372,6 +360,8 @@
             
             ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary
                                                                             apiWrapper:bself->apiWrapper] autorelease];
+            [book updateWithAPIDictionary:[readingDictionary valueForKey:kReadmillAPIReadingBookKey]];
+            
             [delegate readmillUser:bself
                     didFindReading:reading
                            forBook:book];
@@ -381,6 +371,7 @@
     [[self apiWrapper] findOrCreateReadingWithBookId:[book bookId]
                                                state:readingState
                                            isPrivate:isPrivate 
+                                         connections:connections
                                    completionHandler:completionBlock];
 }
 

@@ -141,7 +141,7 @@
 
 - (IBAction)findBookButtonClicked:(id)sender
 {
-    [user findBookWithISBN:[isbnTextField text]
+    [user findOrCreateBookWithISBN:[isbnTextField text]
                      title:[titleTextField text] 
                     author:[authorTextField text]
                   delegate:self];

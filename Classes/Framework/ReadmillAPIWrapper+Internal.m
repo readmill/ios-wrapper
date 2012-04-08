@@ -125,10 +125,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 	[request setHTTPMethod:httpMethod];
 	[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 	[request setHTTPBody:[finalParameters JSONData]];
-    [finalParameters release];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     [request setTimeoutInterval:kTimeoutInterval];
     
+    [finalParameters release];
     return [request autorelease];
 }
 
@@ -327,7 +327,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
         // resource (409), we issue a GET request with the URL found 
         // in the "Location" header that contains the resource.
         NSString *locationHeader = [[response allHeaderFields] valueForKey:LocationHeader];
-        if (([response statusCode] == 201 || [response statusCode] == 409) && locationHeader != nil) {
+        if (([response statusCode] == 201 || [response statusCode] == 200 || [response statusCode] == 409) && locationHeader != nil) {
             
             NSURL *locationURL = [NSURL URLWithString:locationHeader];
             NSURLRequest *newRequest = [self getRequestWithURL:locationURL 

@@ -123,6 +123,7 @@ static NSString * const kReadmillAPIReadingLocationsKey = @"locations";
 static NSString * const kReadmillAPIReadingHighlightsKey = @"highlights";
 static NSString * const kReadmillAPIReadingHighlightsCountKey = @"highlights_count";
 static NSString * const kReadmillAPIReadingRecommendedKey = @"recommended";
+static NSString * const kReadmillAPIReadingPostToKey = @"post_to";
 
 #pragma mark API Keys - Highlights
 
@@ -355,13 +356,20 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  IMPORTANT: This will add a book to Readmill even if it already exists. Please search for a book before creating a new one, or use the 
  -findOrCreateBookWithISBN:title:author:delegate: convenience method in the ReadmillUser object, which does this for you. 
  */
-- (void)addBookWithTitle:(NSString *)bookTitle
-                  author:(NSString *)bookAuthor
-                    isbn:(NSString *)bookIsbn 
-       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)findOrCreateBookWithTitle:(NSString *)bookTitle
+                           author:(NSString *)bookAuthor
+                             isbn:(NSString *)bookIsbn 
+                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Readings
+
+
+- (void)readingForUserWithId:(ReadmillUserId)userId
+                matchingISBN:(NSString *)isbn
+                       title:(NSString *)title
+                      author:(NSString *)author
+           completionHandler:(ReadmillAPICompletionHandler)completion;
 
 /*!
  @param bookId The id of the book to create a reading for.
