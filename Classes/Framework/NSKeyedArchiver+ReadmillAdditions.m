@@ -16,13 +16,13 @@ static NSString * const ReadmillReadingSessionArchiveFileName = @"ReadmillReadin
 
 + (NSString *)readmillReadingSessionArchivePath 
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *libraryDirectory = [paths objectAtIndex:0];
     return [libraryDirectory stringByAppendingPathComponent:ReadmillReadingSessionArchiveFileName];       
 }
 + (NSString *)readmillPingArchivePath 
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *libraryDirectory = [paths objectAtIndex:0];
     return [libraryDirectory stringByAppendingPathComponent:ReadmillFailedPingsArchiveFileName];       
 }
