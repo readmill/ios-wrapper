@@ -18,6 +18,7 @@
 		333FC84E14C7204300DC62AD /* ReadmillReadingSession+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 333FC84C14C7204300DC62AD /* ReadmillReadingSession+Internal.h */; };
 		333FC84F14C7204300DC62AD /* ReadmillReadingSession+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 333FC84D14C7204300DC62AD /* ReadmillReadingSession+Internal.m */; };
 		335E809E149BA94100BC8565 /* reading22533.json in Resources */ = {isa = PBXBuildFile; fileRef = 335E809D149BA94100BC8565 /* reading22533.json */; };
+		33CCB96715613D6A00131265 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9647F57B12F1A0140088CAA0 /* QuartzCore.framework */; };
 		33D9B950149B7CE900C6876E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B94F149B7CE900C6876E /* logo.png */; };
 		33D9B953149B7D5900C6876E /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B952149B7D5900C6876E /* Default-Portrait~ipad.png */; };
 		502698D2130C87D400E67974 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.md */; };
@@ -242,6 +243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33CCB96715613D6A00131265 /* QuartzCore.framework in Frameworks */,
 				333BA9AF14C7563600A247BF /* libOCMock.a in Frameworks */,
 				734A51AE135A1DF5009F9794 /* UIKit.framework in Frameworks */,
 				734A51AF135A1DF5009F9794 /* Foundation.framework in Frameworks */,
@@ -900,21 +902,6 @@
 			};
 			name = Release;
 		};
-		734A51C2135A1DF6009F9794 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ReadmillAPI/ReadmillAPI-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/..\"",
-				);
-				PRODUCT_NAME = ReadmillAPI;
-				SKIP_INSTALL = YES;
-			};
-			name = Distribution;
-		};
 		734A51C4135A1DF6009F9794 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -971,64 +958,6 @@
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
-		};
-		734A51C6135A1DF6009F9794 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ReadmillAPITests/ReadmillAPITests-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Libraries/Headers/**";
-				INFOPLIST_FILE = "ReadmillAPITests/ReadmillAPITests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Libraries",
-				);
-				OTHER_LDFLAGS = (
-					"-framework",
-					SenTestingKit,
-					"-all_load",
-					"-ObjC",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Library/Headers";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Distribution;
-		};
-		73840E061358FD3200553156 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 2;
-			};
-			name = Distribution;
-		};
-		73840E071358FD3200553156 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Readmill_Framework-Prefix.pch";
-				INFOPLIST_FILE = "Readmill_Framework-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = "Readmill Example";
-				PROVISIONING_PROFILE = "";
-				RUN_CLANG_STATIC_ANALYZER = YES;
-			};
-			name = Distribution;
 		};
 		96BEAEEB12F05E80006028D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1100,7 +1029,6 @@
 			buildConfigurations = (
 				734A51C0135A1DF6009F9794 /* Debug */,
 				734A51C1135A1DF6009F9794 /* Release */,
-				734A51C2135A1DF6009F9794 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1110,7 +1038,6 @@
 			buildConfigurations = (
 				734A51C4135A1DF6009F9794 /* Debug */,
 				734A51C5135A1DF6009F9794 /* Release */,
-				734A51C6135A1DF6009F9794 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1120,7 +1047,6 @@
 			buildConfigurations = (
 				96BEAEEB12F05E80006028D0 /* Debug */,
 				96BEAEEC12F05E80006028D0 /* Release */,
-				73840E061358FD3200553156 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1130,7 +1056,6 @@
 			buildConfigurations = (
 				96BEAEEE12F05E80006028D0 /* Debug */,
 				96BEAEEF12F05E80006028D0 /* Release */,
-				73840E071358FD3200553156 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
