@@ -239,15 +239,10 @@
     }
     
     // The block to be called when authorization request returns
-    void (^authorizationHandler)(id, NSError *) = ^(id result, NSError *error) {
-        if (!error) {
+    ReadmillAPICompletionHandler authorizationHandler = ^(id result, NSError *error) {
+        if (!error && result) {
             // Authorization succeeded, now try to fetch & update the user
-            [[self apiWrapper] currentUserWithCompletionHandler:^(id result, NSError *error) {
-                if (!error) {
-                    [self updateWithAPIDictionary:result];
-                }
-                [authenticationDelegate readmillAuthenticationDidSucceedWithLoggedInUser:self];
-            }];
+            [self verifyAuthentication:authenticationDelegate];
         } else {
             [authenticationDelegate readmillAuthenticationDidFailWithError:error];   
         }
