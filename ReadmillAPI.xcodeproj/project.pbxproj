@@ -24,8 +24,8 @@
 		502698D2130C87D400E67974 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 502698D1130C87D300E67974 /* README.md */; };
 		7318A46B137D294800CBC7A4 /* NSError+ReadmillAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318A469137D294800CBC7A4 /* NSError+ReadmillAdditions.h */; settings = {ATTRIBUTES = (); }; };
 		7318A46C137D294800CBC7A4 /* NSError+ReadmillAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318A46A137D294800CBC7A4 /* NSError+ReadmillAdditions.m */; };
-		7318DE74142C94E50002152C /* ReadmillURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318DE72142C94E50002152C /* ReadmillURLConnection.h */; settings = {ATTRIBUTES = (); }; };
-		7318DE76142C94E50002152C /* ReadmillURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318DE73142C94E50002152C /* ReadmillURLConnection.m */; };
+		7318DE74142C94E50002152C /* ReadmillRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 7318DE72142C94E50002152C /* ReadmillRequestOperation.h */; settings = {ATTRIBUTES = (); }; };
+		7318DE76142C94E50002152C /* ReadmillRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7318DE73142C94E50002152C /* ReadmillRequestOperation.m */; };
 		734A51A4135A1DF5009F9794 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED212F05E80006028D0 /* Foundation.framework */; };
 		734A51AE135A1DF5009F9794 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED012F05E80006028D0 /* UIKit.framework */; };
 		734A51AF135A1DF5009F9794 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED212F05E80006028D0 /* Foundation.framework */; };
@@ -161,8 +161,8 @@
 		731471EC1353601200A41B49 /* NSKeyedArchiver+ReadmillAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "NSKeyedArchiver+ReadmillAdditions.m"; path = "../NSKeyedArchiver+ReadmillAdditions.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7318A469137D294800CBC7A4 /* NSError+ReadmillAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+ReadmillAdditions.h"; path = "../NSError+ReadmillAdditions.h"; sourceTree = "<group>"; };
 		7318A46A137D294800CBC7A4 /* NSError+ReadmillAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+ReadmillAdditions.m"; path = "../NSError+ReadmillAdditions.m"; sourceTree = "<group>"; };
-		7318DE72142C94E50002152C /* ReadmillURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillURLConnection.h; sourceTree = "<group>"; };
-		7318DE73142C94E50002152C /* ReadmillURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillURLConnection.m; sourceTree = "<group>"; };
+		7318DE72142C94E50002152C /* ReadmillRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillRequestOperation.h; sourceTree = "<group>"; };
+		7318DE73142C94E50002152C /* ReadmillRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillRequestOperation.m; sourceTree = "<group>"; };
 		733291061356FC0B0063FBF4 /* Readmill Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73370EE71341172C00880F5B /* ReadmillDismissingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillDismissingView.h; path = ../UI/ReadmillDismissingView.h; sourceTree = "<group>"; };
 		73370EE81341172C00880F5B /* ReadmillDismissingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillDismissingView.m; path = ../UI/ReadmillDismissingView.m; sourceTree = "<group>"; };
@@ -398,8 +398,8 @@
 		73FA54011470323400CFC589 /* URL Connection */ = {
 			isa = PBXGroup;
 			children = (
-				7318DE72142C94E50002152C /* ReadmillURLConnection.h */,
-				7318DE73142C94E50002152C /* ReadmillURLConnection.m */,
+				7318DE72142C94E50002152C /* ReadmillRequestOperation.h */,
+				7318DE73142C94E50002152C /* ReadmillRequestOperation.m */,
 			);
 			name = "URL Connection";
 			path = ..;
@@ -582,7 +582,7 @@
 				734A5202135A1E41009F9794 /* NSKeyedArchiver+ReadmillAdditions.h in Headers */,
 				734A5205135A1E41009F9794 /* ReadmillAPIWrapper.h in Headers */,
 				734A5207135A1E46009F9794 /* ReadmillSpinner.h in Headers */,
-				7318DE74142C94E50002152C /* ReadmillURLConnection.h in Headers */,
+				7318DE74142C94E50002152C /* ReadmillRequestOperation.h in Headers */,
 				734A51D7135A1E10009F9794 /* NSString+ReadmillAdditions.h in Headers */,
 				734A51D5135A1E10009F9794 /* NSDictionary+ReadmillAdditions.h in Headers */,
 				734A51D3135A1E10009F9794 /* NSURL+ReadmillURLParameters.h in Headers */,
@@ -781,7 +781,7 @@
 				735E41DB135A666D00855884 /* ReadmillPing.m in Sources */,
 				7318A46C137D294800CBC7A4 /* NSError+ReadmillAdditions.m in Sources */,
 				735E3E6D13E06E2900930E8C /* JSONKit.m in Sources */,
-				7318DE76142C94E50002152C /* ReadmillURLConnection.m in Sources */,
+				7318DE76142C94E50002152C /* ReadmillRequestOperation.m in Sources */,
 				736C85E4145A964C00C5E6B5 /* NSDate+ReadmillAdditions.m in Sources */,
 				73AA2952145EB41300CDBBD6 /* ReadmillAPIConfiguration.m in Sources */,
 				734CAD621461F13D00855E9B /* ReadmillDateFormatter.m in Sources */,

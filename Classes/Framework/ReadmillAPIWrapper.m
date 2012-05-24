@@ -28,6 +28,7 @@
 #import "NSDate+ReadmillAdditions.h"
 #import "JSONKit.h"
 #import "ReadmillAPIWrapper+Internal.h"
+#import "ReadmillRequestOperation.h"
 
 @interface ReadmillAPIWrapper () 
 
@@ -899,6 +900,75 @@
    shouldBeCalledUnauthorized:NO 
             completionHandler:completionHandler];
 }
+
+- (ReadmillRequestOperation *)operationWithRequest:(NSURLRequest *)request
+                                     completion:(ReadmillAPICompletionHandler)completionBlock
+{
+    NSAssert(request != nil, @"Request is nil!");
+    static NSString * const LocationHeader = @"Location";
+    
+    dispatch_queue_t currentQueue = dispatch_get_current_queue();
+    // This block will be called when the asynchronous operation finishes
+    ReadmillRequestOperationCompletionBlock connectionCompletionHandler = ^(NSHTTPURLResponse *response, 
+                                                                           NSData *responseData, 
+                                                                           NSError *connectionError) {
+        
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        
+        NSError *error = nil;
+        
+        // If we created something (201) or tried to create an existing
+        // resource (409), we issue a GET request with the URL found 
+        // in the "Location" header that contains the resource.
+        NSString *locationHeader = [[response allHeaderFields] valueForKey:LocationHeader];
+        if (([response statusCode] == 201 || [response statusCode] == 200 || [response statusCode] == 409) && locationHeader != nil) {
+            
+            NSURL *locationURL = [NSURL URLWithString:locationHeader];
+            NSURLRequest *newRequest = [self getRequestWithURL:locationURL 
+                                                    parameters:nil 
+                                    shouldBeCalledUnauthorized:NO
+                                                         error:&error];
+            
+            if (newRequest) {
+                // It's important that we return this resource ASAP
+                [self startPreparedRequest:newRequest 
+                                completion:completionBlock
+                             queuePriority:NSOperationQueuePriorityVeryHigh];
+            } else {
+                if (completionBlock) {
+                    dispatch_async(currentQueue, ^{
+                        completionBlock(nil, error);
+                    });
+                }
+            }
+        } else {
+            // Parse the response
+            id jsonResponse = [self parseResponse:response 
+                                 withResponseData:responseData 
+                                  connectionError:connectionError
+                                            error:&error];
+            
+            if (connectionError || error) {
+                // Remove cached requests for errors
+                [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+            }
+            
+            // Execute the completionBlock
+            if (completionBlock) {
+                dispatch_async(currentQueue, ^{
+                    completionBlock(jsonResponse, error);
+                });
+            }
+        }
+        [pool release];
+    };
+    
+    ReadmillRequestOperation *operation = [[[ReadmillRequestOperation alloc] initWithRequest:request 
+                                                                           completionHandler:connectionCompletionHandler] autorelease];
+    
+    return operation;
+}
+
 
 #pragma mark -
 #pragma mark - Cancel operations

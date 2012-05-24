@@ -165,6 +165,8 @@ static NSString * const kReadmillAPIFilterByFollowings = @"followings";
 static NSString * const kReadmillAPIOrderKey = @"order";
 static NSString * const kReadmillAPIOrderByPopular = @"popular";
 
+@class ReadmillRequestOperation;
+
 #pragma mark -
 
 /*!
@@ -684,6 +686,10 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @brief Cancels all queued requests to the server.
  */
 - (void)cancelAllOperations;
+
+- (ReadmillRequestOperation *)operationWithRequest:(NSURLRequest *)request
+                                     completion:(ReadmillAPICompletionHandler)completion;
+
 
 #pragma mark -
 #pragma mark - Deprecated methods

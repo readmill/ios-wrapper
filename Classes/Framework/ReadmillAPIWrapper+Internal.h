@@ -72,4 +72,12 @@
 
 - (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock;
 
+- (void)startPreparedRequest:(NSURLRequest *)request
+                  completion:(ReadmillAPICompletionHandler)completionBlock 
+               queuePriority:(NSOperationQueuePriority)queuePriority;
+
+- (id)parseResponse:(NSHTTPURLResponse *)response
+   withResponseData:(NSData *)responseData
+    connectionError:(NSError *)connectionError 
+              error:(NSError **)error;
 @end

@@ -46,7 +46,7 @@ static NSInteger readmill_networkActivityCount = 0;
             readmill_networkActivityCount--;
         } else {
             readmill_networkActivityCount = 0;
-            NSLog(@"%s Unbalanced network activity: count already 0.",
+            DLog(@"%s Unbalanced network activity: count already 0.",
                   __PRETTY_FUNCTION__);
         }        
     }

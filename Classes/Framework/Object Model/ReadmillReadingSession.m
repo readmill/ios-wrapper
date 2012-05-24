@@ -150,15 +150,15 @@
                                  // No client error so ping could not be delivered correctly
                                  [self archiveFailedPing:ping];
                              } else {
-                                 NSLog(@"Failed to send archived ping: %@, error: %@", ping, error);
+                                 DLog(@"Failed to send archived ping: %@, error: %@", ping, error);
                              }
                          } else {
-                             NSLog(@"Pinged reading: %d succesfully", [ping readingId]);
+                             DLog(@"Pinged reading: %d succesfully", [ping readingId]);
                          }
                      }];
         }
     } else {
-        NSLog(@"No archived pings.");
+        DLog(@"No archived pings.");
     }
     [pool drain];
 }

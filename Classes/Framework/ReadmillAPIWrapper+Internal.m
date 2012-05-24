@@ -7,7 +7,7 @@
 //
 
 #import "ReadmillAPIWrapper+Internal.h"
-#import "ReadmillURLConnection.h"
+#import "ReadmillRequestOperation.h"
 #import "NSURL+ReadmillURLParameters.h"
 #import "JSONKit.h"
 
@@ -261,14 +261,17 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
      * TODO - Error if not X-Readmill-API header (needs to be implemented for oauth route first)
      */
     BOOL isReadmillResponse = [[response allHeaderFields] objectForKey:kReadmillAPIHeaderKey] != nil;
-    
     if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
         
 		if (connectionError == nil) {
             // Length > 1 hack to avoid JSONKit error on whitespace
             id errorResponse = nil;
             if (responseData && [responseData length] > 1) {
-                errorResponse = [[self jsonDecoder] objectWithData:responseData];
+                if ([response.MIMEType isEqualToString:@"application/json"]) {
+                    errorResponse = [[self jsonDecoder] objectWithData:responseData];
+                } else {
+                    errorResponse = responseData;
+                }
             }
             if (error != NULL) {
                 NSString *errorDomain = NSURLErrorDomain;
@@ -292,88 +295,35 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 		NSError *parseError = nil;
         // Length > 1 hack to avoid JSONKit error on whitespace
         if (responseData && [responseData length] > 1) {
-            id parsedJsonValue = [[self jsonDecoder] objectWithData:responseData
-                                                              error:&parseError];
+            
+            id result = nil;
+            if ([response.MIMEType isEqualToString:@"application/json"]) {
+                result = [[self jsonDecoder] objectWithData:responseData
+                                                      error:&parseError];
+            } else {
+                result = responseData;
+            }
             if (parseError != nil) {
                 if (error != NULL) {
                     *error = parseError;
                 }
             } else {
-                return parsedJsonValue;
+                return result;
             }
         }
         return nil;
 	}	
 }
 
-- (void)startPreparedRequest:(NSURLRequest *)request 
+- (void)startPreparedRequest:(NSURLRequest *)request
                   completion:(ReadmillAPICompletionHandler)completionBlock 
                queuePriority:(NSOperationQueuePriority)queuePriority
 {    
-    NSAssert(request != nil, @"Request is nil!");
-    static NSString * const LocationHeader = @"Location";
     
-    dispatch_queue_t currentQueue = dispatch_get_current_queue();
-    // This block will be called when the asynchronous operation finishes
-    ReadmillURLConnectionCompletionHandler connectionCompletionHandler = ^(NSHTTPURLResponse *response, 
-                                                                           NSData *responseData, 
-                                                                           NSError *connectionError) {
-        
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        
-        NSError *error = nil;
-        
-        // If we created something (201) or tried to create an existing
-        // resource (409), we issue a GET request with the URL found 
-        // in the "Location" header that contains the resource.
-        NSString *locationHeader = [[response allHeaderFields] valueForKey:LocationHeader];
-        if (([response statusCode] == 201 || [response statusCode] == 200 || [response statusCode] == 409) && locationHeader != nil) {
-            
-            NSURL *locationURL = [NSURL URLWithString:locationHeader];
-            NSURLRequest *newRequest = [self getRequestWithURL:locationURL 
-                                                    parameters:nil 
-                                    shouldBeCalledUnauthorized:NO
-                                                         error:&error];
-            
-            if (newRequest) {
-                // It's important that we return this resource ASAP
-                [self startPreparedRequest:newRequest 
-                                completion:completionBlock
-                             queuePriority:NSOperationQueuePriorityVeryHigh];
-            } else {
-                if (completionBlock) {
-                    dispatch_async(currentQueue, ^{
-                        completionBlock(nil, error);
-                    });
-                }
-            }
-        } else {
-            // Parse the response
-            id jsonResponse = [self parseResponse:response 
-                                 withResponseData:responseData 
-                                  connectionError:connectionError
-                                            error:&error];
-            
-            if (connectionError || error) {
-                // Remove cached requests for errors
-                [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-            }
-            
-            // Execute the completionBlock
-            if (completionBlock) {
-                dispatch_async(currentQueue, ^{
-                    completionBlock(jsonResponse, error);
-                });
-            }
-        }
-        [pool release];
-    };
-    
-    ReadmillURLConnection *connection = [[ReadmillURLConnection alloc] initWithRequest:request 
-                                                                     completionHandler:connectionCompletionHandler];
-    [connection setQueuePriority:queuePriority];
-    [queue addOperation:connection];
-    [connection release];
+    ReadmillRequestOperation *operation = [self operationWithRequest:request
+                                                          completion:completionBlock];
+    [operation setQueuePriority:queuePriority];
+    [queue addOperation:operation];
 }
 
 - (void)startPreparedRequest:(NSURLRequest *)request 
