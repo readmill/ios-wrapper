@@ -47,8 +47,11 @@
     [self setRequest:nil];
     [self setUploadProgressBlock:nil];
     [self setDownloadProgressBlock:nil];
-    [self setBackgroundTaskIdentifier:UIBackgroundTaskInvalid];
-
+    if (_backgroundTaskIdentifier) {
+        [[UIApplication sharedApplication] endBackgroundTask:_backgroundTaskIdentifier];
+        [self setBackgroundTaskIdentifier:UIBackgroundTaskInvalid];
+    }
+    
     [super dealloc];
 }
 
