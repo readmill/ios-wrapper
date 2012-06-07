@@ -264,24 +264,16 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
         
 		if (connectionError == nil) {
-            // Length > 1 hack to avoid JSONKit error on whitespace
-            id errorResponse = nil;
-            if (responseData && [responseData length] > 1) {
-                if ([response.MIMEType isEqualToString:@"application/json"]) {
-                    errorResponse = [[self jsonDecoder] objectWithData:responseData];
-                } else {
-                    errorResponse = responseData;
-                }
-            }
             if (error != NULL) {
                 NSString *errorDomain = NSURLErrorDomain;
                 if (isReadmillResponse) {
                     errorDomain = kReadmillDomain;
                 }
+                
                 *error = [NSError errorWithDomain:errorDomain
                                              code:[response statusCode]
                                          userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                   [errorResponse valueForKey:@"error"], NSLocalizedFailureReasonErrorKey, nil]];
+                                                   @"An unknown error occurred", NSLocalizedFailureReasonErrorKey, nil]];
             }
 		} else {
 			if (error != NULL) {
