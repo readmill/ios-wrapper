@@ -138,6 +138,19 @@
 }
 
 #pragma mark -
+#pragma mark - Post To 
+
+- (NSArray *)postToArrayWithConnections:(NSArray *)connections
+{
+    NSMutableArray *connectionsArray = [NSMutableArray array];
+    for (id connection in connections) {
+        [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
+                                                                forKey:@"id"]];
+    }
+    return connectionsArray;
+}
+
+#pragma mark -
 #pragma mark OAuth
 
 - (void)authorizeWithAuthorizationCode:(NSString *)authCode 
@@ -241,15 +254,8 @@
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:readingParameters 
                                                                          forKey:kReadmillAPIReadingKey];
 
-    if (connections != nil && [connections count]) {
-        // Create a list of JSON objects (i.e array of NSDicionaries)
-        NSMutableArray *connectionsArray = [NSMutableArray array];
-        for (id connection in connections) {
-            [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
-                                                                    forKey:@"id"]];
-        }
-        // In the root
-        [parameters setValue:connectionsArray
+    if (connections != nil) {
+        [parameters setValue:[self postToArrayWithConnections:connections]
                       forKey:kReadmillAPIReadingPostToKey];
     }
     
@@ -331,15 +337,11 @@
                                                                          forKey:kReadmillAPIReadingKey];
     [readingParameters release];
 
-    if (connections != nil && [connections count]) {
-        // Create a list of JSON objects (i.e array of NSDicionaries)
-        NSMutableArray *connectionsArray = [NSMutableArray array];
-        for (id connection in connections) {
-            [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
-                                                                    forKey:@"id"]];
-        }
-        [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
+    if (connections != nil) {
+        [parameters setValue:[self postToArrayWithConnections:connections]
+                      forKey:kReadmillAPIHighlightPostToKey];
     }
+
     [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
 }
 
@@ -674,13 +676,8 @@
     }
     
     if (connections != nil) {
-        // Create a list of JSON objects (i.e array of NSDicionaries
-        NSMutableArray *connectionsArray = [NSMutableArray array];
-        for (id connection in connections) {
-            [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
-                                                                    forKey:@"id"]];
-        }
-        [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
+        [parameters setValue:[self postToArrayWithConnections:connections]
+                      forKey:kReadmillAPIHighlightPostToKey];
     }
     
     if (!highlightedAt) {
@@ -1008,13 +1005,8 @@
     }
     
     if (connectionsOrNil != nil) {
-        // Create a list of JSON objects (i.e array of NSDicionaries
-        NSMutableArray *connectionsArray = [NSMutableArray array];
-        for (id connection in connectionsOrNil) {
-            [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
-                                                                    forKey:@"id"]];
-        }
-        [parameters setValue:connectionsArray forKey:kReadmillAPIHighlightPostToKey];
+        [parameters setValue:[self postToArrayWithConnections:connectionsOrNil]
+                      forKey:kReadmillAPIHighlightPostToKey];
     }
     
     if (!highlightedAt) {
