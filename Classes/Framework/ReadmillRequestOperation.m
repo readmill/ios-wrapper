@@ -9,7 +9,7 @@
 #import "ReadmillRequestOperation.h"
 #import "UIApplication+ReadmillNetworkActivity.h"
 
-@interface ReadmillRequestOperation () <NSURLConnectionDataDelegate>
+@interface ReadmillRequestOperation ()
 
 - (void)finish;
 

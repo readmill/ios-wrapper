@@ -12,7 +12,7 @@
 typedef void (^ReadmillRequestOperationCompletionBlock)(NSHTTPURLResponse *response, NSData *responseData, NSError *error);
 typedef void (^ReadmillRequestOperationProgressBlock)(NSInteger bytes, long long totalBytes, long long totalBytesExpected);
 
-@interface ReadmillRequestOperation : NSOperation
+@interface ReadmillRequestOperation : NSOperation <NSURLConnectionDataDelegate>
 
 @property (nonatomic, copy) NSError *connectionError;
 @property (nonatomic, readonly, retain) NSMutableData *responseData;
