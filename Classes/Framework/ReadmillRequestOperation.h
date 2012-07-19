@@ -32,5 +32,5 @@ typedef void (^ReadmillRequestOperationProgressBlock)(NSInteger bytes, long long
 - (void)setDownloadProgressBlock:(void (^)(NSInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead))block;
 
 - (void)setShouldExecuteAsBackgroundTaskWithExpirationHandler:(void (^)(void))handler;
-
+- (void)cancelConnectionIfCancelled;
 @end
