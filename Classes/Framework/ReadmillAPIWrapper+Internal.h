@@ -80,4 +80,5 @@
    withResponseData:(NSData *)responseData
     connectionError:(NSError *)connectionError 
               error:(NSError **)error;
+
 @end

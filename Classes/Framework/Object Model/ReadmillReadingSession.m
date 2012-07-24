@@ -24,7 +24,6 @@
 #import "NSKeyedArchiver+ReadmillAdditions.h"
 #import "ReadmillPing.h"
 #import "NSError+ReadmillAdditions.h"
-#import "ReadmillReadingSession+Internal.h"
 
 @implementation ReadmillReadingSessionArchive
 
@@ -98,6 +97,10 @@
 @synthesize apiWrapper;
 @synthesize readingId;
 
+
+#pragma mark -
+#pragma mark - Session Identifier
+
 - (NSString *)sessionIdentifier 
 {
     ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
@@ -125,6 +128,17 @@
 {
     return [ReadmillReadingSession isReadingSessionIdentifierValid];
 }
+
+- (void)refreshSessionDate
+{
+    ReadmillReadingSessionArchive *archive = [NSKeyedUnarchiver unarchiveReadmillReadingSession];
+    [archive setLastSessionDate:[NSDate date]];
+    [NSKeyedArchiver archiveReadmillReadingSession:archive];
+}
+
+
+#pragma mark -
+#pragma mark - Ping
 
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper 
 {
@@ -163,10 +177,29 @@
     [pool drain];
 }
 
++ (void)archiveFailedPing:(ReadmillPing *)ping
+{
+    @synchronized (self) {
+        // Grab all archived pings
+        NSArray *unarchivedPings = [NSKeyedUnarchiver unarchiveReadmillPings];
+        NSMutableArray *failedPings = [[NSMutableArray alloc] init];
+        if (nil != unarchivedPings) {
+            [failedPings addObjectsFromArray:unarchivedPings];
+        }
+        // Add the new one
+        [failedPings addObject:ping];
+        // Archive all pings
+        [NSKeyedArchiver archiveReadmillPings:failedPings];
+        
+        [failedPings release];
+    }
+}
+
 - (void)archiveFailedPing:(ReadmillPing *)ping
 {
     [[self class] archiveFailedPing:ping];
 }
+
 - (void)pingArchived
 {
     NSAssert([self apiWrapper] != nil, @"No apiWrapper!");

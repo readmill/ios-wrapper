@@ -15,8 +15,6 @@
 		333BA9AF14C7563600A247BF /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D9B994149BA50D00C6876E /* libOCMock.a */; };
 		333FC84A14C719F800DC62AD /* ReadmillAPIWrapper+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 333FC84814C719F800DC62AD /* ReadmillAPIWrapper+Internal.h */; };
 		333FC84B14C719F800DC62AD /* ReadmillAPIWrapper+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 333FC84914C719F800DC62AD /* ReadmillAPIWrapper+Internal.m */; };
-		333FC84E14C7204300DC62AD /* ReadmillReadingSession+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 333FC84C14C7204300DC62AD /* ReadmillReadingSession+Internal.h */; };
-		333FC84F14C7204300DC62AD /* ReadmillReadingSession+Internal.m in Sources */ = {isa = PBXBuildFile; fileRef = 333FC84D14C7204300DC62AD /* ReadmillReadingSession+Internal.m */; };
 		335E809E149BA94100BC8565 /* reading22533.json in Resources */ = {isa = PBXBuildFile; fileRef = 335E809D149BA94100BC8565 /* reading22533.json */; };
 		33CCB96715613D6A00131265 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9647F57B12F1A0140088CAA0 /* QuartzCore.framework */; };
 		33D9B950149B7CE900C6876E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 33D9B94F149B7CE900C6876E /* logo.png */; };
@@ -145,8 +143,6 @@
 		332FD3921489062D00F755CD /* UIApplication+ReadmillNetworkActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+ReadmillNetworkActivity.m"; path = "Classes/Framework/UIApplication+ReadmillNetworkActivity.m"; sourceTree = SOURCE_ROOT; };
 		333FC84814C719F800DC62AD /* ReadmillAPIWrapper+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ReadmillAPIWrapper+Internal.h"; sourceTree = "<group>"; };
 		333FC84914C719F800DC62AD /* ReadmillAPIWrapper+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ReadmillAPIWrapper+Internal.m"; sourceTree = "<group>"; };
-		333FC84C14C7204300DC62AD /* ReadmillReadingSession+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ReadmillReadingSession+Internal.h"; sourceTree = "<group>"; };
-		333FC84D14C7204300DC62AD /* ReadmillReadingSession+Internal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ReadmillReadingSession+Internal.m"; sourceTree = "<group>"; };
 		335E809D149BA94100BC8565 /* reading22533.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reading22533.json; sourceTree = "<group>"; };
 		33B5E0FF152C7F9C00F14440 /* Readmill.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Readmill.bundle; sourceTree = "<group>"; };
 		33D9B94F149B7CE900C6876E /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
@@ -270,20 +266,10 @@
 		333FC83614C717DD00DC62AD /* ReadmillReadingSession */ = {
 			isa = PBXGroup;
 			children = (
-				333FC83B14C717EA00DC62AD /* ReadmillReadingSession_Internal */,
 				96BEAEF912F06360006028D0 /* ReadmillReadingSession.h */,
 				96BEAEFA12F06360006028D0 /* ReadmillReadingSession.m */,
 			);
 			name = ReadmillReadingSession;
-			sourceTree = "<group>";
-		};
-		333FC83B14C717EA00DC62AD /* ReadmillReadingSession_Internal */ = {
-			isa = PBXGroup;
-			children = (
-				333FC84C14C7204300DC62AD /* ReadmillReadingSession+Internal.h */,
-				333FC84D14C7204300DC62AD /* ReadmillReadingSession+Internal.m */,
-			);
-			name = ReadmillReadingSession_Internal;
 			sourceTree = "<group>";
 		};
 		333FC84414C7193400DC62AD /* ReadmillAPIWrapper */ = {
@@ -594,7 +580,6 @@
 				734CAD611461F13D00855E9B /* ReadmillDateFormatter.h in Headers */,
 				332FD3931489062E00F755CD /* UIApplication+ReadmillNetworkActivity.h in Headers */,
 				333FC84A14C719F800DC62AD /* ReadmillAPIWrapper+Internal.h in Headers */,
-				333FC84E14C7204300DC62AD /* ReadmillReadingSession+Internal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,7 +774,6 @@
 				735F50D11470898E0069A553 /* ReadmillSpinner.m in Sources */,
 				332FD3941489062E00F755CD /* UIApplication+ReadmillNetworkActivity.m in Sources */,
 				333FC84B14C719F800DC62AD /* ReadmillAPIWrapper+Internal.m in Sources */,
-				333FC84F14C7204300DC62AD /* ReadmillReadingSession+Internal.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

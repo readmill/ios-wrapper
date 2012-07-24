@@ -39,7 +39,6 @@
 @property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, readwrite, retain) ReadmillAPIConfiguration *apiConfiguration;
 
-@property (nonatomic, retain) JSONDecoder *jsonDecoder;
 @end
 
 @implementation ReadmillAPIWrapper
@@ -95,7 +94,6 @@
 @synthesize authorizedRedirectURL;
 @synthesize accessTokenExpiryDate;
 @synthesize apiConfiguration;
-@synthesize jsonDecoder;
 @synthesize queue;
 
 - (void)dealloc 
@@ -104,7 +102,6 @@
     [self setAuthorizedRedirectURL:nil];
     [self setAccessTokenExpiryDate:nil];
     [self setApiConfiguration:nil];
-    [self setJsonDecoder:nil];
     [self setQueue:nil];
     [super dealloc];
 }
