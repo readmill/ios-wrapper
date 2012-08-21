@@ -8,9 +8,9 @@
 
 #import "ReadmillPingTests.h"
 #import "ReadmillPing.h"
-#import "ReadmillReadingSession+Internal.h"
+#import "ReadmillReadingSession.h"
 #import "ReadmillAPIWrapper+Internal.h"
-#import "ReadmillURLConnection.h"
+#import "ReadmillRequestOperation.h"
 
 @implementation ReadmillPingTests
 
@@ -27,7 +27,7 @@
                                                                       ofType:@"json"];
     
     NSData *data = [NSData dataWithContentsOfFile:path];    
-    NSDictionary *readingDictionary = [[data objectFromJSONData] retain];
+    NSDictionary *readingDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     
     reading = [[ReadmillReading alloc] initWithAPIDictionary:readingDictionary
                                                   apiWrapper:mockWrapper];
