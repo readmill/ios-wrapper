@@ -216,6 +216,16 @@
     if (self.contentViewController) {
         [contentContainerView setFrame:self.contentViewController.view.bounds];
         [contentContainerView setCenter:self.view.center];
+        CALayer *shadowLayer = contentContainerView.layer;
+        
+        [shadowLayer setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];
+        [shadowLayer setShadowColor:[[UIColor blackColor] CGColor]];
+        [shadowLayer setShadowRadius:8.0];
+        [shadowLayer setShadowOpacity:0.5];
+        [shadowLayer setShadowOffset:CGSizeMake(0.0, 5.0)];
+        [shadowLayer setCornerRadius:3];
+        
+        [self.contentViewController.view.layer setCornerRadius:3];
         [contentContainerView addSubview:self.contentViewController.view];
     }
 }
@@ -243,21 +253,13 @@
     [backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
     [backgroundView setOpaque:NO];
     [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    
     [self setView:backgroundView];
 
     contentContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 648.0, 440.0)];
     [contentContainerView setBackgroundColor:[UIColor whiteColor]];
-    [[contentContainerView layer] setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];
-    [[contentContainerView layer] setShadowColor:[[UIColor blackColor] CGColor]];
-    [[contentContainerView layer] setShadowRadius:8.0];
-    [[contentContainerView layer] setShadowOpacity:0.5];
-    [[contentContainerView layer] setShadowOffset:CGSizeMake(0.0, 5.0)];
     [contentContainerView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin];
-    
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
-
-    [self.view addSubview:contentContainerView];
+    [backgroundView addSubview:contentContainerView];
     
     [self displayContentViewController];
 }
