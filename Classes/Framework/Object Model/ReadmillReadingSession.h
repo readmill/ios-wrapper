@@ -24,6 +24,7 @@
 #import "ReadmillAPIWrapper.h"
 
 @class ReadmillReadingSession;
+@class ReadmillPing;
 
 @protocol ReadmillPingDelegate <NSObject>
 
@@ -122,6 +123,14 @@
  is possible to ensure progress data is synchronized.
  */
 + (void)pingArchived:(ReadmillAPIWrapper *)wrapper;
+
+/*!
+ @param ping The ReadmillPing to archive
+ @brief Try to send all saved "Pings" that have been archived.
+ 
+ Important: You should never need to call this method.
+ */
+- (void)archiveFailedPing:(ReadmillPing *)ping;
 
 + (BOOL)isReadingSessionIdentifierValid;
 - (BOOL)isReadingSessionIdentifierValid;
