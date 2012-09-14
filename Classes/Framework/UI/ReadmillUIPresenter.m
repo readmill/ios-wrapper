@@ -102,6 +102,8 @@
 {
     [self retain];
     
+    _isVisible = YES;
+    
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self
            selector:@selector(contentViewControllerShouldBeDismissed:)
@@ -160,6 +162,8 @@
 
 - (void)dismissPresenterAnimated:(BOOL)animated 
 {
+    _isVisible = NO;
+    
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self
                   name:ReadmillUIPresenterShouldDismissViewNotification
@@ -217,7 +221,6 @@
         [contentContainerView setFrame:self.contentViewController.view.bounds];
         [contentContainerView setCenter:self.view.center];
         CALayer *shadowLayer = contentContainerView.layer;
-        
         [shadowLayer setShadowPath:[UIBezierPath bezierPathWithRect:contentContainerView.bounds].CGPath];
         [shadowLayer setShadowColor:[[UIColor blackColor] CGColor]];
         [shadowLayer setShadowRadius:8.0];
@@ -226,6 +229,7 @@
         [shadowLayer setCornerRadius:3];
         
         [self.contentViewController.view.layer setCornerRadius:3];
+        [self.contentViewController.view setClipsToBounds:YES];
         [contentContainerView addSubview:self.contentViewController.view];
     }
 }

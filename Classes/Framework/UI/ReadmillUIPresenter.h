@@ -50,6 +50,13 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
 @property (nonatomic, readonly, retain) UIViewController *contentViewController;
 
 /*!
+ @property isVisible
+ @brief   Yes if presenter is visible on screen, else NO
+ */
+@property (nonatomic, readonly) BOOL isVisible;
+
+
+/*!
  @param theParentViewController The view controller that this presenter should be displayed in.
  @param animated Whether to animate the view onto the screen.
  @brief   Present a view controller onto the screen.
