@@ -85,7 +85,8 @@
     fullRotation.toValue = [NSNumber numberWithFloat:(2*M_PI)]; 
     fullRotation.duration = 1.0; 
     fullRotation.repeatCount = HUGE_VALF;
-    [self.layer addAnimation:fullRotation forKey:@"spinner"]; 
+    fullRotation.removedOnCompletion = NO;
+    [self.layer addAnimation:fullRotation forKey:@"spinner"];
 }
 - (void)stopAnimating 
 {
