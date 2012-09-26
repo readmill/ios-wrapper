@@ -86,7 +86,7 @@
     fullRotation.duration = 1.0; 
     fullRotation.repeatCount = HUGE_VALF;
     fullRotation.removedOnCompletion = NO;
-    [self.layer addAnimation:fullRotation forKey:@"spinner"];
+    [self.layer addAnimation:fullRotation forKey:@"spinner"]; 
 }
 - (void)stopAnimating 
 {

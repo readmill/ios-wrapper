@@ -31,6 +31,7 @@ typedef NSUInteger ReadmillBookId;
 typedef NSUInteger ReadmillReadingId;
 typedef NSUInteger ReadmillHighlightId;
 typedef NSUInteger ReadmillUserId;
+typedef NSUInteger ReadmillLibraryItemId;
 typedef float ReadmillReadingProgress; // float, 0-1 (%)
 typedef NSUInteger ReadmillPingDuration; // Integer, seconds
 typedef double CLLocationDegrees;
@@ -670,6 +671,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @brief   Get the currently logged in user. 
  */
 - (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 
 #pragma mark -
 #pragma mark Unprepared requests
