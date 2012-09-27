@@ -673,6 +673,37 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 - (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 
+#pragma mark - 
+#pragma mark - Library
+
+/*!
+ @param libraryItemId The id of the library item to get.
+ @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
+ @brief Get a library item.
+ */
+- (void)libraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param libraryItemId The id of the library item to update.
+ @param parameters An NSDictionary containing the changes you wish to make.
+ @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
+ @brief Update a library item.
+ @example parameters = @ { @"library_item" : @ { @"state" : "archived" } }
+ */
+- (void)updateLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+                     parameters:(NSDictionary *)parameters
+              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param localIds A set containing library item ids already stored locally.
+ @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
+ @brief Returns a list of actions to be made on the client to be synchronized with the users cloud storage, 
+        also called Library. There are only two different actions, delete and download.
+ */
+- (void)libraryChangesWithLocalIds:(NSSet *)localIds completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+
 #pragma mark -
 #pragma mark Unprepared requests
 /*!

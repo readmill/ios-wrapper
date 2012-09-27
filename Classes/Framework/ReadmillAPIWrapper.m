@@ -844,6 +844,33 @@
 
 
 #pragma mark -
+#pragma mark - Library
+
+- (NSURL *)urlForLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@v2/me/library/%d", [self apiEndPoint], libraryItemId]];
+    NSLog(@"url: %@", url);
+    return url;
+}
+
+- (void)libraryItemWithId:(ReadmillLibraryItemId)libraryItemId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    [self sendGetRequestToURL:[self urlForLibraryItemWithId:libraryItemId]
+               withParameters:nil
+   shouldBeCalledUnauthorized:NO
+            completionHandler:completionHandler];
+}
+
+- (void)updateLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+                     parameters:(NSDictionary *)parameters
+              completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    [self sendPutRequestToURL:[self urlForLibraryItemWithId:libraryItemId]
+               withParameters:parameters
+            completionHandler:completionHandler];
+}
+
+#pragma mark -
 #pragma mark UI URLs
 
 - (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN 
