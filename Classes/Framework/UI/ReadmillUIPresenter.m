@@ -260,7 +260,7 @@
     [self setView:backgroundView];
 
     contentContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 648.0, 440.0)];
-    [contentContainerView setBackgroundColor:[UIColor whiteColor]];
+    [contentContainerView setBackgroundColor:[UIColor clearColor]];
     [contentContainerView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin];
     [contentContainerView addObserver:self forKeyPath:@"frame" options:0 context:nil];
     [backgroundView addSubview:contentContainerView];
