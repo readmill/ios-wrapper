@@ -44,7 +44,8 @@
         CGRect frame = [self frame];
         frame.size = [[self image] size];
         [self setFrame:frame];
-        [self setHidden:YES];        
+        [self setHidden:YES];
+
     }
     return self;
 }
@@ -80,14 +81,25 @@
 {
     [self setHidden:NO];
     CABasicAnimation *fullRotation; 
-    fullRotation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"]; 
+    fullRotation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     fullRotation.fromValue = [NSNumber numberWithFloat:0]; 
-    fullRotation.toValue = [NSNumber numberWithFloat:(2*M_PI)]; 
+    fullRotation.toValue = [NSNumber numberWithFloat:(2 * M_PI)];
     fullRotation.duration = 1.0; 
     fullRotation.repeatCount = HUGE_VALF;
     fullRotation.removedOnCompletion = NO;
-    [self.layer addAnimation:fullRotation forKey:@"spinner"]; 
+    [self.layer addAnimation:fullRotation forKey:@"spinner"];
 }
+
+/*
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetAllowsAntialiasing(context, true);
+    CGContextSetShouldAntialias(context, true);
+
+ 
+}*/
+
 - (void)stopAnimating 
 {
     [self.layer removeAllAnimations];

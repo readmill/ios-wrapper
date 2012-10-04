@@ -645,6 +645,18 @@
 #pragma mark -
 #pragma mark - Highlights
 
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId
+                             parameters:(NSDictionary *)parameters
+                      completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights",
+                                                 [self readingsEndpoint], readingId]];
+    
+    [self sendPostRequestToURL:highlightsURL
+                withParameters:parameters
+             completionHandler:completionHandler];
+}
+
 - (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
                         highlightedText:(NSString *)highlightedText
                                locators:(NSDictionary *)locators
@@ -652,6 +664,7 @@
                           highlightedAt:(NSDate *)highlightedAt 
                                 comment:(NSString *)comment
                             connections:(NSArray *)connections
+                       isCopyRestricted:(BOOL)isCopyRestricted
                       completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {       
     NSAssert(0 < readingId, @"readingId: %d is invalid.", readingId);
@@ -667,7 +680,9 @@
                            forKey:kReadmillAPIHighlightContentKey];
     [highlightParameters setValue:[NSNumber numberWithFloat:position] 
                            forKey:kReadmillAPIHighlightPositionKey];
-        
+    [highlightParameters setValue:[NSNumber numberWithBool:isCopyRestricted]
+                           forKey:@"copy_restricted"];
+    
     if (comment != nil && 0 < [comment length]) {
         [parameters setValue:comment forKey:kReadmillAPIHighlightCommentKey];
     }

@@ -560,6 +560,10 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 #pragma mark -
 #pragma mark Highlights
 
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId
+                             parameters:(NSDictionary *)parameters
+                      completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 /*!
  @param readingId The id of the reading you want to create a highlight in.
  @param highlightedText The highlighted (formatted) text
@@ -569,17 +573,19 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param highlightedAt (optional) An NSDate object representing the date the resource was created, pass nil for "now". 
  @param comment (optional) A comment on the highlight
  @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+  @param isCopyRestricted A bool stating whether the highlight has restrictions
     IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Send a highlighted text snippet to Readmill.
  */
-- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId
                         highlightedText:(NSString *)highlightedText
                                locators:(NSDictionary *)locators
                                position:(ReadmillReadingProgress)position
-                          highlightedAt:(NSDate *)highlightedAtOrNil
-                                comment:(NSString *)commentOrNil
-                            connections:(NSArray *)connectionsOrNil
+                          highlightedAt:(NSDate *)highlightedAt
+                                comment:(NSString *)comment
+                            connections:(NSArray *)connections
+                       isCopyRestricted:(BOOL)isCopyRestricted
                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
