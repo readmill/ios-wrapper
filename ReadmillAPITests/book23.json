@@ -1,0 +1,33 @@
+{
+    "book": {
+        "id": 23,
+        "title": "Metamorphosis",
+        "author": "Franz Kafka",
+        "identifier": "1435726197",
+        "story": "Classic story of self-discovery, told in a unique manner by Kafka.",
+        "published_at": "2008-06-25",
+        "language": "en",
+        "permalink": "metamorphosis",
+        "permalink_url": "http://stage-readmill.com/books/metamorphosis",
+        "cover_url": "https://readmill-staging-assets.s3.amazonaws.com/covers/87eaa1acb1962e72d5972f0721484b0b-medium.png?1343832985",
+        "assets": {
+            "items": [
+                {
+                    "asset": {
+                        "vendor": "feedbooks",
+                        "uri": "http://www.feedbooks.com/book/8.epub",
+                        "acquisition_type": "direct"
+                    }
+                },
+                {
+                    "asset": {
+                        "vendor": "feedbooks",
+                        "uri": "http://www.feedbooks.com/book/8",
+                        "acquisition_type": "direct"
+                    }
+                }
+            ]
+        }
+    },
+    "status": 200
+}

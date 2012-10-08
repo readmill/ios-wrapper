@@ -44,10 +44,10 @@
 
 @property (readwrite) NSUInteger followerCount;
 @property (readwrite) NSUInteger followingCount;
-@property (readwrite) NSUInteger abandonedBookCount;
-@property (readwrite) NSUInteger finishedBookCount;
-@property (readwrite) NSUInteger interestingBookCount;
-@property (readwrite) NSUInteger openBookCount;
+@property (readwrite) NSUInteger booksAbandonedCount;
+@property (readwrite) NSUInteger booksFinishedCount;
+@property (readwrite) NSUInteger booksInterestingCount;
+@property (readwrite) NSUInteger booksReadingCount;
 
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 
@@ -126,6 +126,7 @@
 - (void)updateWithAPIDictionary:(NSDictionary *)apiDict 
 {
     NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
+    cleanedDict = [cleanedDict valueForKey:kReadmillAPIUserKey];
     
     [self setCity:[cleanedDict valueForKey:kReadmillAPIUserCityKey]];
     [self setCountry:[cleanedDict valueForKey:kReadmillAPIUserCountryKey]];
@@ -151,38 +152,13 @@
     
     [self setFollowerCount:[[cleanedDict valueForKey:kReadmillAPIUserFollowerCountKey] unsignedIntegerValue]];
     [self setFollowingCount:[[cleanedDict valueForKey:kReadmillAPIUserFollowingCountKey] unsignedIntegerValue]];
-    [self setAbandonedBookCount:[[cleanedDict valueForKey:kReadmillAPIUserAbandonedBooksKey] unsignedIntegerValue]];
-    [self setFinishedBookCount:[[cleanedDict valueForKey:kReadmillAPIUserFinishedBooksKey] unsignedIntegerValue]];
-    [self setInterestingBookCount:[[cleanedDict valueForKey:kReadmillAPIUserInterestingBooksKey] unsignedIntegerValue]];
-    [self setOpenBookCount:[[cleanedDict valueForKey:kReadmillAPIUserOpenBooksKey] unsignedIntegerValue]];
+    [self setBooksAbandonedCount:[[cleanedDict valueForKey:kReadmillAPIUserBooksAbandonedCountKey] unsignedIntegerValue]];
+    [self setBooksFinishedCount:[[cleanedDict valueForKey:kReadmillAPIUserBooksFinishedCountKey] unsignedIntegerValue]];
+    [self setBooksInterestingCount:[[cleanedDict valueForKey:kReadmillAPIUserBooksInterestingCountKey] unsignedIntegerValue]];
+    [self setBooksReadingCount:[[cleanedDict valueForKey:kReadmillAPIUserBooksReadingCountKey] unsignedIntegerValue]];
     
     [self setAuthenticationToken:[cleanedDict valueForKey:kReadmillAPIUserAuthenticationToken]];
 }
-
-@synthesize avatarImageData;
-
-@synthesize city;
-@synthesize country;
-@synthesize userDescription;
-@synthesize firstName;
-@synthesize lastName;
-@synthesize fullName;
-@synthesize userName;
-@synthesize authenticationToken;
-@synthesize avatarURL;
-@synthesize permalinkURL;
-@synthesize websiteURL;
-
-@synthesize userId;
-
-@synthesize followerCount;
-@synthesize followingCount;
-@synthesize abandonedBookCount;
-@synthesize finishedBookCount;
-@synthesize interestingBookCount;
-@synthesize openBookCount;
-
-@synthesize apiWrapper;
 
 - (void)dealloc 
 {
@@ -267,18 +243,18 @@
 
 #pragma mark -
 
-- (void)findOrCreateBookWithISBN:(NSString *)isbn
-                           title:(NSString *)title 
-                          author:(NSString *)author
-                createIfNotFound:(BOOL)createIfNotFound
-                        delegate:(id <ReadmillBookFindingDelegate>)delegate 
+- (void)findOrCreateBookWithIdentifier:(NSString *)identifier
+                                 title:(NSString *)title
+                                author:(NSString *)author
+                      createIfNotFound:(BOOL)createIfNotFound
+                              delegate:(id <ReadmillBookFindingDelegate>)delegate 
 {
-    if (!([isbn length] || ([author length] && [title length]))) {
+    if (!([identifier length] || ([author length] && [title length]))) {
         // Need at least ISBN or (author and title)
         NSError *error = [NSError errorWithDomain:kReadmillDomain 
                                              code:0 
                                          userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                   @"Insufficient arguments. Need either ISBN or author & title.", NSLocalizedDescriptionKey, nil]];
+                                                   @"Insufficient arguments. Need either identifier or author & title.", NSLocalizedDescriptionKey, nil]];
 
         return [delegate readmillUser:self failedToFindBookWithError:error];
     }
@@ -300,7 +276,7 @@
     
     [[self apiWrapper] findOrCreateBookWithTitle:title 
                                           author:author
-                                            isbn:isbn 
+                                      identifier:identifier
                                completionHandler:completionBlock];    
 }
 
@@ -308,33 +284,33 @@
                    author:(NSString *)author 
                  delegate:(id<ReadmillBookFindingDelegate>)delegate
 {
-    [self findBookWithISBN:nil 
-                     title:title
-                    author:author 
-                  delegate:delegate];
+    [self findBookWithIdentifier:nil
+                           title:title
+                          author:author
+                        delegate:delegate];
 }
-- (void)findBookWithISBN:(NSString *)isbn
-                   title:(NSString *)title 
-                  author:(NSString *)author 
-                delegate:(id <ReadmillBookFindingDelegate>)delegate 
+- (void)findBookWithIdentifier:(NSString *)identifier
+                         title:(NSString *)title
+                        author:(NSString *)author
+                      delegate:(id <ReadmillBookFindingDelegate>)delegate 
 {    
-    [self findOrCreateBookWithISBN:isbn 
-                             title:title 
-                            author:author
-                  createIfNotFound:NO 
-                          delegate:delegate];
+    [self findOrCreateBookWithIdentifier:identifier
+                                   title:title
+                                  author:author
+                        createIfNotFound:NO
+                                delegate:delegate];
 }
 
-- (void)findOrCreateBookWithISBN:(NSString *)isbn 
-                           title:(NSString *)title 
-                          author:(NSString *)author
-                        delegate:(id <ReadmillBookFindingDelegate>)delegate
+- (void)findOrCreateBookWithIdentifier:(NSString *)identifier
+                                 title:(NSString *)title
+                                author:(NSString *)author
+                              delegate:(id <ReadmillBookFindingDelegate>)delegate
 {
-    [self findOrCreateBookWithISBN:isbn 
-                             title:title
-                            author:author 
-                  createIfNotFound:YES
-                          delegate:delegate];
+    [self findOrCreateBookWithIdentifier:identifier
+                                   title:title
+                                  author:author
+                        createIfNotFound:YES
+                                delegate:delegate];
 }
 
 #pragma mark -
@@ -354,7 +330,7 @@
         } else {
             
             ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary
-                                                                            apiWrapper:bself->apiWrapper] autorelease];
+                                                                            apiWrapper:bself->_apiWrapper] autorelease];
             [book updateWithAPIDictionary:[readingDictionary valueForKey:kReadmillAPIReadingBookKey]];
             
             [delegate readmillUser:bself

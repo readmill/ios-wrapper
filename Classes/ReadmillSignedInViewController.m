@@ -141,10 +141,10 @@
 
 - (IBAction)findBookButtonClicked:(id)sender
 {
-    [user findOrCreateBookWithISBN:[isbnTextField text]
-                     title:[titleTextField text] 
-                    author:[authorTextField text]
-                  delegate:self];
+    [user findOrCreateBookWithIdentifier:[isbnTextField text]
+                                   title:[titleTextField text]
+                                  author:[authorTextField text]
+                                delegate:self];
 }
 #pragma mark -
 #pragma mark Linking to a Book
@@ -161,61 +161,6 @@
                             delegate:self];
 }
 
-#pragma mark STEP 1: Find a book in Readmill.
-
-- (IBAction)connectButtonClicked:(id)sender
-{    
-    if (![self reading]) {        
-        if ([titleTextField text] || [authorTextField text] || [isbnTextField text]) {
-        
-            // Connect a book
-            ReadmillConnectBookUI *readmillConnectBookUI = [[ReadmillConnectBookUI alloc] initWithUser:[self user] 
-                                                                                                  ISBN:[isbnTextField text]
-                                                                                                 title:[titleTextField text]
-                                                                                                author:[authorTextField text]];
-            
-            [readmillConnectBookUI setDelegate:self];
-
-            ReadmillUIPresenter *readmillUIPresenter = [[ReadmillUIPresenter alloc] initWithContentViewController:readmillConnectBookUI];    
-            [readmillUIPresenter presentInViewController:self animated:YES];
-                
-            [readmillConnectBookUI release];
-            [readmillUIPresenter release];
-        }
-    } else {
-        // View the reading
-        ReadmillViewReadingUI *popup = [[ReadmillViewReadingUI alloc] initWithReading:[self reading]];
-        [popup setDelegate:self];
-        
-        ReadmillUIPresenter *presenter = [[ReadmillUIPresenter alloc] initWithContentViewController:popup];
-        
-        [presenter presentInViewController:self animated:YES];
-        [presenter release];
-    }
-}
-
-#pragma mark STEP 4: Handle book connection delegate methods. 
-
-- (void)connect:(ReadmillConnectBookUI *)connectionUI didSkipLinkingToBook:(ReadmillBook *)aBook {
-    
-    // STEP 4.1 The user opted to not link ther book to Readmill.
-    
-}
-
-- (void)connect:(ReadmillConnectBookUI *)connectionUI didFailToLinkToBook:(ReadmillBook *)aBook withError:(NSError *)error {
-    
-    // STEP 2.2: Maybe we're not connected to the internet?
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't Link Book"
-                                                    message:[error localizedDescription]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:nil];
-    
-    [[alert autorelease] show];
-    
-}
-
 #pragma mark STEP 5: We successfully linked a book. Create a session object and store it.
 
 - (void)ping:(NSTimer *)timer 
@@ -229,58 +174,6 @@
     [session pingWithProgress:0.2 
                  pingDuration:kPingDuration
                      delegate:self];
-}
-- (void)connect:(ReadmillConnectBookUI *)connectionUI didSucceedToLinkToBook:(ReadmillBook *)aBook withReading:(ReadmillReading *)aReading 
-{
-    NSLog(@"didSucceedToLinkToBook: %@", aBook);
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Successfully linked book"
-                                                    message:nil
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    
-    [[alert autorelease] show];
-
-    [self setReading:aReading];
-
-    [connectButton setTitle:@"View reading" forState:UIControlStateNormal];
-        
-    [NSTimer scheduledTimerWithTimeInterval:kPingDuration 
-                                     target:self
-                                   selector:@selector(ping:) 
-                                   userInfo:nil 
-                                    repeats:YES];
-    
-
-}
-
-#pragma mark -
-#pragma mark Viewing A Read
-
-#pragma mark STEP 1: Handle delegate methods.
-
-- (void)viewReadingUIWillCloseWithNoAction:(ReadmillViewReadingUI *)readingUI 
-{    
-    // The user decided not to update their read status in Readmill.
-}
-
-#pragma mark STEP 2: Successfully updated read status. 
-
-- (void)viewReadingUI:(ReadmillViewReadingUI *)readUI didFinishReading:(ReadmillReading *)aReading 
-{    
-    // The read object will now be updated with a statue of ReadingStateFinished and possibly an updated closing remark. 
-}
-
-- (void)viewReadingUI:(ReadmillViewReadingUI *)readUI didFailToFinishReading:(ReadmillReading *)aReading withError:(NSError *)error 
-{    
-    // There was an error when trying to update status.
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could Not Finish Read"
-                                                    message:[error localizedDescription]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:nil];
-    
-    [[alert autorelease] show];
 }
 
 #pragma mark ReadmillBookFindingDelegate

@@ -23,7 +23,7 @@
     mockWrapper = [[OCMockObject partialMockForObject:wrapper] retain];
     
     
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"reading22533"
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"reading47783"
                                                                       ofType:@"json"];
     
     NSData *data = [NSData dataWithContentsOfFile:path];    

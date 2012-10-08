@@ -44,43 +44,7 @@
 
 @end
 
-@interface ReadmillReading : NSObject {
-@private
-    
-    NSDate *dateAbandoned;
-    NSDate *dateCreated;
-    NSDate *dateFinished;
-    NSDate *dateModified;
-    NSDate *dateStarted;
-    
-    NSTimeInterval timeSpent, estimatedTimeLeft;
-    
-    NSString *closingRemark;
-    
-    BOOL isPrivate;
-    
-    ReadmillReadingState state;
-    
-    ReadmillBookId bookId;
-    ReadmillUserId userId;
-    ReadmillReadingId readingId;
-    
-    ReadmillAPIWrapper *apiWrapper;
-    
-    ReadmillReadingProgress progress;
-    
-    NSUInteger highlightCount;
-    
-    // URLs
-    NSURL *permalinkURL;
-    NSURL *uri;
-    NSURL *commentsURI;
-    NSURL *periodsURI;
-    NSURL *locationsURI;
-    NSURL *highlightsURI;
-    
-    ReadmillUser *user;
-}
+@interface ReadmillReading : NSObject
 
 /*!
  @param apiDict An API reading dictionary.

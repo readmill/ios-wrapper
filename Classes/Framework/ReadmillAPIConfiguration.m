@@ -19,14 +19,14 @@
 	
 	if (self = [super init]) {
         
-        accessTokenURL = [[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [anAuthURL absoluteString]]] retain];
+        _accessTokenURL = [[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [anAuthURL absoluteString]]] retain];
 
-		apiBaseURL = [anApiBaseURL retain];
-		authURL = [anAuthURL retain];
+		_apiBaseURL = [anApiBaseURL retain];
+		_authURL = [anAuthURL retain];
 		
-		clientID = [aClientID copy];
-		clientSecret = [aClientSecret copy];
-		redirectURL = [aRedirectURL retain];
+		_clientID = [aClientID copy];
+		_clientSecret = [aClientSecret copy];
+		_redirectURL = [aRedirectURL retain];
         
 	}
 	return self;
@@ -54,26 +54,26 @@
 
 -(void)dealloc 
 {
-    [accessTokenURL release]; accessTokenURL = nil;
-	[apiBaseURL release]; apiBaseURL = nil;
-	[authURL release]; authURL = nil;
+    [_accessTokenURL release]; _accessTokenURL = nil;
+	[_apiBaseURL release]; _apiBaseURL = nil;
+	[_authURL release]; _authURL = nil;
 	
-	[clientID release]; clientID = nil;
-	[clientSecret release]; clientSecret = nil;
-	[redirectURL release]; redirectURL = nil;
+	[_clientID release]; _clientID = nil;
+	[_clientSecret release]; _clientSecret = nil;
+	[_redirectURL release]; _redirectURL = nil;
 	[super dealloc];
 }
 
 #pragma mark -
 #pragma mark - Synthesize
 
-@synthesize apiBaseURL;
-@synthesize accessTokenURL;
-@synthesize authURL;
+@synthesize apiBaseURL = _apiBaseURL;
+@synthesize accessTokenURL = _accessTokenURL;
+@synthesize authURL = _authURL;
 
-@synthesize clientID;
-@synthesize clientSecret;
-@synthesize redirectURL;
+@synthesize clientID = _clientID;
+@synthesize clientSecret = _clientSecret;
+@synthesize redirectURL = _redirectURL;
 
 #pragma mark - 
 #pragma mark - NSCoding

@@ -8,22 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString * const kLiveAPIEndPoint = @"https://api.readmill.com/";
-static NSString * const kLiveAuthorizationUri = @"https://m.readmill.com/";
+// API base URL
+static NSString * const kLiveAPIEndPoint = @"https://api.readmill.com/v2";
+static NSString * const kStagingAPIEndPoint = @"http://api.stage-readmill.com/v2";
 
-static NSString * const kStagingAPIEndPoint = @"http://api.stage-readmill.com/";
+// OAuth URL
+static NSString * const kLiveAuthorizationUri = @"https://m.readmill.com/";
 static NSString * const kStagingAuthorizationUri = @"http://m.stage-readmill.com/";
 
-@interface ReadmillAPIConfiguration : NSObject <NSCoding> {
-
-    NSURL *accessTokenURL;
-    NSURL *apiBaseURL;
-	NSURL *authURL;
-	
-	NSString *clientID;
-	NSString *clientSecret;
-	NSURL *redirectURL;
-}
+@interface ReadmillAPIConfiguration : NSObject <NSCoding>
 
 @property (nonatomic, retain) NSURL *accessTokenURL;
 @property (nonatomic, retain) NSURL *apiBaseURL;

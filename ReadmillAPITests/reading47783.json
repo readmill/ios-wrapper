@@ -1,0 +1,38 @@
+{
+    "reading": {
+        "id": 47783,
+        "state": "finished",
+        "private": false,
+        "recommended": false,
+        "closing_remark": "A closing remark.",
+        "started_at": "2012-02-20T20:47:02Z",
+        "touched_at": "2012-07-18T20:10:24Z",
+        "ended_at": "2012-04-05T15:34:01Z",
+        "duration": 31150,
+        "progress": 1,
+        "estimated_time_left": 0,
+        "average_period_time": 1415,
+        "book": {
+            "id": 2855,
+            "title": "Steve Jobs",
+            "author": "Walter Isaacson",
+            "permalink": "steve-jobs",
+            "permalink_url": "http://stage-readmill.com/books/steve-jobs",
+            "cover_url": "https://readmill-staging-assets.s3.amazonaws.com/covers/530281128f9cc98c346b6af29fa29483-medium.png?1344523475"
+        },
+        "user": {
+            "id": 49,
+            "username": "martinhwasser",
+            "firstname": "Martin",
+            "fullname": "Martin Hwasser",
+            "avatar_url": "http://s3-eu-west-1.amazonaws.com/readmill-staging-assets/assets/default-avatar-medium-7db8a5328c515cad97a0800d6ac23419.png",
+            "followers_count": 83,
+            "followings_count": 104,
+            "permalink_url": "http://stage-readmill.com/martinhwasser"
+        },
+        "permalink_url": "http://stage-readmill.com/martinhwasser/reads/steve-jobs",
+        "comments_count": 3,
+        "highlights_count": 33
+    },
+    "status": 200
+}

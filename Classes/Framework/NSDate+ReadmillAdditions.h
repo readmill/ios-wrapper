@@ -11,4 +11,5 @@
 @interface NSDate (ReadmillAdditions)
 
 - (NSString *)stringWithRFC3339Format;
+
 @end

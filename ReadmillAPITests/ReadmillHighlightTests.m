@@ -61,7 +61,8 @@
                                         position:progress 
                                    highlightedAt:date 
                                          comment:@"a comment" 
-                                     connections:nil 
+                                     connections:nil
+                                    isCopyRestricted:NO
                                completionHandler:nil];
     [mockWrapper verify];
 }

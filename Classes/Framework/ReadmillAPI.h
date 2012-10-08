@@ -11,9 +11,9 @@
 
 #import "ReadmillAPIWrapper.h"
 #import "ReadmillUser.h"
+#import "ReadmillReading.h"
+#import "ReadmillBook.h"
 #import "ReadmillUIPresenter.h"
-#import "ReadmillViewReadingUI.h"
-#import "ReadmillConnectBookUI.h"
 #import "ReadmillSpinner.h"
 
 #endif

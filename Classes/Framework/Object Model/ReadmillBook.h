@@ -23,24 +23,7 @@
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
 
-@interface ReadmillBook : NSObject <NSCoding> {
-@private
-    
-    NSString *author;
-    NSString *isbn;
-    NSString *language;
-    NSString *summary;
-    NSString *title;
-    
-    NSURL *coverImageURL;
-    NSURL *metaDataURL;
-    NSURL *permalinkURL;
-    
-    ReadmillBookId bookId;
-    ReadmillBookId rootEditionId;
-    
-    NSDate *datePublished;
-}
+@interface ReadmillBook : NSObject <NSCoding>
 
 /*!
  @param apiDict The NSDictionary object describing the book.
@@ -65,10 +48,10 @@
 @property (readonly, copy) NSString *author;
 
 /*!
- @property  isbn
- @brief The book's ISBN.  
+ @property  identifier
+ @brief The book's identifier (ISBN or similar).
  */
-@property (readonly, copy) NSString *isbn;
+@property (readonly, copy) NSString *identifier;
 
 /*!
  @property  language

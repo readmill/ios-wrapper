@@ -23,7 +23,7 @@
 #import <UIKit/UIKit.h>
 #import "ReadmillAPI.h"
 
-@interface ReadmillSignedInViewController : UIViewController <ReadmillConnectBookUIDelegate, ReadmillViewReadingUIDelegate, ReadmillBookFindingDelegate, ReadmillReadingFindingDelegate, ReadmillReadingUpdatingDelegate, ReadmillPingDelegate> {
+@interface ReadmillSignedInViewController : UIViewController <ReadmillBookFindingDelegate, ReadmillReadingFindingDelegate, ReadmillReadingUpdatingDelegate, ReadmillPingDelegate> {
     
 @private
     ReadmillBook *book;
@@ -41,7 +41,6 @@
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 
 - (IBAction)findBookButtonClicked:(id)sender;
-- (IBAction)connectButtonClicked:(id)sender;
 - (IBAction)signOutButtonClicked:(id)sender;
 
 @end

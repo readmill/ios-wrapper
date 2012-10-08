@@ -83,19 +83,27 @@
 }
 
 - (void)updateWithAPIDictionary:(NSDictionary *)apiDict 
-{    
-    NSDictionary *cleanedDict = [apiDict dictionaryByRemovingNullValues];
-    
-    NSDictionary *userDictionary = [apiDict objectForKey:kReadmillAPIUserKey];
-    if (userDictionary) {
+{
+    apiDict = [apiDict dictionaryByRemovingNullValues];
+    NSDictionary *cleanedDict = [apiDict valueForKey:kReadmillAPIReadingKey];
+
+    NSDictionary *userDictionary = [cleanedDict objectForKey:kReadmillAPIUserKey];
+    if (userDictionary) {        
         // We might get a user_id only or a brief JSON object representing the user
         if ([self user]) {
-            [[self user] updateWithAPIDictionary:userDictionary];
+            [[self user] updateWithAPIDictionary:cleanedDict];
         } else {
-            [self setUser:[[[ReadmillUser alloc] initWithAPIDictionary:userDictionary
+            [self setUser:[[[ReadmillUser alloc] initWithAPIDictionary:cleanedDict
                                                             apiWrapper:self.apiWrapper] autorelease]];
         }
     }
+    
+    if ([self user]) {
+        [self setUserId:[[self user] userId]];
+    } else {
+        [self setUserId:[[[cleanedDict objectForKey:kReadmillAPIUserKey] objectForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
+    }
+    
     [self setDateAbandoned:[[cleanedDict objectForKey:kReadmillAPIReadingDateAbandonedKey] dateWithRFC3339Formatting]];
     [self setDateCreated:[[cleanedDict objectForKey:kReadmillAPIReadingDateCreatedKey] dateWithRFC3339Formatting]];
     [self setDateFinished:[[cleanedDict objectForKey:kReadmillAPIReadingDateFinishedKey] dateWithRFC3339Formatting]];
@@ -104,14 +112,9 @@
     [self setClosingRemark:[cleanedDict objectForKey:kReadmillAPIReadingClosingRemarkKey]];
     
     [self setIsPrivate:[[cleanedDict objectForKey:kReadmillAPIReadingPrivateKey] boolValue]];
-    
-    [self setState:[[cleanedDict objectForKey:kReadmillAPIReadingStateKey] unsignedIntegerValue]];
-    
-    if ([self user]) {
-        [self setUserId:[user userId]];
-    } else {
-        [self setUserId:[[[cleanedDict objectForKey:kReadmillAPIUserKey] objectForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
-    }
+    NSString *readingStateString = [cleanedDict objectForKey:kReadmillAPIReadingStateKey];
+    [self setState:[ReadmillReading readingStateFromReadingStateString:readingStateString]];
+
     [self setBookId:[[[cleanedDict objectForKey:kReadmillAPIReadingBookKey] objectForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
     [self setReadingId:[[cleanedDict objectForKey:kReadmillAPIReadingIdKey] unsignedIntegerValue]];
     
@@ -142,36 +145,6 @@
     return [[[ReadmillReadingSession alloc] initWithAPIWrapper:[self apiWrapper] readingId:[self readingId]] autorelease];
 }
 
-@synthesize dateAbandoned;
-@synthesize dateCreated;
-@synthesize dateFinished;
-@synthesize dateModified;
-@synthesize dateStarted;
-@synthesize estimatedTimeLeft;
-@synthesize timeSpent;
-
-@synthesize permalinkURL;
-@synthesize uri;
-@synthesize commentsURI;
-@synthesize periodsURI;
-@synthesize locationsURI;
-@synthesize highlightsURI;
-
-@synthesize closingRemark;
-@synthesize isPrivate;
-@synthesize isRecommended;
-@synthesize state;
-
-@synthesize bookId;
-@synthesize userId;
-@synthesize readingId;
-
-@synthesize progress;
-
-@synthesize user;
-@synthesize apiWrapper;
-     
-@synthesize highlightCount;
 
 #pragma mark -
 #pragma mark - Dealloc
@@ -197,6 +170,22 @@
     [self setPermalinkURL:nil];
     
     [super dealloc];
+}
+
++ (ReadmillReadingState)readingStateFromReadingStateString:(NSString *)readingStateString
+{
+    ReadmillReadingState readingState;
+    if ([readingStateString isEqualToString:ReadmillReadingStateInterestingKey]) {
+        readingState = ReadingStateInteresting;
+    } else if ([readingStateString isEqualToString:ReadmillReadingStateReadingKey]) {
+        readingState = ReadingStateReading;
+    } else if ([readingStateString isEqualToString:ReadmillReadingStateFinishedKey]) {
+        readingState = ReadingStateFinished;
+    } else if ([readingStateString isEqualToString:ReadmillReadingStateAbandonedKey]) {
+        readingState = ReadingStateAbandoned;
+    }
+    
+    return readingState;
 }
 
 #pragma mark -

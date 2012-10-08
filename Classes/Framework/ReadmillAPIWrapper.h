@@ -54,6 +54,12 @@ typedef enum {
     
 } ReadmillReadingState;
 
+// State strings
+static NSString * const ReadmillReadingStateInterestingKey = @"interesting";
+static NSString * const ReadmillReadingStateReadingKey = @"reading";
+static NSString * const ReadmillReadingStateFinishedKey = @"finished";
+static NSString * const ReadmillReadingStateAbandonedKey = @"abandoned";
+
 // General 
 
 static NSString * const kReadmillDomain = @"com.readmill";
@@ -68,7 +74,7 @@ static NSString * const kReadmillAPIBookAuthorKey = @"author";
 static NSString * const kReadmillAPIBookLanguageKey = @"language";
 static NSString * const kReadmillAPIBookSummaryKey = @"story";
 static NSString * const kReadmillAPIBookTitleKey = @"title";
-static NSString * const kReadmillAPIBookISBNKey = @"isbn";
+static NSString * const kReadmillAPIBookIdentifierKey = @"identifier";
 
 static NSString * const kReadmillAPIBookCoverImageURLKey = @"cover_url";
 static NSString * const kReadmillAPIBookMetaDataURLKey = @"metadata_uri";
@@ -82,16 +88,16 @@ static NSString * const kReadmillAPIBookDatePublishedKey = @"published_at";
 
 static NSString * const kReadmillAPIUserKey = @"user";
 static NSString * const kReadmillAPIUserAvatarURLKey = @"avatar_url";
-static NSString * const kReadmillAPIUserAbandonedBooksKey = @"books_abandoned";
-static NSString * const kReadmillAPIUserFinishedBooksKey = @"books_finished";
-static NSString * const kReadmillAPIUserInterestingBooksKey = @"books_interesting";
-static NSString * const kReadmillAPIUserOpenBooksKey = @"books_open";
+static NSString * const kReadmillAPIUserBooksAbandonedCountKey = @"books_abandoned_count";
+static NSString * const kReadmillAPIUserBooksFinishedCountKey = @"books_finished_count";
+static NSString * const kReadmillAPIUserBooksInterestingCountKey = @"books_interesting_count";
+static NSString * const kReadmillAPIUserBooksReadingCountKey = @"books_reading_count";
 static NSString * const kReadmillAPIUserCityKey = @"city";
 static NSString * const kReadmillAPIUserCountryKey = @"country";
 static NSString * const kReadmillAPIUserDescriptionKey = @"description";
 static NSString * const kReadmillAPIUserFirstNameKey = @"firstname";
-static NSString * const kReadmillAPIUserFollowerCountKey = @"followers";
-static NSString * const kReadmillAPIUserFollowingCountKey = @"followings";
+static NSString * const kReadmillAPIUserFollowerCountKey = @"followers_count";
+static NSString * const kReadmillAPIUserFollowingCountKey = @"followings_count";
 static NSString * const kReadmillAPIUserFullNameKey = @"fullname";
 static NSString * const kReadmillAPIUserIdKey = @"id";
 static NSString * const kReadmillAPIUserLastNameKey = @"lastname";
@@ -295,51 +301,21 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 
 #pragma mark -
-#pragma mark UI Presenter 
-
-/*!
- @param ISBN The ISBN number of the book to link to. 
- @param title The title of the book to link to. 
- @param author The author of the book to link to, or a comma-separated list of authors.
- @result An NSURL pointing to the Readmill book link page with the appropriate parameters.  
- @brief   Obtain a book link URL containing the parameters to have Readmill present a UI to the user 
- for linking the book to their Readmill account.
- */
-- (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN title:(NSString *)title author:(NSString *)author;
-
-/*!
- @param readingId The ReadmillReadingId of the reading to view. 
- @result An NSURL pointing to the Readmill reading.  
- @brief   Obtain a reading link URL containing the parameters to have Readmill present a UI to the user 
- for editing their reading of this book in their Readmill account.
- */
-- (NSURL *)URLForViewingReadingWithId:(ReadmillReadingId)readingId;
-
-
-#pragma mark -
 #pragma mark Books
 
 /*!
- @param searchString The string to use when searching for a book.
- @param completionHandler An (optional) block that will return the result (id) and an NSError pointer.
- @result An NSArray containing the matching books in the Readmill system as NSDictionary objects. See the API Keys - Book section of this header for keys. 
- @brief   Get a list of books matching the search string in the Readmill system. 
- */
-- (void)booksFromSearch:(NSString *)searchString completionHandler:(ReadmillAPICompletionHandler)completionHandler;
-
-/*!
- @param isbn The ISBN to search for. 
+ @param identifier The identifier to search for. 
  @param title The title to search for.
  @param author The author to search for. 
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
- @brief   Get a specific book in the Readmill system. If isbn is included, a match against ISBN is tried first. 
+ @brief   Get a specific book in the Readmill system. If identifier is included, a match against identifier is tried first. 
           If that fails, a match against title and author is attempted.
  */
-- (void)bookMatchingISBN:(NSString *)isbn 
-                   title:(NSString *)title
-                  author:(NSString *)author
-       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)bookMatchingIdentifier:(NSString *)identifier
+                         title:(NSString *)title
+                        author:(NSString *)author
+             completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 /*!
  @param bookId The Readmill id of the book to retrieve.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
@@ -351,25 +327,29 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 /*!
  @param bookTitle The new book's title.
  @param bookAuthor The new book's author, or comma-separated list of authors.
- @param bookIsbn The new book's ISBN.
+ @param bookIdentifier The new book's identifier.
  @param completionHandler An (optional) block that will return the result (id) and an NSError pointer.
  @result The created book in the Readmill system as an NSDictionary object. See the API Keys - Book section of this header for keys. 
- @brief   Create a book with the given title, author and ISBN in the Readmill system. 
- 
- IMPORTANT: This will add a book to Readmill even if it already exists. Please search for a book before creating a new one, or use the 
- -findOrCreateBookWithISBN:title:author:delegate: convenience method in the ReadmillUser object, which does this for you. 
- */
+ @brief   Create a book with the given title, author and identifier in the Readmill system.
+*/
 - (void)findOrCreateBookWithTitle:(NSString *)bookTitle
                            author:(NSString *)bookAuthor
-                             isbn:(NSString *)bookIsbn 
+                       identifier:(NSString *)bookIdentifier
                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Readings
 
-
+/*!
+ @param userId The id of the user to find a reading for.
+ @param identifier The identifier of the book.
+ @param title The title of the book.
+ @param author The author of the book.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Find a reading for user matching the arguments.
+*/
 - (void)readingForUserWithId:(ReadmillUserId)userId
-                matchingISBN:(NSString *)isbn
+          matchingIdentifier:(NSString *)identifier
                        title:(NSString *)title
                       author:(NSString *)author
            completionHandler:(ReadmillAPICompletionHandler)completion;

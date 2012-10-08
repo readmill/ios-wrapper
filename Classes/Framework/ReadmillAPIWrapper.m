@@ -203,7 +203,7 @@
 #pragma mark - Readings
 
 - (void)readingForUserWithId:(ReadmillUserId)userId
-                matchingISBN:(NSString *)isbn 
+          matchingIdentifier:(NSString *)identifier
                        title:(NSString *)title
                       author:(NSString *)author
            completionHandler:(ReadmillAPICompletionHandler)completion
@@ -214,14 +214,17 @@
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
-    if (isbn && [isbn length]) {
-        [parameters setValue:isbn forKey:@"q[isbn]"];
+    if (identifier && [identifier length]) {
+        NSDictionary *identifierDictionary = [NSDictionary dictionaryWithObject:identifier forKey:@"identifier"];
+        [parameters setValue:identifierDictionary forKey:@"q"];
     }
     if (author && [author length]) {
-        [parameters setValue:author forKey:@"q[author]"];
+        NSDictionary *authorDictionary = [NSDictionary dictionaryWithObject:author forKey:@"author"];
+        [parameters setValue:authorDictionary forKey:@"q"];
     }
     if (title && [title length]) {
-        [parameters setValue:title forKey:@"q[title]"];
+        NSDictionary *titleDictionary = [NSDictionary dictionaryWithObject:title forKey:@"title"];
+        [parameters setValue:titleDictionary forKey:@"q"];
     }
     
     [self sendGetRequestToURL:URL
@@ -477,16 +480,9 @@
             completionHandler:completionHandler];
 }
 
+
 #pragma mark - 
 #pragma mark - Book
-
-- (void)booksFromSearch:(NSString *)searchString completionHandler:(ReadmillAPICompletionHandler)completion
-{
-    return [self sendGetRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", [self booksEndpoint]]] 
-                      withParameters:[NSDictionary dictionaryWithObject:searchString forKey:@"q"]
-          shouldBeCalledUnauthorized:NO 
-                   completionHandler:completion];    
-}
 
 - (void)bookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completion
 {    
@@ -501,31 +497,31 @@
                    author:(NSString *)author
         completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    [self bookMatchingISBN:nil
-                     title:title
-                    author:author 
-         completionHandler:completion];
+    [self bookMatchingIdentifier:nil
+                           title:title
+                          author:author
+               completionHandler:completion];
 }
 
-- (void)bookMatchingISBN:(NSString *)isbn 
-       completionHandler:(ReadmillAPICompletionHandler)completion
+- (void)bookMatchingIdentifier:(NSString *)identifier
+             completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    [self bookMatchingISBN:isbn
-                     title:nil
-                    author:nil 
-         completionHandler:completion];
+    [self bookMatchingIdentifier:identifier
+                           title:nil
+                          author:nil
+               completionHandler:completion];
 }
 
-- (void)bookMatchingISBN:(NSString *)isbn
-                   title:(NSString *)title 
-                  author:(NSString *)author
-       completionHandler:(ReadmillAPICompletionHandler)completion
+- (void)bookMatchingIdentifier:(NSString *)identifier
+                         title:(NSString *)title
+                        author:(NSString *)author
+             completionHandler:(ReadmillAPICompletionHandler)completion
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/match", [self booksEndpoint]]];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 
-    if (isbn && [isbn length]) {
-        [parameters setValue:isbn forKey:@"q[isbn]"];
+    if (identifier && [identifier length]) {
+        [parameters setValue:identifier forKey:@"q[identifier]"];
     }
     if (author && [author length]) {
         [parameters setValue:author forKey:@"q[author]"];
@@ -542,7 +538,7 @@
 
 - (void)findOrCreateBookWithTitle:(NSString *)bookTitle 
                            author:(NSString *)bookAuthor 
-                             isbn:(NSString *)bookIsbn 
+                       identifier:(NSString *)bookIdentifier
                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableDictionary *bookParameters = [[NSMutableDictionary alloc] init];
@@ -557,9 +553,9 @@
                           forKey:kReadmillAPIBookAuthorKey];
     }
     
-    if ([bookIsbn length] > 0) {
-        [bookParameters setValue:bookIsbn 
-                          forKey:kReadmillAPIBookISBNKey];
+    if ([bookIdentifier length] > 0) {
+        [bookParameters setValue:bookIdentifier 
+                          forKey:kReadmillAPIBookIdentifierKey];
     }
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:bookParameters 
@@ -885,45 +881,6 @@
             completionHandler:completionHandler];
 }
 
-#pragma mark -
-#pragma mark UI URLs
-
-- (NSURL *)URLForConnectingBookWithISBN:(NSString *)ISBN 
-                                  title:(NSString *)title 
-                                 author:(NSString *)author 
-{
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setValue:ISBN forKey:@"isbn"];
-    [parameters setValue:title forKey:@"title"];
-    [parameters setValue:author forKey:@"author"];
-    [parameters setValue:[[self apiConfiguration] clientID] forKey:kReadmillAPIClientIdKey];
-    [parameters setValue:[self accessToken] forKey:kReadmillAPIAccessTokenKey];
-    
-    NSURL *baseURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@ui/#!/connect/book", 
-                                                    [self apiEndPoint]]];
-    NSURL *URL = [baseURL URLByAddingParameters:parameters];
-    [baseURL release];
-    [parameters release];
-    
-    return URL;
-}
-
-- (NSURL *)URLForViewingReadingWithId:(ReadmillReadingId)readingId 
-{
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setValue:[[self apiConfiguration] clientID] forKey:kReadmillAPIClientIdKey];
-    [parameters setValue:[self accessToken] forKey:kReadmillAPIAccessTokenKey];
-    
-    NSURL *baseURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@ui/#!/view/reading/%d", 
-                                                    [self apiEndPoint], 
-                                                    readingId]];
-    
-    NSURL *URL = [baseURL URLByAddingParameters:parameters];
-    [parameters release];
-    [baseURL release];
-    
-    return URL;
-}
 
 #pragma mark -
 #pragma mark - Prepared requests

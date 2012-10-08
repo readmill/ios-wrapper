@@ -92,35 +92,7 @@
 
 @end
 
-@interface ReadmillUser : NSObject {
-@private
-    
-    NSString *city;
-    NSString *country;
-    NSString *userDescription;
-    NSString *firstName;
-    NSString *lastName;
-    NSString *fullName;
-    NSString *userName;
-    NSString *authenticationToken;
-    
-    NSURL *avatarURL;
-    NSURL *permalinkURL;
-    NSURL *websiteURL;
-    
-    ReadmillUserId userId;
-    
-    NSUInteger followerCount;
-    NSUInteger followingCount;
-    NSUInteger abandonedBookCount;
-    NSUInteger finishedBookCount;
-    NSUInteger interestingBookCount;
-    NSUInteger openBookCount;
-    
-    NSData *avatarImageData;
-    
-    ReadmillAPIWrapper *apiWrapper;
-}
+@interface ReadmillUser : NSObject;
 
 #pragma mark Static Methods
 
@@ -274,16 +246,16 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
                  delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 /*!
- @param isbn (optional) The ISBN/Identifier of the book to search for.
+ @param identifierOrNil (optional) The identifier of the book to search for.
  @param author (optional) The author to search for.
  @param title (optional) The title to search for.
  @param delegate The delegate object to receive notifications of success or failure.
  @brief   Search for a book in Readmill by isbn, author and title. 
  */
-- (void)findBookWithISBN:(NSString *)isbnOrNil
-                   title:(NSString *)titleOrNil
-                  author:(NSString *)authorOrNil
-                delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+- (void)findBookWithIdentifier:(NSString *)identifierOrNil
+                         title:(NSString *)titleOrNil
+                        author:(NSString *)authorOrNil
+                      delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 /*!
  @param isbn The full ISBN of the book to find or create.
@@ -292,10 +264,10 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
  @param bookfindingDelegate The delegate object to receive notifications of success or failure.
  @brief   Search for a book in Readmill, creating one if it doesn't exist.
  */
-- (void)findOrCreateBookWithISBN:(NSString *)isbn
-                           title:(NSString *)title
-                          author:(NSString *)author
-                        delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
+- (void)findOrCreateBookWithIdentifier:(NSString *)identifier
+                                 title:(NSString *)title
+                                author:(NSString *)author
+                              delegate:(id <ReadmillBookFindingDelegate>)bookfindingDelegate;
 
 #pragma mark -
 #pragma mark Readings
@@ -427,28 +399,28 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
 @property (readonly) NSUInteger followingCount;
 
 /*!
- @property  abandonedBookCount
+ @property  booksAbandonedCount
  @brief The number of books the user has abandoned.
  */
-@property (readonly) NSUInteger abandonedBookCount;
+@property (readonly) NSUInteger booksAbandonedCount;
 
 /*!
- @property  finishedBookCount
+ @property  booksFinishedCount
  @brief The number of books the user has completed reading.
  */
-@property (readonly) NSUInteger finishedBookCount;
+@property (readonly) NSUInteger booksFinishedCount;
 
 /*!
- @property  interestingBookCount
+ @property  booksInterestingCount
  @brief The number of books the user has marked as interesting.
  */
-@property (readonly) NSUInteger interestingBookCount;
+@property (readonly) NSUInteger booksInterestingCount;
 
 /*!
- @property  openBookCount
+ @property  booksReadingCount
  @brief The number of books the user is currently reading.
  */
-@property (readonly) NSUInteger openBookCount;
+@property (readonly) NSUInteger booksReadingCount;
 
 /*!
  @property  apiWrapper
