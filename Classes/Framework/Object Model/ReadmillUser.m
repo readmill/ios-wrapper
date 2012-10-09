@@ -232,7 +232,8 @@
 - (void)verifyAuthentication:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate 
 {
     [[self apiWrapper] currentUserWithCompletionHandler:^(id result, NSError *error) {
-        if (result && !error) {
+        NSDictionary *userDictionary = [result valueForKey:kReadmillAPIUserKey];
+        if (userDictionary && !error) {
             [self updateWithAPIDictionary:result];
             [authenticationDelegate readmillAuthenticationDidSucceedWithLoggedInUser:self];
         } else {

@@ -259,7 +259,6 @@
                           [self booksEndpoint],
                           bookId];
     
-    NSLog(@"params: %@", parameters);
     [self sendPostRequestToEndpoint:endpoint
                      withParameters:parameters
                   completionHandler:completionHandler];
@@ -650,7 +649,9 @@
                            forKey:@"copy_restricted"];
     
     if (comment != nil && 0 < [comment length]) {
-        [parameters setValue:comment forKey:kReadmillAPIHighlightCommentKey];
+        NSDictionary *commentContentDictionary = [NSDictionary dictionaryWithObject:comment
+                                                                             forKey:kReadmillAPIHighlightContentKey];
+        [parameters setValue:commentContentDictionary forKey:kReadmillAPIHighlightCommentKey];
     }
     
     if (connections != nil) {
@@ -669,6 +670,7 @@
     
     
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
+    NSLog(@"params: %@", parameters);
     [self sendPostRequestToEndpoint:endpoint
                      withParameters:[parameters autorelease]
                   completionHandler:completionHandler];
