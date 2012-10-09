@@ -141,6 +141,10 @@
 
 - (IBAction)findBookButtonClicked:(id)sender
 {
+    [[self.user apiWrapper] bookMatchingIdentifier:[isbnTextField text]
+                                             title:[titleTextField text] author:[authorTextField text] completionHandler:^(id result, NSError *error) {
+                                                 NSLog(@"result: %@", result);
+                                             }];
     [user findOrCreateBookWithIdentifier:[isbnTextField text]
                                    title:[titleTextField text]
                                   author:[authorTextField text]

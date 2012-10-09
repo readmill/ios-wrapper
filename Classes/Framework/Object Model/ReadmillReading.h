@@ -69,6 +69,9 @@
 #pragma mark -
 #pragma mark Updating
 
++ (NSString *)readingStateStringFromState:(ReadmillReadingState)state;
++ (ReadmillReadingState)readingStateFromReadingStateString:(NSString *)readingStateString;
+
 /*!
  @param newState The new reading state.
  @param delegate The delegate object to be informed of success or failure. 
@@ -257,5 +260,6 @@
  @brief The number of highlights for the reading.
  */
 @property (readonly, nonatomic) NSUInteger highlightCount;
+
 
 @end

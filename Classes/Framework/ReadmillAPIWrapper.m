@@ -30,30 +30,30 @@
 #import "ReadmillAPIWrapper+Internal.h"
 #import "ReadmillRequestOperation.h"
 
-@interface ReadmillAPIWrapper () 
+@interface ReadmillAPIWrapper ()
 
 @property (readwrite, copy) NSString *refreshToken;
 @property (readwrite, copy) NSString *accessToken;
 @property (readwrite, copy) NSString *authorizedRedirectURL;
 @property (readwrite, copy) NSDate *accessTokenExpiryDate;
-@property (nonatomic, retain) NSOperationQueue *queue;
+@property (nonatomic, readwrite, retain) NSOperationQueue *queue;
 @property (nonatomic, readwrite, retain) ReadmillAPIConfiguration *apiConfiguration;
 
 @end
 
 @implementation ReadmillAPIWrapper
 
-- (id)init 
+- (id)init
 {
     if ((self = [super init])) {
         // Initialization code here.
         queue = [[NSOperationQueue alloc] init];
-        [queue setMaxConcurrentOperationCount:10];        
+        [queue setMaxConcurrentOperationCount:10];
     }
     return self;
 }
 
-- (id)initWithAPIConfiguration:(ReadmillAPIConfiguration *)configuration 
+- (id)initWithAPIConfiguration:(ReadmillAPIConfiguration *)configuration
 {
     self = [self init];
     if (self) {
@@ -63,10 +63,10 @@
     return self;
 }
 
-- (id)initWithPropertyListRepresentation:(NSDictionary *)plist 
-{    
+- (id)initWithPropertyListRepresentation:(NSDictionary *)plist
+{
     if ((self = [self init])) {
-        [self setAuthorizedRedirectURL:[plist valueForKey:@"authorizedRedirectURL"]];        
+        [self setAuthorizedRedirectURL:[plist valueForKey:@"authorizedRedirectURL"]];
 		[self setAccessToken:[plist valueForKey:@"accessToken"]];
         [self setAccessTokenExpiryDate:[plist valueForKey:@"accessTokenExpiryDate"]];
         [self setApiConfiguration:[NSKeyedUnarchiver unarchiveObjectWithData:[plist valueForKey:@"apiConfiguration"]]];
@@ -74,16 +74,16 @@
     return self;
 }
 
-- (NSDictionary *)propertyListRepresentation 
+- (NSDictionary *)propertyListRepresentation
 {
     NSMutableDictionary *plist = [NSMutableDictionary dictionary];
-    [plist setObject:[self accessToken] 
+    [plist setObject:[self accessToken]
               forKey:@"accessToken"];
-    [plist setObject:[self authorizedRedirectURL] 
+    [plist setObject:[self authorizedRedirectURL]
               forKey:@"authorizedRedirectURL"];
-    [plist setObject:[NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]] 
+    [plist setObject:[NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]]
               forKey:@"apiConfiguration"];
-
+    
     [plist setObject:[self accessTokenExpiryDate] forKey:@"accessTokenExpiryDate"];
     
     return plist;
@@ -96,7 +96,7 @@
 @synthesize apiConfiguration;
 @synthesize queue;
 
-- (void)dealloc 
+- (void)dealloc
 {
     [self setAccessToken:nil];
     [self setAuthorizedRedirectURL:nil];
@@ -109,39 +109,49 @@
 #pragma mark -
 #pragma mark API endpoints
 
-- (NSString *)apiEndPoint 
+- (NSString *)apiEndPoint
 {
     return [[apiConfiguration apiBaseURL] absoluteString];
 }
-- (NSString *)booksEndpoint 
+
+- (NSString *)booksEndpoint
 {
-    return [NSString stringWithFormat:@"%@books", [self apiEndPoint]];
+    return @"books";
 }
-- (NSString *)readingsEndpoint 
+
+- (NSString *)readingsEndpoint
 {
-    return [NSString stringWithFormat:@"%@readings", [self apiEndPoint]];
+    return @"readings";
 }
-- (NSString *)usersEndpoint 
+
+- (NSString *)usersEndpoint
 {
-    return [NSString stringWithFormat:@"%@users", [self apiEndPoint]];
+    return @"users";
 }
-- (NSString *)highlightsEndpoint 
+
+- (NSString *)highlightsEndpoint
 {
-    return [NSString stringWithFormat:@"%@highlights", [self apiEndPoint]];
+    return @"highlights";
 }
+
 - (NSString *)likesEndpoint
 {
-    return [NSString stringWithFormat:@"%@likes/highlight", [self apiEndPoint]];
+    return @"likes/highlight";
+}
+
+- (NSString *)libraryEndPoint
+{
+    return @"me/library";
 }
 
 #pragma mark -
-#pragma mark - Post To 
+#pragma mark - Post To
 
 - (NSArray *)postToArrayWithConnections:(NSArray *)connections
 {
     NSMutableArray *connectionsArray = [NSMutableArray array];
     for (id connection in connections) {
-        [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection 
+        [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection
                                                                 forKey:@"id"]];
     }
     return connectionsArray;
@@ -150,19 +160,19 @@
 #pragma mark -
 #pragma mark OAuth
 
-- (void)authorizeWithAuthorizationCode:(NSString *)authCode 
+- (void)authorizeWithAuthorizationCode:(NSString *)authCode
                        fromRedirectURL:(NSString *)redirectURLString
                      completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     [self setAuthorizedRedirectURL:redirectURLString];
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [[self apiConfiguration] clientID], kReadmillAPIClientIdKey, 
+                                [[self apiConfiguration] clientID], kReadmillAPIClientIdKey,
                                 [[self apiConfiguration] clientSecret], kReadmillAPIClientSecretKey,
                                 authCode, @"code",
                                 redirectURLString, @"redirect_uri",
                                 @"authorization_code", @"grant_type", nil];
-
+    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[[self apiConfiguration] accessTokenURL]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:kTimeoutInterval];
@@ -170,24 +180,24 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:[parameters JSONData]];
-
+    
     [self startPreparedRequest:request completion:^(NSDictionary *response, NSError *error) {
         if (response != nil) {
-            NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];        
+            NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
             [self willChangeValueForKey:@"propertyListRepresentation"];
             [self setAccessTokenExpiryDate:[[NSDate date] dateByAddingTimeInterval:accessTokenTTL]];
             [self setAccessToken:[response valueForKey:@"access_token"]];
             [self didChangeValueForKey:@"propertyListRepresentation"];
-        }            
+        }
         completionHandler(response, error);
     }];
 }
 
-- (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect 
-{    
+- (NSURL *)clientAuthorizationURLWithRedirectURLString:(NSString *)redirect
+{
     NSString *baseURL = [[[self apiConfiguration] authURL] absoluteString];
-    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@&scope=non-expiring", 
-                           baseURL, 
+    NSString *urlString = [NSString stringWithFormat:@"%@oauth/authorize?response_type=code&client_id=%@&scope=non-expiring",
+                           baseURL,
                            [[self apiConfiguration] clientID]];
     
     if ([redirect length] > 0) {
@@ -208,72 +218,62 @@
                       author:(NSString *)author
            completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings/exists", 
-                                       [self usersEndpoint], 
-                                       userId]];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings/match",
+                          [self usersEndpoint],
+                          userId];
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setValue:identifier forKey:kReadmillAPIBookIdentifierKey];
+    [parameters setValue:title forKey:kReadmillAPIBookTitleKey];
+    [parameters setValue:author forKey:kReadmillAPIBookAuthorKey];
+        
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:parameters
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completion];
     
-    if (identifier && [identifier length]) {
-        NSDictionary *identifierDictionary = [NSDictionary dictionaryWithObject:identifier forKey:@"identifier"];
-        [parameters setValue:identifierDictionary forKey:@"q"];
-    }
-    if (author && [author length]) {
-        NSDictionary *authorDictionary = [NSDictionary dictionaryWithObject:author forKey:@"author"];
-        [parameters setValue:authorDictionary forKey:@"q"];
-    }
-    if (title && [title length]) {
-        NSDictionary *titleDictionary = [NSDictionary dictionaryWithObject:title forKey:@"title"];
-        [parameters setValue:titleDictionary forKey:@"q"];
-    }
-    
-    [self sendGetRequestToURL:URL
-               withParameters:parameters
-   shouldBeCalledUnauthorized:NO 
-            completionHandler:completion];
-
 }
 
-- (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
-                                state:(ReadmillReadingState)readingState 
-                            isPrivate:(BOOL)isPrivate 
+- (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId
+                                state:(NSString *)readingState
+                            isPrivate:(BOOL)isPrivate
                           connections:(NSArray *)connections
-                    completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
+                    completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
     NSMutableDictionary *readingParameters = [NSMutableDictionary dictionary];
     
-    [readingParameters setValue:[NSNumber numberWithInteger:readingState] 
+    [readingParameters setValue:readingState
                          forKey:kReadmillAPIReadingStateKey];
     [readingParameters setValue:isPrivate ? @"true" : @"false"
                          forKey:kReadmillAPIReadingPrivateKey];
     
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
-                                       [self booksEndpoint], 
-                                       bookId]];
-
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:readingParameters 
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:readingParameters
                                                                          forKey:kReadmillAPIReadingKey];
-
+    
     if (connections != nil) {
         [parameters setValue:[self postToArrayWithConnections:connections]
                       forKey:kReadmillAPIReadingPostToKey];
     }
     
-
-    [self sendPostRequestToURL:URL
-                withParameters:parameters
-             completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
+                          [self booksEndpoint],
+                          bookId];
+    
+    NSLog(@"params: %@", parameters);
+    [self sendPostRequestToEndpoint:endpoint
+                     withParameters:parameters
+                  completionHandler:completionHandler];
 }
 
 - (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId
-                                state:(ReadmillReadingState)readingState
-                            isPrivate:(BOOL)isPrivate 
+                                state:(NSString *)readingState
+                            isPrivate:(BOOL)isPrivate
                     completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     [self findOrCreateReadingWithBookId:bookId
                                   state:readingState
                               isPrivate:isPrivate
-                            connections:nil 
+                            connections:nil
                       completionHandler:completionHandler];
 }
 
@@ -281,34 +281,33 @@
                  parameters:(NSDictionary *)parameters
           completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
-                                       [self readingsEndpoint], 
-                                       readingId]];
-
-    [self sendPutRequestToURL:URL 
-               withParameters:parameters 
-            completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d",
+                          [self readingsEndpoint],
+                          readingId];
+    [self sendPutRequestToEndpoint:endpoint
+                    withParameters:parameters
+                 completionHandler:completionHandler];
 }
 
-- (void)updateReadingWithId:(ReadmillReadingId)readingId 
-                  withState:(ReadmillReadingState)readingState
-                  isPrivate:(BOOL)isPrivate 
-              closingRemark:(NSString *)remark 
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
+- (void)updateReadingWithId:(ReadmillReadingId)readingId
+                  withState:(NSString *)readingState
+                  isPrivate:(BOOL)isPrivate
+              closingRemark:(NSString *)remark
+          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
     NSMutableDictionary *readingParameters = [[NSMutableDictionary alloc] init];
-
-    [readingParameters setValue:[NSNumber numberWithInteger:readingState] 
+    
+    [readingParameters setValue:readingState
                          forKey:kReadmillAPIReadingStateKey];
-    [readingParameters setValue:isPrivate ? @"true" : @"false" 
+    [readingParameters setValue:isPrivate ? @"true" : @"false"
                          forKey:kReadmillAPIReadingPrivateKey];
     
     if ([remark length] > 0) {
-        [readingParameters setValue:remark 
+        [readingParameters setValue:remark
                              forKey:kReadmillAPIReadingClosingRemarkKey];
     }
-
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:readingParameters 
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:readingParameters
                                                            forKey:kReadmillAPIReadingKey];
     [readingParameters release];
     
@@ -316,181 +315,165 @@
 }
 
 - (void)updateReadingWithId:(ReadmillReadingId)readingId
-                      state:(ReadmillReadingState)readingState
-              closingRemark:(NSString *)closingRemark 
+                      state:(NSString *)readingState
+              closingRemark:(NSString *)closingRemark
                 recommended:(BOOL)recommended
                 connections:(NSArray *)connections
           completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableDictionary *readingParameters = [[NSMutableDictionary alloc] init];
     
-    [readingParameters setValue:[NSNumber numberWithInteger:readingState] 
+    [readingParameters setValue:readingState
                          forKey:kReadmillAPIReadingStateKey];
     [readingParameters setValue:[NSNumber numberWithUnsignedInteger:recommended]
-                         forKey:kReadmillAPIReadingRecommendedKey];    
+                         forKey:kReadmillAPIReadingRecommendedKey];
     if ([closingRemark length] > 0) {
-        [readingParameters setValue:closingRemark 
+        [readingParameters setValue:closingRemark
                              forKey:kReadmillAPIReadingClosingRemarkKey];
     }
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:readingParameters 
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObject:readingParameters
                                                                          forKey:kReadmillAPIReadingKey];
     [readingParameters release];
-
+    
     if (connections != nil) {
         [parameters setValue:[self postToArrayWithConnections:connections]
                       forKey:kReadmillAPIHighlightPostToKey];
     }
-
+    
     [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
 }
 
-- (void)finishReadingWithId:(ReadmillReadingId)readingId 
+- (void)finishReadingWithId:(ReadmillReadingId)readingId
               closingRemark:(NSString *)closingRemark
-                recommended:(BOOL)recommended 
-                connections:(NSArray *)connections 
+                recommended:(BOOL)recommended
+                connections:(NSArray *)connections
           completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    [self updateReadingWithId:readingId 
-                        state:ReadingStateFinished
-                closingRemark:closingRemark 
+    [self updateReadingWithId:readingId
+                        state:ReadmillReadingStateFinishedKey
+                closingRemark:closingRemark
                   recommended:recommended
                   connections:connections
             completionHandler:completionHandler];
 }
 
-- (void)abandonReadingWithId:(ReadmillReadingId)readingId 
+- (void)abandonReadingWithId:(ReadmillReadingId)readingId
                closingRemark:(NSString *)closingRemark
                  connections:(NSArray *)connections
            completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    [self updateReadingWithId:readingId 
-                        state:ReadingStateAbandoned
-                closingRemark:closingRemark 
+    [self updateReadingWithId:readingId
+                        state:ReadmillReadingStateAbandonedKey
+                closingRemark:closingRemark
                   recommended:NO
                   connections:connections
             completionHandler:completionHandler];
 }
 
-- (void)publicReadingsForUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+- (void)publicReadingsForUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
-                                                        [self usersEndpoint], 
-                                                            userId]];
-    [self sendGetRequestToURL:URL   
-               withParameters:nil
-   shouldBeCalledUnauthorized:YES
-            completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
+                          [self usersEndpoint],
+                          userId];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:YES
+                 completionHandler:completionHandler];
 }
 
 - (void)readingsForUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
-                                       [self usersEndpoint], 
-                                       userId]];
-    [self sendGetRequestToURL:URL   
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO
-            completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
+                          [self usersEndpoint],
+                          userId];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
 }
 
-- (void)readingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
-                                       [self readingsEndpoint], 
-                                       readingId]];
-    [self sendGetRequestToURL:URL 
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO
-            completionHandler:completionHandler];
-}
-
-- (void)readingWithURLString:(NSString *)urlString completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
-    NSError *error = nil;
-    NSURLRequest *request = [self getRequestWithURL:[NSURL URLWithString:urlString] 
-                                         parameters:nil
-                         shouldBeCalledUnauthorized:NO 
-                                              error:&error];
-    
-    if (request) {
-        [self startPreparedRequest:request completion:completionHandler];
-    } else {
-        completionHandler(nil, error);
-    }
-}
-
-- (void)readingsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+- (void)readingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
-                                       [self booksEndpoint], 
-                                       bookId]];
-    [self sendGetRequestToURL:URL 
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO
-            completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d",
+                          [self readingsEndpoint],
+                          readingId];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
 }
 
-- (void)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId 
+- (void)readingsForBookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
+                          [self booksEndpoint],
+                          bookId];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
+}
+
+- (void)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId
                              completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
-                                       [self booksEndpoint], 
-                                       bookId]];
-    
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
                                 kReadmillAPIFilterByFollowings, kReadmillAPIFilterKey, // Filter by followings
                                 [NSNumber numberWithInteger:1], @"highlights_count[from]", nil]; // At least 1 highlight
     
-    [self sendGetRequestToURL:URL 
-               withParameters:parameters
-   shouldBeCalledUnauthorized:NO
-                  cachePolicy:NSURLRequestReturnCacheDataElseLoad
-            completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
+                          [self booksEndpoint],
+                          bookId];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:parameters
+        shouldBeCalledUnauthorized:NO
+                       cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                 completionHandler:completionHandler];
 }
 
-- (void)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId 
+- (void)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId
                             completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/readings", 
-                                       [self booksEndpoint], 
-                                       bookId]];
-    
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
+                          [self booksEndpoint],
+                          bookId];
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
                                 kReadmillAPIOrderByPopular, kReadmillAPIOrderKey, // Order by popularity (based on comments > highlights > followers)
                                 [NSNumber numberWithInteger:1], @"highlights_count[from]", nil]; // At least 1 highlight
-
-    [self sendGetRequestToURL:URL 
-               withParameters:parameters
-   shouldBeCalledUnauthorized:YES
-                  cachePolicy:NSURLRequestReturnCacheDataElseLoad
-            completionHandler:completionHandler];
+    
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:parameters
+        shouldBeCalledUnauthorized:YES
+                       cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                 completionHandler:completionHandler];
 }
 
-- (void)periodsForReadingWithId:(ReadmillReadingId)readingId 
+- (void)periodsForReadingWithId:(ReadmillReadingId)readingId
               completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/periods", 
-                                       [self readingsEndpoint], 
-                                       readingId]];
-    [self sendGetRequestToURL:URL 
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO
-                  cachePolicy:NSURLRequestReturnCacheDataElseLoad
-            completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/periods",
+                          [self readingsEndpoint],
+                          readingId];
+    
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                       cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                 completionHandler:completionHandler];
 }
 
 
-#pragma mark - 
+#pragma mark -
 #pragma mark - Book
 
 - (void)bookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completion
-{    
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", [self booksEndpoint], bookId]];
-    [self sendGetRequestToURL:url
-               withParameters:nil
-   shouldBeCalledUnauthorized:YES 
-            completionHandler:completion];
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self booksEndpoint], bookId];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:YES
+                 completionHandler:completion];
 }
 
 - (void)bookMatchingTitle:(NSString *)title
@@ -517,77 +500,69 @@
                         author:(NSString *)author
              completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/match", [self booksEndpoint]]];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-
-    if (identifier && [identifier length]) {
-        [parameters setValue:identifier forKey:@"q[identifier]"];
-    }
-    if (author && [author length]) {
-        [parameters setValue:author forKey:@"q[author]"];
-    }
-    if (title && [title length]) {
-        [parameters setValue:title forKey:@"q[title]"];
-    }
+    [parameters setValue:identifier forKey:kReadmillAPIBookIdentifierKey];
+    [parameters setValue:author forKey:kReadmillAPIBookAuthorKey];
+    [parameters setValue:title forKey:kReadmillAPIBookTitleKey];
     
-    [self sendGetRequestToURL:url
-               withParameters:parameters
-   shouldBeCalledUnauthorized:NO 
-            completionHandler:completion];
+    [self sendGetRequestToEndpoint:[NSString stringWithFormat:@"%@/match", [self booksEndpoint]]
+                    withParameters:parameters
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completion];
 }
 
-- (void)findOrCreateBookWithTitle:(NSString *)bookTitle 
-                           author:(NSString *)bookAuthor 
+- (void)findOrCreateBookWithTitle:(NSString *)bookTitle
+                           author:(NSString *)bookAuthor
                        identifier:(NSString *)bookIdentifier
                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableDictionary *bookParameters = [[NSMutableDictionary alloc] init];
     
     if ([bookTitle length] > 0) {
-        [bookParameters setValue:bookTitle 
+        [bookParameters setValue:bookTitle
                           forKey:kReadmillAPIBookTitleKey];
     }
     
     if ([bookAuthor length] > 0) {
-        [bookParameters setValue:bookAuthor 
+        [bookParameters setValue:bookAuthor
                           forKey:kReadmillAPIBookAuthorKey];
     }
     
     if ([bookIdentifier length] > 0) {
-        [bookParameters setValue:bookIdentifier 
+        [bookParameters setValue:bookIdentifier
                           forKey:kReadmillAPIBookIdentifierKey];
     }
     
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:bookParameters 
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:bookParameters
                                                            forKey:kReadmillAPIBookKey];
     [bookParameters release];
     
-    [self sendPostRequestToURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", [self booksEndpoint]]]
-                withParameters:parameters
-             completionHandler:completionHandler];    
+    [self sendPostRequestToEndpoint:[NSString stringWithFormat:@"%@", [self booksEndpoint]]
+                     withParameters:parameters
+                  completionHandler:completionHandler];
 }
 
-//Pings     
+//Pings
 #pragma mark - Pings
 
-- (void)pingReadingWithId:(ReadmillReadingId)readingId 
-             withProgress:(ReadmillReadingProgress)progress 
+- (void)pingReadingWithId:(ReadmillReadingId)readingId
+             withProgress:(ReadmillReadingProgress)progress
         sessionIdentifier:(NSString *)sessionId
                  duration:(ReadmillPingDuration)duration
            occurrenceTime:(NSDate *)occurrenceTime
                  latitude:(CLLocationDegrees)latitude
                 longitude:(CLLocationDegrees)longitude
-        completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+        completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableDictionary *pingParameters = [[NSMutableDictionary alloc] init];
     
     [pingParameters setValue:[NSNumber numberWithFloat:progress]
                       forKey:kReadmillAPIPingProgressKey];
-    [pingParameters setValue:[NSNumber numberWithUnsignedInteger:duration] 
+    [pingParameters setValue:[NSNumber numberWithUnsignedInteger:duration]
                       forKey:kReadmillAPIPingDurationKey];
     
     if ([sessionId length] > 0) {
-        [pingParameters setValue:sessionId 
+        [pingParameters setValue:sessionId
                           forKey:kReadmillAPIPingIdentifierKey];
     }
     
@@ -597,43 +572,40 @@
     
     // 2011-01-06T11:47:14Z
     NSString *dateString = [occurrenceTime stringWithRFC3339Format];
-    [pingParameters setValue:dateString 
+    [pingParameters setValue:dateString
                       forKey:kReadmillAPIPingOccurredAtKey];
-
+    
     if (!(longitude == 0.0 && latitude == 0.0)) {
         // Do not send gps values if lat/lng were not specified.
-        [pingParameters setValue:[NSNumber numberWithDouble:latitude] 
+        [pingParameters setValue:[NSNumber numberWithDouble:latitude]
                           forKey:kReadmillAPIPingLatitudeKey];
-        [pingParameters setValue:[NSNumber numberWithDouble:longitude] 
+        [pingParameters setValue:[NSNumber numberWithDouble:longitude]
                           forKey:kReadmillAPIPingLongitudeKey];
     }
-
+    
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:pingParameters
                                                            forKey:@"ping"];
     [pingParameters release];
     
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/pings", 
-                                       [self readingsEndpoint], 
-                                       readingId]];
-    
-    [self sendPostRequestToURL:URL 
-                withParameters:parameters
-             completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/pings", [self readingsEndpoint], readingId];
+    [self sendPostRequestToEndpoint:endpoint
+                     withParameters:parameters
+                  completionHandler:completionHandler];
 }
-- (void)pingReadingWithId:(ReadmillReadingId)readingId 
-             withProgress:(ReadmillReadingProgress)progress 
+- (void)pingReadingWithId:(ReadmillReadingId)readingId
+             withProgress:(ReadmillReadingProgress)progress
         sessionIdentifier:(NSString *)sessionId
                  duration:(ReadmillPingDuration)duration
            occurrenceTime:(NSDate *)occurrenceTime
-        completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
-    [self pingReadingWithId:readingId 
-               withProgress:progress 
-          sessionIdentifier:sessionId 
-                   duration:duration 
-             occurrenceTime:occurrenceTime 
+        completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    [self pingReadingWithId:readingId
+               withProgress:progress
+          sessionIdentifier:sessionId
+                   duration:duration
+             occurrenceTime:occurrenceTime
                    latitude:0.0
-                  longitude:0.0 
+                  longitude:0.0
           completionHandler:completionHandler];
 }
 
@@ -645,36 +617,34 @@
                              parameters:(NSDictionary *)parameters
                       completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights",
-                                                 [self readingsEndpoint], readingId]];
-    
-    [self sendPostRequestToURL:highlightsURL
-                withParameters:parameters
-             completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
+    [self sendPostRequestToEndpoint:endpoint
+                     withParameters:parameters
+                  completionHandler:completionHandler];
 }
 
-- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId
                         highlightedText:(NSString *)highlightedText
                                locators:(NSDictionary *)locators
                                position:(ReadmillReadingProgress)position
-                          highlightedAt:(NSDate *)highlightedAt 
+                          highlightedAt:(NSDate *)highlightedAt
                                 comment:(NSString *)comment
                             connections:(NSArray *)connections
                        isCopyRestricted:(BOOL)isCopyRestricted
                       completionHandler:(ReadmillAPICompletionHandler)completionHandler
-{       
+{
     NSAssert(0 < readingId, @"readingId: %d is invalid.", readingId);
     NSAssert(highlightedText != nil && [highlightedText length], @"Highlighted text can't be nil.");
     NSAssert(locators != nil && [locators count], @"Locators can't be nil.");
-
+    
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     
     NSMutableDictionary *highlightParameters = [[NSMutableDictionary alloc] init];
-    [highlightParameters setValue:locators 
+    [highlightParameters setValue:locators
                            forKey:kReadmillAPIHighlightLocatorsKey];
     [highlightParameters setValue:highlightedText
                            forKey:kReadmillAPIHighlightContentKey];
-    [highlightParameters setValue:[NSNumber numberWithFloat:position] 
+    [highlightParameters setValue:[NSNumber numberWithFloat:position]
                            forKey:kReadmillAPIHighlightPositionKey];
     [highlightParameters setValue:[NSNumber numberWithBool:isCopyRestricted]
                            forKey:@"copy_restricted"];
@@ -692,78 +662,69 @@
         highlightedAt = [NSDate date];
     }
     // 2011-01-06T11:47:14Z
-    [highlightParameters setValue:[highlightedAt stringWithRFC3339Format] 
+    [highlightParameters setValue:[highlightedAt stringWithRFC3339Format]
                            forKey:kReadmillAPIHighlightHighlightedAtKey];
     [parameters setObject:highlightParameters forKey:kReadmillAPIHighlightKey];
     [highlightParameters release];
     
-    NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights", 
-                                                 [self readingsEndpoint], readingId]];
     
-    [self sendPostRequestToURL:highlightsURL 
-                withParameters:[parameters autorelease]
-             completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
+    [self sendPostRequestToEndpoint:endpoint
+                     withParameters:[parameters autorelease]
+                  completionHandler:completionHandler];
 }
 
-- (void)highlightsForReadingWithId:(ReadmillReadingId)readingId 
-                 completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights", 
-                                       [self readingsEndpoint], 
-                                       readingId]];
-
-    [self sendGetRequestToURL:URL 
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO
-            completionHandler:completionHandler];
+- (void)highlightsForReadingWithId:(ReadmillReadingId)readingId
+                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
 }
 
-- (void)deleteHighlightWithId:(NSUInteger)highlightId 
+- (void)deleteHighlightWithId:(NSUInteger)highlightId
             completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", 
-                                       [self highlightsEndpoint], 
-                                       highlightId]];
-    
-    [self sendDeleteRequestToURL:URL
-                  withParameters:nil
-               completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self highlightsEndpoint], highlightId];
+    [self sendDeleteRequestToEndpoint:endpoint
+                       withParameters:nil
+                    completionHandler:completionHandler];
 }
 
 #pragma mark - Highlight comments
 
-- (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId 
+- (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId
                                 comment:(NSString *)comment
                             commentedAt:(NSDate *)date
-                      completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+                      completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/comments", 
-                                       [self highlightsEndpoint], 
-                                       highlightId]];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/comments", [self highlightsEndpoint], highlightId];
     
     NSDictionary *commentDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                        comment, kReadmillAPICommentContentKey,
                                        [date stringWithRFC3339Format], kReadmillAPICommentPostedAtKey, nil];
-
-    NSDictionary *parameters = [NSDictionary dictionaryWithObject:commentDictionary                         
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:commentDictionary
                                                            forKey:@"comment"];
     
-    [self sendPostRequestToURL:URL 
-                withParameters:parameters
-             completionHandler:completionHandler];
+    [self sendPostRequestToEndpoint:endpoint
+                     withParameters:parameters
+                  completionHandler:completionHandler];
 }
 
-- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId 
-                 completionHandler:(ReadmillAPICompletionHandler)completionHandler 
+- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId
+                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/comments", 
-                                       [self highlightsEndpoint], 
-                                       highlightId]];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/comments",
+                          [self highlightsEndpoint],
+                          highlightId];
     
-    [self sendGetRequestToURL:URL 
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO
-            completionHandler:completionHandler];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
 }
 
 #pragma mark -
@@ -772,53 +733,56 @@
 
 - (void)likesForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId]];
-    [self sendGetRequestToURL:URL 
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO
-            completionHandler:completion];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId];
+    
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completion];
 }
 
 - (void)likeHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId]];
-    [self sendPostRequestToURL:URL 
-                withParameters:nil
-             completionHandler:completion];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId];
+    
+    [self sendPostRequestToEndpoint:endpoint
+                     withParameters:nil
+                  completionHandler:completion];
 }
 
 - (void)unlikeHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId]];
-    [self sendDeleteRequestToURL:URL 
-                  withParameters:nil
-               completionHandler:completion];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId];
+    
+    [self sendDeleteRequestToEndpoint:endpoint
+                       withParameters:nil
+                    completionHandler:completion];
 }
 
 #pragma mark -
 #pragma Connections
 
-- (void)connectionsForCurrentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@me/connections", [self apiEndPoint]]];
-    [self sendGetRequestToURL:URL 
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO 
-            completionHandler:completionHandler];
+- (void)connectionsForCurrentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = @"me/connections";
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
 }
 
 
 #pragma mark
 #pragma mark - Users
 
-- (void)userWithId:(ReadmillUserId)userId 
+- (void)userWithId:(ReadmillUserId)userId
  completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@users/%d", [self apiEndPoint], userId]];
-    [self sendGetRequestToURL:url 
-               withParameters:nil
-   shouldBeCalledUnauthorized:YES
-            completionHandler:completionHandler];
+    NSString *endpoint = [NSString stringWithFormat:@"%@users/%d", [self apiEndPoint], userId];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:YES
+                 completionHandler:completionHandler];
 }
 
 - (NSURL *)urlForCurrentUser
@@ -833,17 +797,18 @@
     
     return finalURL;
 }
-- (NSDictionary *)currentUser:(NSError **)error 
-{    
+
+- (NSDictionary *)currentUser:(NSError **)error
+{
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self urlForCurrentUser]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:kTimeoutInterval];
     [request setHTTPMethod:@"GET"];
-        
+    
     return [self sendPreparedRequest:request error:error];
 }
 
-- (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler 
+- (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self urlForCurrentUser]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
@@ -857,74 +822,75 @@
 #pragma mark -
 #pragma mark - Library
 
-- (NSURL *)urlForLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+- (NSString *)endpointForLibraryItemWithId:(ReadmillLibraryItemId)itemId
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@v2/me/library/%d", [self apiEndPoint], libraryItemId]];
-    NSLog(@"url: %@", url);
-    return url;
+    return [NSString stringWithFormat:@"%@/%d", [self libraryEndPoint], itemId];
 }
 
 - (void)libraryItemWithId:(ReadmillLibraryItemId)libraryItemId completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    [self sendGetRequestToURL:[self urlForLibraryItemWithId:libraryItemId]
-               withParameters:nil
-   shouldBeCalledUnauthorized:NO
-            completionHandler:completionHandler];
+    [self sendGetRequestToEndpoint:[self endpointForLibraryItemWithId:libraryItemId]
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
 }
 
 - (void)updateLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
                      parameters:(NSDictionary *)parameters
               completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    [self sendPutRequestToURL:[self urlForLibraryItemWithId:libraryItemId]
-               withParameters:parameters
-            completionHandler:completionHandler];
+    [self sendPutRequestToEndpoint:[self endpointForLibraryItemWithId:libraryItemId]
+                    withParameters:parameters
+                 completionHandler:completionHandler];
 }
 
+- (void)libraryChangesWithLocalIds:(NSArray *)localIds
+                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:[localIds componentsJoinedByString:@","]
+                                                           forKey:kReadmillAPILibraryLocalIdsKey];
+    
+    NSString *endpoint = [[self libraryEndPoint] stringByAppendingPathComponent:@"compare"];
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:parameters
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
+}
 
 #pragma mark -
-#pragma mark - Prepared requests
-
-- (void)sendRequestToURL:(NSURL *)url
-       completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{
-    [self sendGetRequestToURL:url 
-               withParameters:nil 
-   shouldBeCalledUnauthorized:NO 
-            completionHandler:completionHandler];
-}
+#pragma mark - Operation
 
 - (ReadmillRequestOperation *)operationWithRequest:(NSURLRequest *)request
-                                     completion:(ReadmillAPICompletionHandler)completionBlock
+                                        completion:(ReadmillAPICompletionHandler)completionBlock
 {
     NSAssert(request != nil, @"Request is nil!");
     static NSString * const LocationHeader = @"Location";
     
     dispatch_queue_t currentQueue = dispatch_get_current_queue();
     // This block will be called when the asynchronous operation finishes
-    ReadmillRequestOperationCompletionBlock connectionCompletionHandler = ^(NSHTTPURLResponse *response, 
-                                                                           NSData *responseData, 
-                                                                           NSError *connectionError) {
+    ReadmillRequestOperationCompletionBlock connectionCompletionHandler = ^(NSHTTPURLResponse *response,
+                                                                            NSData *responseData,
+                                                                            NSError *connectionError) {
         
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        
         NSError *error = nil;
         
         // If we created something (201) or tried to create an existing
-        // resource (409), we issue a GET request with the URL found 
+        // resource (409), we issue a GET request with the URL found
         // in the "Location" header that contains the resource.
         NSString *locationHeader = [[response allHeaderFields] valueForKey:LocationHeader];
-        if (([response statusCode] == 201 || [response statusCode] == 200 || [response statusCode] == 409) && locationHeader != nil) {
+        if ([response statusCode] == 409 && locationHeader != nil) {
             
             NSURL *locationURL = [NSURL URLWithString:locationHeader];
-            NSURLRequest *newRequest = [self getRequestWithURL:locationURL 
-                                                    parameters:nil 
+            NSURLRequest *newRequest = [self getRequestWithURL:locationURL
+                                                    parameters:nil
                                     shouldBeCalledUnauthorized:NO
+                                                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                          error:&error];
             
             if (newRequest) {
                 // It's important that we return this resource ASAP
-                [self startPreparedRequest:newRequest 
+                [self startPreparedRequest:newRequest
                                 completion:completionBlock
                              queuePriority:NSOperationQueuePriorityVeryHigh];
             } else {
@@ -936,8 +902,8 @@
             }
         } else {
             // Parse the response
-            id jsonResponse = [self parseResponse:response 
-                                 withResponseData:responseData 
+            id jsonResponse = [self parseResponse:response
+                                 withResponseData:responseData
                                   connectionError:connectionError
                                             error:&error];
             
@@ -952,11 +918,10 @@
                     completionBlock(jsonResponse, error);
                 });
             }
+            [pool release];
         }
-        [pool release];
     };
-    
-    ReadmillRequestOperation *operation = [[[ReadmillRequestOperation alloc] initWithRequest:request 
+    ReadmillRequestOperation *operation = [[[ReadmillRequestOperation alloc] initWithRequest:request
                                                                            completionHandler:connectionCompletionHandler] autorelease];
     
     return operation;
@@ -966,15 +931,15 @@
 #pragma mark -
 #pragma mark - Cancel operations
 
-- (void)cancelAllOperations 
+- (void)cancelAllOperations
 {
     [queue cancelAllOperations];
 }
 
-#pragma mark - 
+#pragma mark -
 #pragma mark - Deprecated
 
-- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
+- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId
                         highlightedText:(NSString *)highlightedText
                                     pre:(NSString *)pre
                                    post:(NSString *)post
@@ -982,14 +947,14 @@
                           highlightedAt:(NSDate *)highlightedAt
                                 comment:(NSString *)comment
                             connections:(NSArray *)connectionsOrNil
-                      completionHandler:(ReadmillAPICompletionHandler)completionHandler 
-{    
+                      completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     
     NSMutableDictionary *highlightParameters = [[NSMutableDictionary alloc] init];
     [highlightParameters setValue:highlightedText
                            forKey:kReadmillAPIHighlightContentKey];
-    [highlightParameters setValue:[NSNumber numberWithFloat:position] 
+    [highlightParameters setValue:[NSNumber numberWithFloat:position]
                            forKey:kReadmillAPIHighlightPositionKey];
     [highlightParameters setValue:pre
                            forKey:kReadmillAPIHighlightPreKey];
@@ -1009,17 +974,16 @@
         highlightedAt = [NSDate date];
     }
     // 2011-01-06T11:47:14Z
-    [highlightParameters setValue:[highlightedAt stringWithRFC3339Format] 
+    [highlightParameters setValue:[highlightedAt stringWithRFC3339Format]
                            forKey:kReadmillAPIHighlightHighlightedAtKey];
     [parameters setObject:highlightParameters forKey:@"highlight"];
     [highlightParameters release];
     
-    NSURL *highlightsURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%d/highlights", 
-                                                 [self readingsEndpoint], readingId]];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
     
-    [self sendPostRequestToURL:highlightsURL 
-                withParameters:[parameters autorelease]
-             completionHandler:completionHandler];
+    [self sendPostRequestToEndpoint:endpoint
+                     withParameters:[parameters autorelease]
+                  completionHandler:completionHandler];
 }
 
 @end

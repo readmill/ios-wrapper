@@ -67,6 +67,8 @@ static NSString * const kReadmillAPIClientIdKey = @"client_id";
 static NSString * const kReadmillAPIClientSecretKey = @"client_secret";
 static NSString * const kReadmillAPIAccessTokenKey = @"access_token";
 
+static NSString * const kReadmillAPIItemsKey = @"items";
+
 #pragma mark API Keys - Book
 
 static NSString * const kReadmillAPIBookKey = @"book";
@@ -156,7 +158,7 @@ static NSString * const kReadmillAPICommentIdKey = @"id";
 static NSString * const kReadmillAPICommentPostedAtKey = @"posted_at";
 static NSString * const kReadmillAPICommentContentKey = @"content";
 
-#pragma mark API Keys - Pings
+#pragma mark API Keys - Periods
 
 static NSString * const kReadmillAPIPingProgressKey = @"progress";
 static NSString * const kReadmillAPIPingDurationKey = @"duration";
@@ -171,6 +173,10 @@ static NSString * const kReadmillAPIFilterKey = @"filter";
 static NSString * const kReadmillAPIFilterByFollowings = @"followings";
 static NSString * const kReadmillAPIOrderKey = @"order";
 static NSString * const kReadmillAPIOrderByPopular = @"popular";
+
+#pragma mark Library
+
+static NSString * const kReadmillAPILibraryLocalIdsKey = @"local_ids";
 
 @class ReadmillRequestOperation;
 
@@ -191,13 +197,10 @@ static NSString * const kReadmillAPIOrderByPopular = @"popular";
     NSString *accessToken;
     NSString *authorizedRedirectURL;
     NSDate *accessTokenExpiryDate;
-    NSOperationQueue *queue;
     ReadmillAPIConfiguration *apiConfiguration;
-    
-    
-    // This will be removed soon, in favor of non-expiring tokens
-    NSString *refreshToken DEPRECATED_ATTRIBUTE;
 }
+
+@property (nonatomic, retain, readonly) NSOperationQueue *queue;
 
 #pragma mark Initialization and Serialization 
 
@@ -367,7 +370,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  IMPORTANT: The state and privacy options may not match the passed arguments if a reading already existed.
  */
 - (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
-                                state:(ReadmillReadingState)readingState 
+                                state:(NSString *)readingState
                             isPrivate:(BOOL)isPrivate
                           connections:(NSArray *)connections
                     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
@@ -383,7 +386,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  IMPORTANT: The state and privacy options may not match the passed arguments if a reading already existed.
  */
 - (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
-                                state:(ReadmillReadingState)readingState 
+                                state:(NSString *)readingState
                             isPrivate:(BOOL)isPrivate
                     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
@@ -396,7 +399,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @brief   Update a reading with the given Id with a new state, privacy and closing remark. 
 */
 - (void)updateReadingWithId:(ReadmillReadingId)readingId
-                  withState:(ReadmillReadingState)readingState
+                  withState:(NSString *)readingState
                   isPrivate:(BOOL)isPrivate
               closingRemark:(NSString *)closingRemark
           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
@@ -457,14 +460,6 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 - (void)readingWithId:(ReadmillReadingId)readingId 
     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
-
-/*!
- @param url The URL as a string of the reading you'd like to get details for.
- @param completionHandler An (optional) block that will return the result (id) and an error pointer.
- @brief   Get a specific reading by its URL.
- */
-- (void)readingWithURLString:(NSString *)urlString 
-           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
@@ -662,6 +657,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 #pragma mark - 
 #pragma mark - Library
 
+// http://developers.readmill.com/api/docs/v2/library
+
 /*!
  @param libraryItemId The id of the library item to get.
  @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
@@ -682,22 +679,14 @@ The object returned here is appropriate for saving in a property list, NSUserDef
               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
- @param localIds A set containing library item ids already stored locally.
+ @param localIds An array containing library item ids already stored locally.
  @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
  @brief Returns a list of actions to be made on the client to be synchronized with the users cloud storage, 
         also called Library. There are only two different actions, delete and download.
  */
-- (void)libraryChangesWithLocalIds:(NSSet *)localIds completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)libraryChangesWithLocalIds:(NSArray *)localIds
+                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
-
-#pragma mark -
-#pragma mark Unprepared requests
-/*!
- @param url The URL to which the request will be sent
- @param completionHandler A block that will return any result (id) and an NSError object if an error occurs.
- @brief Send a request to the specified URL.
- */
-- (void)sendRequestToURL:(NSURL *)url completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark - 
 #pragma mark - Cancel operations
@@ -709,31 +698,5 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 - (ReadmillRequestOperation *)operationWithRequest:(NSURLRequest *)request
                                      completion:(ReadmillAPICompletionHandler)completion;
 
-
-#pragma mark -
-#pragma mark - Deprecated methods
-
-/*!
- @param readingId The id of the reading you want to create a highlight in.
- @param highlightedText The highlighted text
- @param pre (optional) The text before the highlightText (needed in case the highlightedText is very short)
- @param post (optional) The text after the highlightedText (needed in case the highlightedText is very short)
- @param position The approximate position of the highlighted text in the book as float percentage.
- @param highlightedAt An NSDate object representing the date the resource was created, pass nil for "now". 
- @param comment (optional) A comment on the highlight
- @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user 
- /me/connections/). Use nil for default connections.
- @param completionHandler A block that will return the result (id) and an error pointer.
- @brief  Send a highlighted text snippet to Readmill.
- */
-- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId 
-                        highlightedText:(NSString *)highlightedText
-                                    pre:(NSString *)preOrNil
-                                   post:(NSString *)postOrNil
-                    approximatePosition:(ReadmillReadingProgress)position
-                          highlightedAt:(NSDate *)highlightedAtOrNil
-                                comment:(NSString *)commentOrNil
-                            connections:(NSArray *)connectionsOrNil
-                      completionHandler:(ReadmillAPICompletionHandler)completionHandler DEPRECATED_ATTRIBUTE;
 
 @end

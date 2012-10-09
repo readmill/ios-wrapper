@@ -172,21 +172,28 @@
     [super dealloc];
 }
 
++ (NSArray *)readingStates
+{
+    static NSArray *_readingStates = nil;
+    if (!_readingStates) {
+        _readingStates = [[NSArray alloc] initWithObjects:@"unknown", @"interesting", @"reading", @"finished", @"abandoned", nil];
+    };
+    return _readingStates;
+}
+
 + (ReadmillReadingState)readingStateFromReadingStateString:(NSString *)readingStateString
 {
-    ReadmillReadingState readingState;
-    if ([readingStateString isEqualToString:ReadmillReadingStateInterestingKey]) {
-        readingState = ReadingStateInteresting;
-    } else if ([readingStateString isEqualToString:ReadmillReadingStateReadingKey]) {
-        readingState = ReadingStateReading;
-    } else if ([readingStateString isEqualToString:ReadmillReadingStateFinishedKey]) {
-        readingState = ReadingStateFinished;
-    } else if ([readingStateString isEqualToString:ReadmillReadingStateAbandonedKey]) {
-        readingState = ReadingStateAbandoned;
-    }
-    
+    ReadmillReadingState readingState = [[ReadmillReading readingStates] indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [readingStateString isEqualToString:obj];
+    }];
     return readingState;
 }
+
++ (NSString *)readingStateStringFromState:(ReadmillReadingState)state
+{
+    return [[ReadmillReading readingStates] objectAtIndex:state];
+}
+
 
 #pragma mark -
 #pragma mark Threaded Methods
@@ -224,16 +231,16 @@
                delegate:(id <ReadmillReadingUpdatingDelegate>)delegate 
 {        
     [[self apiWrapper] updateReadingWithId:[self readingId]
-                                 withState:newState
+                                 withState:[ReadmillReading readingStateStringFromState:newState]
                                  isPrivate:newIsPrivate
                              closingRemark:newRemark
-                         completionHandler:^(id result, NSError *error) {                             
-                             if (error == nil) {
-                                 // PUT does not return a result, but if there was no error, we 
-                                 // can safely assume reading was uppdated successfully.
-                                 [self setState:newState];
-                                 [self setIsPrivate:newIsPrivate];
-                                 [self setClosingRemark:newRemark];
+                         completionHandler:^(id apiResponse, NSError *error) {
+                             NSDictionary *readingDictionary = [apiResponse valueForKey:kReadmillAPIReadingKey];
+                             NSLog(@"api: %@", apiResponse);
+                             
+                             if (error == nil && readingDictionary) {
+                                 NSLog(@"self update with: %@", readingDictionary);
+                                 [self updateWithAPIDictionary:readingDictionary];
                                  [delegate readmillReadingDidUpdateMetadataSuccessfully:self];
                              } else {
                                  [delegate readmillReading:self didFailToUpdateMetadataWithError:error];

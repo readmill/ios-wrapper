@@ -322,8 +322,9 @@
                           delegate:(id <ReadmillReadingFindingDelegate>)delegate 
 {    
     __block typeof (self) bself = self;
-    ReadmillAPICompletionHandler completionBlock = ^(id readingDictionary, NSError *error) {
-        
+    ReadmillAPICompletionHandler completionBlock = ^(id apiResponse, NSError *error) {
+        NSDictionary *readingDictionary = [apiResponse valueForKey:kReadmillAPIReadingKey];
+        NSLog(@"readingdict: %@", readingDictionary);
         if (error || !readingDictionary) {
             [delegate readmillUser:bself failedToFindReadingForBook:book 
                          withError:error];
@@ -339,8 +340,10 @@
         }
     };
     
+    NSLog(@"book: %@", book);
+    
     [[self apiWrapper] findOrCreateReadingWithBookId:[book bookId]
-                                               state:readingState
+                                               state:[ReadmillReading readingStateStringFromState:readingState]
                                            isPrivate:isPrivate 
                                          connections:connections
                                    completionHandler:completionBlock];

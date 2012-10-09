@@ -50,9 +50,9 @@
     };
 
     // Inject our block 
-    [[[mockWrapper expect] andDo:theBlock] sendPostRequestToURL:OCMOCK_ANY
-                                                 withParameters:OCMOCK_ANY
-                                              completionHandler:OCMOCK_ANY];
+    [[[mockWrapper expect] andDo:theBlock] sendPostRequestToEndpoint:OCMOCK_ANY
+                                                      withParameters:OCMOCK_ANY
+                                                   completionHandler:OCMOCK_ANY];
 
     // Create the highlight
     [mockWrapper createHighlightForReadingWithId:4711 

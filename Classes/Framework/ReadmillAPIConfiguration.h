@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 // API base URL
-static NSString * const kLiveAPIEndPoint = @"https://api.readmill.com/v2";
-static NSString * const kStagingAPIEndPoint = @"http://api.stage-readmill.com/v2";
+static NSString * const kLiveAPIEndPoint = @"https://api.readmill.com/v2/";
+static NSString * const kStagingAPIEndPoint = @"http://api.stage-readmill.com/v2/";
 
 // OAuth URL
 static NSString * const kLiveAuthorizationUri = @"https://m.readmill.com/";

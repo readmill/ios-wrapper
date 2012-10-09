@@ -62,22 +62,21 @@
                                                                       ofType:@"json"];
     
     NSData *data = [NSData dataWithContentsOfFile:path];    
-    readingDictionary = [[data objectFromJSONData] retain];
+    self.readingDictionary = [[data objectFromJSONData] retain];
 }
 
 - (void)tearDown
 {
     // Tear-down code here.
-    [readingDictionary release];
+    [_readingDictionary release];
     [super tearDown];
 }
 
 - (void)testCreateReading
 {        
-    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary 
+    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:self.readingDictionary
                                                                     apiWrapper:nil] autorelease];
     
-    NSLog(@"reaidng: %@", reading);
     STAssertTrue([reading readingId] == 47783, @"ReadingId is wrong: %d", [reading readingId]);
     STAssertTrue([reading state] == ReadingStateFinished, @"State is wrong: %d", [reading state]);
     STAssertTrue([reading isPrivate] == NO, @"IsPrivate is wrong: %d", [reading isPrivate]);
@@ -92,7 +91,7 @@
 }
 - (void)testUserFromReading
 {
-    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary 
+    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:self.readingDictionary
                                                                     apiWrapper:nil] autorelease];
     
     ReadmillUser *user = [reading user];
@@ -111,11 +110,11 @@
 - (void)testUpdateReading
 {
     id mockWrapper = [OCMockObject mockForClass:[ReadmillAPIWrapper class]];
-    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary 
+    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:self.readingDictionary
                                                                     apiWrapper:mockWrapper] autorelease];
 
     [[mockWrapper expect] updateReadingWithId:[reading readingId]
-                                    withState:[reading state]
+                                    withState:ReadmillReadingStateFinishedKey
                                     isPrivate:[reading isPrivate]
                                 closingRemark:[reading closingRemark] 
                             completionHandler:OCMOCK_ANY];
@@ -127,7 +126,7 @@
 - (void)testSessionIdentifierUpdates
 {
     id mockWrapper = [OCMockObject niceMockForClass:[ReadmillAPIWrapper class]];
-    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary 
+    ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:self.readingDictionary
                                                                     apiWrapper:mockWrapper] autorelease];
     
     ReadmillReadingSession *readingSession = [reading createReadingSession];

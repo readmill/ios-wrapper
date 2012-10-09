@@ -8,10 +8,8 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface ReadmillAPIReadingTests : SenTestCase {
-@private
+@interface ReadmillAPIReadingTests : SenTestCase
 
-    NSDictionary *readingDictionary;
-}
+@property (nonatomic, retain) NSDictionary *readingDictionary;
 
 @end
