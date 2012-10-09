@@ -52,9 +52,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     [finalParameters setObject:[[self apiConfiguration] clientID]
                         forKey:kReadmillAPIClientIdKey];
     
+    url = [url URLByAddingParameters:finalParameters];
+    
     [finalParameters release];
     
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[url URLByAddingParameters:parameters]
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url
                                                                 cachePolicy:cachePolicy
                                                             timeoutInterval:kTimeoutInterval];
     
@@ -174,13 +176,13 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     }
 }
 
-- (void)sendGetRequestToEndpoint:(NSString *)endPoint
+- (void)sendGetRequestToEndpoint:(NSString *)endpoint
                   withParameters:(NSDictionary *)parameters
       shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSError *error = nil;
-    NSURLRequest *request = [self getRequestWithEndpoint:endPoint
+    NSURLRequest *request = [self getRequestWithEndpoint:endpoint
                                               parameters:parameters
                               shouldBeCalledUnauthorized:allowUnauthed
                                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
