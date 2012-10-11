@@ -214,13 +214,13 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 }
 
 - (void)sendDeleteRequestToEndpoint:(NSString *)endpoint
-                withParameters:(NSDictionary *)parameters
-             completionHandler:(ReadmillAPICompletionHandler)completionHandler
+                     withParameters:(NSDictionary *)parameters
+                  completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSError *error = nil;
     NSURLRequest *request = [self deleteRequestWithEndpoint:endpoint
-                                            parameters:parameters
-                                                 error:&error];
+                                                 parameters:parameters
+                                                      error:&error];
     
     if (request) {
         [self startPreparedRequest:request
@@ -277,54 +277,61 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     connectionError:(NSError *)connectionError
               error:(NSError **)error
 {
-    /*
-     * TODO - Error if not X-Readmill-API header (needs to be implemented for oauth route first)
-     */
-    BOOL isReadmillResponse = [[response allHeaderFields] objectForKey:kReadmillAPIHeaderKey] != nil;
-    if (([response statusCode] != 200 && [response statusCode] != 201) || response == nil || connectionError != nil) {
-        
-		if (connectionError == nil) {
-            if (error != NULL) {
-                NSString *errorDomain = NSURLErrorDomain;
-                if (isReadmillResponse) {
-                    errorDomain = kReadmillDomain;
-                }
-                
-                *error = [NSError errorWithDomain:errorDomain
-                                             code:[response statusCode]
-                                         userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                   @"An unknown error occurred", NSLocalizedFailureReasonErrorKey, nil]];
-            }
-		} else {
-			if (error != NULL) {
-				*error = connectionError;
-			}
-		}
-		return nil;
-		
-	} else {
-		// All was OK in the URL, let's try and parse the JSON.
-		NSError *parseError = nil;
-        // Length > 1 hack to avoid JSONKit error on whitespace
-        if (responseData && [responseData length] > 1) {
-            
-            id result = nil;
-            if ([response.MIMEType isEqualToString:@"application/json"]) {
-                result = [[self jsonDecoder] objectWithData:responseData
-                                                      error:&parseError];
-            } else {
-                result = responseData;
-            }
-            if (parseError != nil) {
-                if (error != NULL) {
-                    *error = parseError;
-                }
-            } else {
-                return result;
-            }
+    id result = nil;
+    NSError *parseError = nil;
+    
+    if (responseData) {
+        if ([response.MIMEType isEqualToString:@"application/json"]) {
+            result = [[self jsonDecoder] objectWithData:responseData
+                                                  error:&parseError];
         }
+    }
+    
+    if (([response statusCode] != 200 && [response statusCode] != 201) // Not OK statusCode
+        || response == nil || result == nil // Response or result == nil
+        || connectionError != nil || parseError != nil) { // Errors NOT nil
+        
+        // No need to find out what went wrong
+        if (error == NULL) return nil;
+        
+        if (connectionError != nil) {
+            // There was a connection error
+            *error = connectionError;
+        } else if (parseError != nil) {
+            // There was a problem parsing the JSON
+            *error = parseError;
+        } else {
+            /*
+             *  No connection error and no parsing error.
+             *  (i.e. resource does not exist, or malformed request)
+             *
+             *  It's a valid Readmill response if there's a JSON status code
+             *  equal to the response code.
+             */
+            BOOL isReadmillResponse = [[result valueForKey:@"status"] integerValue] == response.statusCode;
+            
+            // Unknown case
+            NSString *localizedFailureReasonString = @"An unknown error occurred.";
+            NSString *errorDomain = NSURLErrorDomain;
+            
+            if (isReadmillResponse) {
+                // Belongs to Readmill
+                errorDomain = kReadmillDomain;
+                NSString *errorString = [[result valueForKey:@"error"] description];
+                if (errorString) {
+                    // We have an error string in the response JSON
+                    localizedFailureReasonString = errorString;
+                }
+            }
+            
+            *error = [NSError errorWithDomain:errorDomain
+                                         code:[response statusCode]
+                                     userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                               localizedFailureReasonString, NSLocalizedFailureReasonErrorKey, nil]];
+		}
         return nil;
-	}
+    }
+    return result;
 }
 
 - (void)startPreparedRequest:(NSURLRequest *)request
