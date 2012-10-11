@@ -26,11 +26,18 @@
 @implementation NSDictionary (ReadmillAdditions)
 
 - (NSDictionary *)dictionaryByRemovingNullValues 
-{    
-    NSMutableDictionary *cleanedDictionary = [[self mutableCopy] autorelease];
-    NSArray *nullKeys = [self allKeysForObject:[NSNull null]];
-    [cleanedDictionary removeObjectsForKeys:nullKeys];
+{
+    NSMutableDictionary *cleanedDictionary = [NSMutableDictionary dictionaryWithDictionary:self];
     
+    for (NSString *key in self) {
+        id object = [self objectForKey:key];
+        if ([object isEqual:[NSNull null]]) {
+            [cleanedDictionary removeObjectForKey:key];
+        } else if ([object isKindOfClass:[NSDictionary class]]) {
+            [cleanedDictionary setObject:[(NSDictionary *)object dictionaryByRemovingNullValues]
+                                  forKey:key];
+        }
+    }
     return [NSDictionary dictionaryWithDictionary:cleanedDictionary];
 }
 
