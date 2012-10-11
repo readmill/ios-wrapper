@@ -324,25 +324,22 @@
 {    
     __block typeof (self) bself = self;
     ReadmillAPICompletionHandler completionBlock = ^(id apiResponse, NSError *error) {
-        NSDictionary *readingDictionary = [apiResponse valueForKey:kReadmillAPIReadingKey];
-        NSLog(@"readingdict: %@", readingDictionary);
-        if (error || !readingDictionary) {
+        
+        if (error || !apiResponse) {
             [delegate readmillUser:bself failedToFindReadingForBook:book 
                          withError:error];
         } else {
             
-            ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:readingDictionary
+            ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:apiResponse
                                                                             apiWrapper:bself->_apiWrapper] autorelease];
-            [book updateWithAPIDictionary:[readingDictionary valueForKey:kReadmillAPIReadingBookKey]];
+            [book updateWithAPIDictionary:[apiResponse valueForKey:kReadmillAPIReadingKey]];
             
             [delegate readmillUser:bself
                     didFindReading:reading
                            forBook:book];
         }
     };
-    
-    NSLog(@"book: %@", book);
-    
+        
     [[self apiWrapper] findOrCreateReadingWithBookId:[book bookId]
                                                state:[ReadmillReading readingStateStringFromState:readingState]
                                            isPrivate:isPrivate 
