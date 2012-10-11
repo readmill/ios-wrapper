@@ -123,16 +123,10 @@
 @property (readonly, copy) NSDate *dateAbandoned;
 
 /*!
- @property  dateCreated
- @brief The date this reading object was created, typically the date the user first interacted with the book.
- */
-@property (readonly, copy) NSDate *dateCreated;
-
-/*!
  @property  dateFinished
  @brief The date the user finished reading this book, if any.
  */
-@property (readonly, copy) NSDate *dateFinished;
+@property (readonly, copy) NSDate *dateEnded;
 
 /*!
  @property  dateModified

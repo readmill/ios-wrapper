@@ -27,11 +27,9 @@
 
 @interface ReadmillReading ()
 
-@property (readwrite, copy) NSDate *dateAbandoned;
-@property (readwrite, copy) NSDate *dateCreated;
-@property (readwrite, copy) NSDate *dateFinished;
-@property (readwrite, copy) NSDate *dateModified;
 @property (readwrite, copy) NSDate *dateStarted;
+@property (readwrite, copy) NSDate *dateEnded;
+@property (readwrite, copy) NSDate *dateModified;
 
 @property (readwrite) NSTimeInterval estimatedTimeLeft;
 @property (readwrite) NSTimeInterval timeSpent;
@@ -104,9 +102,8 @@
         [self setUserId:[[[cleanedDict objectForKey:kReadmillAPIUserKey] objectForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
     }
     
-    [self setDateAbandoned:[[cleanedDict objectForKey:kReadmillAPIReadingDateAbandonedKey] dateWithRFC3339Formatting]];
-    [self setDateCreated:[[cleanedDict objectForKey:kReadmillAPIReadingDateCreatedKey] dateWithRFC3339Formatting]];
-    [self setDateFinished:[[cleanedDict objectForKey:kReadmillAPIReadingDateFinishedKey] dateWithRFC3339Formatting]];
+    [self setDateStarted:[[cleanedDict objectForKey:kReadmillAPIReadingDateStartedKey] dateWithRFC3339Formatting]];
+    [self setDateEnded:[[cleanedDict objectForKey:kReadmillAPIReadingDateEndedKey] dateWithRFC3339Formatting]];
     [self setDateModified:[[cleanedDict objectForKey:kReadmillAPIReadingDateModifiedKey] dateWithRFC3339Formatting]];
     [self setDateStarted:[[cleanedDict objectForKey:kReadmillAPIReadingDateStartedKey] dateWithRFC3339Formatting]];
     [self setClosingRemark:[cleanedDict objectForKey:kReadmillAPIReadingClosingRemarkKey]];
@@ -155,9 +152,8 @@
     [self setApiWrapper:nil];
     [self setUser:nil];
 
-    [self setDateAbandoned:nil];
-    [self setDateCreated:nil];
-    [self setDateFinished:nil];
+    [self setDateStarted:nil];
+    [self setDateEnded:nil];
     [self setDateModified:nil];
     [self setDateStarted:nil];
     [self setClosingRemark:nil];

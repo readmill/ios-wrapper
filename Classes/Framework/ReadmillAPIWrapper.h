@@ -111,9 +111,7 @@ static NSString * const kReadmillAPIUserAuthenticationToken = @"authentication_t
 #pragma mark API Keys - Reading
 
 static NSString * const kReadmillAPIReadingKey = @"reading";
-static NSString * const kReadmillAPIReadingDateAbandonedKey = @"abandoned_at";
-static NSString * const kReadmillAPIReadingDateCreatedKey = @"created_at";
-static NSString * const kReadmillAPIReadingDateFinishedKey = @"finished_at";
+static NSString * const kReadmillAPIReadingDateEndedKey = @"ended_at";
 static NSString * const kReadmillAPIReadingDateModifiedKey = @"touched_at";
 static NSString * const kReadmillAPIReadingDateStartedKey = @"started_at";
 static NSString * const kReadmillAPIReadingClosingRemarkKey = @"closing_remark";
