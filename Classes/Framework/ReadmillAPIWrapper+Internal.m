@@ -322,6 +322,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                     // We have an error string in the response JSON
                     localizedFailureReasonString = errorString;
                 }
+                
+                if (response.statusCode == 409) {
+                    
+                }
             }
             
             *error = [NSError errorWithDomain:errorDomain
@@ -329,7 +333,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                      userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
                                                localizedFailureReasonString, NSLocalizedFailureReasonErrorKey, nil]];
 		}
-        return nil;
     }
     return result;
 }

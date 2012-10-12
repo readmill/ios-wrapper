@@ -263,7 +263,7 @@
     __block typeof(self) bself = self;
     ReadmillAPICompletionHandler completionBlock = ^(NSDictionary *bookDictionary, NSError *error) {
         
-        if (error) {
+        if ((error && error.code != 409) || !bookDictionary) {
             [delegate readmillUser:bself failedToFindBookWithError:error];
         } else {
             if (bookDictionary == nil) {
@@ -325,7 +325,7 @@
     __block typeof (self) bself = self;
     ReadmillAPICompletionHandler completionBlock = ^(id apiResponse, NSError *error) {
         
-        if (error || !apiResponse) {
+        if ((error && [error code] != 409) || !apiResponse) {
             [delegate readmillUser:bself failedToFindReadingForBook:book 
                          withError:error];
         } else {

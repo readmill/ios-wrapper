@@ -938,56 +938,6 @@
     [queue cancelAllOperations];
 }
 
-#pragma mark -
-#pragma mark - Deprecated
-
-- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId
-                        highlightedText:(NSString *)highlightedText
-                                    pre:(NSString *)pre
-                                   post:(NSString *)post
-                    approximatePosition:(ReadmillReadingProgress)position
-                          highlightedAt:(NSDate *)highlightedAt
-                                comment:(NSString *)comment
-                            connections:(NSArray *)connectionsOrNil
-                      completionHandler:(ReadmillAPICompletionHandler)completionHandler
-{
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    
-    NSMutableDictionary *highlightParameters = [[NSMutableDictionary alloc] init];
-    [highlightParameters setValue:highlightedText
-                           forKey:kReadmillAPIHighlightContentKey];
-    [highlightParameters setValue:[NSNumber numberWithFloat:position]
-                           forKey:kReadmillAPIHighlightPositionKey];
-    [highlightParameters setValue:pre
-                           forKey:kReadmillAPIHighlightPreKey];
-    [highlightParameters setValue:post
-                           forKey:kReadmillAPIHighlightPostKey];
-    
-    if (comment != nil && [comment length] > 0) {
-        [parameters setValue:comment forKey:kReadmillAPIHighlightCommentKey];
-    }
-    
-    if (connectionsOrNil != nil) {
-        [parameters setValue:[self postToArrayWithConnections:connectionsOrNil]
-                      forKey:kReadmillAPIHighlightPostToKey];
-    }
-    
-    if (!highlightedAt) {
-        highlightedAt = [NSDate date];
-    }
-    // 2011-01-06T11:47:14Z
-    [highlightParameters setValue:[highlightedAt stringWithRFC3339Format]
-                           forKey:kReadmillAPIHighlightHighlightedAtKey];
-    [parameters setObject:highlightParameters forKey:@"highlight"];
-    [highlightParameters release];
-    
-    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
-    
-    [self sendPostRequestToEndpoint:endpoint
-                     withParameters:[parameters autorelease]
-                  completionHandler:completionHandler];
-}
-
 @end
 
 
