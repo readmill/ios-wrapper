@@ -18,11 +18,11 @@
 }
 - (NSURL *)URLByAddingParameters:(NSDictionary *)parameters {
 
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSString *URLString = [self absoluteString];
-    NSURL *URL = [[NSURL alloc] initWithString:[URLString stringByAppendingString:[[NSURL URLWithParameters:parameters] absoluteString]]];    
-    [pool drain];
-    return [URL autorelease];
+    @autoreleasepool {
+        NSString *URLString = [self absoluteString];
+        NSURL *URL = [[NSURL alloc] initWithString:[URLString stringByAppendingString:[[NSURL URLWithParameters:parameters] absoluteString]]];
+        return [URL autorelease];
+    }
 }
 - (NSDictionary *)queryAsDictionary {
     NSArray *parameters = [[self query] componentsSeparatedByString:@"&"];

@@ -34,8 +34,8 @@
 	
 	if (self = [super init]) {
         
-        NSString *authURLString = onProduction ? kLiveAuthorizationUri : kStagingAuthorizationUri;
-        NSString *apiBaseURLString = onProduction ? kLiveAPIEndPoint : kStagingAPIEndPoint;
+        NSString *authURLString = onProduction ? kReadmillLiveAuthorizationURLString : kReadmillStagingAuthorizationURLString;
+        NSString *apiBaseURLString = onProduction ? kReadmillLiveAPIBaseURLString : kReadmillStagingAPIBaseURLString;
         
         _accessTokenURL = [[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", authURLString]] retain];
 

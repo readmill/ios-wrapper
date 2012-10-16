@@ -873,53 +873,53 @@
                                                                             NSData *responseData,
                                                                             NSError *connectionError) {
         
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        NSError *error = nil;
-        
-        // If we created something (201) or tried to create an existing
-        // resource (409), we issue a GET request with the URL found
-        // in the "Location" header that contains the resource.
-        NSString *locationHeader = [[response allHeaderFields] valueForKey:LocationHeader];
-        if ([response statusCode] == 409 && locationHeader != nil) {
+        @autoreleasepool {
+            NSError *error = nil;
             
-            NSURL *locationURL = [NSURL URLWithString:locationHeader];
-            NSURLRequest *newRequest = [self getRequestWithURL:locationURL
-                                                    parameters:nil
-                                    shouldBeCalledUnauthorized:NO
-                                                   cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                         error:&error];
-            
-            if (newRequest) {
-                // It's important that we return this resource ASAP
-                [self startPreparedRequest:newRequest
-                                completion:completionBlock
-                             queuePriority:NSOperationQueuePriorityVeryHigh];
+            // If we created something (201) or tried to create an existing
+            // resource (409), we issue a GET request with the URL found
+            // in the "Location" header that contains the resource.
+            NSString *locationHeader = [[response allHeaderFields] valueForKey:LocationHeader];
+            if ([response statusCode] == 409 && locationHeader != nil) {
+                
+                NSURL *locationURL = [NSURL URLWithString:locationHeader];
+                NSURLRequest *newRequest = [self getRequestWithURL:locationURL
+                                                        parameters:nil
+                                        shouldBeCalledUnauthorized:NO
+                                                       cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+                                                             error:&error];
+                
+                if (newRequest) {
+                    // It's important that we return this resource ASAP
+                    [self startPreparedRequest:newRequest
+                                    completion:completionBlock
+                                 queuePriority:NSOperationQueuePriorityVeryHigh];
+                } else {
+                    if (completionBlock) {
+                        dispatch_async(currentQueue, ^{
+                            completionBlock(nil, error);
+                        });
+                    }
+                }
             } else {
+                // Parse the response
+                id jsonResponse = [self parseResponse:response
+                                     withResponseData:responseData
+                                      connectionError:connectionError
+                                                error:&error];
+                
+                if (connectionError || error) {
+                    // Remove cached requests for errors
+                    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+                }
+                
+                // Execute the completionBlock
                 if (completionBlock) {
                     dispatch_async(currentQueue, ^{
-                        completionBlock(nil, error);
+                        completionBlock(jsonResponse, error);
                     });
                 }
             }
-        } else {
-            // Parse the response
-            id jsonResponse = [self parseResponse:response
-                                 withResponseData:responseData
-                                  connectionError:connectionError
-                                            error:&error];
-            
-            if (connectionError || error) {
-                // Remove cached requests for errors
-                [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-            }
-            
-            // Execute the completionBlock
-            if (completionBlock) {
-                dispatch_async(currentQueue, ^{
-                    completionBlock(jsonResponse, error);
-                });
-            }
-            [pool release];
         }
     };
     ReadmillRequestOperation *operation = [[[ReadmillRequestOperation alloc] initWithRequest:request

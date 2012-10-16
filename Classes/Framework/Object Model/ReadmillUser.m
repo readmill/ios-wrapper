@@ -69,13 +69,11 @@
 {    
     ReadmillAPIWrapper *apiWrapper = [[[ReadmillAPIWrapper alloc] initWithAPIConfiguration:apiConfiguration] autorelease];
     
-    ReadmillUser *user = [[ReadmillUser alloc] initWithAPIDictionary:nil
-                                                          apiWrapper:apiWrapper];
+    ReadmillUser *user = [[[ReadmillUser alloc] initWithAPIDictionary:nil
+                                                           apiWrapper:apiWrapper] autorelease];
     [user authenticateCallbackURL:callbackURL 
                   baseCallbackURL:baseCallbackURL
-                         delegate:authenticationDelegate];
-    
-    [user autorelease];
+                         delegate:authenticationDelegate];    
 }
 
 + (void)authenticateWithPropertyListRepresentation:(NSDictionary *)plistRep delegate:(id <ReadmillUserAuthenticationDelegate>)authenticationDelegate 
