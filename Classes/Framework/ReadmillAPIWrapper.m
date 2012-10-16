@@ -655,8 +655,8 @@
     }
     
     if (connections != nil) {
-        [parameters setValue:[self postToArrayWithConnections:connections]
-                      forKey:kReadmillAPIHighlightPostToKey];
+        [highlightParameters setValue:[self postToArrayWithConnections:connections]
+                               forKey:kReadmillAPIHighlightPostToKey];
     }
     
     if (!highlightedAt) {
@@ -668,9 +668,8 @@
     [parameters setObject:highlightParameters forKey:kReadmillAPIHighlightKey];
     [highlightParameters release];
     
-    
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
-    NSLog(@"params: %@", parameters);
+
     [self sendPostRequestToEndpoint:endpoint
                      withParameters:[parameters autorelease]
                   completionHandler:completionHandler];

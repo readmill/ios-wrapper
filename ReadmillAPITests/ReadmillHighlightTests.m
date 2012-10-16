@@ -36,7 +36,7 @@
                               @"post", kReadmillAPIHighlightPostKey, nil];
     
     NSDate *date = [NSDate dateWithTimeIntervalSinceNow:-100];
-    
+    NSString *comment = @"a comment";
     void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
         // Get the input parameters
         NSDictionary *allParameters;
@@ -44,9 +44,20 @@
         
         NSDictionary *highlightParameters = [allParameters valueForKey:kReadmillAPIHighlightKey];
         STAssertNotNil([highlightParameters valueForKey:kReadmillAPIHighlightLocatorsKey], @"Highlight locators nil");
-        STAssertNotNil([allParameters valueForKey:kReadmillAPIHighlightCommentKey], @"Comment is missing");        
+        STAssertNotNil([allParameters valueForKey:kReadmillAPIHighlightCommentKey], @"Comment is missing");
+        
         NSDate *highlightDate = [[highlightParameters valueForKey:kReadmillAPIHighlightHighlightedAtKey] dateWithRFC3339Formatting];
-        STAssertTrue([highlightDate timeIntervalSinceDate:date] < 1, @"Difference between dates");
+        NSTimeInterval timeInterval = [date timeIntervalSinceDate:highlightDate];
+        // The time difference can be off by a few seconds since date comparison
+        // uses subseconds, but dateFromString (dateWithRFC3339Formatting does not)
+        STAssertTrue(timeInterval < 1, @"Difference between dates: %f", timeInterval);
+        
+        // Check that comment is outside of the highlight scope inside comment[content]
+        NSString *commentParameter = [[allParameters valueForKey:kReadmillAPIHighlightCommentKey] valueForKey:kReadmillAPICommentContentKey];
+        STAssertTrue([commentParameter isEqualToString:comment], @"Comment is wrong: %@", commentParameter);
+        
+        NSString *postToParameter = [highlightParameters valueForKey:kReadmillAPIHighlightPostToKey];
+        NSLog(@"postto: %@", postToParameter);
     };
 
     // Inject our block 
@@ -60,8 +71,8 @@
                                         locators:locators 
                                         position:progress 
                                    highlightedAt:date 
-                                         comment:@"a comment" 
-                                     connections:nil
+                                         comment:comment
+                                     connections:@[@1, @2, @3]
                                     isCopyRestricted:NO
                                completionHandler:nil];
     [mockWrapper verify];
