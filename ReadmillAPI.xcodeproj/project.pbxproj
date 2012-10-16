@@ -649,7 +649,7 @@
 		96BEAEC312F05E80006028D0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Readmill Network LTD";
 			};
 			buildConfigurationList = 96BEAEC612F05E80006028D0 /* Build configuration list for PBXProject "ReadmillAPI" */;

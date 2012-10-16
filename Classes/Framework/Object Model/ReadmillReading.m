@@ -71,8 +71,6 @@
 - (id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper 
 {
     if ((self = [super init])) {
-        // Initialization code here.
-        
         [self setApiWrapper:wrapper];
         [self updateWithAPIDictionary:apiDict];
     }
@@ -231,12 +229,8 @@
                                  isPrivate:newIsPrivate
                              closingRemark:newRemark
                          completionHandler:^(id apiResponse, NSError *error) {
-                             NSDictionary *readingDictionary = [apiResponse valueForKey:kReadmillAPIReadingKey];
-                             NSLog(@"api: %@", apiResponse);
-                             
-                             if (error == nil && readingDictionary) {
-                                 NSLog(@"self update with: %@", readingDictionary);
-                                 [self updateWithAPIDictionary:readingDictionary];
+                             if ((!error || error.code == 409) && apiResponse) {
+                                 [self updateWithAPIDictionary:apiResponse];
                                  [delegate readmillReadingDidUpdateMetadataSuccessfully:self];
                              } else {
                                  [delegate readmillReading:self didFailToUpdateMetadataWithError:error];
