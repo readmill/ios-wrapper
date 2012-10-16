@@ -37,6 +37,9 @@
     
     NSDate *date = [NSDate dateWithTimeIntervalSinceNow:-100];
     NSString *comment = @"a comment";
+    
+    NSArray *connections = @[@1, @2, @3];
+    
     void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
         // Get the input parameters
         NSDictionary *allParameters;
@@ -56,8 +59,9 @@
         NSString *commentParameter = [[allParameters valueForKey:kReadmillAPIHighlightCommentKey] valueForKey:kReadmillAPICommentContentKey];
         STAssertTrue([commentParameter isEqualToString:comment], @"Comment is wrong: %@", commentParameter);
         
-        NSString *postToParameter = [highlightParameters valueForKey:kReadmillAPIHighlightPostToKey];
-        NSLog(@"postto: %@", postToParameter);
+        // Check the count (since we're doing some other stuff like making it a dictionary)
+        NSArray *postToParameters = [highlightParameters valueForKey:kReadmillAPIHighlightPostToKey];
+        STAssertTrue([postToParameters count] == [connections count], @"Connection count is wrong: %d", [postToParameters count]);
     };
 
     // Inject our block 
@@ -72,8 +76,8 @@
                                         position:progress 
                                    highlightedAt:date 
                                          comment:comment
-                                     connections:@[@1, @2, @3]
-                                    isCopyRestricted:NO
+                                     connections:connections
+                                isCopyRestricted:NO
                                completionHandler:nil];
     [mockWrapper verify];
 }

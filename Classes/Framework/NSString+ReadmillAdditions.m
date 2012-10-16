@@ -21,7 +21,7 @@
  */
 
 #import "NSString+ReadmillAdditions.h"
-#import "ReadmillDateFormatter.h"
+#import "NSDateFormatter+ReadmillAdditions.h"
 
 @implementation NSString (ReadmillAdditions)
 
@@ -56,7 +56,7 @@
 
 - (NSDate *)dateWithRFC3339Formatting {
 
-    ReadmillDateFormatter *formatter = [ReadmillDateFormatter formatterWithRFC3339Format];
+    NSDateFormatter *formatter = [NSDateFormatter readmillDateFormatter];
     // Convert the RFC 3339 date time string to an NSDate.
     return [formatter dateFromString:self];
 }

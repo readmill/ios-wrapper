@@ -1,28 +1,26 @@
 //
-//  ReadmillDateFormatter.m
+//  NSDateFormatter+ReadmillAdditions.m
 //  ReadmillAPI
 //
-//  Created by Martin Hwasser on 11/2/11.
-//  Copyright (c) 2011 Readmill Network Limited. All rights reserved.
+//  Created by Martin Hwasser on 10/16/12.
+//  Copyright (c) 2012 Readmill Network LTD. All rights reserved.
 //
 
-#import "ReadmillDateFormatter.h"
+#import "NSDateFormatter+ReadmillAdditions.h"
 
-@implementation ReadmillDateFormatter
+@implementation NSDateFormatter (ReadmillAdditions)
 
-
-+ (ReadmillDateFormatter *)formatterWithRFC3339Format {
-    
-    static ReadmillDateFormatter *sRFC3339DateFormatter;
++ (NSDateFormatter *)readmillDateFormatter
+{
+    static NSDateFormatter *sRFC3339DateFormatter;
     @synchronized (sRFC3339DateFormatter) {
         
-        // If the date formatters aren't already set up, do that now and cache them
+        // If the date formatter isn't already set up, do that now and cache it
         // for subsequence reuse.
-        
         if (sRFC3339DateFormatter == nil) {
             NSLocale *enUSPOSIXLocale;
             
-            sRFC3339DateFormatter = [[ReadmillDateFormatter alloc] init];
+            sRFC3339DateFormatter = [[NSDateFormatter alloc] init];
             
             enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
             
@@ -33,4 +31,5 @@
         return sRFC3339DateFormatter;
     }
 }
+
 @end

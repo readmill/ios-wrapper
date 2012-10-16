@@ -9,6 +9,8 @@
 #import "ReadmillAPIReadingTests.h"
 #import "OCMock.h"
 #import "ReadmillDateFormatter.h"
+#import "NSString+ReadmillAdditions.h"
+#import "ReadmillAPIWrapper+Internal.h"
 
 /* Reading JSON v2
 
@@ -89,6 +91,7 @@
 //    STAssertTrue([reading isRecommended] == NO, @"Recommended is wrong: %d", [reading isRecommended]);
 //    STAssertTrue([reading isRecommended] == NO, @"Recommended is wrong: %d", [reading isRecommended]);
 }
+
 - (void)testUserFromReading
 {
     ReadmillReading *reading = [[[ReadmillReading alloc] initWithAPIDictionary:self.readingDictionary
@@ -105,6 +108,45 @@
     STAssertTrue([user followerCount] == 83, @"Follower count is wrong");
     STAssertTrue([user followingCount] == 104, @"Following count is wrong");
     STAssertNotNil([user permalinkURL], @"permalink is nil");
+}
+
+- (void)testPostReading
+{
+    ReadmillAPIConfiguration *apiConf = [ReadmillAPIConfiguration configurationForStagingWithClientID:@"a"
+                                                                                         clientSecret:@"b"
+                                                                                          redirectURL:nil];
+    ReadmillAPIWrapper *wrapper = [[ReadmillAPIWrapper alloc] initWithAPIConfiguration:apiConf];
+    id mockWrapper = [OCMockObject partialMockForObject:wrapper];
+    
+    NSString *readingState = @"reading";
+    BOOL isPrivate = NO;
+    ReadmillBookId bookId = 4711;
+    NSArray *connections = @[@4712, @4713];
+
+    void (^theBlock)(NSInvocation *) = ^(NSInvocation *invocation) {
+        // Get the input parameters
+        NSDictionary *allParameters;
+        [invocation getArgument:&allParameters atIndex:3];
+        
+        NSDictionary *readingParameters = [allParameters valueForKey:kReadmillAPIReadingKey];
+        
+        // Check the count (since we're doing some other stuff like making it a dictionary)
+        NSArray *postToParameters = [readingParameters valueForKey:kReadmillAPIReadingPostToKey];
+        STAssertTrue([postToParameters count] == [connections count], @"Connection count is wrong: %d", [postToParameters count]);
+    };
+    
+    // Inject our block
+    [[[mockWrapper expect] andDo:theBlock] sendPostRequestToEndpoint:OCMOCK_ANY
+                                                      withParameters:OCMOCK_ANY
+                                                   completionHandler:OCMOCK_ANY];    
+    
+    
+    [mockWrapper findOrCreateReadingWithBookId:bookId
+                                         state:readingState
+                                     isPrivate:isPrivate
+                                   connections:connections
+                             completionHandler:OCMOCK_ANY];
+    [mockWrapper verify];
 }
 
 - (void)testUpdateReading

@@ -226,7 +226,7 @@
     [parameters setValue:identifier forKey:kReadmillAPIBookIdentifierKey];
     [parameters setValue:title forKey:kReadmillAPIBookTitleKey];
     [parameters setValue:author forKey:kReadmillAPIBookAuthorKey];
-        
+    
     [self sendGetRequestToEndpoint:endpoint
                     withParameters:parameters
         shouldBeCalledUnauthorized:NO
@@ -251,8 +251,8 @@
                                                                          forKey:kReadmillAPIReadingKey];
     
     if (connections != nil) {
-        [parameters setValue:[self postToArrayWithConnections:connections]
-                      forKey:kReadmillAPIReadingPostToKey];
+        [readingParameters setValue:[self postToArrayWithConnections:connections]
+                             forKey:kReadmillAPIReadingPostToKey];
     }
     
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
@@ -336,8 +336,8 @@
     [readingParameters release];
     
     if (connections != nil) {
-        [parameters setValue:[self postToArrayWithConnections:connections]
-                      forKey:kReadmillAPIHighlightPostToKey];
+        [readingParameters setValue:[self postToArrayWithConnections:connections]
+                             forKey:kReadmillAPIHighlightPostToKey];
     }
     
     [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
@@ -669,7 +669,7 @@
     [highlightParameters release];
     
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
-
+    
     [self sendPostRequestToEndpoint:endpoint
                      withParameters:[parameters autorelease]
                   completionHandler:completionHandler];
