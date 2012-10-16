@@ -39,13 +39,14 @@
         
         _accessTokenURL = [[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", authURLString]] retain];
 
-		_apiBaseURL = [[NSURL URLWithString:apiBaseURLString ] retain];
+		_apiBaseURL = [[NSURL URLWithString:apiBaseURLString] retain];
 		_authURL = [[NSURL URLWithString:authURLString] retain];
-		
+        _redirectURL = [redirectURL retain];
+        
 		_clientID = [clientID copy];
 		_clientSecret = [clientSecret copy];
-		_redirectURL = [redirectURL retain];
         
+        _isConfiguredForProduction = onProduction;
 	}
 	return self;
 }
@@ -61,8 +62,8 @@
 + (id)configurationForStagingWithClientID:(NSString *)clientID clientSecret:(NSString *)clientSecret redirectURL:(NSURL *)redirectURL 
 {
     return [[[self alloc] initWithClientID:clientID
-                             clientSecret:clientSecret
-                              redirectURL:redirectURL
+                              clientSecret:clientSecret
+                               redirectURL:redirectURL
                               onProduction:NO] autorelease];
 }
 

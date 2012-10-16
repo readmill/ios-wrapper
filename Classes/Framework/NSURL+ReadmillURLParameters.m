@@ -16,15 +16,17 @@
 {    
     return [NSURL URLWithString:[parameters urlParameterString]];
 }
-- (NSURL *)URLByAddingParameters:(NSDictionary *)parameters {
 
-    @autoreleasepool {
-        NSString *URLString = [self absoluteString];
-        NSURL *URL = [[NSURL alloc] initWithString:[URLString stringByAppendingString:[[NSURL URLWithParameters:parameters] absoluteString]]];
-        return [URL autorelease];
-    }
+- (NSURL *)URLByAddingParameters:(NSDictionary *)parameters
+{
+    NSString *urlString = [self absoluteString];
+    urlString = [urlString stringByAppendingString:[parameters urlParameterString]];
+    NSLog(@"urlString: %@", urlString);
+    return [NSURL URLWithString:urlString];
 }
-- (NSDictionary *)queryAsDictionary {
+            
+- (NSDictionary *)queryAsDictionary
+    {
     NSArray *parameters = [[self query] componentsSeparatedByString:@"&"];
     NSMutableDictionary *parametersDictionary = [NSMutableDictionary dictionaryWithCapacity:[parameters count]];
     for (NSString *parameter in parameters) {

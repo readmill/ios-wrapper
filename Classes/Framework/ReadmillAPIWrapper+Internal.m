@@ -53,7 +53,6 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                         forKey:kReadmillAPIClientIdKey];
     
     url = [url URLByAddingParameters:finalParameters];
-    
     [finalParameters release];
     
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url

@@ -638,13 +638,6 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
- @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result The current authenticated user as an NSDictionary object. See the API Keys - User section of this header for keys. 
- @brief   Get the currently logged in user. 
- */
-- (NSDictionary *)currentUser:(NSError **)error;
-
-/*!
  @param completionHandler A block that will return the result (id) and an NSError object if an error occurs. 
  @result The current authenticated user as an NSDictionary object. See the API Keys - User section of this header for keys. 
  @brief   Get the currently logged in user. 

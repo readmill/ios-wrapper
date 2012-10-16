@@ -83,7 +83,6 @@
               forKey:@"authorizedRedirectURL"];
     [plist setObject:[NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]]
               forKey:@"apiConfiguration"];
-    
     [plist setObject:[self accessTokenExpiryDate] forKey:@"accessTokenExpiryDate"];
     
     return plist;
@@ -111,7 +110,9 @@
 
 - (NSString *)apiEndPoint
 {
-    return [[apiConfiguration apiBaseURL] absoluteString];
+    NSLog(@"apicon: %@", self.apiConfiguration);
+    
+    return [[self.apiConfiguration apiBaseURL] absoluteString];
 }
 
 - (NSString *)booksEndpoint
@@ -786,37 +787,12 @@
                  completionHandler:completionHandler];
 }
 
-- (NSURL *)urlForCurrentUser
-{
-    NSURL *baseURL = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@me", [self apiEndPoint]]];
-    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                [self accessToken], kReadmillAPIAccessTokenKey,
-                                [[[self apiConfiguration] clientID] urlEncodedString], kReadmillAPIClientIdKey, nil];
-    NSURL *finalURL = [baseURL URLByAddingParameters:parameters];
-    [baseURL release];
-    [parameters release];
-    
-    return finalURL;
-}
-
-- (NSDictionary *)currentUser:(NSError **)error
-{
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self urlForCurrentUser]
-                                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                       timeoutInterval:kTimeoutInterval];
-    [request setHTTPMethod:@"GET"];
-    
-    return [self sendPreparedRequest:request error:error];
-}
-
 - (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler
-{
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[self urlForCurrentUser]
-                                                           cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                                       timeoutInterval:kTimeoutInterval];
-    [request setHTTPMethod:@"GET"];
-    
-    [self startPreparedRequest:request completion:completionHandler];
+{    
+    [self sendGetRequestToEndpoint:@"me"
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
 }
 
 
