@@ -18,14 +18,15 @@ static NSString * const kStagingAuthorizationUri = @"http://m.stage-readmill.com
 
 @interface ReadmillAPIConfiguration : NSObject <NSCoding>
 
-@property (nonatomic, retain) NSURL *accessTokenURL;
-@property (nonatomic, retain) NSURL *apiBaseURL;
-@property (nonatomic, retain) NSURL *authURL;
+@property (nonatomic, retain, readonly) NSURL *accessTokenURL;
+@property (nonatomic, retain, readonly) NSURL *apiBaseURL;
+@property (nonatomic, retain, readonly) NSURL *authURL;
+@property (nonatomic, retain, readonly) NSURL *redirectURL;
 
-@property (nonatomic, copy) NSString *clientID;
-@property (nonatomic, copy) NSString *clientSecret;
-@property (nonatomic, retain) NSURL *redirectURL;
+@property (nonatomic, copy, readonly) NSString *clientID;
+@property (nonatomic, copy, readonly) NSString *clientSecret;
 
+@property (nonatomic, readonly) BOOL isConfiguredForProduction;
 
 + (id)configurationForProductionWithClientID:(NSString *)clientID
                                 clientSecret:(NSString *)clientSecret
@@ -34,12 +35,5 @@ static NSString * const kStagingAuthorizationUri = @"http://m.stage-readmill.com
 + (id)configurationForStagingWithClientID:(NSString *)clientID
                              clientSecret:(NSString *)clientSecret
                               redirectURL:(NSURL *)redirectURL;
-
-
-- (id)initWithClientID:(NSString *)clientID
-          clientSecret:(NSString *)clientSecret
-           redirectURL:(NSURL *)redirectURL
-            apiBaseURL:(NSURL *)apiBaseURL
-               authURL:(NSURL *)authURL;
 
 @end

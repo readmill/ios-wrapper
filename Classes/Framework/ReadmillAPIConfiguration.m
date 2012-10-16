@@ -8,25 +8,43 @@
 
 #import "ReadmillAPIConfiguration.h"
 
+@interface ReadmillAPIConfiguration ()
+
+@property (nonatomic, retain, readwrite) NSURL *accessTokenURL;
+@property (nonatomic, retain, readwrite) NSURL *apiBaseURL;
+@property (nonatomic, retain, readwrite) NSURL *authURL;
+@property (nonatomic, retain, readwrite) NSURL *redirectURL;
+
+@property (nonatomic, copy, readwrite) NSString *clientID;
+@property (nonatomic, copy, readwrite) NSString *clientSecret;
+
+@property (nonatomic, readwrite) BOOL isConfiguredForProduction;
+
+@end
+
 @implementation ReadmillAPIConfiguration
 
-- (id)initWithClientID:(NSString *)aClientID clientSecret:(NSString *)aClientSecret redirectURL:(NSURL *)aRedirectURL apiBaseURL:(NSURL *)anApiBaseURL authURL:(NSURL *)anAuthURL 
-{    
-    NSAssert(aClientID, @"No Client ID supplied");
-	NSAssert(aClientSecret, @"No Client Secret supplied");
-    NSAssert(anApiBaseURL, @"No Api Base URL supplied");
-    NSAssert(anAuthURL, @"No Auth URL supplied");
+- (id)initWithClientID:(NSString *)clientID
+          clientSecret:(NSString *)clientSecret
+           redirectURL:(NSURL *)redirectURL
+          onProduction:(BOOL)onProduction
+{
+    NSAssert(clientID, @"No Client ID supplied");
+	NSAssert(clientSecret, @"No Client Secret supplied");
 	
 	if (self = [super init]) {
         
-        _accessTokenURL = [[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", [anAuthURL absoluteString]]] retain];
+        NSString *authURLString = onProduction ? kLiveAuthorizationUri : kStagingAuthorizationUri;
+        NSString *apiBaseURLString = onProduction ? kLiveAPIEndPoint : kStagingAPIEndPoint;
+        
+        _accessTokenURL = [[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", authURLString]] retain];
 
-		_apiBaseURL = [anApiBaseURL retain];
-		_authURL = [anAuthURL retain];
+		_apiBaseURL = [[NSURL URLWithString:apiBaseURLString ] retain];
+		_authURL = [[NSURL URLWithString:authURLString] retain];
 		
-		_clientID = [aClientID copy];
-		_clientSecret = [aClientSecret copy];
-		_redirectURL = [aRedirectURL retain];
+		_clientID = [clientID copy];
+		_clientSecret = [clientSecret copy];
+		_redirectURL = [redirectURL retain];
         
 	}
 	return self;
@@ -35,11 +53,9 @@
 + (id)configurationForProductionWithClientID:(NSString *)clientID clientSecret:(NSString *)clientSecret redirectURL:(NSURL *)redirectURL 
 {
 	return [[[self alloc] initWithClientID:clientID
-                             clientSecret:clientSecret
-                              redirectURL:redirectURL
-                               apiBaseURL:[NSURL URLWithString:kLiveAPIEndPoint]
-                                  authURL:[NSURL URLWithString:kLiveAuthorizationUri]] 
-             autorelease];
+                              clientSecret:clientSecret
+                               redirectURL:redirectURL
+                              onProduction:YES] autorelease];
 }
 
 + (id)configurationForStagingWithClientID:(NSString *)clientID clientSecret:(NSString *)clientSecret redirectURL:(NSURL *)redirectURL 
@@ -47,12 +63,10 @@
     return [[[self alloc] initWithClientID:clientID
                              clientSecret:clientSecret
                               redirectURL:redirectURL
-                               apiBaseURL:[NSURL URLWithString:kStagingAPIEndPoint]
-                                  authURL:[NSURL URLWithString:kStagingAuthorizationUri]]
-             autorelease];
+                              onProduction:NO] autorelease];
 }
 
--(void)dealloc 
+- (void)dealloc 
 {
     [_accessTokenURL release]; _accessTokenURL = nil;
 	[_apiBaseURL release]; _apiBaseURL = nil;
@@ -64,53 +78,54 @@
 	[super dealloc];
 }
 
-#pragma mark -
-#pragma mark - Synthesize
-
-@synthesize apiBaseURL = _apiBaseURL;
-@synthesize accessTokenURL = _accessTokenURL;
-@synthesize authURL = _authURL;
-
-@synthesize clientID = _clientID;
-@synthesize clientSecret = _clientSecret;
-@synthesize redirectURL = _redirectURL;
 
 #pragma mark - 
 #pragma mark - NSCoding
 
-static NSString * const kReadmillAPIConfigurationAccessTokenURLKey = @"accessTokenURL";
 static NSString * const kReadmillAPIConfigurationAPIBaseURLKey = @"apiBaseURL";
-static NSString * const kReadmillAPIConfigurationAuthURLKey = @"authURL";
 static NSString * const kReadmillAPIConfigurationClientIDKey = @"clientID";
 static NSString * const kReadmillAPIConfigurationClientSecretKey = @"clientSecret";
 static NSString * const kReadmillAPIConfigurationRedirectURLKey = @"redirectURL";
+static NSString * const kReadmillAPIConfigurationOnProductionKey = @"isConfiguredForProduction";
 
 - (void)encodeWithCoder:(NSCoder *)aCoder 
 {
-    [aCoder encodeObject:[[self accessTokenURL] absoluteString] forKey:kReadmillAPIConfigurationAccessTokenURLKey];
-    [aCoder encodeObject:[[self apiBaseURL] absoluteString] forKey:kReadmillAPIConfigurationAPIBaseURLKey];
-    [aCoder encodeObject:[[self authURL] absoluteString] forKey:kReadmillAPIConfigurationAuthURLKey];
     [aCoder encodeObject:[self clientID] forKey:kReadmillAPIConfigurationClientIDKey];
     [aCoder encodeObject:[self clientSecret] forKey:kReadmillAPIConfigurationClientSecretKey];
     [aCoder encodeObject:[[self redirectURL] absoluteString] forKey:kReadmillAPIConfigurationRedirectURLKey];
+    [aCoder encodeBool:[self isConfiguredForProduction] forKey:kReadmillAPIConfigurationOnProductionKey];
 }
+
 - (id)initWithCoder:(NSCoder *)aDecoder 
 {
-    self = [super init];
-    if (self) {
-        [self setAccessTokenURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationAccessTokenURLKey]]];
-        [self setApiBaseURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationAPIBaseURLKey]]];
-        [self setAuthURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationAuthURLKey]]];
-        [self setClientID:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationClientIDKey]];
-        [self setClientSecret:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationClientSecretKey]];
-        [self setRedirectURL:[NSURL URLWithString:[aDecoder decodeObjectForKey:kReadmillAPIConfigurationRedirectURLKey]]];
+    NSString *clientID = [aDecoder decodeObjectForKey:kReadmillAPIConfigurationClientIDKey];
+    NSString *clientSecret = [aDecoder decodeObjectForKey:kReadmillAPIConfigurationClientSecretKey];
+    NSString *redirectURLString = [aDecoder decodeObjectForKey:kReadmillAPIConfigurationRedirectURLKey];
+    NSURL *redirectURL = redirectURLString ? [NSURL URLWithString:redirectURLString] : nil;
+    NSString *apiBaseURLString = [aDecoder decodeObjectForKey:kReadmillAPIConfigurationAPIBaseURLKey];
+    
+    BOOL isConfiguredForProduction = [aDecoder decodeBoolForKey:kReadmillAPIConfigurationOnProductionKey];
+    /*
+     *  2012-10-16 @hwaxxer
+     *  This is used for migrating existing api configuration objects that did not have 
+     *  kReadmillAPIConfigurationOnProductionKey (prior to v2).
+     *  It's easier to update URLs if the URLs are not serialized and instead depend only
+     *  on whether the configuration is for production or staging.
+     */
+    if ([apiBaseURLString rangeOfString:@"stage"].location == NSNotFound) {
+        isConfiguredForProduction = YES;
     }
-    return self;
+
+    return [self initWithClientID:clientID
+                     clientSecret:clientSecret
+                      redirectURL:redirectURL
+                     onProduction:isConfiguredForProduction];
 }
 
 - (NSString *)description 
 {
-    return [NSString stringWithFormat:@"ReadmillAPIConfiguration: %@, with endPoint: %@, clientID: %@", [super description], [self apiBaseURL], [self clientID]];
+    return [NSString stringWithFormat:@"ReadmillAPIConfiguration: %@, with endPoint: %@, clientID: %@",
+            [super description], [self apiBaseURL], [self clientID]];
 }
 
 @end
