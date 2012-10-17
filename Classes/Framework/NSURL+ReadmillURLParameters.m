@@ -21,7 +21,6 @@
 {
     NSString *urlString = [self absoluteString];
     urlString = [urlString stringByAppendingString:[parameters urlParameterString]];
-    NSLog(@"urlString: %@", urlString);
     return [NSURL URLWithString:urlString];
 }
             

@@ -22,6 +22,7 @@
 
 #import "ReadmillBook.h"
 #import "NSDictionary+ReadmillAdditions.h"
+#import "NSString+ReadmillAdditions.h"
 
 @interface ReadmillBook ()
 
@@ -86,10 +87,8 @@
     [self setBookId:[[cleanedDict valueForKey:kReadmillAPIBookIdKey] unsignedIntegerValue]];
     [self setRootEditionId:[[cleanedDict valueForKey:kReadmillAPIBookRootEditionIdKey] unsignedIntegerValue]];
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-    [self setDatePublished:[formatter dateFromString:[cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey]]];
-    [formatter release];
+    NSString *datePublishedString = [cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey];
+    [self setDatePublished:[datePublishedString dateWithRFC3339Formatting]];
 }
 
 -(NSString *)description 
