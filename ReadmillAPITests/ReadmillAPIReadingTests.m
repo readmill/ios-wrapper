@@ -8,7 +8,7 @@
 
 #import "ReadmillAPIReadingTests.h"
 #import "OCMock.h"
-#import "ReadmillDateFormatter.h"
+#import "NSDateFormatter+ReadmillAdditions.h"
 #import "NSString+ReadmillAdditions.h"
 #import "ReadmillAPIWrapper+Internal.h"
 
@@ -85,7 +85,7 @@
     STAssertTrue([reading isRecommended] == NO, @"Recommended is wrong: %d", [reading isRecommended]);
     STAssertTrue([[reading closingRemark] isEqualToString:@"A closing remark."], @"closingRemark is wrong: %@", [reading closingRemark]);
     
-    ReadmillDateFormatter *dateFormatter = [ReadmillDateFormatter formatterWithRFC3339Format];
+    NSDateFormatter *dateFormatter = [NSDateFormatter readmillDateFormatter];
     NSDate *date = [dateFormatter dateFromString:@"2012-02-20T20:47:02Z"];
     STAssertTrue([[reading dateStarted] isEqualToDate:date], @"dateStarted is wrong: %d", [reading dateStarted]);
 //    STAssertTrue([reading isRecommended] == NO, @"Recommended is wrong: %d", [reading isRecommended]);
