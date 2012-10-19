@@ -158,6 +158,7 @@ static NSString * const kReadmillAPICommentContentKey = @"content";
 
 #pragma mark API Keys - Periods
 
+static NSString * const kReadmillAPIPingKey = @"ping";
 static NSString * const kReadmillAPIPingProgressKey = @"progress";
 static NSString * const kReadmillAPIPingDurationKey = @"duration";
 static NSString * const kReadmillAPIPingIdentifierKey = @"identifier";

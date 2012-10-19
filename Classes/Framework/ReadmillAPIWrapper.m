@@ -584,14 +584,19 @@
     }
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObject:pingParameters
-                                                           forKey:@"ping"];
+                                                           forKey:kReadmillAPIPingKey];
     [pingParameters release];
     
-    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/pings", [self readingsEndpoint], readingId];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/%@",
+                          [self readingsEndpoint],
+                          readingId,
+                          kReadmillAPIPingKey];
+    
     [self sendPostRequestToEndpoint:endpoint
                      withParameters:parameters
                   completionHandler:completionHandler];
 }
+
 - (void)pingReadingWithId:(ReadmillReadingId)readingId
              withProgress:(ReadmillReadingProgress)progress
         sessionIdentifier:(NSString *)sessionId
