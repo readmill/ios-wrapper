@@ -84,7 +84,8 @@
     STAssertTrue([reading isPrivate] == NO, @"IsPrivate is wrong: %d", [reading isPrivate]);
     STAssertTrue([reading isRecommended] == NO, @"Recommended is wrong: %d", [reading isRecommended]);
     STAssertTrue([[reading closingRemark] isEqualToString:@"A closing remark."], @"closingRemark is wrong: %@", [reading closingRemark]);
-    
+    STAssertTrue([reading timeSpent] == 31150, @"timeSpent == %d", [reading timeSpent]);
+    STAssertTrue([reading estimatedTimeLeft] == 0, @"timeLeft == %d", [reading estimatedTimeLeft]);
     NSDateFormatter *dateFormatter = [NSDateFormatter readmillDateFormatter];
     NSDate *date = [dateFormatter dateFromString:@"2012-02-20T20:47:02Z"];
     STAssertTrue([[reading dateStarted] isEqualToDate:date], @"dateStarted is wrong: %d", [reading dateStarted]);
