@@ -456,8 +456,10 @@
                           [self readingsEndpoint],
                           readingId];
     
+    NSDictionary *parameters = @{ @"count" : @100 };
+    
     [self sendGetRequestToEndpoint:endpoint
-                    withParameters:nil
+                    withParameters:parameters
         shouldBeCalledUnauthorized:NO
                        cachePolicy:NSURLRequestReturnCacheDataElseLoad
                  completionHandler:completionHandler];
