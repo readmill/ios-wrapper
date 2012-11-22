@@ -465,6 +465,32 @@
                  completionHandler:completionHandler];
 }
 
+- (void)positionForReadingWithId:(ReadmillReadingId)readingId
+               completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/position",
+                          [self readingsEndpoint],
+                          readingId];
+    
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:nil
+        shouldBeCalledUnauthorized:NO
+                 completionHandler:completionHandler];
+}
+
+- (void)updatePosition:(double)position
+      forReadingWithId:(ReadmillReadingId)readingId
+     completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/position",
+                          [self readingsEndpoint],
+                          readingId];
+    
+    [self sendPutRequestToEndpoint:endpoint
+                    withParameters:@ { kReadmillAPIReadingPositionKey : @(position) }
+                 completionHandler:completionHandler];
+}
+
 
 #pragma mark -
 #pragma mark - Book

@@ -131,6 +131,8 @@ static NSString * const kReadmillAPIReadingHighlightsKey = @"highlights";
 static NSString * const kReadmillAPIReadingHighlightsCountKey = @"highlights_count";
 static NSString * const kReadmillAPIReadingRecommendedKey = @"recommended";
 static NSString * const kReadmillAPIReadingPostToKey = @"post_to";
+static NSString * const kReadmillAPIReadingPositionKey = @"position";
+static NSString * const kReadmillAPIReadingPositionUpdatedAtKey = @"position_updated_at";
 
 #pragma mark API Keys - Highlights
 
@@ -491,6 +493,25 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  */
 - (void)periodsForReadingWithId:(ReadmillReadingId)readingId
               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+
+/*!
+ @param readingId The readingId for which to get position
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Get the position of the reading with the specified readingId
+ */
+- (void)positionForReadingWithId:(ReadmillReadingId)readingId
+               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param position The new position (percentage value between 0 and 1)
+ @param readingId The readingId to update
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Update the position of the reading with the specified readingId
+ */
+- (void)updatePosition:(double)position
+      forReadingWithId:(ReadmillReadingId)readingId
+     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Pings
