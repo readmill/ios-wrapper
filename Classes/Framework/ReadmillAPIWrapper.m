@@ -486,8 +486,10 @@
                           [self readingsEndpoint],
                           readingId];
     
+    NSDictionary *parameters = @{ kReadmillAPIReadingPositionKey :
+                                @ { kReadmillAPIReadingPositionKey : @(position) }};
     [self sendPutRequestToEndpoint:endpoint
-                    withParameters:@ { kReadmillAPIReadingPositionKey : @(position) }
+                    withParameters:parameters
                  completionHandler:completionHandler];
 }
 
