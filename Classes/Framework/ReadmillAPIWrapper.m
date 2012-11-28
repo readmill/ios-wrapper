@@ -465,22 +465,22 @@
                  completionHandler:completionHandler];
 }
 
-- (void)positionForReadingWithId:(ReadmillReadingId)readingId
-               completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)positionForReadingWithId:(ReadmillReadingId)readingId
+                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/position",
                           [self readingsEndpoint],
                           readingId];
     
-    [self sendGetRequestToEndpoint:endpoint
-                    withParameters:nil
-        shouldBeCalledUnauthorized:NO
-                 completionHandler:completionHandler];
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:nil
+               shouldBeCalledUnauthorized:NO
+                        completionHandler:completionHandler];
 }
 
-- (void)updatePosition:(double)position
-      forReadingWithId:(ReadmillReadingId)readingId
-     completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)updatePosition:(double)position
+                            forReadingWithId:(ReadmillReadingId)readingId
+                           completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/position",
                           [self readingsEndpoint],
@@ -488,9 +488,9 @@
     
     NSDictionary *parameters = @{ kReadmillAPIReadingPositionKey :
                                 @ { kReadmillAPIReadingPositionKey : @(position) }};
-    [self sendPutRequestToEndpoint:endpoint
-                    withParameters:parameters
-                 completionHandler:completionHandler];
+    return [self sendPutRequestToEndpoint:endpoint
+                           withParameters:parameters
+                        completionHandler:completionHandler];
 }
 
 

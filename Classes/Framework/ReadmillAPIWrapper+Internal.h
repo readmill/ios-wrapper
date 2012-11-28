@@ -47,40 +47,41 @@
                shouldBeCalledUnauthorized:(BOOL)allowUnauthed
                                     error:(NSError **)error;
 
-- (void)sendPutRequestToEndpoint:(NSString *)endpoint
-                  withParameters:(NSDictionary *)parameters
-               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)sendPutRequestToEndpoint:(NSString *)endpoint
+                                        withParameters:(NSDictionary *)parameters
+                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
-- (void)sendDeleteRequestToEndpoint:(NSString *)endpoint
-                     withParameters:(NSDictionary *)parameters
-                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)sendDeleteRequestToEndpoint:(NSString *)endpoint
+                                           withParameters:(NSDictionary *)parameters
+                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
-- (void)sendPostRequestToEndpoint:(NSString *)endpoint
-                   withParameters:(NSDictionary *)parameters
-                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)sendPostRequestToEndpoint:(NSString *)endpoint
+                                         withParameters:(NSDictionary *)parameters
+                                      completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
-- (void)sendGetRequestToEndpoint:(NSString *)endpoint
-                  withParameters:(NSDictionary *)parameters
-      shouldBeCalledUnauthorized:(BOOL)allowUnauthed
-                     cachePolicy:(NSURLRequestCachePolicy)cachePolicy
-               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)sendGetRequestToEndpoint:(NSString *)endpoint
+                                        withParameters:(NSDictionary *)parameters
+                            shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                                           cachePolicy:(NSURLRequestCachePolicy)cachePolicy
+                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
-- (void)sendGetRequestToEndpoint:(NSString *)endpoint
-                  withParameters:(NSDictionary *)parameters
-      shouldBeCalledUnauthorized:(BOOL)allowUnauthed
-               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)sendGetRequestToEndpoint:(NSString *)endpoint
+                                        withParameters:(NSDictionary *)parameters
+                            shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
-- (void)sendBodyRequestToEndpoint:(NSString *)endpoint
-                       httpMethod:(NSString *)httpMethod
-                   withParameters:(NSDictionary *)parameters
-       shouldBeCalledUnauthorized:(BOOL)allowUnauthed
-                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)sendBodyRequestToEndpoint:(NSString *)endpoint
+                                             httpMethod:(NSString *)httpMethod
+                                         withParameters:(NSDictionary *)parameters
+                             shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                                      completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
-- (void)startPreparedRequest:(NSURLRequest *)request completion:(ReadmillAPICompletionHandler)completionBlock;
+- (ReadmillRequestOperation *)startPreparedRequest:(NSURLRequest *)request
+                                        completion:(ReadmillAPICompletionHandler)completionBlock;
 
-- (void)startPreparedRequest:(NSURLRequest *)request
-                  completion:(ReadmillAPICompletionHandler)completionBlock
-               queuePriority:(NSOperationQueuePriority)queuePriority;
+- (ReadmillRequestOperation *)startPreparedRequest:(NSURLRequest *)request
+                                        completion:(ReadmillAPICompletionHandler)completionBlock
+                                     queuePriority:(NSOperationQueuePriority)queuePriority;
 
 - (id)parseResponse:(NSHTTPURLResponse *)response
    withResponseData:(NSData *)responseData

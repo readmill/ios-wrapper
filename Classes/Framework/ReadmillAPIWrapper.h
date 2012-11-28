@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIConfiguration.h"
+#import "ReadmillRequestOperation.h"
 
 #define kTimeoutInterval 30.0
 
@@ -500,8 +501,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get the position of the reading with the specified readingId
  */
-- (void)positionForReadingWithId:(ReadmillReadingId)readingId
-               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)positionForReadingWithId:(ReadmillReadingId)readingId
+                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param position The new position (percentage value between 0 and 1)
@@ -509,9 +510,9 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Update the position of the reading with the specified readingId
  */
-- (void)updatePosition:(double)position
-      forReadingWithId:(ReadmillReadingId)readingId
-     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)updatePosition:(double)position
+                            forReadingWithId:(ReadmillReadingId)readingId
+                           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Pings

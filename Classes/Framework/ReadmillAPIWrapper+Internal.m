@@ -154,11 +154,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 #pragma mark -
 #pragma mark - Sending requests
 
-- (void)sendGetRequestToEndpoint:(NSString *)endpoint
-                  withParameters:(NSDictionary *)parameters
-      shouldBeCalledUnauthorized:(BOOL)allowUnauthed
-                     cachePolicy:(NSURLRequestCachePolicy)cachePolicy
-               completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)sendGetRequestToEndpoint:(NSString *)endpoint
+                                        withParameters:(NSDictionary *)parameters
+                            shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                                           cachePolicy:(NSURLRequestCachePolicy)cachePolicy
+                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSError *error = nil;
     NSURLRequest *request = [self getRequestWithEndpoint:endpoint
@@ -175,10 +175,10 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     }
 }
 
-- (void)sendGetRequestToEndpoint:(NSString *)endpoint
-                  withParameters:(NSDictionary *)parameters
-      shouldBeCalledUnauthorized:(BOOL)allowUnauthed
-               completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)sendGetRequestToEndpoint:(NSString *)endpoint
+                                        withParameters:(NSDictionary *)parameters
+                            shouldBeCalledUnauthorized:(BOOL)allowUnauthed
+                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSError *error = nil;
     NSURLRequest *request = [self getRequestWithEndpoint:endpoint
@@ -188,16 +188,17 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                                    error:&error];
     
     if (request) {
-        [self startPreparedRequest:request
-                        completion:completionHandler];
+        return [self startPreparedRequest:request
+                               completion:completionHandler];
     } else {
         completionHandler(nil, error);
+        return nil;
     }
 }
 
-- (void)sendPutRequestToEndpoint:(NSString *)endpoint
-                  withParameters:(NSDictionary *)parameters
-               completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)sendPutRequestToEndpoint:(NSString *)endpoint
+                                        withParameters:(NSDictionary *)parameters
+                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSError *error = nil;
     NSURLRequest *request = [self putRequestWithEndpoint:endpoint
@@ -205,16 +206,17 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                                    error:&error];
     
     if (request) {
-        [self startPreparedRequest:request
-                        completion:completionHandler];
+        return [self startPreparedRequest:request
+                               completion:completionHandler];
     } else {
-        return completionHandler(nil, error);
+        completionHandler(nil, error);
+        return nil;
     }
 }
 
-- (void)sendDeleteRequestToEndpoint:(NSString *)endpoint
-                     withParameters:(NSDictionary *)parameters
-                  completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)sendDeleteRequestToEndpoint:(NSString *)endpoint
+                                           withParameters:(NSDictionary *)parameters
+                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSError *error = nil;
     NSURLRequest *request = [self deleteRequestWithEndpoint:endpoint
@@ -222,16 +224,17 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                                       error:&error];
     
     if (request) {
-        [self startPreparedRequest:request
-                        completion:completionHandler];
+        return [self startPreparedRequest:request
+                               completion:completionHandler];
     } else {
-        return completionHandler(nil, error);
+        completionHandler(nil, error);
+        return nil;
     }
 }
 
-- (void)sendPostRequestToEndpoint:(NSString *)endpoint
-                   withParameters:(NSDictionary *)parameters
-                completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)sendPostRequestToEndpoint:(NSString *)endpoint
+                                         withParameters:(NSDictionary *)parameters
+                                      completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSError *error = nil;
     NSURLRequest *request = [self postRequestWithEndpoint:endpoint
@@ -239,14 +242,15 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                                     error:&error];
     
     if (request) {
-        [self startPreparedRequest:request
-                        completion:completionHandler];
+        return [self startPreparedRequest:request
+                               completion:completionHandler];
     } else {
-        return completionHandler(nil, error);
+        completionHandler(nil, error);
+        return nil;
     }
 }
 
-- (void)sendBodyRequestToEndpoint:(NSString *)endpoint
+- (ReadmillRequestOperation *)sendBodyRequestToEndpoint:(NSString *)endpoint
                        httpMethod:(NSString *)httpMethod
                    withParameters:(NSDictionary *)parameters
        shouldBeCalledUnauthorized:(BOOL)allowUnauthed
@@ -261,10 +265,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                                     error:&error];
     
     if (request) {
-        [self startPreparedRequest:request
-                        completion:completionHandler];
+        return [self startPreparedRequest:request
+                               completion:completionHandler];
     } else {
         completionHandler(nil, error);
+        return nil;
     }
 }
 
@@ -336,23 +341,25 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     return result;
 }
 
-- (void)startPreparedRequest:(NSURLRequest *)request
-                  completion:(ReadmillAPICompletionHandler)completionBlock
-               queuePriority:(NSOperationQueuePriority)queuePriority
+- (ReadmillRequestOperation *)startPreparedRequest:(NSURLRequest *)request
+                                        completion:(ReadmillAPICompletionHandler)completionBlock
+                                     queuePriority:(NSOperationQueuePriority)queuePriority
 {
     
     ReadmillRequestOperation *operation = [self operationWithRequest:request
                                                           completion:completionBlock];
     [operation setQueuePriority:queuePriority];
     [self.queue addOperation:operation];
+    
+    return operation;
 }
 
-- (void)startPreparedRequest:(NSURLRequest *)request
-                  completion:(ReadmillAPICompletionHandler)completionBlock
+- (ReadmillRequestOperation *)startPreparedRequest:(NSURLRequest *)request
+                                        completion:(ReadmillAPICompletionHandler)completionBlock
 {
-    [self startPreparedRequest:request
-                    completion:completionBlock
-                 queuePriority:NSOperationQueuePriorityNormal];
+    return [self startPreparedRequest:request
+                           completion:completionBlock
+                        queuePriority:NSOperationQueuePriorityNormal];
 }
 - (id)sendPreparedRequest:(NSURLRequest *)request
                     error:(NSError **)error
