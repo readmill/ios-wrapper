@@ -150,6 +150,12 @@
         [dismiss release];
     }
 }
+
+- (void)presentInViewController:(UIViewController *)theParentViewController
+{
+    [self presentInViewController:theParentViewController animated:YES];
+}
+
 - (void)dismissView 
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:ReadmillUIPresenterShouldDismissViewNotification 
@@ -197,6 +203,11 @@
         [[self view] removeFromSuperview];
         [self release];
     }
+}
+
+- (void)dismissPresenter
+{
+    [self dismissPresenterAnimated:YES];
 }
 
 - (void)animation:(NSString*)animationID finished:(BOOL)didFinish context:(void *)context 

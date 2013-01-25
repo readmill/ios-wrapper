@@ -60,18 +60,25 @@ static NSString * const ReadmillUIPresenterDidAnimateIn = @"ReadmillUIPresenterD
  @param theParentViewController The view controller that this presenter should be displayed in.
  @param animated Whether to animate the view onto the screen.
  @brief   Present a view controller onto the screen.
- 
- The behaviour of this is largely the same as calling -presentModalViewController:animated:, with a presentation style of 
- UIModalPresentationFormSheet. However, this method places a "close" button at the top left of the presented view and 
- allows for views of any size and shape.
  */
 -(void)presentInViewController:(UIViewController *)theParentViewController animated:(BOOL)animated;
+
+/*!
+ @param theParentViewController The view controller that this presenter should be displayed in.
+ @brief   Present a view controller onto the screen with an animation.
+ */
+-(void)presentInViewController:(UIViewController *)theParentViewController;
 
 /*!
  @param animated Whether to animate the view off the screen.
  @brief   Remove a presented view controller.
  */
 -(void)dismissPresenterAnimated:(BOOL)animated;
+
+/*!
+ @brief   Remove a presented view controller with an animation.
+ */
+-(void)dismissPresenter;
 
 /*!
  @param aContentViewController Sets the contentViewController.
