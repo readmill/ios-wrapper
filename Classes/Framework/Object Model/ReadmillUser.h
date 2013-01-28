@@ -92,6 +92,14 @@
 
 @end
 
+
+typedef enum {
+    ReadmillUserAvatarSizeSmall,
+    ReadmillUserAvatarSizeMedium,
+    ReadmillUserAvatarSizeMediumLarge,
+    ReadmillUserAvatarSizeLarge
+} ReadmillUserAvatarSize;
+
 @interface ReadmillUser : NSObject;
 
 #pragma mark Static Methods
@@ -304,6 +312,13 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
                          isPrivate:(BOOL)isPrivate 
                        connections:(NSArray *)connections
                           delegate:(id <ReadmillReadingFindingDelegate>)delegate;
+
+
+#pragma mark -
+#pragma mark - Avatar
+
+
+- (NSURL *)avatarURLWithSize:(ReadmillUserAvatarSize)size;
 
 #pragma mark -
 #pragma mark Properties

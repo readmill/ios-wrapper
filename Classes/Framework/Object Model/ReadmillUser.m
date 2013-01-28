@@ -24,6 +24,7 @@
 #import "NSDictionary+ReadmillAdditions.h"
 #import "ReadmillBook.h"
 #import "ReadmillReading.h"
+#import "NSURL+ReadmillURLParameters.h"
 
 @interface ReadmillUser ()
 
@@ -355,6 +356,47 @@
                            isPrivate:isPrivate
                          connections:nil 
                             delegate:readingFindingDelegate];
+}
+
+
+#pragma mark -
+#pragma mark - Avatar
+
+- (NSString *)avatarSizeToString:(ReadmillUserAvatarSize)avatarSize
+{
+    NSString *result = nil;
+    
+    switch (avatarSize) {
+        case ReadmillUserAvatarSizeSmall:
+            result = @"small";
+            break;
+        case ReadmillUserAvatarSizeMedium:
+            result = @"medium";
+            break;
+        case ReadmillUserAvatarSizeMediumLarge:
+            result = @"medium-large";
+            break;
+        case ReadmillUserAvatarSizeLarge:
+            result = @"large";
+            break;
+        default:
+            [NSException raise:NSGenericException format:@"Unexpected avatar size."];
+    }
+    
+    return result;
+}
+
+- (NSURL *)avatarURLWithSize:(ReadmillUserAvatarSize)size
+{
+    ReadmillAPIWrapper *apiWrapper = self.apiWrapper;
+    NSString *endpoint = [NSString stringWithFormat:@"users/%d/avatar", self.userId];
+    ReadmillAPIConfiguration *apiConfiguration = [apiWrapper apiConfiguration];
+    NSURL *apiBaseURL = [apiConfiguration apiBaseURL];
+    NSURL *avatarURL = [NSURL URLWithString:endpoint relativeToURL:apiBaseURL];
+    
+    avatarURL = [avatarURL URLByAddingParameters:@{ @"size" : [self avatarSizeToString:size],
+                        kReadmillAPIClientIdKey : [apiConfiguration clientID] }];
+    return avatarURL;
 }
 
 @end
