@@ -173,7 +173,13 @@
                                 authCode, @"code",
                                 redirectURLString, @"redirect_uri",
                                 @"authorization_code", @"grant_type", nil];
-    
+
+    [self authorizeWithParameters:parameters completionHandler:completionHandler];
+}
+
+- (void)authorizeWithParameters:(NSDictionary *)parameters
+              completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[[self apiConfiguration] accessTokenURL]
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
                                                        timeoutInterval:kTimeoutInterval];

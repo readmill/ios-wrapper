@@ -288,13 +288,23 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param authCode The authorizationCode provided by Readmill. 
  @param redirectURLString The original redirect URL, without any of the additional parameters 
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
- @result YES if the current access token is valid and current, or if a new one was fetched successfully.
  @brief   Refresh the current access token if it's invalid or expired.
  
  IMPORTANT: All of the other methods in the ReadmillAPIWrapper object will call this automatically if 
  needed. There's normally no need to call this yourself except for debugging purposes. 
  */
-- (void)authorizeWithAuthorizationCode:(NSString *)authCode fromRedirectURL:(NSString *)redirectURLString completionHandler:(ReadmillAPICompletionHandler)completion;
+- (void)authorizeWithAuthorizationCode:(NSString *)authCode
+                       fromRedirectURL:(NSString *)redirectURLString
+                     completionHandler:(ReadmillAPICompletionHandler)completion;
+
+/*!
+ @param parameters The finalized POST parameters.
+ @param completionHandler An (optional) block to be executed on completion.
+ @brief   Refresh the current access token if it's invalid or expired.
+  */
+- (void)authorizeWithParameters:(NSDictionary *)parameters
+              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 
 /*!
  @param redirect The URL Readmill should return to once authorization succeeds. 
