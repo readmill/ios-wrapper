@@ -77,13 +77,13 @@
 - (NSDictionary *)propertyListRepresentation
 {
     NSMutableDictionary *plist = [NSMutableDictionary dictionary];
-    [plist setObject:[self accessToken]
+    [plist setValue:[self accessToken]
               forKey:@"accessToken"];
-    [plist setObject:[self authorizedRedirectURL]
+    [plist setValue:[self authorizedRedirectURL]
               forKey:@"authorizedRedirectURL"];
-    [plist setObject:[NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]]
+    [plist setValue:[NSKeyedArchiver archivedDataWithRootObject:[self apiConfiguration]]
               forKey:@"apiConfiguration"];
-    [plist setObject:[self accessTokenExpiryDate] forKey:@"accessTokenExpiryDate"];
+    [plist setValue:[self accessTokenExpiryDate] forKey:@"accessTokenExpiryDate"];
     
     return plist;
 }
@@ -187,7 +187,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:[parameters JSONData]];
-    
+    NSLog(@"url: %@", request.URL);
     [self startPreparedRequest:request completion:^(NSDictionary *response, NSError *error) {
         if (response != nil) {
             NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];

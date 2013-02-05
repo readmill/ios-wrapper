@@ -37,7 +37,7 @@
         NSString *authURLString = onProduction ? kReadmillLiveAuthorizationURLString : kReadmillStagingAuthorizationURLString;
         NSString *apiBaseURLString = onProduction ? kReadmillLiveAPIBaseURLString : kReadmillStagingAPIBaseURLString;
         
-        _accessTokenURL = [[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token.json", authURLString]] retain];
+        _accessTokenURL = [[NSURL URLWithString:[NSString stringWithFormat:@"%@oauth/token", authURLString]] retain];
 
 		_apiBaseURL = [[NSURL URLWithString:apiBaseURLString] retain];
 		_authURL = [[NSURL URLWithString:authURLString] retain];
