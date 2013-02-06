@@ -187,7 +187,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:[parameters JSONData]];
-    NSLog(@"url: %@", request.URL);
+
     [self startPreparedRequest:request completion:^(NSDictionary *response, NSError *error) {
         if (response != nil) {
             NSTimeInterval accessTokenTTL = [[response valueForKey:@"expires_in"] doubleValue];
