@@ -57,7 +57,7 @@
 		735E41C3135A5C7500855884 /* libReadmillAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 734A51A3135A1DF5009F9794 /* libReadmillAPI.a */; };
 		735E41DA135A666D00855884 /* ReadmillPing.h in Headers */ = {isa = PBXBuildFile; fileRef = 735E41D8135A666D00855884 /* ReadmillPing.h */; settings = {ATTRIBUTES = (); }; };
 		735E41DB135A666D00855884 /* ReadmillPing.m in Sources */ = {isa = PBXBuildFile; fileRef = 735E41D9135A666D00855884 /* ReadmillPing.m */; };
-		735EF9D5145EE43F00303F19 /* ReadmillAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 735EF9D4145EE43F00303F19 /* ReadmillAPI.h */; settings = {ATTRIBUTES = (); }; };
+		735EF9D5145EE43F00303F19 /* ReadmillAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 735EF9D4145EE43F00303F19 /* ReadmillAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		735F50D11470898E0069A553 /* ReadmillSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 73370FA31341197300880F5B /* ReadmillSpinner.m */; };
 		73603EEB1471465900889041 /* rm-overlay-views.png in Resources */ = {isa = PBXBuildFile; fileRef = 73603EEA1471465900889041 /* rm-overlay-views.png */; };
 		736C85E3145A02A900C5E6B5 /* NSDate+ReadmillAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 736C85DF1459FFAF00C5E6B5 /* NSDate+ReadmillAdditions.h */; settings = {ATTRIBUTES = (); }; };
@@ -176,7 +176,7 @@
 		735E3E6B13E06E1500930E8C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = JSONKit/JSONKit.m; sourceTree = SOURCE_ROOT; };
 		735E41D8135A666D00855884 /* ReadmillPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ReadmillPing.h; path = Classes/Framework/ReadmillPing.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		735E41D9135A666D00855884 /* ReadmillPing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ReadmillPing.m; path = Classes/Framework/ReadmillPing.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		735EF9D4145EE43F00303F19 /* ReadmillAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPI.h; path = Classes/Framework/ReadmillAPI.h; sourceTree = "<group>"; };
+		735EF9D4145EE43F00303F19 /* ReadmillAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPI.h; path = ../../ReadmillAPI/ReadmillAPI.h; sourceTree = "<group>"; };
 		73603EEA1471465900889041 /* rm-overlay-views.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rm-overlay-views.png"; sourceTree = "<group>"; };
 		736C85DF1459FFAF00C5E6B5 /* NSDate+ReadmillAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+ReadmillAdditions.h"; path = "Classes/Framework/NSDate+ReadmillAdditions.h"; sourceTree = SOURCE_ROOT; };
 		736C85E01459FFAF00C5E6B5 /* NSDate+ReadmillAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+ReadmillAdditions.m"; path = "Classes/Framework/NSDate+ReadmillAdditions.m"; sourceTree = SOURCE_ROOT; };
@@ -433,7 +433,6 @@
 			children = (
 				33D9B986149BA50D00C6876E /* OCMock.xcodeproj */,
 				502698D1130C87D300E67974 /* README.md */,
-				735EF9D4145EE43F00303F19 /* ReadmillAPI.h */,
 				33B5E0FF152C7F9C00F14440 /* Readmill.bundle */,
 				96BEAEF312F06360006028D0 /* ReadmillAPI */,
 				96F0757A12F0620B00F6369D /* Example Application */,
@@ -469,6 +468,7 @@
 		96BEAEF312F06360006028D0 /* ReadmillAPI */ = {
 			isa = PBXGroup;
 			children = (
+				735EF9D4145EE43F00303F19 /* ReadmillAPI.h */,
 				73FA5402147082D700CFC589 /* JSONKit */,
 				735E41D7135A655B00855884 /* Readmill Helper Classes */,
 				96BEAF3112F0636C006028D0 /* Additions */,
@@ -865,12 +865,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ReadmillAPI/ReadmillAPI-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/..\"",
-				);
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = ReadmillAPI;
+				PUBLIC_HEADERS_FOLDER_PATH = ReadmillAPI;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -880,12 +877,9 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ReadmillAPI/ReadmillAPI-Prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/..\"",
-				);
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = ReadmillAPI;
+				PUBLIC_HEADERS_FOLDER_PATH = ReadmillAPI;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
