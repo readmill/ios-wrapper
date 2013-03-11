@@ -722,7 +722,7 @@
 {
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
     [self sendGetRequestToEndpoint:endpoint
-                    withParameters:nil
+                    withParameters:@{ @"count" : @100 }
         shouldBeCalledUnauthorized:NO
                  completionHandler:completionHandler];
 }
