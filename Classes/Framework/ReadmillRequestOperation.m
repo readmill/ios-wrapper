@@ -188,17 +188,21 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 
 - (void)setShouldExecuteAsBackgroundTaskWithExpirationHandler:(void (^)(void))handler 
 {
-    if (!self.backgroundTaskIdentifier) {    
+    if (!self.backgroundTaskIdentifier) {
+        __block __typeof(&*self) weakSelf = self;
         UIApplication *application = [UIApplication sharedApplication];
         self.backgroundTaskIdentifier = [application beginBackgroundTaskWithExpirationHandler:^{
+            __strong __typeof(&*weakSelf) strongSelf = weakSelf;
             if (handler) {
                 handler();
             }
             
-            [self cancel];
-            
-            [application endBackgroundTask:self.backgroundTaskIdentifier];
-            self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+            if (strongSelf) {
+                [strongSelf cancel];
+                
+                [application endBackgroundTask:strongSelf.backgroundTaskIdentifier];
+                strongSelf.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
+            }
         }];
     }
 }
