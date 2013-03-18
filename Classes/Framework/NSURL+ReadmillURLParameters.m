@@ -17,15 +17,23 @@
     return [NSURL URLWithString:[parameters urlParameterString]];
 }
 
-- (NSURL *)URLByAddingParameters:(NSDictionary *)parameters
+- (NSURL *)URLByAddingParameters:(NSDictionary *)newParameters
 {
-    NSString *urlString = [self absoluteString];
-    urlString = [urlString stringByAppendingString:[parameters urlParameterString]];
+    // Strip any query
+    NSURL *newURL = [[NSURL alloc] initWithScheme:self.scheme
+                                             host:self.host
+                                             path:self.path];
+
+    NSMutableString *urlString = [newURL.absoluteString mutableCopy];
+    NSMutableDictionary *parameters = [[self queryAsDictionary] mutableCopy];
+    [parameters addEntriesFromDictionary:newParameters];
+    [urlString appendString:[parameters urlParameterString]];
+
     return [NSURL URLWithString:urlString];
 }
             
 - (NSDictionary *)queryAsDictionary
-    {
+{
     NSArray *parameters = [[self query] componentsSeparatedByString:@"&"];
     NSMutableDictionary *parametersDictionary = [NSMutableDictionary dictionaryWithCapacity:[parameters count]];
     for (NSString *parameter in parameters) {
