@@ -394,7 +394,7 @@
     NSURL *apiBaseURL = [apiConfiguration apiBaseURL];
     NSURL *avatarURL = [NSURL URLWithString:endpoint relativeToURL:apiBaseURL];
     
-    avatarURL = [avatarURL URLByAddingParameters:@{ @"size" : [self avatarSizeToString:size],
+    avatarURL = [avatarURL URLByAddingQueryParameters:@{ @"size" : [self avatarSizeToString:size],
                         kReadmillAPIClientIdKey : [apiConfiguration clientID] }];
     return avatarURL;
 }

@@ -12,26 +12,11 @@
 
 @implementation NSURL (ReadmillURLParameters)
 
-+ (NSURL *)URLWithParameters:(NSDictionary *)parameters 
-{    
++ (NSURL *)URLWithParameters:(NSDictionary *)parameters
+{
     return [NSURL URLWithString:[parameters urlParameterString]];
 }
 
-- (NSURL *)URLByAddingParameters:(NSDictionary *)newParameters
-{
-    // Strip any query
-    NSURL *newURL = [[NSURL alloc] initWithScheme:self.scheme
-                                             host:self.host
-                                             path:self.path];
-
-    NSMutableString *urlString = [newURL.absoluteString mutableCopy];
-    NSMutableDictionary *parameters = [[self queryAsDictionary] mutableCopy];
-    [parameters addEntriesFromDictionary:newParameters];
-    [urlString appendString:[parameters urlParameterString]];
-
-    return [NSURL URLWithString:urlString];
-}
-            
 - (NSDictionary *)queryAsDictionary
 {
     NSArray *parameters = [[self query] componentsSeparatedByString:@"&"];
@@ -46,4 +31,50 @@
     }
     return parametersDictionary;
 }
+
+- (NSURL *)URLByAddingQueryParameters:(NSDictionary *)parameters
+{
+    // Note:this ensures duplicate parameters aren't added
+    NSMutableDictionary *allParameters = [NSMutableDictionary dictionary];
+    [allParameters addEntriesFromDictionary:[self queryAsDictionary]];
+    [allParameters addEntriesFromDictionary:parameters];
+
+    NSMutableArray *queryParameters = [NSMutableArray arrayWithCapacity:[allParameters count]];
+
+    [allParameters enumerateKeysAndObjectsUsingBlock:^ (id key, id obj, BOOL *stop) {
+        NSMutableString *parameter = [NSMutableString string];
+        [parameter appendString:[key urlEncodedString]];
+        [parameter appendString:@"="];
+        if ([obj isKindOfClass:[NSString class]]) {
+			[parameter appendString:[obj urlEncodedString]];
+		} else if ([obj isKindOfClass:[NSNumber class]]) {
+            [parameter appendString:[[obj stringValue] urlEncodedString]];
+        }
+        
+        [queryParameters addObject:parameter];
+	}];
+
+    NSMutableString *absoluteURLString = [[self.absoluteString mutableCopy] autorelease];
+
+    NSString *newQuery = [@"?" stringByAppendingString:[queryParameters componentsJoinedByString:@"&"]];
+
+    if (self.query != nil) {
+        NSRange queryRange = [absoluteURLString rangeOfString:self.query];
+        queryRange.location--; // Note:remove the '?'
+        queryRange.length++;
+        [absoluteURLString replaceCharactersInRange:queryRange withString:newQuery];
+    } else {
+        // Insert before #fragment
+        NSString *fragment = self.fragment;
+        if (fragment != nil) {
+            NSRange range = [absoluteURLString rangeOfString:fragment];
+            range.location--; // Note:remove the '#'
+            [absoluteURLString insertString:newQuery atIndex:range.location];
+        } else {
+            [absoluteURLString appendString:newQuery];
+        }
+    }
+    return [NSURL URLWithString:absoluteURLString];
+}
+
 @end

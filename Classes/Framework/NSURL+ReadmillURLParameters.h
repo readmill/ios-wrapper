@@ -10,7 +10,9 @@
 
 
 @interface NSURL (ReadmillURLParameters)
+
 + (NSURL *)URLWithParameters:(NSDictionary *)parameters;
-- (NSURL *)URLByAddingParameters:(NSDictionary *)parameters;
+- (NSURL *)URLByAddingQueryParameters:(NSDictionary *)parameters;
 - (NSDictionary *)queryAsDictionary;
+
 @end

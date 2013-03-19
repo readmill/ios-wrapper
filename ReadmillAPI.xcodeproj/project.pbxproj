@@ -152,7 +152,7 @@
 		33EDA94614C6E2F900733C0A /* ReadmillPingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillPingTests.m; sourceTree = "<group>"; };
 		502698D1130C87D300E67974 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		731471C7135304F900A41B49 /* NSURL+ReadmillURLParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+ReadmillURLParameters.h"; path = "Classes/Framework/NSURL+ReadmillURLParameters.h"; sourceTree = SOURCE_ROOT; };
-		731471C8135304F900A41B49 /* NSURL+ReadmillURLParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+ReadmillURLParameters.m"; path = "Classes/Framework/NSURL+ReadmillURLParameters.m"; sourceTree = SOURCE_ROOT; };
+		731471C8135304F900A41B49 /* NSURL+ReadmillURLParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+ReadmillURLParameters.m"; path = "Classes/Framework/NSURL+ReadmillURLParameters.m"; sourceTree = SOURCE_ROOT; usesTabs = 0; wrapsLines = 1; };
 		731471EB1353601200A41B49 /* NSKeyedArchiver+ReadmillAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = "NSKeyedArchiver+ReadmillAdditions.h"; path = "../NSKeyedArchiver+ReadmillAdditions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		731471EC1353601200A41B49 /* NSKeyedArchiver+ReadmillAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "NSKeyedArchiver+ReadmillAdditions.m"; path = "../NSKeyedArchiver+ReadmillAdditions.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7318A469137D294800CBC7A4 /* NSError+ReadmillAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+ReadmillAdditions.h"; path = "../NSError+ReadmillAdditions.h"; sourceTree = "<group>"; };
@@ -443,6 +443,7 @@
 				96BEAECD12F05E80006028D0 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		96BEAECD12F05E80006028D0 /* Products */ = {
 			isa = PBXGroup;
