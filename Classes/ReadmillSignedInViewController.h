@@ -31,8 +31,6 @@
     ReadmillUser *user;
 }
 
-@property (nonatomic, retain) IBOutlet UIButton *connectButton;
-
 @property (nonatomic, retain) ReadmillUser *user;
 @property (nonatomic, retain) ReadmillBook *book;
 @property (nonatomic, retain) ReadmillReading *reading;

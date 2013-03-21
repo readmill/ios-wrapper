@@ -33,7 +33,6 @@
 - (void)dealloc 
 {
     [self setBook:nil];
-    [self setConnectButton:nil];
     [self setAuthorTextField:nil];
     [self setTitleTextField:nil];
     [self setIsbnTextField:nil];
@@ -85,12 +84,10 @@
     [user removeObserver:self forKeyPath:@"propertyListRepresentation"];
     [user removeObserver:self forKeyPath:@"userName"];
     
-    [self setConnectButton:nil];
     [self setTitleTextField:nil], [self setAuthorTextField:nil], [self setIsbnTextField:nil];
     [self setTextView:nil];
 }
 
-@synthesize connectButton;
 @synthesize reading;
 @synthesize book;
 @synthesize user;
