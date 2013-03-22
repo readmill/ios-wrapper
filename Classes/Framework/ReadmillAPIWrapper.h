@@ -606,7 +606,14 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Deletes the particular highlight in Readmill.
  */
-- (void)deleteHighlightWithId:(NSUInteger)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)deleteHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param userId The id of the user to retrieve highlights for.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Get all highlights for a particualr Readmill user.
+ */
+- (void)highlightsForUserWithId:(ReadmillUserId)userId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark Comments
 

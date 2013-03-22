@@ -736,6 +736,17 @@
                     completionHandler:completionHandler];
 }
 
+- (void)highlightsForUserWithId:(ReadmillUserId)userId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setValue:[NSNumber numberWithUnsignedInteger:count] forKey:@"count"];
+    [parameters setValue:fromDate forKey:@"from"];
+    [parameters setValue:toDate forKey:@"to"];
+
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self usersEndpoint], userId];
+    [self sendGetRequestToEndpoint:endpoint withParameters:[parameters autorelease] shouldBeCalledUnauthorized:NO completionHandler:completionHandler];
+}
+
 #pragma mark - Highlight comments
 
 - (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId
