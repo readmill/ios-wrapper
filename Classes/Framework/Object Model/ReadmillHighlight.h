@@ -25,6 +25,22 @@
 
 @class ReadmillHighlight;
 
+@protocol ReadmillHighlightUpdateDelegate <NSObject>
+
+/*!
+ @param highlight A ReadmillHighlight object.
+ @param error An NSError object describing the error.
+ @brief Delegate method informing the target that updating highlight failed.
+ */
+- (void)readmillHighlightUpdateDidFailWithHighlight:(ReadmillHighlight *)highlight error:(NSError *)error;
+
+/*!
+ @param highlight A ReadmillHighlight object.
+ @brief Delegate method informing the target that updating highlight succeeded.
+ */
+- (void)readmillHighlightUpdateDidSucceedWithHighlight:(ReadmillHighlight *)highlight;
+
+@end
 @protocol ReadmillCommentsFindingDelegate <NSObject>
 
 /*!
@@ -131,8 +147,17 @@
 - (void)updateWithAPIDictionary:(NSDictionary *)apiDict;
 
 #pragma mark -
+#pragma mark Managing Highlight
+
+- (void)updateWithDelegate:(id <ReadmillHighlightUpdateDelegate>)delegate;
+
+#pragma mark -
 #pragma mark Comments
 
+/*!
+ @param apiDict An API user dictionary.
+ @brief Finds.
+ */
 - (void)findCommentsWithCount:(NSUInteger)count
                      fromDate:(NSDate *)fromDate
                        toDate:(NSDate *)toDate

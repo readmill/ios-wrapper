@@ -727,6 +727,12 @@
                  completionHandler:completionHandler];
 }
 
+- (void)highlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self highlightsEndpoint], highlightId];
+    [self sendGetRequestToEndpoint:endpoint withParameters:nil shouldBeCalledUnauthorized:YES completionHandler:completionHandler];
+}
+
 - (void)deleteHighlightWithId:(NSUInteger)highlightId
             completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {

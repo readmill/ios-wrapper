@@ -106,6 +106,26 @@
 }
 
 #pragma mark -
+#pragma mark Managing Highlight
+
+- (void)updateWithDelegate:(id <ReadmillHighlightUpdateDelegate>)delegate
+{
+    __block typeof (self) bself = self;
+    ReadmillAPICompletionHandler completionBlock = ^(id apiResponse, NSError *error) {
+        
+        if ((error && [error code] != 409) || !apiResponse) {
+            [delegate readmillHighlightUpdateDidFailWithHighlight:bself error:error];
+        }
+        else {
+            [self updateWithAPIDictionary:apiResponse];
+            [delegate readmillHighlightUpdateDidSucceedWithHighlight:bself];
+        }
+    };
+    
+    [[self apiWrapper] highlightWithId:[self highlightId] completionHandler:completionBlock];
+}
+
+#pragma mark -
 #pragma mark Comments
 
 - (void)findCommentsWithCount:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate delegate:(id<ReadmillCommentsFindingDelegate>)delegate
