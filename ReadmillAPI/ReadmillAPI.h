@@ -14,6 +14,7 @@
 #import "ReadmillReading.h"
 #import "ReadmillBook.h"
 #import "ReadmillHighlight.h"
+#import "ReadmillComment.h"
 #import "ReadmillUIPresenter.h"
 #import "ReadmillSpinner.h"
 

@@ -771,12 +771,22 @@
 - (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId
                  completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
+    [self commentsForHighlightWithId:highlightId count:100 fromDate:nil toDate:nil completionHandler:completionHandler];
+}
+
+- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setValue:[NSNumber numberWithUnsignedInteger:count] forKey:@"count"];
+    [parameters setValue:fromDate forKey:@"from"];
+    [parameters setValue:toDate forKey:@"to"];
+    
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/comments",
                           [self highlightsEndpoint],
                           highlightId];
     
     [self sendGetRequestToEndpoint:endpoint
-                    withParameters:nil
+                    withParameters:[parameters autorelease]
         shouldBeCalledUnauthorized:NO
                  completionHandler:completionHandler];
 }

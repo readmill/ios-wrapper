@@ -21,21 +21,22 @@
  */
 
 #import "ReadmillHighlight.h"
+#import "ReadmillComment.h"
 #import "NSString+ReadmillAdditions.h"
 #import "NSDictionary+ReadmillAdditions.h"
 
 @interface ReadmillHighlight ()
 
-@property(readwrite, nonatomic) ReadmillHighlightId highlightId;
-@property(readwrite, nonatomic) float position;
-@property(readwrite, nonatomic) NSString *content;
-@property(readwrite, nonatomic) NSDate *highlightedAt;
-@property(readwrite, nonatomic) NSURL *permalinkURI;
-@property(readwrite, nonatomic) ReadmillUserId userId;
-@property(readwrite, nonatomic) NSUInteger commentsCount;
-@property(readwrite, nonatomic) NSUInteger likesCount;
-@property(readwrite, nonatomic) ReadmillReadingId readingId;
-@property(readwrite, nonatomic) ReadmillAPIWrapper *apiWrapper;
+@property(readwrite) ReadmillHighlightId highlightId;
+@property(readwrite) float position;
+@property(readwrite, copy) NSString *content;
+@property(readwrite, copy) NSDate *highlightedAt;
+@property(readwrite, copy) NSURL *permalinkURI;
+@property(readwrite) ReadmillUserId userId;
+@property(readwrite) NSUInteger commentsCount;
+@property(readwrite) NSUInteger likesCount;
+@property(readwrite) ReadmillReadingId readingId;
+@property(readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 
 @end
 
@@ -69,7 +70,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@ id %d: Highlight by %d from reading %d", [super description], [self highlightId], [self readingId], [self userId]];
+    return [NSString stringWithFormat:@"%@ id %d: Highlight by %d from reading %d", [super description], [self highlightId], [self userId], [self readingId]];
 }
 
 - (void)updateWithAPIDictionary:(NSDictionary *)apiDict
@@ -102,6 +103,32 @@
     [self setHighlightedAt:nil];
     [self setPermalinkURI:nil];
     [super dealloc];
+}
+
+#pragma mark -
+#pragma mark Comments
+
+- (void)findCommentsWithCount:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate delegate:(id<ReadmillCommentsFindingDelegate>)delegate
+{
+    __block typeof (self) bself = self;
+    ReadmillAPICompletionHandler completionBlock = ^(id apiResponse, NSError *error) {
+        
+        if ((error && [error code] != 409) || !apiResponse) {
+            [delegate readmillHighlight:bself failedToFindCommentsFromDate:fromDate toDate:toDate withError:error];
+        }
+        else {
+            NSMutableArray *comments = [[NSMutableArray alloc] init];
+            NSArray *items = [apiResponse valueForKeyPath:@"items"];
+            for (NSDictionary *d in items) {
+                ReadmillComment *comment = [[ReadmillComment alloc] initWithAPIDictionary:d apiWrapper:bself->_apiWrapper];
+                [comments addObject:[comment autorelease]];
+            }
+            
+            [delegate readmillHighlight:bself didFindComments:comments fromDate:fromDate toDate:toDate];
+        }
+    };
+    
+    [[self apiWrapper] commentsForHighlightWithId:[self highlightId] count:count fromDate:fromDate toDate:toDate completionHandler:completionBlock];
 }
 
 @end

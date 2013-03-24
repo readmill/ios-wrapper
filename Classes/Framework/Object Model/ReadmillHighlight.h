@@ -23,13 +23,37 @@
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
 
+@class ReadmillHighlight;
+
+@protocol ReadmillCommentsFindingDelegate <NSObject>
+
+/*!
+ @param user The user object that was performing the request.
+ @param highlights An array of retrieved `ReadmillComment` objects.
+ @param fromDate Beginning date range.
+ @param toDate Ending date range.
+ @brief Delegate method informing the target that Readmill found comments.
+ */
+- (void)readmillHighlight:(ReadmillHighlight *)highlight didFindComments:(NSArray *)comments fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
+
+/*!
+ @param user The user object that was performing the request.
+ @param fromDate Beginning date range.
+ @param toDate Ending date range.
+ @param error An NSError object describing the error that occurred.
+ @brief Delegate method informing the target that an error occurred attempting to search for comments.
+ */
+- (void)readmillHighlight:(ReadmillHighlight *)highlight failedToFindCommentsFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate withError:(NSError *)error;
+
+@end
+
 @interface ReadmillHighlight : NSObject
 
 #pragma mark -
 #pragma mark Properties
 
 /*!
- @property position
+ @property highlightId
  @brief The Readmill id of the current highlight.
  */
 @property(readonly) ReadmillHighlightId highlightId;
@@ -86,7 +110,7 @@
  @property  apiWrapper
  @brief The ReadmillAPIWrapper object this user uses.
  */
-@property (readonly, retain) ReadmillAPIWrapper *apiWrapper;
+@property(readonly, retain) ReadmillAPIWrapper *apiWrapper;
 
 #pragma mark -
 #pragma mark Initialization and Serialization
@@ -94,15 +118,24 @@
 /*!
  @param apiDict An API user dictionary.
  @param wrapper The ReadmillAPIWrapper to be used by the user.
- @result The created highlight.
- @brief   Create a new highlight for the given API highlight dictionary and wrapper.
+ @result The created comment.
+ @brief Create a new comment for the given API highlight dictionary and wrapper.
  */
-- (id)initWithAPIDictionary:(NSDictionary *)apiDict apiWrapper:(ReadmillAPIWrapper *)wrapper;
+- (id)initWithAPIDictionary:(NSDictionary *)apiDict
+                 apiWrapper:(ReadmillAPIWrapper *)wrapper;
 
 /*!
  @param apiDict An API user dictionary.
- @brief  Update this highlight with an NSDictionary from a ReadmillAPIWrapper object.
+ @brief Update this comment with an NSDictionary from a ReadmillAPIWrapper object.
  */
 - (void)updateWithAPIDictionary:(NSDictionary *)apiDict;
+
+#pragma mark -
+#pragma mark Comments
+
+- (void)findCommentsWithCount:(NSUInteger)count
+                     fromDate:(NSDate *)fromDate
+                       toDate:(NSDate *)toDate
+                     delegate:(id <ReadmillCommentsFindingDelegate>)delegate;
 
 @end
