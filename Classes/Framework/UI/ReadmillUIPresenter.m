@@ -73,28 +73,37 @@
 #define kBackgroundOpacity 0.5
 
 - (void)willShowKeyboard:(NSNotification *)note 
-{    
-    CGFloat offset = 30.0;
-    CGPoint position = [contentContainerView center];
-    position.y -= offset;
-    [UIView animateWithDuration:0.3
+{
+    CGRect keyboardFrame = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    UIViewAnimationOptions options = [[note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    CGFloat duration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    
+    keyboardFrame = [self.view convertRect:keyboardFrame fromView:nil];
+
+    CGRect parentFrame = self.parentViewController.view.frame;
+    CGRect frame = contentContainerView.frame;
+
+    CGFloat minimumMarginY = 10;
+    frame.origin.y = MAX(CGRectGetMinY(parentFrame) + minimumMarginY, frame.origin.y - CGRectGetHeight(keyboardFrame) / 2);
+
+    [UIView animateWithDuration:duration
                           delay:0.0 
-                        options:UIViewAnimationOptionCurveEaseInOut 
+                        options:options
                      animations:^{
-                        [contentContainerView setCenter:position];                        
+                         [contentContainerView setFrame:frame];
                      }
                      completion:nil];
 }
-- (void)willHideKeyboard:(NSNotification *)note 
+- (void)willHideKeyboard:(NSNotification *)note
 {
-    CGFloat offset = 30.0;
-    CGPoint position = [contentContainerView center];
-    position.y += offset;
-    [UIView animateWithDuration:0.3
+    UIViewAnimationOptions options = [[note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    CGFloat duration = [[note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    
+    [UIView animateWithDuration:duration
                           delay:0.0 
-                        options:UIViewAnimationOptionCurveEaseOut 
+                        options:options
                      animations:^{
-                         [contentContainerView setCenter:position];                        
+                         [contentContainerView setCenter:self.view.center];
                      }
                      completion:nil];
 }
