@@ -31,6 +31,7 @@ typedef void (^ReadmillAPICompletionHandler)(id result, NSError *error);
 typedef NSUInteger ReadmillBookId;
 typedef NSUInteger ReadmillReadingId;
 typedef NSUInteger ReadmillHighlightId;
+typedef NSUInteger ReadmillCommentId;
 typedef NSUInteger ReadmillUserId;
 typedef NSUInteger ReadmillLibraryItemId;
 typedef float ReadmillReadingProgress; // float, 0-1 (%)
@@ -155,9 +156,11 @@ static NSString * const kReadmillAPIHighlightHighlightedAtKey = @"highlighted_at
 
 #pragma mark API Keys - Comments
 
+static NSString * const kReadmillAPICommentKey = @"comment";
 static NSString * const kReadmillAPICommentIdKey = @"id";
 static NSString * const kReadmillAPICommentPostedAtKey = @"posted_at";
 static NSString * const kReadmillAPICommentContentKey = @"content";
+static NSString * const kReadmillAPICommentUserKey = @"user";
 
 #pragma mark API Keys - Periods
 
@@ -606,7 +609,24 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Deletes the particular highlight in Readmill.
  */
-- (void)deleteHighlightWithId:(NSUInteger)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (void)highlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param highlightId The id of the highlight.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Deletes the particular highlight in Readmill.
+ */
+- (void)deleteHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param userId The id of the user to retrieve highlights for.
+ @param count Number of highlights to retrieve.
+ @param fromDate Starting date to filter highlights from.
+ @param toDate Ending date to filter highlights to.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief Get all highlights for a particular Readmill user.
+ */
+- (void)highlightsForUserWithId:(ReadmillUserId)userId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark Comments
 
@@ -625,6 +645,16 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @brief  Get all comments for a particular highlight in Readmill.
  */
 - (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param userId The id of the highlight to retrieve comments for.
+ @param count Number of comments to retrieve.
+ @param fromDate Starting date to filter comments from.
+ @param toDate Ending date to filter comments to.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief Get all comments for a particular Readmill highlight.
+ */
+- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark Likes
 
