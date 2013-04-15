@@ -727,6 +727,12 @@
                  completionHandler:completionHandler];
 }
 
+- (void)highlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self highlightsEndpoint], highlightId];
+    [self sendGetRequestToEndpoint:endpoint withParameters:nil shouldBeCalledUnauthorized:NO completionHandler:completionHandler];
+}
+
 - (void)deleteHighlightWithId:(NSUInteger)highlightId
             completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
@@ -734,6 +740,17 @@
     [self sendDeleteRequestToEndpoint:endpoint
                        withParameters:nil
                     completionHandler:completionHandler];
+}
+
+- (void)highlightsForUserWithId:(ReadmillUserId)userId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setValue:[NSNumber numberWithUnsignedInteger:count] forKey:@"count"];
+    [parameters setValue:fromDate forKey:@"from"];
+    [parameters setValue:toDate forKey:@"to"];
+
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self usersEndpoint], userId];
+    [self sendGetRequestToEndpoint:endpoint withParameters:[parameters autorelease] shouldBeCalledUnauthorized:NO completionHandler:completionHandler];
 }
 
 #pragma mark - Highlight comments
@@ -760,12 +777,22 @@
 - (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId
                  completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
+    [self commentsForHighlightWithId:highlightId count:100 fromDate:nil toDate:nil completionHandler:completionHandler];
+}
+
+- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setValue:[NSNumber numberWithUnsignedInteger:count] forKey:@"count"];
+    [parameters setValue:fromDate forKey:@"from"];
+    [parameters setValue:toDate forKey:@"to"];
+    
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/comments",
                           [self highlightsEndpoint],
                           highlightId];
     
     [self sendGetRequestToEndpoint:endpoint
-                    withParameters:nil
+                    withParameters:[parameters autorelease]
         shouldBeCalledUnauthorized:NO
                  completionHandler:completionHandler];
 }

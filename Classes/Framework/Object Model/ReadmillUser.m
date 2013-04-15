@@ -24,6 +24,7 @@
 #import "NSDictionary+ReadmillAdditions.h"
 #import "ReadmillBook.h"
 #import "ReadmillReading.h"
+#import "ReadmillHighlight.h"
 #import "NSURL+ReadmillURLParameters.h"
 
 @interface ReadmillUser ()
@@ -356,6 +357,34 @@
                            isPrivate:isPrivate
                          connections:nil 
                             delegate:readingFindingDelegate];
+}
+
+#pragma mark -
+#pragma mark Highlights
+
+- (void)findHighlightsWithCount:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate delegate:(id <ReadmillHighlightsFindingDelegate>)delegate
+{
+    __block typeof (self) bself = self;
+    ReadmillAPICompletionHandler completionBlock = ^(id apiResponse, NSError *error) {
+        
+        if ((error && [error code] != 409) || !apiResponse) {
+            [delegate readmillUser:bself failedToFindHighlightsFromDate:fromDate toDate:toDate withError:error];
+        } else {
+            
+            NSMutableArray *highlights = [[NSMutableArray alloc] init];
+            NSArray *items = [apiResponse valueForKeyPath:@"items"];
+            for (NSDictionary *d in items) {
+                ReadmillHighlight *highlight = [[ReadmillHighlight alloc] initWithAPIDictionary:d apiWrapper:bself->_apiWrapper];
+                [highlights addObject:[highlight autorelease]];
+                
+                // TODO: Should we update the current user here as well? Probably not very smart or is it?
+            }
+            
+            [delegate readmillUser:bself didFindHighlights:[highlights autorelease] fromDate:fromDate toDate:toDate];
+        }
+    };
+    
+    [[self apiWrapper] highlightsForUserWithId:[self userId] count:count fromDate:fromDate toDate:toDate completionHandler:completionBlock];
 }
 
 

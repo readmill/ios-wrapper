@@ -91,7 +91,27 @@
 - (void)readmillUser:(ReadmillUser *)user failedToFindReadingForBook:(ReadmillBook *)book withError:(NSError *)error;
 
 @end
+@protocol ReadmillHighlightsFindingDelegate <NSObject>
 
+/*!
+ @param user The user object that was performing the request.
+ @param highlights An array of retrieved `ReadmillHighlight` objects.
+ @param fromDate Beginning date range.
+ @param toDate Ending date range.
+ @brief Delegate method informing the target that Readmill found highlights.
+ */
+- (void)readmillUser:(ReadmillUser *)user didFindHighlights:(NSArray *)highlights fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
+
+/*!
+ @param user The user object that was performing the request.
+ @param fromDate Beginning date range.
+ @param toDate Ending date range.
+ @param error An NSError object describing the error that occurred.
+ @brief Delegate method informing the target that an error occurred attempting to search for highlights.
+ */
+- (void)readmillUser:(ReadmillUser *)user failedToFindHighlightsFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate withError:(NSError *)error;
+
+@end
 
 typedef enum {
     ReadmillUserAvatarSizeSmall,
@@ -312,6 +332,14 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
                          isPrivate:(BOOL)isPrivate 
                        connections:(NSArray *)connections
                           delegate:(id <ReadmillReadingFindingDelegate>)delegate;
+
+#pragma mark -
+#pragma mark Highlights
+
+- (void)findHighlightsWithCount:(NSUInteger)count
+                       fromDate:(NSDate *)fromDate
+                         toDate:(NSDate *)toDate
+                       delegate:(id <ReadmillHighlightsFindingDelegate>)delegate;
 
 
 #pragma mark -
