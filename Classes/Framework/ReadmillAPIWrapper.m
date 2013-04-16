@@ -717,14 +717,10 @@
                   completionHandler:completionHandler];
 }
 
-- (void)highlightsForReadingWithId:(ReadmillReadingId)readingId
-                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId
+                                       completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
-    [self sendGetRequestToEndpoint:endpoint
-                    withParameters:@{ @"count" : @100 }
-        shouldBeCalledUnauthorized:NO
-                 completionHandler:completionHandler];
+    [self highlightsForReadingWithId:readingId count:100 fromDate:nil toDate:nil completionHandler:completionHandler];
 }
 
 - (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler

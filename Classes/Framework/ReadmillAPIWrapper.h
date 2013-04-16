@@ -597,14 +597,17 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 /*!
  @param readingId The id of the reading.
  @param completionHandler A block that will return the result (id) and an error pointer.
- @brief  Get all highlights for a particular reading in Readmill.
+ @brief  Get the first hundred highlights for a particular reading in Readmill.
  */
-- (void)highlightsForReadingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading.
+ @param count Number of highlights to return.
+ @param fromDate Date to return highlights from.
+ @param toDate Date to return highlights to.
  @param completionHandler A block that will return the result (id) and an error pointer.
- @brief  Get all highlights for a particular reading in Readmill.
+ @brief  Get a specified number of highlights for a particular reading in Readmill between two dates.
  */
 - (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
