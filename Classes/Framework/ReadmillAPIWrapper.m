@@ -283,9 +283,16 @@
                       completionHandler:completionHandler];
 }
 
-- (void)updateReadingWithId:(ReadmillReadingId)readingId
-                 parameters:(NSDictionary *)parameters
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                        toPrivate:(BOOL)toPrivate
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    return [self updateReadingWithId:readingId withState:nil isPrivate:toPrivate closingRemark:nil completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                   parameters:(NSDictionary *)parameters
+            completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d",
                           [self readingsEndpoint],
@@ -295,11 +302,11 @@
                  completionHandler:completionHandler];
 }
 
-- (void)updateReadingWithId:(ReadmillReadingId)readingId
-                  withState:(NSString *)readingState
-                  isPrivate:(BOOL)isPrivate
-              closingRemark:(NSString *)remark
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                        withState:(NSString *)readingState
+                                        isPrivate:(BOOL)isPrivate
+                                    closingRemark:(NSString *)remark
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableDictionary *readingParameters = [[NSMutableDictionary alloc] init];
     
@@ -317,7 +324,7 @@
                                                            forKey:kReadmillAPIReadingKey];
     [readingParameters release];
     
-    [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
+    return [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
 }
 
 - (void)updateReadingWithId:(ReadmillReadingId)readingId
