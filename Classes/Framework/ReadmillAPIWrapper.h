@@ -602,6 +602,13 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 - (void)highlightsForReadingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
+ @param readingId The id of the reading.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Get all highlights for a particular reading in Readmill.
+ */
+- (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
  @param highlightId The id of the highlight.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Deletes the particular highlight in Readmill.

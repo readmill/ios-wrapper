@@ -727,6 +727,21 @@
                  completionHandler:completionHandler];
 }
 
+- (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithCapacity:3];
+    [parameters setValue:@(count) forKey:@"count"];
+    [parameters setValue:@"highlighted_at" forKey:@"order"];
+    [parameters setValue:[fromDate stringWithRFC3339Format] forKey:@"from"];
+    [parameters setValue:[toDate stringWithRFC3339Format] forKey:@"to"];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/highlights", [self readingsEndpoint], readingId];
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:parameters
+               shouldBeCalledUnauthorized:NO
+                        completionHandler:completionHandler];
+}
+
 - (void)deleteHighlightWithId:(NSUInteger)highlightId
             completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
