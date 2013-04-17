@@ -283,29 +283,28 @@
                       completionHandler:completionHandler];
 }
 
-- (void)updateReadingWithId:(ReadmillReadingId)readingId
-                 parameters:(NSDictionary *)parameters
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                        toPrivate:(BOOL)toPrivate
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSString *endpoint = [NSString stringWithFormat:@"%@/%d",
-                          [self readingsEndpoint],
-                          readingId];
-    [self sendPutRequestToEndpoint:endpoint
-                    withParameters:parameters
-                 completionHandler:completionHandler];
+    return [self updateReadingWithId:readingId
+                           withState:nil
+                           isPrivate:toPrivate
+                       closingRemark:nil
+                   completionHandler:completionHandler];
 }
 
-- (void)updateReadingWithId:(ReadmillReadingId)readingId
-                  withState:(NSString *)readingState
-                  isPrivate:(BOOL)isPrivate
-              closingRemark:(NSString *)remark
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                        withState:(NSString *)readingState
+                                        isPrivate:(BOOL)isPrivate
+                                    closingRemark:(NSString *)remark
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableDictionary *readingParameters = [[NSMutableDictionary alloc] init];
     
     [readingParameters setValue:readingState
                          forKey:kReadmillAPIReadingStateKey];
-    [readingParameters setValue:isPrivate ? @"true" : @"false"
+    [readingParameters setValue:@(isPrivate)
                          forKey:kReadmillAPIReadingPrivateKey];
     
     if ([remark length] > 0) {
@@ -317,15 +316,15 @@
                                                            forKey:kReadmillAPIReadingKey];
     [readingParameters release];
     
-    [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
+    return [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
 }
 
-- (void)updateReadingWithId:(ReadmillReadingId)readingId
-                      state:(NSString *)readingState
-              closingRemark:(NSString *)closingRemark
-                recommended:(BOOL)recommended
-                connections:(NSArray *)connections
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                            state:(NSString *)readingState
+                                    closingRemark:(NSString *)closingRemark
+                                      recommended:(BOOL)recommended
+                                      connections:(NSArray *)connections
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSMutableDictionary *readingParameters = [[NSMutableDictionary alloc] init];
     
@@ -333,6 +332,7 @@
                          forKey:kReadmillAPIReadingStateKey];
     [readingParameters setValue:[NSNumber numberWithUnsignedInteger:recommended]
                          forKey:kReadmillAPIReadingRecommendedKey];
+
     if ([closingRemark length] > 0) {
         [readingParameters setValue:closingRemark
                              forKey:kReadmillAPIReadingClosingRemarkKey];
@@ -350,31 +350,43 @@
     [self updateReadingWithId:readingId parameters:parameters completionHandler:completionHandler];
 }
 
-- (void)finishReadingWithId:(ReadmillReadingId)readingId
-              closingRemark:(NSString *)closingRemark
-                recommended:(BOOL)recommended
-                connections:(NSArray *)connections
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)finishReadingWithId:(ReadmillReadingId)readingId
+                                    closingRemark:(NSString *)closingRemark
+                                      recommended:(BOOL)recommended
+                                      connections:(NSArray *)connections
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    [self updateReadingWithId:readingId
-                        state:ReadmillReadingStateFinishedKey
-                closingRemark:closingRemark
-                  recommended:recommended
-                  connections:connections
-            completionHandler:completionHandler];
+    return [self updateReadingWithId:readingId
+                               state:ReadmillReadingStateFinishedKey
+                       closingRemark:closingRemark
+                         recommended:recommended
+                         connections:connections
+                   completionHandler:completionHandler];
 }
 
-- (void)abandonReadingWithId:(ReadmillReadingId)readingId
-               closingRemark:(NSString *)closingRemark
-                 connections:(NSArray *)connections
-           completionHandler:(ReadmillAPICompletionHandler)completionHandler
+- (ReadmillRequestOperation *)abandonReadingWithId:(ReadmillReadingId)readingId
+                                     closingRemark:(NSString *)closingRemark
+                                       connections:(NSArray *)connections
+                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    [self updateReadingWithId:readingId
-                        state:ReadmillReadingStateAbandonedKey
-                closingRemark:closingRemark
-                  recommended:NO
-                  connections:connections
-            completionHandler:completionHandler];
+    return [self updateReadingWithId:readingId
+                               state:ReadmillReadingStateAbandonedKey
+                       closingRemark:closingRemark
+                         recommended:NO
+                         connections:connections
+                   completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                       parameters:(NSDictionary *)parameters
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d",
+                          [self readingsEndpoint],
+                          readingId];
+    return [self sendPutRequestToEndpoint:endpoint
+                           withParameters:parameters
+                        completionHandler:completionHandler];
 }
 
 - (void)publicReadingsForUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler
