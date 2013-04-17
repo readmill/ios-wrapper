@@ -287,7 +287,7 @@
                                         toPrivate:(BOOL)toPrivate
                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    return [self updateReadingWithId:readingId withState:nil isPrivate:toPrivate closingRemark:nil completionHandler:completionHandler];
+    return [self updateReadingWithId:readingId withState:ReadmillReadingStateReadingKey isPrivate:toPrivate closingRemark:nil completionHandler:completionHandler];
 }
 
 - (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
@@ -296,8 +296,8 @@
 {
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d",
                           [self readingsEndpoint],
-                          readingId];
-    [self sendPutRequestToEndpoint:endpoint
+                          readingId];    
+    return [self sendPutRequestToEndpoint:endpoint
                     withParameters:parameters
                  completionHandler:completionHandler];
 }
