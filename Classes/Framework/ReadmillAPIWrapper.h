@@ -407,17 +407,29 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 /*!
  @param readingId The id of the reading to update.
+ @param toPrivate The new reading privacy.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief   Update a reading with the given Id with a new state, privacy and closing remark.
+ */
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                        toPrivate:(BOOL)toPrivate
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param readingId The id of the reading to update.
  @param readingState The new reading state.
  @param isPrivate The new reading privacy.
  @param closingRemark The new reading remark.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
  @brief   Update a reading with the given Id with a new state, privacy and closing remark. 
 */
-- (void)updateReadingWithId:(ReadmillReadingId)readingId
-                  withState:(NSString *)readingState
-                  isPrivate:(BOOL)isPrivate
-              closingRemark:(NSString *)closingRemark
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                        withState:(NSString *)readingState
+                                        isPrivate:(BOOL)isPrivate
+                                    closingRemark:(NSString *)closingRemark
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading to finish.
@@ -426,13 +438,14 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
     IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
  @brief   Finish a reading with the given Id with an optional closing remark and do/dont recommend.
  */
-- (void)finishReadingWithId:(ReadmillReadingId)readingId
-              closingRemark:(NSString *)closingRemark
-                recommended:(BOOL)recommended
-                connections:(NSArray *)connections
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)finishReadingWithId:(ReadmillReadingId)readingId
+                                    closingRemark:(NSString *)closingRemark
+                                      recommended:(BOOL)recommended
+                                      connections:(NSArray *)connections
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading to abandon.
@@ -440,12 +453,13 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
     IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
  @brief   Abandon a reading with the given Id with an optional closing remark.
  */
-- (void)abandonReadingWithId:(ReadmillReadingId)readingId 
-               closingRemark:(NSString *)closingRemark
-                 connections:(NSArray *)connections
-           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)abandonReadingWithId:(ReadmillReadingId)readingId
+                                     closingRemark:(NSString *)closingRemark
+                                       connections:(NSArray *)connections
+                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param userId The user Id of the user you'd like readings for.
