@@ -408,10 +408,22 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 /*!
  @param readingId The id of the reading to update.
+ @param toPrivate The new reading privacy.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief   Update a reading with the given Id with a new state, privacy and closing remark.
+ */
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                        toPrivate:(BOOL)toPrivate
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param readingId The id of the reading to update.
  @param readingState The new reading state.
  @param isPrivate The new reading privacy.
  @param closingRemark The new reading remark.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
  @brief   Update a reading with the given Id with a new state, privacy and closing remark. 
 */
 - (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
@@ -427,6 +439,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
     IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
  @brief   Finish a reading with the given Id with an optional closing remark and do/dont recommend.
  */
 - (ReadmillRequestOperation *)finishReadingWithId:(ReadmillReadingId)readingId
@@ -441,9 +454,10 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
     IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
  @brief   Abandon a reading with the given Id with an optional closing remark.
  */
-- (ReadmillRequestOperation *)abandonReadingWithId:(ReadmillReadingId)readingId 
+- (ReadmillRequestOperation *)abandonReadingWithId:(ReadmillReadingId)readingId
                                      closingRemark:(NSString *)closingRemark
                                        connections:(NSArray *)connections
                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
