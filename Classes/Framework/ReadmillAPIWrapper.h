@@ -330,17 +330,18 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @brief   Get a specific book in the Readmill system. If identifier is included, a match against identifier is tried first. 
           If that fails, a match against title and author is attempted.
  */
-- (void)bookMatchingIdentifier:(NSString *)identifier
-                         title:(NSString *)title
-                        author:(NSString *)author
-             completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)bookMatchingIdentifier:(NSString *)identifier
+                                               title:(NSString *)title
+                                              author:(NSString *)author
+                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 /*!
  @param bookId The Readmill id of the book to retrieve.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result A Readmill book as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Get a specific book in the Readmill system. 
  */
-- (void)bookWithId:(ReadmillBookId)bookId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)bookWithId:(ReadmillBookId)bookId
+                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookTitle The new book's title.
@@ -350,10 +351,10 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @result The created book in the Readmill system as an NSDictionary object. See the API Keys - Book section of this header for keys. 
  @brief   Create a book with the given title, author and identifier in the Readmill system.
 */
-- (void)findOrCreateBookWithTitle:(NSString *)bookTitle
-                           author:(NSString *)bookAuthor
-                       identifier:(NSString *)bookIdentifier
-                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)findOrCreateBookWithTitle:(NSString *)bookTitle
+                                                 author:(NSString *)bookAuthor
+                                             identifier:(NSString *)bookIdentifier
+                                      completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Readings
@@ -366,11 +367,11 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Find a reading for user matching the arguments.
 */
-- (void)readingForUserWithId:(ReadmillUserId)userId
-          matchingIdentifier:(NSString *)identifier
-                       title:(NSString *)title
-                      author:(NSString *)author
-           completionHandler:(ReadmillAPICompletionHandler)completion;
+- (ReadmillRequestOperation *)readingForUserWithId:(ReadmillUserId)userId
+                                matchingIdentifier:(NSString *)identifier
+                                             title:(NSString *)title
+                                            author:(NSString *)author
+                                 completionHandler:(ReadmillAPICompletionHandler)completion;
 
 /*!
  @param bookId The id of the book to create a reading for.
@@ -384,11 +385,11 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  
  IMPORTANT: The state and privacy options may not match the passed arguments if a reading already existed.
  */
-- (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
-                                state:(NSString *)readingState
-                            isPrivate:(BOOL)isPrivate
-                          connections:(NSArray *)connections
-                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
+                                                      state:(NSString *)readingState
+                                                  isPrivate:(BOOL)isPrivate
+                                                connections:(NSArray *)connections
+                                          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The id of the book to create a reading for.
@@ -400,10 +401,10 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  
  IMPORTANT: The state and privacy options may not match the passed arguments if a reading already existed.
  */
-- (void)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
-                                state:(NSString *)readingState
-                            isPrivate:(BOOL)isPrivate
-                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)findOrCreateReadingWithBookId:(ReadmillBookId)bookId 
+                                                      state:(NSString *)readingState
+                                                  isPrivate:(BOOL)isPrivate
+                                          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading to update.
@@ -413,11 +414,11 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Update a reading with the given Id with a new state, privacy and closing remark. 
 */
-- (void)updateReadingWithId:(ReadmillReadingId)readingId
-                  withState:(NSString *)readingState
-                  isPrivate:(BOOL)isPrivate
-              closingRemark:(NSString *)closingRemark
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)updateReadingWithId:(ReadmillReadingId)readingId
+                                        withState:(NSString *)readingState
+                                        isPrivate:(BOOL)isPrivate
+                                    closingRemark:(NSString *)closingRemark
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading to finish.
@@ -428,11 +429,11 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Finish a reading with the given Id with an optional closing remark and do/dont recommend.
  */
-- (void)finishReadingWithId:(ReadmillReadingId)readingId
-              closingRemark:(NSString *)closingRemark
-                recommended:(BOOL)recommended
-                connections:(NSArray *)connections
-          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)finishReadingWithId:(ReadmillReadingId)readingId
+                                    closingRemark:(NSString *)closingRemark
+                                      recommended:(BOOL)recommended
+                                      connections:(NSArray *)connections
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading to abandon.
@@ -442,10 +443,10 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Abandon a reading with the given Id with an optional closing remark.
  */
-- (void)abandonReadingWithId:(ReadmillReadingId)readingId 
-               closingRemark:(NSString *)closingRemark
-                 connections:(NSArray *)connections
-           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)abandonReadingWithId:(ReadmillReadingId)readingId 
+                                     closingRemark:(NSString *)closingRemark
+                                       connections:(NSArray *)connections
+                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param userId The user Id of the user you'd like readings for.
@@ -453,8 +454,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @result A list of readings in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
  @brief   Get a list of readings for a given user Id. 
 */
-- (void)publicReadingsForUserWithId:(ReadmillUserId)userId 
-                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)publicReadingsForUserWithId:(ReadmillUserId)userId 
+                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
  
 /*!
  @param userId The user Id of the user you'd like readings for.
@@ -462,8 +463,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @result A list of readings in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
  @brief   Get a list of readings for a given user Id. 
  */
-- (void)readingsForUserWithId:(ReadmillUserId)userId 
-            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)readingsForUserWithId:(ReadmillUserId)userId 
+                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 
 /*!
@@ -473,40 +474,40 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @brief   Get a specific reading by its id.
  */
 
-- (void)readingWithId:(ReadmillReadingId)readingId 
-    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)readingWithId:(ReadmillReadingId)readingId 
+                          completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get all readings for the book with the specifiedId
  */
-- (void)readingsForBookWithId:(ReadmillBookId)bookId 
-            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)readingsForBookWithId:(ReadmillBookId)bookId 
+                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get the readings for the book with the specified bookId, filtered by followed people.
  */
-- (void)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId 
-                             completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId 
+                                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get the most popular readings for the book with the specified bookId.
  */
-- (void)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId 
-                            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId 
+                                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The readingId for which to get periods
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get the periods for the reading with the specified readingId
  */
-- (void)periodsForReadingWithId:(ReadmillReadingId)readingId
-              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)periodsForReadingWithId:(ReadmillReadingId)readingId
+                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 
 /*!
@@ -539,12 +540,12 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time.
  */
-- (void)pingReadingWithId:(ReadmillReadingId)readingId 
-             withProgress:(ReadmillReadingProgress)progress
-        sessionIdentifier:(NSString *)sessionId
-                 duration:(ReadmillPingDuration)duration
-           occurrenceTime:(NSDate *)occurrenceTime
-        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)pingReadingWithId:(ReadmillReadingId)readingId 
+                                   withProgress:(ReadmillReadingProgress)progress
+                              sessionIdentifier:(NSString *)sessionId
+                                       duration:(ReadmillPingDuration)duration
+                                 occurrenceTime:(NSDate *)occurrenceTime
+                              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading you'd like to ping.
@@ -557,21 +558,21 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief  Ping Readmill, informing it of the fact the user was reading a certain part of the book at the given time. 
  */
-- (void)pingReadingWithId:(ReadmillReadingId)readingId 
-             withProgress:(ReadmillReadingProgress)progress
-        sessionIdentifier:(NSString *)sessionId
-                 duration:(ReadmillPingDuration)duration
-           occurrenceTime:(NSDate *)occurrenceTime 
-                 latitude:(CLLocationDegrees)latitude
-                longitude:(CLLocationDegrees)longitude
-        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)pingReadingWithId:(ReadmillReadingId)readingId 
+                                   withProgress:(ReadmillReadingProgress)progress
+                              sessionIdentifier:(NSString *)sessionId
+                                       duration:(ReadmillPingDuration)duration
+                                 occurrenceTime:(NSDate *)occurrenceTime 
+                                       latitude:(CLLocationDegrees)latitude
+                                      longitude:(CLLocationDegrees)longitude
+                              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Highlights
 
-- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId
-                             parameters:(NSDictionary *)parameters
-                      completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)createHighlightForReadingWithId:(ReadmillReadingId)readingId
+                                                   parameters:(NSDictionary *)parameters
+                                            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading you want to create a highlight in.
@@ -587,22 +588,23 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Send a highlighted text snippet to Readmill.
  */
-- (void)createHighlightForReadingWithId:(ReadmillReadingId)readingId
-                        highlightedText:(NSString *)highlightedText
-                               locators:(NSDictionary *)locators
-                               position:(ReadmillReadingProgress)position
-                          highlightedAt:(NSDate *)highlightedAt
-                                comment:(NSString *)comment
-                            connections:(NSArray *)connections
-                       isCopyRestricted:(BOOL)isCopyRestricted
-                      completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)createHighlightForReadingWithId:(ReadmillReadingId)readingId
+                                              highlightedText:(NSString *)highlightedText
+                                                     locators:(NSDictionary *)locators
+                                                     position:(ReadmillReadingProgress)position
+                                                highlightedAt:(NSDate *)highlightedAt
+                                                      comment:(NSString *)comment
+                                                  connections:(NSArray *)connections
+                                             isCopyRestricted:(BOOL)isCopyRestricted
+                                            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Get the first hundred highlights for a particular reading in Readmill.
  */
-- (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId
+                                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The id of the reading.
@@ -612,21 +614,27 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Get a specified number of highlights for a particular reading in Readmill between two dates.
  */
-- (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)highlightsForReadingWithId:(ReadmillReadingId)readingId
+                                                   count:(NSUInteger)count
+                                                fromDate:(NSDate *)fromDate
+                                                  toDate:(NSDate *)toDate
+                                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param highlightId The id of the highlight.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Deletes the particular highlight in Readmill.
  */
-- (void)highlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)highlightWithId:(ReadmillHighlightId)highlightId
+                            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param highlightId The id of the highlight.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Deletes the particular highlight in Readmill.
  */
-- (void)deleteHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)deleteHighlightWithId:(ReadmillHighlightId)highlightId
+                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param userId The id of the user to retrieve highlights for.
@@ -636,7 +644,11 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief Get all highlights for a particular Readmill user.
  */
-- (void)highlightsForUserWithId:(ReadmillUserId)userId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)highlightsForUserWithId:(ReadmillUserId)userId
+                                                count:(NSUInteger)count
+                                             fromDate:(NSDate *)fromDate
+                                               toDate:(NSDate *)toDate
+                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark Comments
 
@@ -647,14 +659,18 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result and an error pointer.
  @brief  Add a comment to a particular highlight in Readmill.
  */
-- (void)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId comment:(NSString *)comment commentedAt:(NSDate *)date completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId
+                                                      comment:(NSString *)comment
+                                                  commentedAt:(NSDate *)date
+                                            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param highlightId The id of the highlight.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Get all comments for a particular highlight in Readmill.
  */
-- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)commentsForHighlightWithId:(ReadmillHighlightId)highlightId
+                                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param userId The id of the highlight to retrieve comments for.
@@ -664,7 +680,11 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief Get all comments for a particular Readmill highlight.
  */
-- (void)commentsForHighlightWithId:(ReadmillHighlightId)highlightId count:(NSUInteger)count fromDate:(NSDate *)fromDate toDate:(NSDate *)toDate completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)commentsForHighlightWithId:(ReadmillHighlightId)highlightId
+                                                   count:(NSUInteger)count
+                                                fromDate:(NSDate *)fromDate
+                                                  toDate:(NSDate *)toDate
+                                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark Likes
 
@@ -673,21 +693,24 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Get all users that liked the particular highlight in Readmill.
  */
-- (void)likesForHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion;
+- (ReadmillRequestOperation *)likesForHighlightWithId:(ReadmillHighlightId)highlightId
+                                    completionHandler:(ReadmillAPICompletionHandler)completion;
 
 /*!
  @param highlightId The id of the highlight.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Like the particular highlight on Readmill.
  */
-- (void)likeHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion;
+- (ReadmillRequestOperation *)likeHighlightWithId:(ReadmillHighlightId)highlightId
+                                completionHandler:(ReadmillAPICompletionHandler)completion;
 
 /*!
  @param highlightId The id of the highlight.
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Unlike the particular highlight on Readmill.
  */
-- (void)unlikeHighlightWithId:(ReadmillHighlightId)highlightId completionHandler:(ReadmillAPICompletionHandler)completion;
+- (ReadmillRequestOperation *)unlikeHighlightWithId:(ReadmillHighlightId)highlightId
+                                  completionHandler:(ReadmillAPICompletionHandler)completion;
 
 
 #pragma mark -
@@ -697,7 +720,7 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param error An (optional) error pointer that will contain an NSError object if an error occurs. 
  @brief  Get the service connections (Facebook/Twitter etc) for the current user in Readmill.
  */
-- (void)connectionsForCurrentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)connectionsForCurrentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Users
@@ -707,15 +730,15 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result and an error pointer.
  @brief   Get a specific user by their id. 
  */
-- (void)userWithId:(ReadmillUserId)userId
- completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)userWithId:(ReadmillUserId)userId
+                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param completionHandler A block that will return the result (id) and an NSError object if an error occurs. 
  @result The current authenticated user as an NSDictionary object. See the API Keys - User section of this header for keys. 
  @brief   Get the currently logged in user. 
  */
-- (void)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 
 #pragma mark - 
@@ -728,8 +751,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
  @brief Get a library item.
  */
-- (void)libraryItemWithId:(ReadmillLibraryItemId)libraryItemId
-        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)libraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+                              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param libraryItemId The id of the library item to update.
@@ -738,9 +761,9 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @brief Update a library item.
  @example parameters = @ { @"library_item" : @ { @"state" : "archived" } }
  */
-- (void)updateLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
-                     parameters:(NSDictionary *)parameters
-              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)updateLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+                                           parameters:(NSDictionary *)parameters
+                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param localIds An array containing library item ids already stored locally.
@@ -748,8 +771,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @brief Returns a list of actions to be made on the client to be synchronized with the users cloud storage, 
         also called Library. There are only two different actions, delete and download.
  */
-- (void)libraryChangesWithLocalIds:(NSArray *)localIds
-                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)libraryChangesWithLocalIds:(NSArray *)localIds
+                                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 
 #pragma mark - 
