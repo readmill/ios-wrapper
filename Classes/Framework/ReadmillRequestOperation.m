@@ -84,10 +84,10 @@
 
 - (void)start 
 {
-    if (![NSThread isMainThread]) {
-        return [self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
-    }
-        
+//    if (![NSThread isMainThread]) {
+//        return [self performSelectorOnMainThread:@selector(start) withObject:nil waitUntilDone:NO];
+//    }
+
     [self willChangeValueForKey:@"isExecuting"];
     _isExecuting = YES;
     [self didChangeValueForKey:@"isExecuting"];
@@ -106,7 +106,12 @@
     if (self.connection == nil || [self isCancelled]) {
         [self cancelConnectionIfCancelled];
     } else {
+        NSPort *port = [NSPort port];
+        NSRunLoop *rl = [NSRunLoop currentRunLoop]; // Get the runloop
+        [rl addPort:port forMode:NSDefaultRunLoopMode];
+        [self.connection scheduleInRunLoop:rl forMode:NSDefaultRunLoopMode];
         [self.connection start];
+        [rl run];
     }
 }
 
