@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 Readmill Network LTD. All rights reserved.
 //
 
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
 #import <UIKit/UIKit.h>
 
 @interface UIApplication (ReadmillNetworkActivity)
@@ -17,3 +18,5 @@
 - (void)readmill_resetNetworkActivity;
 
 @end
+
+#endif

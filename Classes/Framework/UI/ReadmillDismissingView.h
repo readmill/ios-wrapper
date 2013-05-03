@@ -6,6 +6,7 @@
 //  Copyright 2011 Readmill. All rights reserved.
 //
 
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
 #import <UIKit/UIKit.h>
 
 @protocol ReadmillDismissingViewDelegate
@@ -21,3 +22,5 @@
 - (void)addToView:(UIView *)aView;
 
 @end
+
+#endif

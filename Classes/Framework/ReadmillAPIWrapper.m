@@ -43,6 +43,14 @@
 
 @implementation ReadmillAPIWrapper
 
+@synthesize refreshToken;
+@synthesize accessToken;
+@synthesize authorizedRedirectURL;
+@synthesize accessTokenExpiryDate;
+@synthesize apiConfiguration;
+@synthesize queue;
+
+
 - (id)init
 {
     if ((self = [super init])) {
@@ -88,12 +96,6 @@
     return plist;
 }
 
-@synthesize refreshToken;
-@synthesize accessToken;
-@synthesize authorizedRedirectURL;
-@synthesize accessTokenExpiryDate;
-@synthesize apiConfiguration;
-@synthesize queue;
 
 - (void)dealloc
 {

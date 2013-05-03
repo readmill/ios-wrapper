@@ -17,8 +17,11 @@
 @property (nonatomic, readwrite, retain) NSMutableData *responseData;
 @property (nonatomic, readwrite, copy) ReadmillRequestOperationProgressBlock uploadProgressBlock;
 @property (nonatomic, readwrite, copy) ReadmillRequestOperationProgressBlock downloadProgressBlock;
-@property (nonatomic, readwrite) CGFloat uploadProgress;
+@property (nonatomic, readwrite) float uploadProgress;
+
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
+#endif
 
 @end
 
@@ -47,11 +50,14 @@
     [self setRequest:nil];
     [self setUploadProgressBlock:nil];
     [self setDownloadProgressBlock:nil];
+
+    #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
     if (_backgroundTaskIdentifier) {
         [[UIApplication sharedApplication] endBackgroundTask:_backgroundTaskIdentifier];
         [self setBackgroundTaskIdentifier:UIBackgroundTaskInvalid];
     }
-    
+    #endif
+
     [super dealloc];
 }
 
@@ -66,7 +72,10 @@
 @synthesize uploadProgressBlock = _uploadProgressBlock;
 @synthesize downloadProgressBlock = _downloadProgressBlock;
 @synthesize uploadProgress = _uploadProgress;
+
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
 @synthesize backgroundTaskIdentifier = _backgroundTaskIdentifier;
+#endif
 
 - (BOOL)isConcurrent 
 {
@@ -89,8 +98,10 @@
     
     self.connection = aConnection;
     [aConnection release];
-    
+
+    #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
     [[UIApplication sharedApplication] readmill_pushNetworkActivity];
+    #endif
 
     if (self.connection == nil || [self isCancelled]) {
         [self cancelConnectionIfCancelled];
@@ -109,7 +120,9 @@
               [self.request URL], [self.response statusCode], [self.responseData length]);
     }
 
+    #if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
     [[UIApplication sharedApplication] readmill_popNetworkActivity];
+    #endif
     
     if (self.completionHandler) {
         self.completionHandler(self.response, self.responseData, self.connectionError);        
@@ -186,6 +199,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
     [self finish];
 }
 
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
 - (void)setShouldExecuteAsBackgroundTaskWithExpirationHandler:(void (^)(void))handler 
 {
     if (!self.backgroundTaskIdentifier) {
@@ -206,6 +220,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
         }];
     }
 }
+#endif
 
 @end
 

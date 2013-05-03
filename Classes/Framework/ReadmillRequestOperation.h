@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 typedef void (^ReadmillRequestOperationCompletionBlock)(NSHTTPURLResponse *response, NSData *responseData, NSError *error);
 typedef void (^ReadmillRequestOperationProgressBlock)(NSInteger bytes, long long totalBytes, long long totalBytesExpected);
@@ -24,7 +23,7 @@ typedef void (^ReadmillRequestOperationProgressBlock)(NSInteger bytes, long long
 @property (nonatomic, readonly, copy) ReadmillRequestOperationProgressBlock uploadProgressBlock;
 @property (nonatomic, readonly, copy) ReadmillRequestOperationProgressBlock downloadProgressBlock;
 
-@property (nonatomic, readonly) CGFloat uploadProgress;
+@property (nonatomic, readonly) float uploadProgress;
 
 - (id)initWithRequest:(NSURLRequest *)request completionHandler:(ReadmillRequestOperationCompletionBlock)completionHandler;
 

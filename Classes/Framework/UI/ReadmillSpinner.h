@@ -6,7 +6,9 @@
 //  Copyright 2011 Readmill. All rights reserved.
 //
 
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
 #import <UIKit/UIKit.h>
+
 
 typedef enum {
     ReadmillSpinnerTypeDefault = 1,
@@ -21,3 +23,5 @@ typedef enum {
 - (id)initAndStartSpinning:(ReadmillSpinnerType)type;
 
 @end
+
+#endif

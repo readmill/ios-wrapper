@@ -196,14 +196,7 @@ static NSString * const kReadmillAPILibraryLocalIdsKey = @"local_ids";
  reader type of application. 
  */
 
-@interface ReadmillAPIWrapper : NSObject {
-@private
-    
-    NSString *accessToken;
-    NSString *authorizedRedirectURL;
-    NSDate *accessTokenExpiryDate;
-    ReadmillAPIConfiguration *apiConfiguration;
-}
+@interface ReadmillAPIWrapper : NSObject
 
 @property (nonatomic, retain, readonly) NSOperationQueue *queue;
 

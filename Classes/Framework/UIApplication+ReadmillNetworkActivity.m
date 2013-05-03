@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 Readmill Network LTD. All rights reserved.
 //
 
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+
 #import "UIApplication+ReadmillNetworkActivity.h"
 
 static NSInteger readmill_networkActivityCount = 0;
@@ -63,3 +65,5 @@ static NSInteger readmill_networkActivityCount = 0;
 
 
 @end
+
+#endif
