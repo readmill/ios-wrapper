@@ -168,10 +168,11 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
                                                    error:&error];
     
     if (request) {
-        [self startPreparedRequest:request
-                        completion:completionHandler];
+        return [self startPreparedRequest:request
+                               completion:completionHandler];
     } else {
         completionHandler(nil, error);
+        return nil;
     }
 }
 
