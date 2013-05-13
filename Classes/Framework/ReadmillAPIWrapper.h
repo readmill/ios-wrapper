@@ -772,9 +772,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 /*!
  @param userId The id of the user you'd like to get the avatar for.
  @param size Size of the avatar you would like to retrieve.
- @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
- @result The current authenticated user as an NSDictionary object. See the API Keys - User section of this header for keys.
- @brief Get the avatar for a user with specified id and avatar size.
+ @result The URL that points to avatar of desired size for user with id.
+ @brief Get the avatar URL for a user with specified id and avatar size.
  */
 - (NSURL *)avatarURLForUserWithId:(ReadmillUserId)userId
                              size:(NSString *)size;
