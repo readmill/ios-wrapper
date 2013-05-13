@@ -474,6 +474,22 @@
                         completionHandler:completionHandler];
 }
 
+- (void)readingsOrderedByFriendsFirstForBookWithId:(ReadmillBookId)bookId
+                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
+                          [self booksEndpoint],
+                          bookId];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                kReadmillAPIOrderByFriendsFirst, kReadmillAPIOrderKey, nil];
+    
+    [self sendGetRequestToEndpoint:endpoint
+                    withParameters:parameters
+        shouldBeCalledUnauthorized:NO
+                       cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                 completionHandler:completionHandler];
+}
+
 - (ReadmillRequestOperation *)periodsForReadingWithId:(ReadmillReadingId)readingId
                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {

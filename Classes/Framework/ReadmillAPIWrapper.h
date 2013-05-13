@@ -178,7 +178,7 @@ static NSString * const kReadmillAPIFilterKey = @"filter";
 static NSString * const kReadmillAPIFilterByFollowings = @"followings";
 static NSString * const kReadmillAPIOrderKey = @"order";
 static NSString * const kReadmillAPIOrderByPopular = @"popular";
-
+static NSString * const kReadmillAPIOrderByFriendsFirst = @"friends_first";
 #pragma mark Library
 
 static NSString * const kReadmillAPILibraryLocalIdsKey = @"local_ids";
@@ -514,6 +514,14 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  */
 - (ReadmillRequestOperation *)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId 
                                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param bookId The bookId for which to get readings
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief Get the recent readings for the book with the specified bookId ordered by friends first.
+ */
+- (void)readingsOrderedByFriendsFirstForBookWithId:(ReadmillBookId)bookId
+                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The readingId for which to get periods
