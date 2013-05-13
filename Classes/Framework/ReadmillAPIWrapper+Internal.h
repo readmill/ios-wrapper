@@ -10,6 +10,8 @@
 
 @interface ReadmillAPIWrapper (Internal)
 
+- (NSURL *)urlWithEndpoint:(NSString *)endpoint;
+
 - (id)sendPreparedRequest:(NSURLRequest *)request error:(NSError **)error;
 
 - (NSURLRequest *)putRequestWithEndpoint:(NSString *)endpoint

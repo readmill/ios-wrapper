@@ -930,6 +930,15 @@
                         completionHandler:completionHandler];
 }
 
+- (NSURL *)avatarURLForUserWithId:(ReadmillUserId)userId
+                             size:(NSString *)size
+{
+    NSString *endpoint = [NSString stringWithFormat:@"users/%d/avatar", userId];
+    NSDictionary *parameters = @{ kReadmillAPIUserAvatarSizeKey : size,
+                                  kReadmillAPIClientIdKey : self.apiConfiguration.clientID };
+    return [[self urlWithEndpoint:endpoint] URLByAddingQueryParameters:parameters];
+}
+
 #pragma mark -
 #pragma mark - Library
 

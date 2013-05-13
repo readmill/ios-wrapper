@@ -110,6 +110,13 @@ static NSString * const kReadmillAPIUserReadmillUserNameKey = @"username";
 static NSString * const kReadmillAPIUserWebsiteKey = @"website";
 static NSString * const kReadmillAPIUserAuthenticationToken = @"authentication_token";
 
+static NSString * const kReadmillAPIUserAvatarSizeKey = @"size";
+static NSString * const kReadmillAPIUserAvatarSizeSmall = @"small"; // 30x30
+static NSString * const kReadmillAPIUserAvatarSizeMedium = @"medium"; // 50x50
+static NSString * const kReadmillAPIUserAvatarSizeMediumLarge = @"medium-large"; // 100x100
+static NSString * const kReadmillAPIUserAvatarSizeLarge = @"large"; // 280x280
+
+
 #pragma mark API Keys - Reading
 
 static NSString * const kReadmillAPIReadingKey = @"reading";
@@ -762,6 +769,15 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  */
 - (ReadmillRequestOperation *)currentUserWithCompletionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+/*!
+ @param userId The id of the user you'd like to get the avatar for.
+ @param size Size of the avatar you would like to retrieve.
+ @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
+ @result The current authenticated user as an NSDictionary object. See the API Keys - User section of this header for keys.
+ @brief Get the avatar for a user with specified id and avatar size.
+ */
+- (NSURL *)avatarURLForUserWithId:(ReadmillUserId)userId
+                             size:(NSString *)size;
 
 #pragma mark - 
 #pragma mark - Library
