@@ -142,6 +142,25 @@ static NSString * const kReadmillAPIReadingRecommendedKey = @"recommended";
 static NSString * const kReadmillAPIReadingPostToKey = @"post_to";
 static NSString * const kReadmillAPIReadingPositionKey = @"position";
 static NSString * const kReadmillAPIReadingPositionUpdatedAtKey = @"position_updated_at";
+static NSString * const kReadmillAPIReadingCountKey = @"count";
+static NSString * const kReadmillAPIReadingFromDateKey = @"from";
+static NSString * const kReadmillAPIReadingToDateKey = @"to";
+static NSString * const kReadmillAPIReadingOrderKey = @"order";
+static NSString * const kReadmillAPIReadingFilterKey = @"filter";
+static NSString * const kReadmillAPIReadingHighlightsCountFromKey = @"highlights_count[from]";
+static NSString * const kReadmillAPIReadingHighlightsCountToKey = @"highlights_count[to]";
+static NSString * const kReadmillAPIReadingStatesKey = @"states";
+
+static NSString * const kReadmillAPIReadingOrderTouchedAt = @"touched_at";
+static NSString * const kReadmillAPIReadingOrderCreatedAt = @"created_at";
+static NSString * const kReadmillAPIReadingOrderPopular = @"popular";
+static NSString * const kReadmillAPIReadingOrderFriendsFirst = @"friends_first";
+static NSString * const kReadmillAPIReadingFilterFollowings = @"followings";
+static NSString * const kReadmillAPIReadingStateInteresting = @"interesting";
+static NSString * const kReadmillAPIReadingStateReading = @"reading";
+static NSString * const kReadmillAPIReadingStateFinished = @"finished";
+static NSString * const kReadmillAPIReadingStateAbandoned = @"abandoned";
+
 
 #pragma mark API Keys - Highlights
 
@@ -527,8 +546,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief Get the recent readings for the book with the specified bookId ordered by friends first.
  */
-- (void)readingsOrderedByFriendsFirstForBookWithId:(ReadmillBookId)bookId
-                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+- (ReadmillRequestOperation *)readingsOrderedByFriendsFirstForBookWithId:(ReadmillBookId)bookId
+                                                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param readingId The readingId for which to get periods
