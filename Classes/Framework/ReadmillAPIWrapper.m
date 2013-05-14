@@ -1016,7 +1016,6 @@
 - (ReadmillRequestOperation *)operationWithRequest:(NSURLRequest *)request
                                         completion:(ReadmillAPICompletionHandler)completionBlock
 {
-    NSLog(@"req: %@", request);
     NSAssert(request != nil, @"Request is nil!");
     static NSString * const LocationHeader = @"Location";
     
