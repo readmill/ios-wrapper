@@ -615,6 +615,7 @@
     return [self sendGetRequestToEndpoint:[NSString stringWithFormat:@"%@", [self booksEndpoint]]
                            withParameters:parameters
                shouldBeCalledUnauthorized:NO
+                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                         completionHandler:completionHandler];
 }
 
