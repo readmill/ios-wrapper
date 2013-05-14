@@ -628,7 +628,7 @@
     NSMutableDictionary *finalDictionary = [parameters mutableCopy];
     [finalDictionary setValue:query forKey:@"query"];
 
-    return [self sendGetRequestToEndpoint:[NSString stringWithFormat:@"%@", [self booksEndpoint]]
+    return [self sendGetRequestToEndpoint:endpoint
                            withParameters:finalDictionary
                shouldBeCalledUnauthorized:YES
                               cachePolicy:NSURLRequestReturnCacheDataElseLoad
@@ -1016,6 +1016,7 @@
 - (ReadmillRequestOperation *)operationWithRequest:(NSURLRequest *)request
                                         completion:(ReadmillAPICompletionHandler)completionBlock
 {
+    NSLog(@"req: %@", request);
     NSAssert(request != nil, @"Request is nil!");
     static NSString * const LocationHeader = @"Location";
     
