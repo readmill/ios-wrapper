@@ -154,17 +154,19 @@ static NSString * const kReadmillAPIReadingPositionUpdatedAtKey = @"position_upd
 static NSString * const kReadmillAPIReadingCountKey = @"count";
 static NSString * const kReadmillAPIReadingFromDateKey = @"from";
 static NSString * const kReadmillAPIReadingToDateKey = @"to";
-static NSString * const kReadmillAPIReadingOrderKey = @"order";
-static NSString * const kReadmillAPIReadingFilterKey = @"filter";
 static NSString * const kReadmillAPIReadingHighlightsCountFromKey = @"highlights_count[from]";
 static NSString * const kReadmillAPIReadingHighlightsCountToKey = @"highlights_count[to]";
-static NSString * const kReadmillAPIReadingStatesKey = @"states";
 
+static NSString * const kReadmillAPIReadingOrderKey = @"order";
 static NSString * const kReadmillAPIReadingOrderTouchedAt = @"touched_at";
 static NSString * const kReadmillAPIReadingOrderCreatedAt = @"created_at";
 static NSString * const kReadmillAPIReadingOrderPopular = @"popular";
 static NSString * const kReadmillAPIReadingOrderFriendsFirst = @"friends_first";
+
+static NSString * const kReadmillAPIReadingFilterKey = @"filter";
 static NSString * const kReadmillAPIReadingFilterFollowings = @"followings";
+
+static NSString * const kReadmillAPIReadingStatesKey = @"states";
 static NSString * const kReadmillAPIReadingStateInteresting = @"interesting";
 static NSString * const kReadmillAPIReadingStateReading = @"reading";
 static NSString * const kReadmillAPIReadingStateFinished = @"finished";
@@ -207,13 +209,6 @@ static NSString * const kReadmillAPIPingOccurredAtKey = @"occurred_at";
 static NSString * const kReadmillAPIPingLatitudeKey = @"lat";
 static NSString * const kReadmillAPIPingLongitudeKey = @"lng";
 
-#pragma mark API Filtering & Ordering
-
-static NSString * const kReadmillAPIFilterKey = @"filter";
-static NSString * const kReadmillAPIFilterByFollowings = @"followings";
-static NSString * const kReadmillAPIOrderKey = @"order";
-static NSString * const kReadmillAPIOrderByPopular = @"popular";
-static NSString * const kReadmillAPIOrderByFriendsFirst = @"friends_first";
 #pragma mark Library
 
 static NSString * const kReadmillAPILibraryLocalIdsKey = @"local_ids";
@@ -546,26 +541,12 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 /*!
  @param bookId The bookId for which to get readings
- @param count Number of readings to return.
- @param fromDate Date to return readings from (optional).
- @param toDate Date to return readings to (optional).
- @param order The sort order for returned readings (optional).
- @param filter The sort order for returned readings (optional).
- @param highlightsCountFrom Only include readings which have equal or more highlights. Pass -1 to ignore this paramter.
- @param highlightsCountTo Only include readings which have less or equal highlights. Pass -1 to ignore this paramter.
- @param states An array of states to return readings for (optional).
+ @param parameters Extra parameters to pass with the request.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief Get all readings for the book with the specifiedId
  */
 - (ReadmillRequestOperation *)readingsForBookWithId:(ReadmillBookId)bookId
-                                              count:(NSUInteger)count
-                                           fromDate:(NSDate *)fromDate
-                                             toDate:(NSDate *)toDate
-                                              order:(NSString *)order
-                                             filter:(NSString *)filter
-                                highlightsCountFrom:(NSInteger)highlightsCountFrom
-                                  highlightsCountTo:(NSInteger)highlightsCountTo
-                                             states:(NSArray *)states
+                                         parameters:(NSDictionary *)parameters
                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!

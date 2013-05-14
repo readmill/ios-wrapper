@@ -429,36 +429,15 @@
 }
 
 - (ReadmillRequestOperation *)readingsForBookWithId:(ReadmillBookId)bookId
-                                              count:(NSUInteger)count
-                                           fromDate:(NSDate *)fromDate
-                                             toDate:(NSDate *)toDate
-                                              order:(NSString *)order
-                                             filter:(NSString *)filter
-                                highlightsCountFrom:(NSInteger)highlightsCountFrom
-                                  highlightsCountTo:(NSInteger)highlightsCountTo
-                                             states:(NSArray *)states
+                                         parameters:(NSDictionary *)parameters
                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
                           [self booksEndpoint],
                           bookId];
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    [parameters setValue:@(count) forKey:kReadmillAPIReadingCountKey];
-    [parameters setValue:fromDate forKey:kReadmillAPIReadingFromDateKey];
-    [parameters setValue:toDate forKey:kReadmillAPIReadingToDateKey];
-    [parameters setValue:order forKey:kReadmillAPIReadingOrderKey];
-    [parameters setValue:filter forKey:kReadmillAPIReadingFilterKey];
-    
-    if (highlightsCountFrom >= 0) {
-        [parameters setValue:@(highlightsCountFrom) forKey:kReadmillAPIReadingHighlightsCountFromKey];
-    }
-    
-    if (highlightsCountTo >= 0) {
-        [parameters setValue:@(highlightsCountTo) forKey:kReadmillAPIReadingHighlightsCountToKey];
-    }
-    
-    [parameters setValue:[states componentsJoinedByString:@","] forKey:kReadmillAPIReadingStatesKey];
+    NSString *filter = [parameters valueForKey:kReadmillAPIReadingFilterKey];
+    NSString *order = [parameters valueForKey:kReadmillAPIReadingOrderKey];
     
     BOOL unauthorized = YES;
     if ([filter isEqualToString:kReadmillAPIReadingFilterFollowings] ||
@@ -476,59 +455,34 @@
                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     return [self readingsForBookWithId:bookId
-                                 count:20
-                              fromDate:nil
-                                toDate:nil
-                                 order:nil
-                                filter:nil
-                   highlightsCountFrom:-1
-                     highlightsCountTo:-1
-                                states:nil
+                            parameters:nil
                      completionHandler:completionHandler];
 }
 
 - (ReadmillRequestOperation *)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId
                                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
+    NSDictionary *parameters = @{ kReadmillAPIReadingFilterFollowings : kReadmillAPIReadingFilterKey };
     return [self readingsForBookWithId:bookId
-                                 count:20
-                              fromDate:nil
-                                toDate:nil
-                                 order:nil
-                                filter:kReadmillAPIReadingFilterFollowings
-                   highlightsCountFrom:1
-                     highlightsCountTo:-1
-                                states:nil
+                            parameters:parameters
                      completionHandler:completionHandler];
 }
 
 - (ReadmillRequestOperation *)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId
                                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
+    NSDictionary *parameters = @{ kReadmillAPIReadingOrderPopular : kReadmillAPIReadingOrderKey };
     return [self readingsForBookWithId:bookId
-                                 count:20
-                              fromDate:nil
-                                toDate:nil
-                                 order:kReadmillAPIReadingOrderPopular
-                                filter:nil
-                   highlightsCountFrom:-1
-                     highlightsCountTo:-1
-                                states:nil
+                            parameters:parameters
                      completionHandler:completionHandler];
 }
 
 - (ReadmillRequestOperation *)readingsOrderedByFriendsFirstForBookWithId:(ReadmillBookId)bookId
                                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
+    NSDictionary *parameters = @{ kReadmillAPIReadingOrderFriendsFirst : kReadmillAPIReadingOrderKey };
     return [self readingsForBookWithId:bookId
-                                 count:100
-                              fromDate:nil
-                                toDate:nil
-                                 order:kReadmillAPIReadingOrderFriendsFirst
-                                filter:nil
-                   highlightsCountFrom:-1
-                     highlightsCountTo:-1
-                                states:nil
+                            parameters:parameters
                      completionHandler:completionHandler];
 }
 
