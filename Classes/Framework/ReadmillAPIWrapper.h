@@ -396,6 +396,18 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 
 /*!
+ @param parameters The query to search for.
+ @param parameters The parameters for the request.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief   Search books given the argument passed to parameters.
+ */
+- (ReadmillRequestOperation *)searchBooksUsingQuery:(NSString *)query
+                                         parameters:(NSDictionary *)parameters
+                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+
+/*!
  @param bookId The id of the book you'd like to get the cover for.
  @param size Size of the cover you would like to retrieve.
  @result The URL that points to the cover of desired size for book with id.

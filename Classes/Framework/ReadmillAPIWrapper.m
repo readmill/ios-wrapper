@@ -614,7 +614,23 @@
 {
     return [self sendGetRequestToEndpoint:[NSString stringWithFormat:@"%@", [self booksEndpoint]]
                            withParameters:parameters
-               shouldBeCalledUnauthorized:NO
+               shouldBeCalledUnauthorized:YES
+                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                        completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)searchBooksUsingQuery:(NSString *)query
+                                         parameters:(NSDictionary *)parameters
+                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/search", [self booksEndpoint]];
+
+    NSMutableDictionary *finalDictionary = [parameters mutableCopy];
+    [finalDictionary setValue:query forKey:@"query"];
+
+    return [self sendGetRequestToEndpoint:[NSString stringWithFormat:@"%@", [self booksEndpoint]]
+                           withParameters:finalDictionary
+               shouldBeCalledUnauthorized:YES
                               cachePolicy:NSURLRequestReturnCacheDataElseLoad
                         completionHandler:completionHandler];
 }
