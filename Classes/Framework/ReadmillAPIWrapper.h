@@ -95,6 +95,7 @@ static NSString * const kReadmillAPIBookOrderByCreatedAt = @"created_at";
 static NSString * const kReadmillAPIBookOrderByHotnessScore = @"hotness_score";
 
 static NSString * const kReadmillAPIBookCountKey = @"count";
+static NSString * const kReadmillAPIBookCoverSizeKey = @"size";
 
 #pragma mark API Keys - User
 
@@ -397,6 +398,16 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 */
 - (ReadmillRequestOperation *)booksWithParameters:(NSDictionary *)parameters
                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+
+/*!
+ @param bookId The id of the book you'd like to get the cover for.
+ @param size Size of the cover you would like to retrieve.
+ @result The URL that points to the cover of desired size for book with id.
+ @brief Get the cover URL for a book with specified id and cover size.
+ */
+- (NSURL *)coverURLForBookWithId:(ReadmillBookId)bookId
+                            size:(NSString *)size;
 
 #pragma mark -
 #pragma mark Readings

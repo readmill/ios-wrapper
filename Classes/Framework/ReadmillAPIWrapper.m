@@ -664,6 +664,16 @@
                         completionHandler:completionHandler];
 }
 
+- (NSURL *)coverURLForBookWithId:(ReadmillBookId)bookId
+                            size:(NSString *)size
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/cover", [self booksEndpoint], bookId];
+    NSDictionary *parameters = @{ kReadmillAPIBookCoverSizeKey : size,
+                                  kReadmillAPIClientIdKey : self.apiConfiguration.clientID };
+    return [[self urlWithEndpoint:endpoint] URLByAddingQueryParameters:parameters];
+}
+
+
 //Pings
 #pragma mark - Pings
 
