@@ -519,6 +519,30 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 /*!
  @param bookId The bookId for which to get readings
+ @param count Number of readings to return.
+ @param fromDate Date to return readings from (optional).
+ @param toDate Date to return readings to (optional).
+ @param order The sort order for returned readings (optional).
+ @param filter The sort order for returned readings (optional).
+ @param highlightsCountFrom Only include readings which have equal or more highlights. Pass -1 to ignore this paramter.
+ @param highlightsCountTo Only include readings which have less or equal highlights. Pass -1 to ignore this paramter.
+ @param states An array of states to return readings for (optional).
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief Get all readings for the book with the specifiedId
+ */
+- (ReadmillRequestOperation *)readingsForBookWithId:(ReadmillBookId)bookId
+                                              count:(NSUInteger)count
+                                           fromDate:(NSDate *)fromDate
+                                             toDate:(NSDate *)toDate
+                                              order:(NSString *)order
+                                             filter:(NSString *)filter
+                                highlightsCountFrom:(NSInteger)highlightsCountFrom
+                                  highlightsCountTo:(NSInteger)highlightsCountTo
+                                             states:(NSArray *)states
+                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param bookId The bookId for which to get readings
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get all readings for the book with the specifiedId
  */
