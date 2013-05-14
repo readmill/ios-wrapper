@@ -39,6 +39,8 @@
 @property (readwrite) ReadmillBookId bookId;
 @property (readwrite) ReadmillBookId rootEditionId;
 
+@property (readwrite) NSUInteger readingsCount;
+
 @property (readwrite, copy) NSDate *datePublished;
 
 @end
@@ -64,8 +66,8 @@
 - (void)updateWithAPIDictionary:(NSDictionary *)apiDictionary
 {
     NSDictionary *bookDictionary = [apiDictionary valueForKey:kReadmillAPIBookKey];
-    NSDictionary *cleanedDict = [bookDictionary dictionaryByRemovingNullValues];
-    
+    NSDictionary *cleanedDict = [bookDictionary dictionaryByRemovingNullValues];    
+
     [self setAuthor:[cleanedDict valueForKey:kReadmillAPIBookAuthorKey]];
     [self setLanguage:[cleanedDict valueForKey:kReadmillAPIBookLanguageKey]];
     [self setSummary:[cleanedDict valueForKey:kReadmillAPIBookSummaryKey]];
@@ -89,6 +91,8 @@
     
     NSString *datePublishedString = [cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey];
     [self setDatePublished:[datePublishedString dateWithRFC3339Formatting]];
+
+    [self setReadingsCount:[[cleanedDict valueForKey:kReadmillAPIBookReadingsCountKey] unsignedIntegerValue]];
 }
 
 -(NSString *)description 

@@ -613,6 +613,15 @@
                          completionHandler:completionHandler];
 }
 
+- (ReadmillRequestOperation *)booksWithParameters:(NSDictionary *)parameters
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    return [self sendGetRequestToEndpoint:[NSString stringWithFormat:@"%@", [self booksEndpoint]]
+                           withParameters:parameters
+               shouldBeCalledUnauthorized:NO
+                        completionHandler:completionHandler];
+}
+
 //Pings
 #pragma mark - Pings
 

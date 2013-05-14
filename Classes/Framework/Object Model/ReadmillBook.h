@@ -107,4 +107,11 @@
  */
 @property (readonly) ReadmillBookId rootEditionId;
 
+/*!
+ @property  readingsCount
+ @brief The number of 'readings' for this book.
+ */
+@property (readonly) NSUInteger readingsCount;
+
+
 @end

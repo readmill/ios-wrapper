@@ -79,14 +79,22 @@ static NSString * const kReadmillAPIBookLanguageKey = @"language";
 static NSString * const kReadmillAPIBookSummaryKey = @"story";
 static NSString * const kReadmillAPIBookTitleKey = @"title";
 static NSString * const kReadmillAPIBookIdentifierKey = @"identifier";
-
 static NSString * const kReadmillAPIBookCoverImageURLKey = @"cover_url";
 static NSString * const kReadmillAPIBookMetaDataURLKey = @"metadata_uri";
 static NSString * const kReadmillAPIBookPermalinkURLKey = @"permalink_url";
-
 static NSString * const kReadmillAPIBookIdKey = @"id";
 static NSString * const kReadmillAPIBookRootEditionIdKey = @"root_edition";
 static NSString * const kReadmillAPIBookDatePublishedKey = @"published_at";
+static NSString * const kReadmillAPIBookReadingsCountKey = @"readings_count";
+
+static NSString * const kReadmillAPIBookFilterPriceSegmentsKey = @"price_segments";
+static NSString * const kReadmillAPIBookFilterPriceSegmentsFree = @"free";
+
+static NSString * const kReadmillAPIBookOrderKey = @"order";
+static NSString * const kReadmillAPIBookOrderByCreatedAt = @"created_at";
+static NSString * const kReadmillAPIBookOrderByHotnessScore = @"hotness_score";
+
+static NSString * const kReadmillAPIBookCountKey = @"count";
 
 #pragma mark API Keys - User
 
@@ -362,6 +370,14 @@ The object returned here is appropriate for saving in a property list, NSUserDef
                                                  author:(NSString *)bookAuthor
                                              identifier:(NSString *)bookIdentifier
                                       completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+/*!
+@param parameters The parameters for the request.
+@param completionHandler An (optional) block that will return the result (id) and an error pointer.
+@return A `ReadmillRequestOperation` object associated with the action.
+@brief   Find books given the argument passed to parameters.
+*/
+- (ReadmillRequestOperation *)booksWithParameters:(NSDictionary *)parameters
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark -
 #pragma mark Readings
