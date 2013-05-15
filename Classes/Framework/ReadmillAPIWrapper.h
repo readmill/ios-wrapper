@@ -86,6 +86,7 @@ static NSString * const kReadmillAPIBookIdKey = @"id";
 static NSString * const kReadmillAPIBookRootEditionIdKey = @"root_edition";
 static NSString * const kReadmillAPIBookDatePublishedKey = @"published_at";
 static NSString * const kReadmillAPIBookReadingsCountKey = @"readings_count";
+static NSString * const kReadmillAPIBookAssetsKey = @"assets";
 
 static NSString * const kReadmillAPIBookFilterPriceSegmentsKey = @"price_segments";
 static NSString * const kReadmillAPIBookFilterPriceSegmentsFree = @"free";

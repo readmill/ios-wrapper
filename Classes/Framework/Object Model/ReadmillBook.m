@@ -24,6 +24,36 @@
 #import "NSDictionary+ReadmillAdditions.h"
 #import "NSString+ReadmillAdditions.h"
 
+@interface ReadmillBookAsset ()
+@property (readwrite, nonatomic, copy) NSString *acquisitionType, *vendor;
+@property (readwrite, nonatomic, retain) NSURL *uri;
+@end
+
+@implementation ReadmillBookAsset
+- (id)initWithAssetJSON:(NSDictionary *)JSON
+{
+    if (self = [super init]) {
+        NSDictionary *assetJSON = [JSON valueForKey:@"asset"];
+
+        _acquisitionType = [[assetJSON valueForKey:@"acquisition_type"] copy];
+        _vendor = [[assetJSON valueForKey:@"vendor"] copy];
+        NSString *uriString = [assetJSON valueForKey:@"uri"];
+        _uri = [[NSURL URLWithString:uriString] retain];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [_uri release];
+    [_vendor release];
+    [_acquisitionType release];
+    [super dealloc];
+}
+
+@end
+
+
 @interface ReadmillBook ()
 
 @property (readwrite, copy) NSString *author;
@@ -42,6 +72,8 @@
 @property (readwrite) NSUInteger readingsCount;
 
 @property (readwrite, copy) NSDate *datePublished;
+
+@property (nonatomic, readwrite, copy) NSArray *assets;
 
 @end
 
@@ -93,6 +125,16 @@
     [self setDatePublished:[datePublishedString dateWithRFC3339Formatting]];
 
     [self setReadingsCount:[[cleanedDict valueForKey:kReadmillAPIBookReadingsCountKey] unsignedIntegerValue]];
+
+    NSArray *assets = [cleanedDict valueForKey:kReadmillAPIBookAssetsKey];
+    assets = [assets valueForKey:@"items"];
+    NSMutableArray *m_assets = [NSMutableArray array];
+    for (NSDictionary *assetJSON in assets) {
+        ReadmillBookAsset *asset = [[ReadmillBookAsset alloc] initWithAssetJSON:assetJSON];
+        [m_assets addObject:asset];
+        [asset release];
+    }
+    self.assets = m_assets;
 }
 
 -(NSString *)description 
@@ -111,7 +153,8 @@
     [self setMetaDataURL:nil];
     [self setPermalinkURL:nil];
     [self setDatePublished:nil];
-    
+    [self setAssets:nil];
+
     [super dealloc];
 }
 

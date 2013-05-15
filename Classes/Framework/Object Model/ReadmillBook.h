@@ -23,6 +23,8 @@
 #import <Foundation/Foundation.h>
 #import "ReadmillAPIWrapper.h"
 
+@class ReadmillBookAsset;
+
 @interface ReadmillBook : NSObject <NSCoding>
 
 /*!
@@ -113,5 +115,19 @@
  */
 @property (readonly) NSUInteger readingsCount;
 
+/*!
+ @property  assets
+ @brief The assets for this book.
+ */
+@property (readonly, copy) NSArray *assets;
+
+
+@end
+
+
+@interface ReadmillBookAsset : NSObject
+
+@property (readonly, nonatomic, copy) NSString *acquisitionType, *vendor;
+@property (readonly, nonatomic, retain) NSURL *uri;
 
 @end
