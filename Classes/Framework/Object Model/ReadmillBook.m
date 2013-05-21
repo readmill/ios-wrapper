@@ -70,6 +70,9 @@
 @property (readwrite) ReadmillBookId rootEditionId;
 
 @property (readwrite) NSUInteger readingsCount;
+@property (readwrite) NSUInteger recommendedReadingsCount;
+
+@property (readwrite) NSUInteger averageDuration;
 
 @property (readwrite, copy) NSDate *datePublished;
 
@@ -125,6 +128,9 @@
     [self setDatePublished:[datePublishedString dateWithRFC3339Formatting]];
 
     [self setReadingsCount:[[cleanedDict valueForKey:kReadmillAPIBookReadingsCountKey] unsignedIntegerValue]];
+    [self setRecommendedReadingsCount:[[cleanedDict valueForKey:kReadmillAPIBookRecommendedReadingsCountKey] unsignedIntegerValue]];
+
+    [self setAverageDuration:[[cleanedDict valueForKey:kReadmillAPIBookAverageDurationKey] unsignedIntegerValue]];
 
     NSArray *assets = [cleanedDict valueForKey:kReadmillAPIBookAssetsKey];
     assets = [assets valueForKey:@"items"];
@@ -135,6 +141,22 @@
         [asset release];
     }
     self.assets = m_assets;
+}
+
+- (NSString *)averageReadingTimeDescription
+{
+    NSUInteger averageDuration = self.averageDuration;
+    NSString *string = nil;
+    
+    if (NSLocationInRange(averageDuration, NSMakeRange(1, 1800))) {
+        string = NSLocalizedString(@"30 minutes", nil);
+    } else if (NSLocationInRange(averageDuration, NSMakeRange(1800, 3600))) {
+        string = NSLocalizedString(@"1 hour", nil);
+    } else if (averageDuration > 0) {
+        NSUInteger lowerBoundsHours = (NSUInteger)(averageDuration/3600);
+        string = [NSString stringWithFormat:NSLocalizedString(@"%d–%d hours", nil), lowerBoundsHours, lowerBoundsHours+1];
+    }
+    return string;
 }
 
 -(NSString *)description 
