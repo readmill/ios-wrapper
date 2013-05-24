@@ -116,10 +116,22 @@
 @property (readonly) ReadmillBookId rootEditionId;
 
 /*!
+ @property  featured
+ @brief Returns YES if the book is featured; otherwise NO.
+ */
+@property (readonly) BOOL featured;
+
+/*!
  @property  readingsCount
- @brief The number of 'readings' for this book.
+ @brief The number of all 'readings' for this book (this includes private and interesting readings).
  */
 @property (readonly) NSUInteger readingsCount;
+
+/*!
+ @property  activeAndFinishedReadingsCount
+ @brief The number of only active and finished 'readings' for this book.
+ */
+@property (readonly) NSUInteger activeAndFinishedReadingsCount;
 
 /*!
  @property  recommendedReadingsCount

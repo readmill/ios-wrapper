@@ -69,7 +69,9 @@
 @property (readwrite) ReadmillBookId bookId;
 @property (readwrite) ReadmillBookId rootEditionId;
 
+@property (readwrite) BOOL featured;
 @property (readwrite) NSUInteger readingsCount;
+@property (readwrite) NSUInteger activeAndFinishedReadingsCount;
 @property (readwrite) NSUInteger recommendedReadingsCount;
 
 @property (readwrite) NSUInteger averageDuration;
@@ -127,7 +129,9 @@
     NSString *datePublishedString = [cleanedDict valueForKey:kReadmillAPIBookDatePublishedKey];
     [self setDatePublished:[datePublishedString dateWithRFC3339Formatting]];
 
+    [self setFeatured:[[cleanedDict valueForKey:kReadmillAPIBookFeaturedKey] boolValue]];
     [self setReadingsCount:[[cleanedDict valueForKey:kReadmillAPIBookReadingsCountKey] unsignedIntegerValue]];
+    [self setActiveAndFinishedReadingsCount:[[cleanedDict valueForKey:kReadmillAPIBookActiveAndFinishedReadingsCountKey] unsignedIntegerValue]];
     [self setRecommendedReadingsCount:[[cleanedDict valueForKey:kReadmillAPIBookRecommendedReadingsCountKey] unsignedIntegerValue]];
 
     [self setAverageDuration:[[cleanedDict valueForKey:kReadmillAPIBookAverageDurationKey] unsignedIntegerValue]];
