@@ -572,26 +572,32 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 /*!
  @param bookId The bookId for which to get readings
+ @param parameters An (optional) parameter dictionary.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get the readings for the book with the specified bookId, filtered by followed people.
  */
-- (ReadmillRequestOperation *)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId 
+- (ReadmillRequestOperation *)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId
+                                                          parameters:(NSDictionary *)parameters
                                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
+ @param parameters An (optional) parameter dictionary.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief   Get the most popular readings for the book with the specified bookId.
  */
-- (ReadmillRequestOperation *)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId 
+- (ReadmillRequestOperation *)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId
+                                                         parameters:(NSDictionary *)parameters
                                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param bookId The bookId for which to get readings
+ @param parameters An (optional) parameter dictionary.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @brief Get the recent readings for the book with the specified bookId ordered by friends first.
  */
 - (ReadmillRequestOperation *)readingsOrderedByFriendsFirstForBookWithId:(ReadmillBookId)bookId
+                                                              parameters:(NSDictionary *)parameters
                                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!

@@ -453,7 +453,6 @@
         [order isEqualToString:kReadmillAPIReadingOrderFriendsFirst]) {
         unauthorized = NO;
     }
-    
     return [self sendGetRequestToEndpoint:endpoint
                            withParameters:parameters
                shouldBeCalledUnauthorized:unauthorized
@@ -469,29 +468,38 @@
 }
 
 - (ReadmillRequestOperation *)readingsFilteredByFriendsForBookWithId:(ReadmillBookId)bookId
+                                                          parameters:(NSDictionary *)parameters
                                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSDictionary *parameters = @{ kReadmillAPIReadingFilterFollowings : kReadmillAPIReadingFilterKey };
+    NSMutableDictionary *finalParameters = [@{ kReadmillAPIReadingFilterKey : kReadmillAPIReadingFilterFollowings } mutableCopy];
+    [finalParameters addEntriesFromDictionary:parameters];
+
     return [self readingsForBookWithId:bookId
-                            parameters:parameters
+                            parameters:finalParameters
                      completionHandler:completionHandler];
 }
 
 - (ReadmillRequestOperation *)readingsOrderedByPopularForBookWithId:(ReadmillBookId)bookId
+                                                         parameters:(NSDictionary *)parameters
                                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSDictionary *parameters = @{ kReadmillAPIReadingOrderPopular : kReadmillAPIReadingOrderKey };
+    NSMutableDictionary *finalParameters = [@{ kReadmillAPIReadingOrderPopular : kReadmillAPIReadingOrderKey } mutableCopy];
+    [finalParameters addEntriesFromDictionary:parameters];
+
     return [self readingsForBookWithId:bookId
-                            parameters:parameters
+                            parameters:finalParameters
                      completionHandler:completionHandler];
 }
 
 - (ReadmillRequestOperation *)readingsOrderedByFriendsFirstForBookWithId:(ReadmillBookId)bookId
+                                                              parameters:(NSDictionary *)parameters
                                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSDictionary *parameters = @{ kReadmillAPIReadingOrderFriendsFirst : kReadmillAPIReadingOrderKey };
+    NSMutableDictionary *finalParameters = [@{ kReadmillAPIReadingOrderFriendsFirst : kReadmillAPIReadingOrderKey } mutableCopy];
+    [finalParameters addEntriesFromDictionary:parameters];
+
     return [self readingsForBookWithId:bookId
-                            parameters:parameters
+                            parameters:finalParameters
                      completionHandler:completionHandler];
 }
 
