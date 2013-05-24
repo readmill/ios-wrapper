@@ -44,6 +44,12 @@
 - (void)updateWithAPIDictionary:(NSDictionary *)apiDict;
 
 /*!
+ @result Descriptive string representing average reading time.
+ @brief Creates and returns the average reading time description based on averageDuration, eg. "2–3 hours".
+ */
+- (NSString *)averageReadingTimeDescription;
+
+/*!
  @property  author
  @brief The book's author. 
  */
@@ -114,6 +120,18 @@
  @brief The number of 'readings' for this book.
  */
 @property (readonly) NSUInteger readingsCount;
+
+/*!
+ @property  recommendedReadingsCount
+ @brief The number of recommended readings for this book.
+ */
+@property (readonly) NSUInteger recommendedReadingsCount;
+
+/*!
+ @property  averageDuration
+ @brief The average reading duration for this book.
+ */
+@property (readonly) NSUInteger averageDuration;
 
 /*!
  @property  assets
