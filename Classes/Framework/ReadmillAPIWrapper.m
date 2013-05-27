@@ -483,7 +483,7 @@
                                                          parameters:(NSDictionary *)parameters
                                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSMutableDictionary *finalParameters = [@{ kReadmillAPIReadingOrderPopular : kReadmillAPIReadingOrderKey } mutableCopy];
+    NSMutableDictionary *finalParameters = [@{ kReadmillAPIReadingOrderKey : kReadmillAPIReadingOrderPopular } mutableCopy];
     [finalParameters addEntriesFromDictionary:parameters];
 
     return [self readingsForBookWithId:bookId
@@ -495,7 +495,7 @@
                                                               parameters:(NSDictionary *)parameters
                                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSMutableDictionary *finalParameters = [@{ kReadmillAPIReadingOrderFriendsFirst : kReadmillAPIReadingOrderKey } mutableCopy];
+    NSMutableDictionary *finalParameters = [@{ kReadmillAPIReadingOrderKey : kReadmillAPIReadingOrderFriendsFirst } mutableCopy];
     [finalParameters addEntriesFromDictionary:parameters];
 
     return [self readingsForBookWithId:bookId
