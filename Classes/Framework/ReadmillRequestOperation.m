@@ -125,6 +125,12 @@
     [self didChangeValueForKey:@"isFinished"];
 }
 
+- (void)cancel
+{
+    [super cancel];
+    [self cancelConnectionIfCancelled];
+}
+
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)err 
 {
     self.connectionError = err;
