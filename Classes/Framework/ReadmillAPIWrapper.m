@@ -632,7 +632,7 @@
     return [self sendGetRequestToEndpoint:[NSString stringWithFormat:@"%@", [self booksEndpoint]]
                            withParameters:parameters
                shouldBeCalledUnauthorized:YES
-                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                         completionHandler:completionHandler];
 }
 
@@ -648,7 +648,7 @@
     return [self sendGetRequestToEndpoint:endpoint
                            withParameters:finalDictionary
                shouldBeCalledUnauthorized:YES
-                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                         completionHandler:completionHandler];
 }
 
