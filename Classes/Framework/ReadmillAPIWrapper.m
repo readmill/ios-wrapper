@@ -220,6 +220,23 @@
 #pragma mark - Readings
 
 - (ReadmillRequestOperation *)readingForUserWithId:(ReadmillUserId)userId
+                                matchingBookWithId:(ReadmillBookId)bookId
+                                 completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings/match",
+                          [self usersEndpoint],
+                          userId];
+
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setValue:@(bookId) forKey:@"book_id"];
+
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:parameters
+               shouldBeCalledUnauthorized:NO
+                        completionHandler:completion];
+}
+
+- (ReadmillRequestOperation *)readingForUserWithId:(ReadmillUserId)userId
                                 matchingIdentifier:(NSString *)identifier
                                              title:(NSString *)title
                                             author:(NSString *)author

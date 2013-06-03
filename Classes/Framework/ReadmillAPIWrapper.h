@@ -426,6 +426,17 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 
 /*!
  @param userId The id of the user to find a reading for.
+ @param bookId The id of the book.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @brief   Find a reading for user matching the arguments.
+ */
+- (ReadmillRequestOperation *)readingForUserWithId:(ReadmillUserId)userId
+                                matchingBookWithId:(ReadmillBookId)bookId
+                                 completionHandler:(ReadmillAPICompletionHandler)completion;
+
+
+/*!
+ @param userId The id of the user to find a reading for.
  @param identifier The identifier of the book.
  @param title The title of the book.
  @param author The author of the book.
