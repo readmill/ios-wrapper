@@ -888,6 +888,14 @@ The object returned here is appropriate for saving in a property list, NSUserDef
                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
+ @param libraryItemId The id of the library item to delete.
+ @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
+ @brief Delete a library item.
+ */
+- (ReadmillRequestOperation *)deleteLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
  @param localIds An array containing library item ids already stored locally.
  @param completionHandler A block that will return the result (id) and an NSError object if an error occurs.
  @brief Returns a list of actions to be made on the client to be synchronized with the users cloud storage, 

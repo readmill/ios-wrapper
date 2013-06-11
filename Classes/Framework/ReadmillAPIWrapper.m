@@ -1031,6 +1031,14 @@
                         completionHandler:completionHandler];
 }
 
+- (ReadmillRequestOperation *)deleteLibraryItemWithId:(ReadmillLibraryItemId)libraryItemId
+                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    return [self sendDeleteRequestToEndpoint:[self endpointForLibraryItemWithId:libraryItemId]
+                              withParameters:nil
+                           completionHandler:completionHandler];
+}
+
 - (ReadmillRequestOperation *)libraryChangesWithLocalIds:(NSArray *)localIds
                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
