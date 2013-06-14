@@ -24,6 +24,7 @@
 #import "NSDictionary+ReadmillAdditions.h"
 #import "NSString+ReadmillAdditions.h"
 #import "ReadmillUser.h"
+#import "ReadmillBook.h"
 
 @interface ReadmillReading ()
 
@@ -54,6 +55,7 @@
 
 @property (readwrite) ReadmillReadingProgress progress;
 
+@property (readwrite, retain) ReadmillBook *book;
 @property (readwrite, retain) ReadmillUser *user;
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 
@@ -98,6 +100,12 @@
         [self setUserId:[[self user] userId]];
     } else {
         [self setUserId:[[[cleanedDict objectForKey:kReadmillAPIUserKey] objectForKey:kReadmillAPIUserIdKey] unsignedIntegerValue]];
+    }
+    
+    if (self.book) {
+        [self.book updateWithAPIDictionary:cleanedDict];
+    } else {
+        self.book = [[ReadmillBook alloc] initWithAPIDictionary:cleanedDict];
     }
     
     [self setDateStarted:[[cleanedDict objectForKey:kReadmillAPIReadingDateStartedKey] dateWithRFC3339Formatting]];

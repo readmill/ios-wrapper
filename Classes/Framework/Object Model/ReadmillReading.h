@@ -25,6 +25,7 @@
 #import "ReadmillReadingSession.h"
 
 @class ReadmillReading;
+@class ReadmillBook;
 @class ReadmillUser;
 
 @protocol ReadmillReadingUpdatingDelegate <NSObject>
@@ -200,6 +201,12 @@
  @brief The progress of this reading in Readmill.
  */
 @property (readonly) ReadmillReadingProgress progress;
+
+/*!
+ @property  book
+ @brief The ReadmillBook of this reading.
+ */
+@property (readonly, retain) ReadmillBook *book;
 
 /*!
  @property  user
