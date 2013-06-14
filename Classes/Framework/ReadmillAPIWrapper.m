@@ -981,7 +981,7 @@
 - (ReadmillRequestOperation *)userWithId:(ReadmillUserId)userId
                        completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
-    NSString *endpoint = [NSString stringWithFormat:@"%@users/%d", [self apiEndPoint], userId];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%d", userId];
     return [self sendGetRequestToEndpoint:endpoint
                            withParameters:nil
                shouldBeCalledUnauthorized:YES
