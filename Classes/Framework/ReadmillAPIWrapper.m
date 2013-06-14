@@ -1006,6 +1006,50 @@
 }
 
 #pragma mark -
+#pragma mark - Followings
+
+- (ReadmillRequestOperation *)followersForUserWithId:(ReadmillUserId)userId
+                                          parameters:(NSDictionary *)parameters
+                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"users/%d/followers", userId];
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:parameters
+               shouldBeCalledUnauthorized:YES
+                        completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)followingsForUserWithId:(ReadmillUserId)userId
+                                           parameters:(NSDictionary *)parameters
+                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"users/%d/followings", userId];
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:parameters
+               shouldBeCalledUnauthorized:YES
+                        completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)followUserWithId:(ReadmillUserId)userId
+                             completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"followings/%d", userId];
+    return [self sendPostRequestToEndpoint:endpoint
+                            withParameters:nil
+                         completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)unfollowUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"followings/%d", userId];
+    return [self sendDeleteRequestToEndpoint:endpoint
+                              withParameters:nil
+                           completionHandler:completionHandler];
+}
+
+
+
+#pragma mark -
 #pragma mark - Library
 
 - (NSString *)endpointForLibraryItemWithId:(ReadmillLibraryItemId)itemId

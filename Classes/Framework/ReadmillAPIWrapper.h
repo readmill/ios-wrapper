@@ -131,6 +131,16 @@ static NSString * const kReadmillAPIUserAvatarSizeMediumLarge = @"medium-large";
 static NSString * const kReadmillAPIUserAvatarSizeLarge = @"large"; // 280x280
 
 
+#pragma mark API Keys - Following
+
+static NSString * const kReadmillAPIFollowingCountKey = @"count";
+static NSString * const kReadmillAPIFollowingFromDateKey = @"from";
+static NSString * const kReadmillAPIFollowingToDateKey = @"to";
+
+static NSString * const kReadmillAPIFollowingOrderKey = @"order";
+static NSString * const kReadmillAPIFollowingOrderByCreatedAt = @"created_at";
+
+
 #pragma mark API Keys - Reading
 
 static NSString * const kReadmillAPIReadingKey = @"reading";
@@ -862,6 +872,49 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  */
 - (NSURL *)avatarURLForUserWithId:(ReadmillUserId)userId
                              size:(NSString *)size;
+
+#pragma mark -
+#pragma mark Followings
+
+/*!
+ @param userId Id of the user to get followers for.
+ @param parameters The parameters for the request.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief Find followers for a specific Readmill user.
+ */
+- (ReadmillRequestOperation *)followersForUserWithId:(ReadmillUserId)userId
+                                          parameters:(NSDictionary *)parameters
+                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param userId Id of the user to get followings for.
+ @param parameters The parameters for the request.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief Find followings for a specific Readmill user.
+ */
+- (ReadmillRequestOperation *)followingsForUserWithId:(ReadmillUserId)userId
+                                           parameters:(NSDictionary *)parameters
+                                    completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param userId Id of the user to follow.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief Follow a specific Readmill user.
+ */
+- (ReadmillRequestOperation *)followUserWithId:(ReadmillUserId)userId
+                             completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param userId Id of the user to unfollow.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief Unfollow a specific Readmill user.
+ */
+- (ReadmillRequestOperation *)unfollowUserWithId:(ReadmillUserId)userId
+                               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 #pragma mark - 
 #pragma mark - Library
