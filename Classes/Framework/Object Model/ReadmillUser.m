@@ -428,4 +428,19 @@
     return avatarURL;
 }
 
+#pragma mark -
+#pragma mark - Location
+
+- (NSString *)location
+{
+    NSMutableArray *items = [NSMutableArray array];
+    if ([self.city length]) {
+        [items addObject:self.city];
+    }
+    if ([self.country length]) {
+        [items addObject:self.country];
+    }
+    return [items componentsJoinedByString:@", "];
+}
+
 @end

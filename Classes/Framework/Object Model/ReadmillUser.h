@@ -471,4 +471,13 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
  */
 @property (readonly, retain) ReadmillAPIWrapper *apiWrapper;
 
+#pragma mark -
+#pragma mark - Location
+
+/*!
+ @result A `NSString` object.
+ @brief Returns descriptive location string from city and country.
+ */
+- (NSString *)location;
+
 @end
