@@ -560,11 +560,13 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  
 /*!
  @param userId The user Id of the user you'd like readings for.
+ @param parameters Extra parameters to pass with the request.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result A list of readings in the Readmill system as NSDictionary objects. See the API Keys - Read section of this header for keys. 
  @brief   Get a list of readings for a given user Id. 
  */
-- (ReadmillRequestOperation *)readingsForUserWithId:(ReadmillUserId)userId 
+- (ReadmillRequestOperation *)readingsForUserWithId:(ReadmillUserId)userId
+                                         parameters:(NSDictionary *)parameters
                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 

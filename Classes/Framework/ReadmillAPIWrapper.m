@@ -422,13 +422,14 @@
 }
 
 - (ReadmillRequestOperation *)readingsForUserWithId:(ReadmillUserId)userId
+                                         parameters:(NSDictionary *)parameters
                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/readings",
                           [self usersEndpoint],
                           userId];
     return [self sendGetRequestToEndpoint:endpoint
-                           withParameters:nil
+                           withParameters:parameters
                shouldBeCalledUnauthorized:NO
                         completionHandler:completionHandler];
 }
