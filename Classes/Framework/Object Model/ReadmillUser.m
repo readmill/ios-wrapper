@@ -391,7 +391,7 @@
 #pragma mark -
 #pragma mark - Avatar
 
-- (NSString *)avatarSizeToString:(ReadmillUserAvatarSize)avatarSize
++ (NSString *)avatarSizeToString:(ReadmillUserAvatarSize)avatarSize
 {
     NSString *result = nil;
     
@@ -415,17 +415,20 @@
     return result;
 }
 
-- (NSURL *)avatarURLWithSize:(ReadmillUserAvatarSize)size
++ (NSURL *)avatarURLWithAPIWrapper:(ReadmillAPIWrapper *)apiWrapper userId:(ReadmillUserId)userId size:(ReadmillUserAvatarSize)size
 {
-    ReadmillAPIWrapper *apiWrapper = self.apiWrapper;
-    NSString *endpoint = [NSString stringWithFormat:@"users/%d/avatar", self.userId];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%d/avatar", userId];
     ReadmillAPIConfiguration *apiConfiguration = [apiWrapper apiConfiguration];
     NSURL *apiBaseURL = [apiConfiguration apiBaseURL];
     NSURL *avatarURL = [NSURL URLWithString:endpoint relativeToURL:apiBaseURL];
     
     avatarURL = [avatarURL URLByAddingQueryParameters:@{ @"size" : [self avatarSizeToString:size],
-                        kReadmillAPIClientIdKey : [apiConfiguration clientID] }];
+                             kReadmillAPIClientIdKey : [apiConfiguration clientID] }];
     return avatarURL;
+}
+- (NSURL *)avatarURLWithSize:(ReadmillUserAvatarSize)size
+{
+    [[self class] avatarURLWithAPIWrapper:self.apiWrapper userId:self.userId size:size];
 }
 
 #pragma mark -

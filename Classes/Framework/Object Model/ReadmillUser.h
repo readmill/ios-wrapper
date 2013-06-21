@@ -345,6 +345,9 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
 #pragma mark -
 #pragma mark - Avatar
 
++ (NSURL *)avatarURLWithAPIWrapper:(ReadmillAPIWrapper *)apiWrapper
+                            userId:(ReadmillUserId)userId
+                              size:(ReadmillUserAvatarSize)size;
 
 - (NSURL *)avatarURLWithSize:(ReadmillUserAvatarSize)size;
 
