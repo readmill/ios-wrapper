@@ -130,6 +130,15 @@ static NSString * const kReadmillAPIUserAvatarSizeMedium = @"medium"; // 50x50
 static NSString * const kReadmillAPIUserAvatarSizeMediumLarge = @"medium-large"; // 100x100
 static NSString * const kReadmillAPIUserAvatarSizeLarge = @"large"; // 280x280
 
+static NSString * const kReadmillAPIUserAvatarWidthKey = @"width";
+static NSString * const kReadmillAPIUserAvatarHeightKey = @"height";
+static NSString * const kReadmillAPIUserAvatarOperationKey = @"operation";
+static NSString * const kReadmillAPIUserAvatarOperationCrop = @"operation";
+static NSString * const kReadmillAPIUserAvatarOperationShrinkWidth = @"shrink-w";
+static NSString * const kReadmillAPIUserAvatarFormatKey = @"format";
+static NSString * const kReadmillAPIUserAvatarFormatPNG = @"png";
+static NSString * const kReadmillAPIUserAvatarFormatJPEG = @"jpeg";
+
 
 #pragma mark API Keys - Following
 

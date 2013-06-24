@@ -349,6 +349,10 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
                             userId:(ReadmillUserId)userId
                               size:(ReadmillUserAvatarSize)size;
 
++ (NSURL *)avatarURLWithAPIWrapper:(ReadmillAPIWrapper *)apiWrapper
+                            userId:(ReadmillUserId)userId
+                        parameters:(NSDictionary *)parameters;
+
 - (NSURL *)avatarURLWithSize:(ReadmillUserAvatarSize)size;
 
 #pragma mark -
