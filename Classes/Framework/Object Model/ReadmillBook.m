@@ -191,7 +191,7 @@
 + (ReadmillPriceSegment)priceSegmentFromPriceSegmentString:(NSString *)priceSegmentString
 {
     ReadmillPriceSegment priceSegment = ReadmillPriceSegmentUnknown;
-    if (priceSegmentString == kReadmillAPIBookPriceSegmentFree) {
+    if ([priceSegmentString isEqualToString:kReadmillAPIBookPriceSegmentFree]) {
         priceSegmentString = ReadmillPriceSegmentFree;
     }
     return priceSegment;
