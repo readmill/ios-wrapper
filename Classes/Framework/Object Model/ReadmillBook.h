@@ -122,6 +122,12 @@
 @property (readonly) BOOL featured;
 
 /*!
+ @property  priceSegment
+ @brief The book's price segment.
+ */
+@property (readonly) ReadmillPriceSegment priceSegment;
+
+/*!
  @property  readingsCount
  @brief The number of all 'readings' for this book (this includes private and interesting readings).
  */

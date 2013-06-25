@@ -56,6 +56,19 @@ typedef enum {
     
 } ReadmillReadingState;
 
+/*!
+ @enum ReadmillPriceSegment
+ @brief   Price segment for a book.
+ @constant   ReadmillPriceSegmentUnknown The price segment is unknown.
+ @constant   ReadmillPriceSegmentFree Book is free.
+ */
+typedef enum {
+    
+    ReadmillPriceSegmentUnknown = 1,
+    ReadmillPriceSegmentFree = 2
+    
+} ReadmillPriceSegment;
+
 // State strings
 static NSString * const ReadmillReadingStateInterestingKey = @"interesting";
 static NSString * const ReadmillReadingStateReadingKey = @"reading";
@@ -101,6 +114,9 @@ static NSString * const kReadmillAPIBookOrderByHotnessScore = @"hotness_score";
 
 static NSString * const kReadmillAPIBookCountKey = @"count";
 static NSString * const kReadmillAPIBookCoverSizeKey = @"size";
+
+static NSString * const kReadmillAPIBookPriceSegmentKey = @"price_segment";
+static NSString * const kReadmillAPIBookPriceSegmentFree = @"free";
 
 #pragma mark API Keys - User
 

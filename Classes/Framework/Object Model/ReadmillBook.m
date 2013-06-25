@@ -70,6 +70,7 @@
 @property (readwrite) ReadmillBookId rootEditionId;
 
 @property (readwrite) BOOL featured;
+@property (readwrite) ReadmillPriceSegment priceSegment;
 @property (readwrite) NSUInteger readingsCount;
 @property (readwrite) NSUInteger activeAndFinishedReadingsCount;
 @property (readwrite) NSUInteger recommendedReadingsCount;
@@ -135,6 +136,9 @@
     [self setRecommendedReadingsCount:[[cleanedDict valueForKey:kReadmillAPIBookRecommendedReadingsCountKey] unsignedIntegerValue]];
 
     [self setAverageDuration:[[cleanedDict valueForKey:kReadmillAPIBookAverageDurationKey] unsignedIntegerValue]];
+    
+    NSString *priceSegmentString = [cleanedDict valueForKey:kReadmillAPIBookPriceSegmentKey];
+    [self setPriceSegment:[[self class] priceSegmentFromPriceSegmentString:priceSegmentString]];
 
     NSArray *assets = [cleanedDict valueForKey:kReadmillAPIBookAssetsKey];
     assets = [assets valueForKey:@"items"];
@@ -182,6 +186,15 @@
     [self setAssets:nil];
 
     [super dealloc];
+}
+
++ (ReadmillPriceSegment)priceSegmentFromPriceSegmentString:(NSString *)priceSegmentString
+{
+    ReadmillPriceSegment priceSegment = ReadmillPriceSegmentUnknown;
+    if (priceSegmentString == kReadmillAPIBookPriceSegmentFree) {
+        priceSegmentString = ReadmillPriceSegmentFree;
+    }
+    return priceSegment;
 }
 
 #pragma mark -
