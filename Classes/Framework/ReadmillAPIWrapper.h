@@ -130,14 +130,16 @@ static NSString * const kReadmillAPIUserAvatarSizeMedium = @"medium"; // 50x50
 static NSString * const kReadmillAPIUserAvatarSizeMediumLarge = @"medium-large"; // 100x100
 static NSString * const kReadmillAPIUserAvatarSizeLarge = @"large"; // 280x280
 
-static NSString * const kReadmillAPIUserAvatarWidthKey = @"width";
-static NSString * const kReadmillAPIUserAvatarHeightKey = @"height";
-static NSString * const kReadmillAPIUserAvatarOperationKey = @"operation";
-static NSString * const kReadmillAPIUserAvatarOperationCrop = @"crop";
-static NSString * const kReadmillAPIUserAvatarOperationShrinkWidth = @"shrink-w";
-static NSString * const kReadmillAPIUserAvatarFormatKey = @"format";
-static NSString * const kReadmillAPIUserAvatarFormatPNG = @"png";
-static NSString * const kReadmillAPIUserAvatarFormatJPEG = @"jpg";
+#pragma mark API Keys - Images
+
+static NSString * const kReadmillAPIImageWidthKey = @"width";
+static NSString * const kReadmillAPIImageHeightKey = @"height";
+static NSString * const kReadmillAPIImageOperationKey = @"operation";
+static NSString * const kReadmillAPIImageOperationCrop = @"crop";
+static NSString * const kReadmillAPIImageOperationShrinkWidth = @"shrink-w";
+static NSString * const kReadmillAPIImageFormatKey = @"format";
+static NSString * const kReadmillAPIImageFormatPNG = @"png";
+static NSString * const kReadmillAPIImageFormatJPEG = @"jpg";
 
 
 #pragma mark API Keys - Following
