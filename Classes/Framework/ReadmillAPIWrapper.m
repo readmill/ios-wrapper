@@ -679,6 +679,15 @@
     return [[self urlWithEndpoint:endpoint] URLByAddingQueryParameters:parameters];
 }
 
+- (NSURL *)coverURLForBookWithId:(ReadmillBookId)bookId
+                      parameters:(NSDictionary *)parameters
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/cover", [self booksEndpoint], bookId];
+    NSMutableDictionary *mParameters = [@{ kReadmillAPIClientIdKey : self.apiConfiguration.clientID } mutableCopy];
+    [mParameters addEntriesFromDictionary:parameters];
+    return [[self urlWithEndpoint:endpoint] URLByAddingQueryParameters:mParameters];
+}
+
 
 //Pings
 #pragma mark - Pings

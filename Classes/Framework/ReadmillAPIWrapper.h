@@ -441,6 +441,15 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 - (NSURL *)coverURLForBookWithId:(ReadmillBookId)bookId
                             size:(NSString *)size;
 
+/*!
+ @param bookId The id of the book you'd like to get the cover for.
+ @param parameters The parameters for the request.
+ @result The URL that points to the cover of desired size for book with id.
+ @brief Get the cover URL for a book with specified id and parameters.
+ */
+- (NSURL *)coverURLForBookWithId:(ReadmillBookId)bookId
+                      parameters:(NSDictionary *)parameters;
+
 #pragma mark -
 #pragma mark Readings
 
