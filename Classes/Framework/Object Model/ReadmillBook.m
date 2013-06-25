@@ -192,7 +192,7 @@
 {
     ReadmillPriceSegment priceSegment = ReadmillPriceSegmentUnknown;
     if ([priceSegmentString isEqualToString:kReadmillAPIBookPriceSegmentFree]) {
-        priceSegmentString = ReadmillPriceSegmentFree;
+        priceSegment = ReadmillPriceSegmentFree;
     }
     return priceSegment;
 }
