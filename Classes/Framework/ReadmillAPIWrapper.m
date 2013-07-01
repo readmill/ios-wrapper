@@ -145,18 +145,6 @@
     return @"me/library";
 }
 
-#pragma mark -
-#pragma mark - Post To
-
-- (NSArray *)postToArrayWithConnections:(NSArray *)connections
-{
-    NSMutableArray *connectionsArray = [NSMutableArray array];
-    for (id connection in connections) {
-        [connectionsArray addObject:[NSDictionary dictionaryWithObject:connection
-                                                                forKey:@"id"]];
-    }
-    return connectionsArray;
-}
 
 #pragma mark -
 #pragma mark OAuth
@@ -275,7 +263,7 @@
                                                                          forKey:kReadmillAPIReadingKey];
     
     if (connections != nil) {
-        [readingParameters setValue:[self postToArrayWithConnections:connections]
+        [readingParameters setValue:connections
                              forKey:kReadmillAPIReadingPostToKey];
     }
     
@@ -362,7 +350,7 @@
     [readingParameters release];
     
     if (connections != nil) {
-        [readingParameters setValue:[self postToArrayWithConnections:connections]
+        [readingParameters setValue:connections
                              forKey:kReadmillAPIHighlightPostToKey];
     }
     
@@ -808,7 +796,7 @@
     }
     
     if (connections != nil) {
-        [highlightParameters setValue:[self postToArrayWithConnections:connections]
+        [highlightParameters setValue:connections
                                forKey:kReadmillAPIHighlightPostToKey];
     }
     
