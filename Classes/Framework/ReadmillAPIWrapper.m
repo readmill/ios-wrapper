@@ -676,16 +676,17 @@
     NSString *endpoint = [NSString stringWithFormat:@"%@/%d/cover", [self booksEndpoint], bookId];
     NSDictionary *parameters = @{ kReadmillAPIBookCoverSizeKey : size,
                                   kReadmillAPIClientIdKey : self.apiConfiguration.clientID };
-    return [[self urlWithEndpoint:endpoint] URLByAddingQueryParameters:parameters];
+    return [self coverURLForBookWithId:bookId parameters:parameters];
 }
 
 - (NSURL *)coverURLForBookWithId:(ReadmillBookId)bookId
                       parameters:(NSDictionary *)parameters
 {
-    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/cover", [self booksEndpoint], bookId];
-    NSMutableDictionary *mParameters = [@{ kReadmillAPIClientIdKey : self.apiConfiguration.clientID } mutableCopy];
-    [mParameters addEntriesFromDictionary:parameters];
-    return [[self urlWithEndpoint:endpoint] URLByAddingQueryParameters:mParameters];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/cover?%@=%@", [self booksEndpoint], bookId, kReadmillAPIClientIdKey, [self.apiConfiguration clientID]];
+    for (NSString *key in [parameters allKeys]) {
+        endpoint = [endpoint stringByAppendingFormat:@"&%@=%@", key, parameters[key]];
+    }
+    return [NSURL URLWithString:endpoint relativeToURL:self.apiConfiguration.apiBaseURL];
 }
 
 
@@ -1007,12 +1008,13 @@
 }
 
 - (NSURL *)avatarURLForUserWithId:(ReadmillUserId)userId
-                             size:(NSString *)size
+                       parameters:(NSDictionary *)parameters
 {
-    NSString *endpoint = [NSString stringWithFormat:@"users/%d/avatar", userId];
-    NSDictionary *parameters = @{ kReadmillAPIUserAvatarSizeKey : size,
-                                  kReadmillAPIClientIdKey : self.apiConfiguration.clientID };
-    return [[self urlWithEndpoint:endpoint] URLByAddingQueryParameters:parameters];
+    NSString *endpoint = [NSString stringWithFormat:@"users/%d/avatar?%@=%@", userId, kReadmillAPIClientIdKey, [self.apiConfiguration clientID]];
+    for (NSString *key in [parameters allKeys]) {
+        endpoint = [endpoint stringByAppendingFormat:@"&%@=%@", key, parameters[key]];
+    }
+    return [NSURL URLWithString:endpoint relativeToURL:self.apiConfiguration.apiBaseURL];
 }
 
 #pragma mark -

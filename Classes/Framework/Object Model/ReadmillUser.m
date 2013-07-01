@@ -427,14 +427,7 @@
 
 + (NSURL *)avatarURLWithAPIWrapper:(ReadmillAPIWrapper *)apiWrapper userId:(ReadmillUserId)userId parameters:(NSDictionary *)parameters
 {
-    NSString *endpoint = [NSString stringWithFormat:@"users/%d/avatar", userId];
-    ReadmillAPIConfiguration *apiConfiguration = [apiWrapper apiConfiguration];
-    NSURL *apiBaseURL = [apiConfiguration apiBaseURL];
-    NSURL *avatarURL = [NSURL URLWithString:endpoint relativeToURL:apiBaseURL];
-    
-    avatarURL = [avatarURL URLByAddingQueryParameters:@{ kReadmillAPIClientIdKey : [apiConfiguration clientID] }];
-    avatarURL = [avatarURL URLByAddingQueryParameters:parameters];
-    return avatarURL;
+    return [apiWrapper avatarURLForUserWithId:userId parameters:parameters];
 }
 
 #pragma mark -
