@@ -503,7 +503,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param bookId The id of the book to create a reading for.
  @param readingState The initial reading state if a new reading is created.
  @param isPrivate The intial reading privacy if a new reading is created.
- @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+ @param connections (optional) An array consisting of connections (dictionary) to post to. 
+    Example: post_to : [{ id : 25 }, { email : martin@readmill.com }]
     IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @result The created reading in the Readmill system as an NSDictionary object. See the API Keys - Read section of this header for keys. 
@@ -561,8 +562,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 /*!
  @param readingId The id of the reading to finish.
  @param closingRemark (optional) A closing remark.
- @param recommended (optional) Should be recommended.
- @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+ @param recommended (optional) Whether reading should be recommended or not.
+ @param connections (optional) An array consisting of connections (dictionary) to post to. Example: post_to : [{ id : 25 }, { email : martin@readmill.com }]
     IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @return A `ReadmillRequestOperation` object associated with the action.
@@ -577,7 +578,8 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 /*!
  @param readingId The id of the reading to abandon.
  @param closingRemark (optional) A closing remark.
- @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+ @param connections (optional) An array consisting of connections (dictionary) to post to. 
+    Example: post_to : [{ id : 25 }, { email : martin@readmill.com }]
     IMPORTANT: Passing nil connections uses default connections.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @return A `ReadmillRequestOperation` object associated with the action.
@@ -748,9 +750,10 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  @param position The approximate position of the highlighted text in the book as float percentage.
  @param highlightedAt (optional) An NSDate object representing the date the resource was created, pass nil for "now". 
  @param comment (optional) A comment on the highlight
- @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
-  @param isCopyRestricted A bool stating whether the highlight has restrictions
+ @param connections (optional) An array consisting of connections (dictionary) to post to. 
+    Example: post_to : [{ id : 25 }, { email : martin@readmill.com }]
     IMPORTANT: Passing nil connections uses default connections.
+  @param isCopyRestricted A bool stating whether the highlight has restrictions
  @param completionHandler A block that will return the result (id) and an error pointer.
  @brief  Send a highlighted text snippet to Readmill.
  */

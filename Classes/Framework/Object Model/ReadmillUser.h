@@ -319,7 +319,7 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
  @param book The book to find or create a reading for.
  @param readingState The state of the reading if a new one is created.
  @param isPrivate The privacy of the reading if a new one is created.
- @param connections (optional) An array consisting of connection IDs (NSString) to post to (unique for user /me/connections/). 
+ @param connections (optional) An array consisting of connections (dictionary) to post to. Example: post_to : [{ id : 25 }, { email : martin@readmill.com }]
     IMPORTANT: Passing nil connections uses default connections.
  @param readingFindingDelegate The delegate object to receive notifications of success or failure.
  @brief   Find a reading for the given book in Readmill, creating one if it doesn't exist.
