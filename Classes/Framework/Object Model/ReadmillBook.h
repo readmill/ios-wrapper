@@ -92,6 +92,12 @@
 @property (readonly, copy) NSURL *coverImageURL;
 
 /*!
+ @property  originalCoverSize
+ @brief Original width and height of the book cover.
+ */
+@property (readonly) CGSize originalCoverSize;
+
+/*!
  @property  metaDataURL
  @brief A URL to the book's metadata.
  */

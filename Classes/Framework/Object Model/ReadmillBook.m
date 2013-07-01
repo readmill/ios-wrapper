@@ -63,6 +63,7 @@
 @property (readwrite, copy) NSString *title;
 
 @property (readwrite, copy) NSURL *coverImageURL;
+@property (readwrite) CGSize originalCoverSize;
 @property (readwrite, copy) NSURL *metaDataURL;
 @property (readwrite, copy) NSURL *permalinkURL;
 
@@ -114,6 +115,13 @@
     
     if ([cleanedDict valueForKey:kReadmillAPIBookCoverImageURLKey]) {
         [self setCoverImageURL:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIBookCoverImageURLKey]]];
+    }
+    
+    NSDictionary *coverMetadata = [cleanedDict valueForKey:kReadmillAPIBookCoverMetadataKey];
+    if (coverMetadata) {
+        CGFloat width = [[coverMetadata valueForKeyPath:kReadmillAPIBookCoverMetadataOriginalWidthKey] floatValue];
+        CGFloat height = [[coverMetadata valueForKeyPath:kReadmillAPIBookCoverMetadataOriginalHeightKey] floatValue];
+        [self setOriginalCoverSize:CGSizeMake(width, height)];
     }
     
     if ([cleanedDict valueForKey:kReadmillAPIBookMetaDataURLKey]) {
