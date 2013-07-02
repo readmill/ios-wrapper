@@ -407,6 +407,12 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
 @property (readonly, copy) NSString *userName;
 
 /*!
+ @property  email
+ @brief The user's email (only returned for current user).
+ */
+@property (readonly, copy) NSString *email;
+
+/*!
  @property  avatarURL
  @brief The URL of the user's avatar image.
  */

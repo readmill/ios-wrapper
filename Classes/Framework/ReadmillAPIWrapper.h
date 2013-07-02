@@ -140,6 +140,7 @@ static NSString * const kReadmillAPIUserIdKey = @"id";
 static NSString * const kReadmillAPIUserLastNameKey = @"lastname";
 static NSString * const kReadmillAPIUserPermalinkURLKey = @"permalink_url";
 static NSString * const kReadmillAPIUserReadmillUserNameKey = @"username";
+static NSString * const kReadmillAPIUserReadmillEmailKey = @"email";
 static NSString * const kReadmillAPIUserWebsiteKey = @"website";
 static NSString * const kReadmillAPIUserAuthenticationToken = @"authentication_token";
 

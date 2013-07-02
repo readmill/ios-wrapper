@@ -36,6 +36,7 @@
 @property (readwrite, copy) NSString *lastName;
 @property (readwrite, copy) NSString *fullName;
 @property (readwrite, copy) NSString *userName;
+@property (readwrite, copy) NSString *email;
 @property (readwrite, copy) NSString *authenticationToken;
 
 @property (readwrite, copy) NSURL *avatarURL;
@@ -135,6 +136,7 @@
     [self setLastName:[cleanedDict valueForKey:kReadmillAPIUserLastNameKey]];
     [self setFullName:[cleanedDict valueForKey:kReadmillAPIUserFullNameKey]];
     [self setUserName:[cleanedDict valueForKey:kReadmillAPIUserReadmillUserNameKey]];
+    [self setEmail:[cleanedDict valueForKey:kReadmillAPIUserReadmillEmailKey]];
     
     if ([cleanedDict valueForKey:kReadmillAPIUserAvatarURLKey]) {
         [self setAvatarURL:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIUserAvatarURLKey]]];
