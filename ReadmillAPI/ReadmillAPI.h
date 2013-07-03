@@ -16,6 +16,5 @@
 #import "ReadmillHighlight.h"
 #import "ReadmillComment.h"
 #import "ReadmillUIPresenter.h"
-#import "ReadmillSpinner.h"
 
 #endif
