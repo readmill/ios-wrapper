@@ -445,15 +445,6 @@
     NSString *filter = [parameters valueForKey:kReadmillAPIReadingFilterKey];
     NSString *order = [parameters valueForKey:kReadmillAPIReadingOrderKey];
     
-    id states = [parameters valueForKey:kReadmillAPIReadingStatesKey];
-    if ([states isKindOfClass:[NSArray class]]) {
-        states = [states componentsJoinedByString:@","];
-        
-        NSMutableDictionary *mParameters = [parameters mutableCopy];
-        [mParameters setValue:states forKey:kReadmillAPIReadingStatesKey];
-        parameters = mParameters;
-    }
-    
     BOOL unauthorized = YES;
     if ([filter isEqualToString:kReadmillAPIReadingFilterFollowings] ||
         [order isEqualToString:kReadmillAPIReadingOrderFriendsFirst]) {
