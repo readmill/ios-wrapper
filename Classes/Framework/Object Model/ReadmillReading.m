@@ -105,7 +105,7 @@
     if (self.book) {
         [self.book updateWithAPIDictionary:cleanedDict];
     } else {
-        self.book = [[ReadmillBook alloc] initWithAPIDictionary:cleanedDict];
+        self.book = [[[ReadmillBook alloc] initWithAPIDictionary:cleanedDict] autorelease];
     }
     
     [self setDateStarted:[[cleanedDict objectForKey:kReadmillAPIReadingDateStartedKey] dateWithRFC3339Formatting]];
