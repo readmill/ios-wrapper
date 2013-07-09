@@ -167,7 +167,7 @@ static NSString * const kReadmillAPIImageFormatJPEG = @"jpg";
 static NSString * const kReadmillAPIFollowingCountKey = @"count";
 static NSString * const kReadmillAPIFollowingFromDateKey = @"from";
 static NSString * const kReadmillAPIFollowingToDateKey = @"to";
-static NSString * const kReadmillAPIFollowingFilterKey = @"filter";
+static NSString * const kReadmillAPIFollowingUserIdsKey = @"user_ids";
 
 static NSString * const kReadmillAPIFollowingOrderKey = @"order";
 static NSString * const kReadmillAPIFollowingOrderByCreatedAt = @"created_at";
