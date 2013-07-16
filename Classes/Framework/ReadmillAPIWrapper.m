@@ -26,7 +26,6 @@
 #import "NSError+ReadmillAdditions.h"
 #import "NSDictionary+ReadmillAdditions.h"
 #import "NSDate+ReadmillAdditions.h"
-#import "JSONKit.h"
 #import "ReadmillAPIWrapper+Internal.h"
 #import "ReadmillRequestOperation.h"
 
@@ -174,7 +173,7 @@
     
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:[parameters JSONData]];
+    [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:nil]];
 
     [self startPreparedRequest:request completion:^(NSDictionary *response, NSError *error) {
         if (response != nil) {

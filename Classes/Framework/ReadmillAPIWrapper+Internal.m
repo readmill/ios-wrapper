@@ -9,24 +9,11 @@
 #import "ReadmillAPIWrapper+Internal.h"
 #import "ReadmillRequestOperation.h"
 #import "NSURL+ReadmillURLParameters.h"
-#import "JSONKit.h"
 
 static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 
 @implementation ReadmillAPIWrapper (Internal)
 
-
-#pragma mark -
-#pragma mark - JSONDecoder
-
-- (JSONDecoder *)jsonDecoder
-{
-    static JSONDecoder *jsonDecoder = nil;
-    if (!jsonDecoder) {
-        jsonDecoder = [[JSONDecoder alloc] init];
-    }
-    return jsonDecoder;
-}
 
 #pragma mark -
 #pragma mark Creating requests
@@ -143,7 +130,7 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setHTTPMethod:httpMethod];
 	[request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-	[request setHTTPBody:[finalParameters JSONData]];
+	[request setHTTPBody:[NSJSONSerialization dataWithJSONObject:finalParameters options:0 error:nil]];
     [request setValue:@"application/json" forHTTPHeaderField:@"accept"];
     [request setTimeoutInterval:kTimeoutInterval];
     
@@ -287,8 +274,9 @@ static NSString *const kReadmillAPIHeaderKey = @"X-Readmill-API";
     
     if (responseData) {
         if ([response.MIMEType isEqualToString:@"application/json"]) {
-            result = [[self jsonDecoder] objectWithData:responseData
-                                                  error:&parseError];
+            result = [NSJSONSerialization JSONObjectWithData:responseData
+                                                     options:0
+                                                       error:&parseError];
         }
     }
     

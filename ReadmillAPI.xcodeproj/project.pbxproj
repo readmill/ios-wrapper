@@ -73,7 +73,6 @@
 		73992D761622F85B00C1693C /* user49.json in Resources */ = {isa = PBXBuildFile; fileRef = 73992D751622F85B00C1693C /* user49.json */; };
 		73A3A28F162D6B6200E39AB8 /* NSDateFormatter+ReadmillAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 73A3A28D162D6B6200E39AB8 /* NSDateFormatter+ReadmillAdditions.h */; };
 		73A3A290162D6B6200E39AB8 /* NSDateFormatter+ReadmillAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 73A3A28E162D6B6200E39AB8 /* NSDateFormatter+ReadmillAdditions.m */; };
-		73A3A294162D85A900E39AB8 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 735E3E6B13E06E1500930E8C /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		73AA2951145EB41300CDBBD6 /* ReadmillAPIConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 73AA294F145EB41300CDBBD6 /* ReadmillAPIConfiguration.h */; settings = {ATTRIBUTES = (); }; };
 		73AA2952145EB41300CDBBD6 /* ReadmillAPIConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 73AA2950145EB41300CDBBD6 /* ReadmillAPIConfiguration.m */; };
 		73FA5403147085F900CFC589 /* NSString+ReadmillAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BEAF0312F06360006028D0 /* NSString+ReadmillAdditions.m */; };
@@ -175,8 +174,6 @@
 		734A51BA135A1DF6009F9794 /* ReadmillAPITests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReadmillAPITests-Prefix.pch"; sourceTree = "<group>"; };
 		734A51BB135A1DF6009F9794 /* ReadmillAPIReadingTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadmillAPIReadingTests.h; sourceTree = "<group>"; };
 		734A51BD135A1DF6009F9794 /* ReadmillAPIReadingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ReadmillAPIReadingTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		735E3E6A13E06E1500930E8C /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONKit.h; path = JSONKit/JSONKit.h; sourceTree = SOURCE_ROOT; };
-		735E3E6B13E06E1500930E8C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = JSONKit/JSONKit.m; sourceTree = SOURCE_ROOT; };
 		735E41D8135A666D00855884 /* ReadmillPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ReadmillPing.h; path = Classes/Framework/ReadmillPing.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		735E41D9135A666D00855884 /* ReadmillPing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = ReadmillPing.m; path = Classes/Framework/ReadmillPing.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		735EF9D4145EE43F00303F19 /* ReadmillAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillAPI.h; path = ../../ReadmillAPI/ReadmillAPI.h; sourceTree = "<group>"; };
@@ -391,15 +388,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		73FA5402147082D700CFC589 /* JSONKit */ = {
-			isa = PBXGroup;
-			children = (
-				735E3E6A13E06E1500930E8C /* JSONKit.h */,
-				735E3E6B13E06E1500930E8C /* JSONKit.m */,
-			);
-			name = JSONKit;
-			sourceTree = "<group>";
-		};
 		966E3E4F12F2F6EB0027E05F /* Linking A Book */ = {
 			isa = PBXGroup;
 			children = (
@@ -463,7 +451,6 @@
 			isa = PBXGroup;
 			children = (
 				735EF9D4145EE43F00303F19 /* ReadmillAPI.h */,
-				73FA5402147082D700CFC589 /* JSONKit */,
 				735E41D7135A655B00855884 /* Readmill Helper Classes */,
 				96BEAF3112F0636C006028D0 /* Additions */,
 				96BEAEF412F06360006028D0 /* Object Model */,
@@ -753,7 +740,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73A3A294162D85A900E39AB8 /* JSONKit.m in Sources */,
 				734A51D4135A1E10009F9794 /* NSURL+ReadmillURLParameters.m in Sources */,
 				734A51D6135A1E10009F9794 /* NSDictionary+ReadmillAdditions.m in Sources */,
 				734A51F3135A1E37009F9794 /* ReadmillBook.m in Sources */,
