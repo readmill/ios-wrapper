@@ -22,12 +22,14 @@
     NSArray *parameters = [[self query] componentsSeparatedByString:@"&"];
     NSMutableDictionary *parametersDictionary = [NSMutableDictionary dictionaryWithCapacity:[parameters count]];
     for (NSString *parameter in parameters) {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        NSArray *kvp = [parameter componentsSeparatedByString:@"="];
-        NSString *key = [[kvp objectAtIndex:0] urlDecodedString];
-        NSString *value = [[kvp objectAtIndex:1] urlDecodedString];
-        [parametersDictionary setValue:value forKey:key];
-        [pool drain];
+        @autoreleasepool {
+            NSArray *kvp = [parameter componentsSeparatedByString:@"="];
+            if (kvp.count >= 2) {
+                NSString *key = [[kvp objectAtIndex:0] urlDecodedString];
+                NSString *value = [[kvp objectAtIndex:1] urlDecodedString];
+                [parametersDictionary setValue:value forKey:key];
+            }
+        }
     }
     return parametersDictionary;
 }
