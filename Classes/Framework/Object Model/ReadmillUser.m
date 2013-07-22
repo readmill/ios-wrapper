@@ -424,7 +424,7 @@
 
 - (NSURL *)avatarURLWithSize:(ReadmillUserAvatarSize)size
 {
-    [[self class] avatarURLWithAPIWrapper:self.apiWrapper userId:self.userId size:size];
+    return [[self class] avatarURLWithAPIWrapper:self.apiWrapper userId:self.userId size:size];
 }
 
 + (NSURL *)avatarURLWithAPIWrapper:(ReadmillAPIWrapper *)apiWrapper userId:(ReadmillUserId)userId parameters:(NSDictionary *)parameters
