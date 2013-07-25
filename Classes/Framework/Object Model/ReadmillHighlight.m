@@ -22,6 +22,7 @@
 
 #import "ReadmillHighlight.h"
 #import "ReadmillComment.h"
+#import "ReadmillUser.h"
 #import "NSString+ReadmillAdditions.h"
 #import "NSDictionary+ReadmillAdditions.h"
 
@@ -33,6 +34,7 @@
 @property(readwrite, copy) NSDate *highlightedAt;
 @property(readwrite, copy) NSURL *permalinkURI;
 @property(readwrite) ReadmillUserId userId;
+@property(readwrite, retain) ReadmillUser *user;
 @property(readwrite) NSUInteger commentsCount;
 @property(readwrite) NSUInteger likesCount;
 @property(readwrite) ReadmillReadingId readingId;
@@ -87,6 +89,17 @@
 
     if ([cleanedDict valueForKey:kReadmillAPIHighlightPermalinkURLKey]) {
         [self setPermalinkURI:[NSURL URLWithString:[cleanedDict valueForKey:kReadmillAPIHighlightPermalinkURLKey]]];
+    }
+    
+    NSDictionary *userDictionary = [cleanedDict objectForKey:kReadmillAPIUserKey];
+    if (userDictionary) {
+        // We might get a user_id only or a brief JSON object representing the user
+        if ([self user]) {
+            [[self user] updateWithAPIDictionary:cleanedDict];
+        } else {
+            [self setUser:[[[ReadmillUser alloc] initWithAPIDictionary:cleanedDict
+                                                            apiWrapper:self.apiWrapper] autorelease]];
+        }
     }
     
     [self setUserId:[[cleanedDict valueForKeyPath:@"user.id"] unsignedIntegerValue]];

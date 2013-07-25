@@ -24,6 +24,7 @@
 #import "ReadmillAPIWrapper.h"
 
 @class ReadmillHighlight;
+@class ReadmillUser;
 
 @protocol ReadmillHighlightUpdateDelegate <NSObject>
 
@@ -103,6 +104,12 @@
  @brief The Readmill id for the user who made the current highlight.
  */
 @property(readonly) ReadmillUserId userId;
+
+/*!
+ @property userId
+ @brief The Readmill user who made the current highlight.
+ */
+@property(readonly, retain) ReadmillUser *user;
 
 /*!
  @property commentsCount
