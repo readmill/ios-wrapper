@@ -15,6 +15,7 @@
 #import "ReadmillBook.h"
 #import "ReadmillHighlight.h"
 #import "ReadmillComment.h"
+#import "ReadmillClosingRemark.h"
 #import "ReadmillUIPresenter.h"
 
 #endif

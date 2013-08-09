@@ -632,6 +632,16 @@
                         completionHandler:completionHandler];
 }
 
+- (ReadmillRequestOperation *)closingRemarksForBookWithId:(ReadmillBookId)bookId parameters:(NSDictionary *)parameters completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/closing_remarks", [self booksEndpoint], bookId];
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:parameters
+               shouldBeCalledUnauthorized:YES
+                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                        completionHandler:completionHandler];
+}
+
 - (ReadmillRequestOperation *)searchBooksUsingQuery:(NSString *)query
                                          parameters:(NSDictionary *)parameters
                                   completionHandler:(ReadmillAPICompletionHandler)completionHandler

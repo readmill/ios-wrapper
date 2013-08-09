@@ -27,6 +27,9 @@
 		7320894A16FC350A00D1308C /* ReadmillHighlight.m in Sources */ = {isa = PBXBuildFile; fileRef = 7320894516FC26AD00D1308C /* ReadmillHighlight.m */; };
 		7320895816FC9AFF00D1308C /* ReadmillComment.h in Headers */ = {isa = PBXBuildFile; fileRef = 7320895316FC8D8000D1308C /* ReadmillComment.h */; };
 		7320895916FC9B0200D1308C /* ReadmillComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 7320895416FC8D8000D1308C /* ReadmillComment.m */; };
+		733D604B17B3984200C5BA27 /* ReadmillClosingRemark.h in Headers */ = {isa = PBXBuildFile; fileRef = 733D604917B3984200C5BA27 /* ReadmillClosingRemark.h */; };
+		733D604C17B3984200C5BA27 /* ReadmillClosingRemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 733D604A17B3984200C5BA27 /* ReadmillClosingRemark.m */; };
+		733D604D17B3984200C5BA27 /* ReadmillClosingRemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 733D604A17B3984200C5BA27 /* ReadmillClosingRemark.m */; };
 		734A51A4135A1DF5009F9794 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED212F05E80006028D0 /* Foundation.framework */; };
 		734A51AE135A1DF5009F9794 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED012F05E80006028D0 /* UIKit.framework */; };
 		734A51AF135A1DF5009F9794 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED212F05E80006028D0 /* Foundation.framework */; };
@@ -136,6 +139,8 @@
 		733291061356FC0B0063FBF4 /* Readmill Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Readmill Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73370EE71341172C00880F5B /* ReadmillDismissingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReadmillDismissingView.h; path = ../UI/ReadmillDismissingView.h; sourceTree = "<group>"; };
 		73370EE81341172C00880F5B /* ReadmillDismissingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReadmillDismissingView.m; path = ../UI/ReadmillDismissingView.m; sourceTree = "<group>"; };
+		733D604917B3984200C5BA27 /* ReadmillClosingRemark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadmillClosingRemark.h; sourceTree = "<group>"; };
+		733D604A17B3984200C5BA27 /* ReadmillClosingRemark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadmillClosingRemark.m; sourceTree = "<group>"; };
 		734A51A3135A1DF5009F9794 /* libReadmillAPI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReadmillAPI.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		734A51A7135A1DF5009F9794 /* ReadmillAPI-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReadmillAPI-Prefix.pch"; sourceTree = "<group>"; };
 		734A51AD135A1DF5009F9794 /* ReadmillAPITests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReadmillAPITests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -435,6 +440,8 @@
 				7320894516FC26AD00D1308C /* ReadmillHighlight.m */,
 				7320895316FC8D8000D1308C /* ReadmillComment.h */,
 				7320895416FC8D8000D1308C /* ReadmillComment.m */,
+				733D604917B3984200C5BA27 /* ReadmillClosingRemark.h */,
+				733D604A17B3984200C5BA27 /* ReadmillClosingRemark.m */,
 			);
 			path = "Object Model";
 			sourceTree = "<group>";
@@ -525,6 +532,7 @@
 				73A3A28F162D6B6200E39AB8 /* NSDateFormatter+ReadmillAdditions.h in Headers */,
 				7320894916FC350000D1308C /* ReadmillHighlight.h in Headers */,
 				7320895816FC9AFF00D1308C /* ReadmillComment.h in Headers */,
+				733D604B17B3984200C5BA27 /* ReadmillClosingRemark.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +680,7 @@
 				734A51F3135A1E37009F9794 /* ReadmillBook.m in Sources */,
 				734A51F5135A1E37009F9794 /* ReadmillReading.m in Sources */,
 				734A51F7135A1E37009F9794 /* ReadmillReadingSession.m in Sources */,
+				733D604D17B3984200C5BA27 /* ReadmillClosingRemark.m in Sources */,
 				734A51F9135A1E37009F9794 /* ReadmillUser.m in Sources */,
 				734A51FB135A1E3D009F9794 /* ReadmillDismissingView.m in Sources */,
 				734A51FD135A1E41009F9794 /* ReadmillUIPresenter.m in Sources */,
@@ -709,6 +718,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96F0756D12F061C800F6369D /* ReadmillExampleAppDelegate.m in Sources */,
+				733D604C17B3984200C5BA27 /* ReadmillClosingRemark.m in Sources */,
 				96F0757912F0620600F6369D /* ReadmillSignedInViewController.m in Sources */,
 				96F0758312F0623400F6369D /* Readmill_Framework-main.m in Sources */,
 				966E3E5412F2F7290027E05F /* ReadmillSigningInViewController.m in Sources */,

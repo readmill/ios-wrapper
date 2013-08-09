@@ -34,6 +34,7 @@ typedef NSUInteger ReadmillHighlightId;
 typedef NSUInteger ReadmillCommentId;
 typedef NSUInteger ReadmillUserId;
 typedef NSUInteger ReadmillLibraryItemId;
+typedef NSUInteger ReadmillClosingRemarkId;
 typedef float ReadmillReadingProgress; // float, 0-1 (%)
 typedef NSUInteger ReadmillPingDuration; // Integer, seconds
 typedef double CLLocationDegrees;
@@ -246,6 +247,16 @@ static NSString * const kReadmillAPICommentPostedAtKey = @"posted_at";
 static NSString * const kReadmillAPICommentContentKey = @"content";
 static NSString * const kReadmillAPICommentUserKey = @"user";
 
+#pragma mark API Keys - Closing remarks
+
+static NSString * const kReadmillAPIClosingRemarkKey = @"closing_remark";
+static NSString * const kReadmillAPIClosingRemarkIdKey = @"id";
+static NSString * const kReadmillAPIClosingRemarkCreatedAtKey = @"created_at";
+static NSString * const kReadmillAPIClosingRemarkContentKey = @"content";
+static NSString * const kReadmillAPIClosingRemarkLikesCountKey = @"likes_count";
+static NSString * const kReadmillAPIClosingRemarkCommentsCountKey = @"comments_count";
+static NSString * const kReadmillAPIClosingRemarkRecommendedKey = @"recommended";
+
 #pragma mark API Keys - Periods
 
 static NSString * const kReadmillAPIPingKey = @"ping";
@@ -441,6 +452,16 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 - (ReadmillRequestOperation *)booksWithParameters:(NSDictionary *)parameters
                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+/*!
+ @param bookId The book id to fetch closing remarks for.
+ @param parameters The parameters for the request.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief Find closing remarks for a specific book given the argument passed to parameters.
+ */
+- (ReadmillRequestOperation *)closingRemarksForBookWithId:(ReadmillBookId)bookId
+                                               parameters:(NSDictionary *)parameters
+                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
  @param parameters The query to search for.
