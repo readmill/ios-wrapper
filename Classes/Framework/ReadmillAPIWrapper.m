@@ -134,9 +134,14 @@
     return @"highlights";
 }
 
+- (NSString *)closingRemarksEndpoint
+{
+    return @"closing_remarks";
+}
+
 - (NSString *)likesEndpoint
 {
-    return @"likes/highlight";
+    return @"likes";
 }
 
 - (NSString *)libraryEndPoint
@@ -879,6 +884,18 @@
                         completionHandler:completionHandler];
 }
 
+#pragma mark Closing remark
+
+- (ReadmillRequestOperation *)closingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self closingRemarksEndpoint], closingRemarkId];
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:nil
+               shouldBeCalledUnauthorized:NO
+                        completionHandler:completionHandler];
+}
+
 #pragma mark - Highlight comments
 
 - (ReadmillRequestOperation *)createCommentForHighlightWithId:(ReadmillHighlightId)highlightId
@@ -931,13 +948,63 @@
                         completionHandler:completionHandler];
 }
 
+- (ReadmillRequestOperation *)createCommentForClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                                          comment:(NSString *)comment
+                                                      commentedAt:(NSDate *)date
+                                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/comments", [self closingRemarksEndpoint], closingRemarkId];
+    
+    NSDictionary *commentDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       comment, kReadmillAPICommentContentKey,
+                                       [date stringWithRFC3339Format], kReadmillAPICommentPostedAtKey, nil];
+    
+    NSDictionary *parameters = [NSDictionary dictionaryWithObject:commentDictionary
+                                                           forKey:@"comment"];
+    
+    return [self sendPostRequestToEndpoint:endpoint
+                            withParameters:parameters
+                         completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)commentsForClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                           completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    return [self commentsForClosingRemarkWithId:closingRemarkId
+                                          count:100
+                                       fromDate:nil
+                                         toDate:nil
+                              completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)commentsForClosingRemarkWithId:(ReadmillHighlightId)highlightId
+                                                       count:(NSUInteger)count
+                                                    fromDate:(NSDate *)fromDate
+                                                      toDate:(NSDate *)toDate
+                                           completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setValue:[NSNumber numberWithUnsignedInteger:count] forKey:@"count"];
+    [parameters setValue:fromDate forKey:@"from"];
+    [parameters setValue:toDate forKey:@"to"];
+    
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d/comments",
+                          [self closingRemarksEndpoint],
+                          highlightId];
+    
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:[parameters autorelease]
+               shouldBeCalledUnauthorized:NO
+                        completionHandler:completionHandler];
+}
+
 #pragma mark -
 #pragma mark - Likes
 
 - (ReadmillRequestOperation *)likesForHighlightWithId:(ReadmillHighlightId)highlightId
                                     completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/highlight/%d", [self likesEndpoint], highlightId];
     return [self sendGetRequestToEndpoint:endpoint
                            withParameters:nil
                shouldBeCalledUnauthorized:NO
@@ -947,7 +1014,7 @@
 - (ReadmillRequestOperation *)likeHighlightWithId:(ReadmillHighlightId)highlightId
                                 completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/highlight/%d", [self likesEndpoint], highlightId];
     return [self sendPostRequestToEndpoint:endpoint
                             withParameters:nil
                          completionHandler:completion];
@@ -956,7 +1023,35 @@
 - (ReadmillRequestOperation *)unlikeHighlightWithId:(ReadmillHighlightId)highlightId
                                   completionHandler:(ReadmillAPICompletionHandler)completion
 {
-    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self likesEndpoint], highlightId];
+    NSString *endpoint = [NSString stringWithFormat:@"%@/highlight/%d", [self likesEndpoint], highlightId];
+    return [self sendDeleteRequestToEndpoint:endpoint
+                              withParameters:nil
+                           completionHandler:completion];
+}
+
+- (ReadmillRequestOperation *)likesForClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                        completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/closing_remark/%d", [self likesEndpoint], closingRemarkId];
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:nil
+               shouldBeCalledUnauthorized:NO
+                        completionHandler:completion];
+}
+
+- (ReadmillRequestOperation *)likeClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                    completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/closing_remark/%d", [self likesEndpoint], closingRemarkId];
+    return [self sendPostRequestToEndpoint:endpoint
+                            withParameters:nil
+                         completionHandler:completion];
+}
+
+- (ReadmillRequestOperation *)unlikeClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                      completionHandler:(ReadmillAPICompletionHandler)completion
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/closing_remark/%d", [self likesEndpoint], closingRemarkId];
     return [self sendDeleteRequestToEndpoint:endpoint
                               withParameters:nil
                            completionHandler:completion];

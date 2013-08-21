@@ -841,6 +841,16 @@ The object returned here is appropriate for saving in a property list, NSUserDef
                                                toDate:(NSDate *)toDate
                                     completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+#pragma mark Closing remarks
+
+/*!
+ @param highlightId The id of the closing remark.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Deletes the particular closing remark in Readmill.
+ */
+- (ReadmillRequestOperation *)closingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 #pragma mark Comments
 
 /*!
@@ -877,6 +887,40 @@ The object returned here is appropriate for saving in a property list, NSUserDef
                                                   toDate:(NSDate *)toDate
                                        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+/*!
+ @param closingRemarkId The id of the closing remark you want to create a comment for.
+ @param comment The comment text to post.
+ @param commentedAt An NSDate object representing the date the resource was created, pass nil for "now"
+ @param completionHandler A block that will return the result and an error pointer.
+ @brief  Add a comment to a particular closing remark in Readmill.
+ */
+- (ReadmillRequestOperation *)createCommentForClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                                          comment:(NSString *)comment
+                                                      commentedAt:(NSDate *)date
+                                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param highlightId The id of the closing remark.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Get all comments for a particular closing remark in Readmill.
+ */
+- (ReadmillRequestOperation *)commentsForClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
+ @param userId The id of the closing remark to retrieve comments for.
+ @param count Number of comments to retrieve.
+ @param fromDate Starting date to filter comments from.
+ @param toDate Ending date to filter comments to.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief Get all comments for a particular Readmill closing remark.
+ */
+- (ReadmillRequestOperation *)commentsForClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                                       count:(NSUInteger)count
+                                                    fromDate:(NSDate *)fromDate
+                                                      toDate:(NSDate *)toDate
+                                           completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 #pragma mark Likes
 
 /*!
@@ -902,6 +946,30 @@ The object returned here is appropriate for saving in a property list, NSUserDef
  */
 - (ReadmillRequestOperation *)unlikeHighlightWithId:(ReadmillHighlightId)highlightId
                                   completionHandler:(ReadmillAPICompletionHandler)completion;
+
+/*!
+ @param closingRemarkId The id of the closing remark.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Get all users that liked the particular closing remark in Readmill.
+ */
+- (ReadmillRequestOperation *)likesForClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                        completionHandler:(ReadmillAPICompletionHandler)completion;
+
+/*!
+ @param closingRemarkId The id of the closing remark.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Like the particular closing remark on Readmill.
+ */
+- (ReadmillRequestOperation *)likeClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                    completionHandler:(ReadmillAPICompletionHandler)completion;
+
+/*!
+ @param closingRemarkId The id of the closing remark.
+ @param completionHandler A block that will return the result (id) and an error pointer.
+ @brief  Unlike the particular closing remark on Readmill.
+ */
+- (ReadmillRequestOperation *)unlikeClosingRemarkWithId:(ReadmillClosingRemarkId)closingRemarkId
+                                      completionHandler:(ReadmillAPICompletionHandler)completion;
 
 
 #pragma mark -
