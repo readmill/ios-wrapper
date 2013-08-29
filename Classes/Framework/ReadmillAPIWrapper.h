@@ -921,6 +921,14 @@ The object returned here is appropriate for saving in a property list, NSUserDef
                                                       toDate:(NSDate *)toDate
                                            completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
+/*!
+ @param commentId The id of the comment to be deleted.
+ @param completionHandler A block that will return the result and an error pointer.
+ @brief Delete a comment.
+ */
+- (ReadmillRequestOperation *)deleteCommentWithId:(ReadmillCommentId)commentId
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
 #pragma mark Likes
 
 /*!

@@ -139,6 +139,11 @@
     return @"closing_remarks";
 }
 
+- (NSString *)commentsEndpoint
+{
+    return @"comments";
+}
+
 - (NSString *)likesEndpoint
 {
     return @"likes";
@@ -996,6 +1001,12 @@
                            withParameters:[parameters autorelease]
                shouldBeCalledUnauthorized:NO
                         completionHandler:completionHandler];
+}
+
+- (ReadmillRequestOperation *)deleteCommentWithId:(ReadmillCommentId)commentId completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/%d", [self commentsEndpoint], commentId];
+    return [self sendDeleteRequestToEndpoint:endpoint withParameters:nil completionHandler:completionHandler];
 }
 
 #pragma mark -
