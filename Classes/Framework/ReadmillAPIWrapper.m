@@ -109,8 +109,6 @@
 
 - (NSString *)apiEndPoint
 {
-    NSLog(@"apicon: %@", self.apiConfiguration);
-    
     return [[self.apiConfiguration apiBaseURL] absoluteString];
 }
 
