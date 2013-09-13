@@ -47,7 +47,7 @@
     if ((self = [super init])) {
         // Initialization code here.
         queue = [[NSOperationQueue alloc] init];
-        [queue setMaxConcurrentOperationCount:10];
+        [queue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
     }
     return self;
 }
