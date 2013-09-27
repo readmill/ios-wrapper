@@ -656,7 +656,7 @@
 {
     NSString *endpoint = [NSString stringWithFormat:@"%@/search", [self booksEndpoint]];
 
-    NSMutableDictionary *finalDictionary = [parameters mutableCopy];
+    NSMutableDictionary *finalDictionary = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [finalDictionary setValue:query forKey:@"query"];
 
     return [self sendGetRequestToEndpoint:endpoint
