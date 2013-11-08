@@ -28,7 +28,6 @@
 		7320895816FC9AFF00D1308C /* ReadmillComment.h in Headers */ = {isa = PBXBuildFile; fileRef = 7320895316FC8D8000D1308C /* ReadmillComment.h */; };
 		7320895916FC9B0200D1308C /* ReadmillComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 7320895416FC8D8000D1308C /* ReadmillComment.m */; };
 		733D604B17B3984200C5BA27 /* ReadmillClosingRemark.h in Headers */ = {isa = PBXBuildFile; fileRef = 733D604917B3984200C5BA27 /* ReadmillClosingRemark.h */; };
-		733D604C17B3984200C5BA27 /* ReadmillClosingRemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 733D604A17B3984200C5BA27 /* ReadmillClosingRemark.m */; };
 		733D604D17B3984200C5BA27 /* ReadmillClosingRemark.m in Sources */ = {isa = PBXBuildFile; fileRef = 733D604A17B3984200C5BA27 /* ReadmillClosingRemark.m */; };
 		734A51A4135A1DF5009F9794 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED212F05E80006028D0 /* Foundation.framework */; };
 		734A51AE135A1DF5009F9794 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BEAED012F05E80006028D0 /* UIKit.framework */; };
@@ -718,7 +717,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				96F0756D12F061C800F6369D /* ReadmillExampleAppDelegate.m in Sources */,
-				733D604C17B3984200C5BA27 /* ReadmillClosingRemark.m in Sources */,
 				96F0757912F0620600F6369D /* ReadmillSignedInViewController.m in Sources */,
 				96F0758312F0623400F6369D /* Readmill_Framework-main.m in Sources */,
 				966E3E5412F2F7290027E05F /* ReadmillSigningInViewController.m in Sources */,
