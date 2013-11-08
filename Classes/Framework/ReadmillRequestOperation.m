@@ -102,7 +102,7 @@
 - (void)finish 
 {
     if (self.connectionError) {
-        DLog(@"Operation for url: %@ finished with status code: %d, error: %@, data size: %u", 
+        DLog(@"Operation for url: %@ finished with status code: %d, error: %@, data size: %u",
               [self.request URL], [self.response statusCode], [self.connectionError localizedDescription], [self.responseData length]);
     } else {
         DLog(@"Operation for url: %@ finished with status code: %d, data size: %u", 
@@ -110,22 +110,25 @@
     }
 
     [[UIApplication sharedApplication] readmill_popNetworkActivity];
-    
-    if (self.completionHandler) {
-        self.completionHandler(self.response, self.responseData, self.connectionError);        
-    }
 
-    [self willChangeValueForKey:@"isExecuting"];
-    [self willChangeValueForKey:@"isFinished"];
-    
-    _isExecuting = NO;
-    _isFinished = YES;
-    
-    [self didChangeValueForKey:@"isExecuting"];
-    [self didChangeValueForKey:@"isFinished"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        if (self.completionHandler) {
+            self.completionHandler(self.response, self.responseData, self.connectionError);        
+        }
+
+        [self willChangeValueForKey:@"isExecuting"];
+        [self willChangeValueForKey:@"isFinished"];
+        
+        _isExecuting = NO;
+        _isFinished = YES;
+        
+        [self didChangeValueForKey:@"isExecuting"];
+        [self didChangeValueForKey:@"isFinished"];
+    });
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)err 
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)err
 {
     self.connectionError = err;
     [self finish];

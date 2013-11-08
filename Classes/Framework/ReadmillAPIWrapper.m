@@ -1209,12 +1209,10 @@
     NSAssert(request != nil, @"Request is nil!");
     static NSString * const LocationHeader = @"Location";
     
-    dispatch_queue_t currentQueue = dispatch_get_current_queue();
     // This block will be called when the asynchronous operation finishes
     ReadmillRequestOperationCompletionBlock connectionCompletionHandler = ^(NSHTTPURLResponse *response,
                                                                             NSData *responseData,
                                                                             NSError *connectionError) {
-        
         @autoreleasepool {
             NSError *error = nil;
             
@@ -1238,9 +1236,7 @@
                                  queuePriority:NSOperationQueuePriorityVeryHigh];
                 } else {
                     if (completionBlock) {
-                        dispatch_async(currentQueue, ^{
-                            completionBlock(nil, error);
-                        });
+                        completionBlock(nil, error);
                     }
                 }
             } else {
@@ -1257,9 +1253,7 @@
                 
                 // Execute the completionBlock
                 if (completionBlock) {
-                    dispatch_async(currentQueue, ^{
-                        completionBlock(jsonResponse, error);
-                    });
+                    completionBlock(jsonResponse, error);
                 }
             }
         }
