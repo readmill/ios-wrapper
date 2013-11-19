@@ -1143,6 +1143,16 @@
                          completionHandler:completionHandler];
 }
 
+- (ReadmillRequestOperation *)followUsersWithIds:(NSArray *)userIds
+                               completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *userIdsParameter = [userIds componentsJoinedByString:@","];
+    NSDictionary *parameters = @{ @"user_ids" : userIdsParameter };
+    return [self sendPostRequestToEndpoint:@"followings"
+                            withParameters:parameters
+                         completionHandler:completionHandler];
+}
+
 - (ReadmillRequestOperation *)unfollowUserWithId:(ReadmillUserId)userId completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {
     NSString *endpoint = [NSString stringWithFormat:@"followings/%d", userId];

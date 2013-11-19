@@ -1051,6 +1051,15 @@ The object returned here is appropriate for saving in a property list, NSUserDef
                              completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
+ @param userIds Array of user ids to follow.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief Follow a list of Readmill users by user ids.
+ */
+- (ReadmillRequestOperation *)followUsersWithIds:(NSArray *)userIds
+                               completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
  @param userId Id of the user to unfollow.
  @param completionHandler An (optional) block that will return the result (id) and an error pointer.
  @return A `ReadmillRequestOperation` object associated with the action.
