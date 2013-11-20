@@ -1081,6 +1081,15 @@
 #pragma mark
 #pragma mark - Users
 
+- (ReadmillRequestOperation *)usersWithParameters:(NSDictionary *)parameters
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    return [self sendGetRequestToEndpoint:@"users"
+                           withParameters:parameters
+               shouldBeCalledUnauthorized:YES
+                        completionHandler:completionHandler];
+}
+
 - (ReadmillRequestOperation *)userWithId:(ReadmillUserId)userId
                        completionHandler:(ReadmillAPICompletionHandler)completionHandler
 {

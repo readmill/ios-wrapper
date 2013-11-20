@@ -993,9 +993,17 @@ The object returned here is appropriate for saving in a property list, NSUserDef
 #pragma mark Users
 
 /*!
+ @param parameters The parameters for the request.
+ @param completionHandler A block that will return the result and an error pointer.
+ @brief Gets users based on given parameters.
+ */
+- (ReadmillRequestOperation *)usersWithParameters:(NSDictionary *)parameters
+                                completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
  @param userId The id of the user you'd like to get details for.
  @param completionHandler A block that will return the result and an error pointer.
- @brief   Get a specific user by their id. 
+ @brief   Get a specific user by their id.
  */
 - (ReadmillRequestOperation *)userWithId:(ReadmillUserId)userId
                        completionHandler:(ReadmillAPICompletionHandler)completionHandler;
