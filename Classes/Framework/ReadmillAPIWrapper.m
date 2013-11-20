@@ -1108,6 +1108,21 @@
                         completionHandler:completionHandler];
 }
 
+- (ReadmillRequestOperation *)searchUsersUsingQuery:(NSString *)query
+                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler
+{
+    NSString *endpoint = [NSString stringWithFormat:@"%@/search", [self usersEndpoint]];
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setValue:query forKey:@"query"];
+    
+    return [self sendGetRequestToEndpoint:endpoint
+                           withParameters:parameters
+               shouldBeCalledUnauthorized:YES
+                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                        completionHandler:completionHandler];
+}
+
 - (NSURL *)avatarURLForUserWithId:(ReadmillUserId)userId
                        parameters:(NSDictionary *)parameters
 {

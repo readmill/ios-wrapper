@@ -1001,6 +1001,16 @@ The object returned here is appropriate for saving in a property list, NSUserDef
                                 completionHandler:(ReadmillAPICompletionHandler)completionHandler;
 
 /*!
+ @param parameters The query to search for.
+ @param parameters The parameters for the request.
+ @param completionHandler An (optional) block that will return the result (id) and an error pointer.
+ @return A `ReadmillRequestOperation` object associated with the action.
+ @brief   Search users given the argument passed to parameters.
+ */
+- (ReadmillRequestOperation *)searchUsersUsingQuery:(NSString *)query
+                                  completionHandler:(ReadmillAPICompletionHandler)completionHandler;
+
+/*!
  @param userId The id of the user you'd like to get details for.
  @param completionHandler A block that will return the result and an error pointer.
  @brief   Get a specific user by their id.
