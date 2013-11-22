@@ -51,6 +51,8 @@
 @property (readwrite) NSUInteger booksFinishedCount;
 @property (readwrite) NSUInteger booksInterestingCount;
 @property (readwrite) NSUInteger booksReadingCount;
+@property (readwrite) NSTimeInterval readingTime;
+@property (readwrite) NSTimeInterval recentReadingTime;
 
 @property (readwrite, retain) ReadmillAPIWrapper *apiWrapper;
 
@@ -158,7 +160,9 @@
     [self setBooksFinishedCount:[[cleanedDict valueForKey:kReadmillAPIUserBooksFinishedCountKey] unsignedIntegerValue]];
     [self setBooksInterestingCount:[[cleanedDict valueForKey:kReadmillAPIUserBooksInterestingCountKey] unsignedIntegerValue]];
     [self setBooksReadingCount:[[cleanedDict valueForKey:kReadmillAPIUserBooksReadingCountKey] unsignedIntegerValue]];
-    
+    [self setReadingTime:[[cleanedDict valueForKey:@"reading_time"] unsignedIntegerValue]];
+    [self setRecentReadingTime:[[cleanedDict valueForKey:@"recent_reading_time"] unsignedIntegerValue]];
+
     [self setAuthenticationToken:[cleanedDict valueForKey:kReadmillAPIUserAuthenticationToken]];
 }
 

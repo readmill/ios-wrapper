@@ -479,6 +479,18 @@ See the documentation for +authenticateCallbackURL:baseCallbackURL:delegate:apiC
 @property (readonly) NSUInteger booksReadingCount;
 
 /*!
+ @property  readingTime
+ @brief The total readin time of the user.
+ */
+@property (readonly) NSTimeInterval readingTime;
+
+/*!
+ @property  recentReadingTime
+ @brief The recent reading time of the user.
+ */
+@property (readonly) NSTimeInterval recentReadingTime;
+
+/*!
  @property  apiWrapper
  @brief The ReadmillAPIWrapper object this user uses.
  */
