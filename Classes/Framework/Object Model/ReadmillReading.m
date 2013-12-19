@@ -156,6 +156,7 @@
 {
     // Clean-up code here.
     [self setApiWrapper:nil];
+    [self setBook:nil];
     [self setUser:nil];
 
     [self setDateStarted:nil];
