@@ -112,6 +112,7 @@
 {
     // Clean-up code.
     [self setApiWrapper:nil];
+    [self setUser:nil];
     [self setContent:nil];
     [self setHighlightedAt:nil];
     [self setPermalinkURI:nil];
